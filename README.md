@@ -1,4 +1,4 @@
-# cuby
+# DiaDoc
 
 > A Vue.js project
 

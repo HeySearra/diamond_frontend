@@ -33,7 +33,7 @@
               </el-dropdown>
       </div>
       <div class="write" v-if="is_login">
-        <el-button type="primary" @click="function(){$router.push({path:'/edit', query:{from:$route.path}})}">写文章</el-button>
+        <!-- <el-button type="primary" @click="function(){$router.push({path:'/edit', query:{from:$route.path}})}">写文章</el-button> -->
       </div>
       <div class="search">
           <div>
