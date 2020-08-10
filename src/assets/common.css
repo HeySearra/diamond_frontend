@@ -1,0 +1,210 @@
+.el-header {
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+    padding:0 !important;
+    height: 60px !important;
+    overflow: hidden;
+    width:100vw;
+    z-index: 2000;
+    -webkit-box-shadow: 0 1px 3px #eee;
+    box-shadow: 0 1px 3px rgba(26,26,26,.1) !important;
+}
+
+.el-footer{
+    height:50px;
+    width:100%;
+}
+
+.el-header{
+    position: fixed;
+}
+
+.mid {
+    margin-top:62px !important;
+}
+
+.el-aside {
+    color: #333;
+    padding-top:50px;
+    padding-bottom:30px;
+}
+
+.el-main {
+    color: #333;
+    padding-top:50px !important;
+    margin-right:10px;
+    margin-left:5px;
+    width:auto;
+    box-shadow: 0 2px 12px 1px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 1px;
+    padding-left:0;
+    padding-right:0;
+}
+
+.mid {
+    margin-bottom: 40px;
+    width:1500px;
+    margin:0 auto;
+}
+
+@media (max-width: 1560px){
+    .mid{
+        width:1250px;
+    }
+}
+
+@media (max-width: 1320px){
+    .mid{
+        width:1000px;
+    }
+}
+
+.clear_both{
+    clear: both !important;
+    float: none !important;
+}
+
+h1:focus, a:focus{
+    outline: none;
+}
+
+/*
+.el-input>>>.el-input.is-active .el-input__inner, .el-input>>>.el-input__inner:focus
+.el-transfer>>>.el-transfer-panel__filter>>>.el-input__inner:focus{
+    border-color:#bbb;
+}
+
+.el-button:focus, .el-button:hover{
+    background-color: hsl(1, 69%, 96%);
+    border-color: hsl(1, 69%, 78%);
+    color:hsl(1, 69%, 69%);
+}
+
+.el-button--primary, .el-transfer>>>.el-button--primary{
+    background-color: hsl(1, 69%, 78%);
+    border-color: hsl(1, 69%, 78%);
+    color:#fff;
+}
+
+.el-button--primary:hover, .el-button--primary:focus, .el-button--primary:active,
+.el-transfer>>>.el-button--primary:hover, .el-transfer>>>.el-button--primary:focus, .el-transfer>>>.el-button--primary:active{
+    background-color: hsl(1, 64%, 73%);
+    border-color:hsl(1, 64%, 73%);
+    color:#fff;
+}
+
+.tags>>>.el-input.is-active .el-input__inner, .tags>>>.el-input__inner:focus{
+    background-color: hsl(1, 69%, 98%);
+    border-color: hsl(1, 69%, 83%);
+    color:hsl(1, 69%, 78%);
+}
+
+.tags .el-tag{
+    background-color: hsl(1, 69%, 96%);
+    border-color: hsl(1, 69%, 78%);
+    color:hsl(1, 69%, 69%);
+}
+
+.mid>>>.el-tag .el-tag__close{
+    color:hsl(1, 69%, 78%);
+}
+
+.mid>>>.el-tag .el-tag__close:hover{
+    background-color:hsl(1, 69%, 83%) !important;
+    color: #fff;
+}
+
+.el-checkbox__input.is-checked+.el-checkbox__label, .el-transfer>>>.el-checkbox__input.is-checked+.el-checkbox__label{
+    color:#303133;
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner,
+.el-transfer>>>.el-checkbox__input.is-checked .el-checkbox__inner, .el-transfer>>>.el-checkbox__input.is-indeterminate .el-checkbox__inner{
+    background-color: hsl(1, 69%, 78%);
+    border-color:hsl(1, 69%, 78%)
+}
+
+.el-transfer-panel__item:hover, .el-transfer>>>.el-transfer-panel__item:hover{
+    color:#999
+}
+
+.el-checkbox__input.is-focus .el-checkbox__inner, .el-transfer>>>.el-checkbox__input.is-focus .el-checkbox__inner{
+    border-color:hsl(1, 69%, 78%)
+}
+*/
+
+.not_found{
+    text-align: center !important;
+    color: #aaa;
+    line-height: 20px;
+}
+
+.pointer{
+    cursor:pointer;
+}
+
+.cur_def, .curdef{
+    cursor: default;
+}
+
+.user_option:hover, .user_option:active, .user_option--active{
+    color:#e67b79;
+    transition: none;
+}
+
+.user_option--noactive{
+    color:#333;
+    transition: none;
+}
+
+.user_option>>>.el-input__icon{
+    transition: none !important;
+}
+
+.loading_bar{
+    position: fixed;
+    top:60px;
+    left:-6px;
+    width:calc(100vw + 11px);
+    transition: 0.1s opacity linear;
+    height:3px
+}
+
+.loading_bar_done{
+    opacity: 0;
+}
+
+.no_choose{
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+    cursor:default;
+}
+
+.member{
+    color:hsl(1, 69%, 69%);
+    font-size: inherit;
+}
+
+.more{
+    cursor:pointer
+  }
+
+.more:hover{
+    color:hsl(1, 69%, 69%);
+}
+
+.icon_member{
+    width: 21px;
+}
+
+.member_color{
+    color:hsl(45, 78%, 56%);
+}
+
+.member_color:hover{
+    color:hsl(45, 78%, 69%) !important;
+}
