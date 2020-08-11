@@ -5,7 +5,7 @@
       <navbar class="nav"></navbar>
     </el-header>
     <div style="margin-top:27vh"></div>
-    <fsb id="fsb"></fsb>
+    <forget></forget>
   </el-container>
 </div>
 </template>
@@ -32,10 +32,11 @@ export default {
 @import url("../assets/common.css");
 
 .snow{
-  background-image: url("../assets/snow.jpg");
+  background-image: url("../assets/panda.jpg");
   background-size: cover;
   height:100vh;
   background-position: center;
+  opacity: 0.69;
 }
 
 .nav>>>.el-menu{

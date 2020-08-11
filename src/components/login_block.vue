@@ -5,7 +5,7 @@
             <el-form :model="form" :rules="rules" ref="form" label-width="0">
                 <el-form-item prop="account">
                     <el-input v-model="form.account" placeholder="请输入账号的邮箱" @keyup.enter.native="$refs.pas.focus()" maxLength="50">
-                        <i slot="prefix" class="el-input__icon" :class="is_phone_num?'el-icon-phone':'el-icon-message'"></i>
+                        <i slot="prefix" class="el-input__icon el-icon-message"></i>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
@@ -34,7 +34,7 @@ export default {
                     {required:true,message:'请输入密码',trigger:'blur'},
                 ],
                 account:[
-                    // {type:'email',required:true,message:'请输入邮箱',trigger:'blur'},
+                     {type:'email',required:true,message:'请输入邮箱',trigger:'blur'},
                     // { pattern:/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/, message: "请输入合法手机号/电话号", trigger: "blur" }
                     { validator: this.check_account, trigger: 'blur'}
                 ]
