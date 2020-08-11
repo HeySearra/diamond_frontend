@@ -4,15 +4,54 @@
       :default-active="''+active_index"
       class="el-menu-demo"
       mode="horizontal"
-      @select="handleSelect"
       background-color="#fff"
       text-color="#333"
       active-text-color="#efb7b6">
-      <h1>
-        <a class="logo_a" @click="$router.push({path:'/index'});renew_active()"></a></h1>
-      <el-menu-item index="1" @click="$router.push({path:'/index'});renew_active()">主页</el-menu-item>
-      <el-menu-item index="2" @click="$router.push({path:'/index/new'});renew_active()" v-if="login_manager.get()">动态</el-menu-item>
-      <el-menu-item index="3" @click="$router.push({path:'/index/hotart'});renew_active()">热门</el-menu-item>
+      <h1><a class="logo_a" @click="$router.push({path:'/index'});renew_active()"></a></h1>
+      <div class="online_icon">
+        <el-avatar>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              <i class="el-icon-more"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown" class="online_icon_dropdown">
+              <el-dropdown-item>
+                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                <span>这是一个人</span>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                <span>这是一个人</span>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                <span>这是一个人</span>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                <span>这是一个人</span>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                <span>这是一个人</span>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                <span>这是一个人</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown> 
+        </el-avatar>
+        <el-tooltip class="item" effect="dark" content="lkw" placement="top-start">
+          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="wlt" placement="top-start">
+          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="lrq" placement="top-start">
+          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+        </el-tooltip>
+      </div>
       <div class="user">
           <span class="el-dropdown-link" @click="to_login" v-if="!is_login">
               <el-avatar>登录</el-avatar>
@@ -22,18 +61,21 @@
                   <el-avatar :src="photo_src"></el-avatar>
               </span>
               <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="'/userInfo/'+uid">个人主页</el-dropdown-item>
-                  <el-dropdown-item command="/create/article">管理中心</el-dropdown-item>
-                  <el-dropdown-item command="to_collection">收藏管理</el-dropdown-item>
-                  <el-dropdown-item command="/create/message">消息</el-dropdown-item>
-                  <el-dropdown-item command="/create/setting/myinfo">设置</el-dropdown-item>
-                  <el-dropdown-item command="/create/vip">VIP</el-dropdown-item>
+                  <el-dropdown-item command="user_info">账号管理</el-dropdown-item>
+                  <el-dropdown-item command="help">使用帮助</el-dropdown-item>
                   <el-dropdown-item command="logout">登出</el-dropdown-item>
               </el-dropdown-menu>
               </el-dropdown>
       </div>
-      <div class="write" v-if="is_login">
-        <!-- <el-button type="primary" @click="function(){$router.push({path:'/edit', query:{from:$route.path}})}">写文章</el-button> -->
+      <div class="header_icon">
+        <el-badge :value="message_count" class="item">
+          <span class="icon iconfont">&#xe60b;</span>
+        </el-badge>
+      </div>
+      <div class="header_icon">
+        <el-badge :is-dot="have_chat" class="item">
+          <span class="icon iconfont">&#xe7fe;</span>
+        </el-badge>
       </div>
       <div class="search">
           <div>
@@ -57,15 +99,14 @@
         search: '',
         active_index: 0,
         uid:0,
-        is_login:false,
-        photo_src:''
+        is_login:true,
+        photo_src:'',
+        online_icon_list:[],
+        message_count:11,
+        have_chat:true
       };
     },
     methods: {
-      handleSelect(key, keyPath) {
-        //console.log(key, keyPath);
-      },
-
       getCookie (name) {
         var value = '; ' + document.cookie
         var parts = value.split('; ' + name + '=')
@@ -77,20 +118,7 @@
           this.is_login = true;
           this.photo_src = this.login_manager.get_por();
         }
-        this.renew_active();
-        this.apply_for_info();
-      },
-
-      renew_active(){
-        if(this.$route.name == 'index'){
-          this.active_index = 1;
-        }
-        else if(this.$route.name == 'follow_new'){
-          this.active_index = 2;
-        }
-        else if(this.$route.name == 'hot'){
-          this.active_index = 3;
-        }
+        //this.apply_for_info();
       },
 
       apply_for_info(){
@@ -189,6 +217,7 @@
 
 <style scoped>
 @import url("../assets/common.css");
+@import url("../assets/diadoc_icon.css");
 
 .hearer{
   z-index: 1000;
@@ -215,7 +244,7 @@
 .el-menu--horizontal>.el-menu-item.is-active {
     border-bottom: 3px solid;
     color: #333;
-    border-color: #efb7b6 !important;
+    border-color: #586378 !important;
 }
 
 .el-menu--horizontal>.el-menu-item{
@@ -252,6 +281,23 @@ h1 a:hover{
   opacity: 0.75;
 }
 
+.header_icon{
+  float:right;
+  border: solid 1px;
+  margin: 15px 0;
+  height: 30px;
+  width:30px;
+  margin-left:20px;
+  padding: 0;
+  line-height: 30px;
+  cursor:pointer;
+}
+
+.header_icon .iconfont{
+  font-size: 25px;
+  color:#586378;
+}
+
 .search{
     width:250px;
     float: right;
@@ -284,7 +330,7 @@ h1 a:hover{
 
 .el-dropdown-link {
     cursor: pointer;
-    color: hsl(1, 69%, 78%);
+    /* color: hsl(1, 69%, 78%); */
     display: inline-block;
     width:50px;
   }
@@ -316,5 +362,45 @@ h1 a:hover{
   background-position: center;
   background-repeat: no-repeat;
   transition:0.1s linear opacity;
+}
+
+.online_icon{
+  border:solid 1px;
+  float:left;
+  margin: 10px 35px 10px 50px;
+  height:40px;
+  width:300px;
+}
+
+.online_icon>>>.el-avatar{
+  float:right;
+  margin-left:11px;
+  border:solid 1px #000;
+  cursor:pointer;
+  height:36px;
+  width:36px;
+  margin-top:2px;
+}
+
+.online_icon>>>.el-dropdown-link{
+  width:36px;
+  color:#586378;
+  background-color: #fff;
+}
+
+.online_icon_dropdown{
+  width: fit-content !important;
+}
+
+.online_icon_dropdown li{
+  height:45px;
+  line-height:45px;
+}
+
+.online_icon_dropdown>>>.el-avatar--circle{
+  height:30px;
+  width:30px;
+  float:left;
+  margin: 6px 10px 0 -3px;
 }
 </style>
