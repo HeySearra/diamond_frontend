@@ -16,6 +16,7 @@ import './assets/common.css'
 import navbar from './components/header';
 import login from './components/login_block';
 import reg from './components/register_block';
+import sidebar from './components/team_sidebar'
 
 Vue.use(Element);
 Vue.use(echarts);
@@ -24,6 +25,7 @@ Vue.use(mavonEditor)
 Vue.component('navbar', navbar);
 Vue.component('login', login);
 Vue.component('reg', reg);
+Vue.component('sidebar', sidebar);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
