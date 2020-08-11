@@ -3,18 +3,8 @@
         <div>
             <h2><figure></figure></h2>
             <el-form :model="form" :rules="rules" ref="form" label-width="0">
-                <el-form-item prop="account">
-                    <el-input v-model="form.account" placeholder="请输入帐号" @keyup.enter.native="$refs.pas.focus()" maxLength="50">
-                        <i slot="prefix" class="el-input__icon" :class='el-icon-message'></i>
-                    </el-input>
-                </el-form-item>
-                    <el-form-item prop="password">
-                    <el-input placeholder="请输入新密码" v-model="form.password" show-password ref="pas" @keyup.enter.native="submit('form')" maxLength="20">
-                        <i slot="prefix" class="el-input__icon iconfont icon-lock-fill"></i>
-                    </el-input>
-                </el-form-item>
                 <el-form-item prop="password">
-                    <el-input placeholder="请输入验证密文" v-model="form.key" show-password ref="pas" @keyup.enter.native="submit('form')" maxLength="20">
+                    <el-input placeholder="请输入新密码" v-model="form.password" show-password ref="pas" @keyup.enter.native="submit('form')" maxLength="20">
                         <i slot="prefix" class="el-input__icon iconfont icon-lock-fill"></i>
                     </el-input>
                 </el-form-item>
@@ -31,10 +21,11 @@ export default {
     data() {
         return {
             form:{
-                account: '',
                 password: '',
-                password_confirm: '',
-                key: '',
+                param: Object.freeze({
+                    account: this.$route.query.acc,
+                    value: this.$route.query.key
+                })
             },
             rules:{
                 account:[
