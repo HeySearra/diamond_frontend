@@ -27,6 +27,8 @@ import team_block from './components/team_block';
 import file_display_block from './components/file_display_block';
 import file_display_list from './components/file_display_list';
 import team_display_block from './components/team_display_block';
+import template_block from './components/template_block';
+import template_display_block from './components/template_display_block';
 
 Vue.use(Element);
 Vue.use(echarts);
@@ -46,6 +48,8 @@ Vue.component('team-block', team_block);
 Vue.component('file-display-block', file_display_block);
 Vue.component('file-display-list', file_display_list);
 Vue.component('team-display-block', team_display_block);
+Vue.component('template-block', template_block);
+Vue.component('template-display-block', template_display_block);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
