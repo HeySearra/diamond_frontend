@@ -9,6 +9,7 @@ import echarts from 'echarts'
 import mavonEditor from 'mavon-editor'
 import 'jquery'
 import './assets/icon_store/iconfont.css'
+import './assets/diadoc_icon/iconfont.css'
 import 'mavon-editor/dist/css/index.css'
 import './assets/common.css'
 
