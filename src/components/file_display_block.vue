@@ -1,0 +1,118 @@
+<template>
+    <div class="file_display_block">
+        <h1>{{title}}</h1>
+        <el-divider></el-divider>
+        <div class="file_area">
+            <div class="file_item" 
+                v-for="item in list" 
+                :key="item.id">
+                <component 
+                    :is="item.type=='file'?'file-block':'fold-block'" 
+                    :is_link="item.is_link" 
+                    :did="item.id" 
+                    :fid="item.id" 
+                    :name="item.name" 
+                    :context="context" 
+                    :is_starred="item.is_starred"
+                    @open_info="open_info">
+                </component>
+            </div>
+        </div>
+        <el-dialog
+            class="dialog_style"
+            :visible.sync="dia_vis"
+            width="700px">
+            <h3>{{dia_title}}</h3>
+            <div class="content">
+                <div class="info_list">
+                    <div class="info_title">文件名：</div>
+                    <div class="info_content">介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容</div>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dia_vis=false">关 闭</el-button>
+            </span>
+        </el-dialog>
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        title: {
+            type:String,
+            default: '文件展示块'
+        },
+        context: {
+            type:String,
+            default: 'file_system'
+        },
+        list: {
+            type: Array,
+            default() {
+                return [
+                    {
+                        type: 'file', // or fold
+                        id: '1',
+                        is_link: false,
+                        is_starred: true,
+                        name: 'file',
+                    },
+                    {
+                        type: 'fold', // or file
+                        id: '2',
+                        is_link: true,
+                        is_starred: false,
+                        name: 'folder',
+                    }
+                ]
+            }
+        }
+    },
+    data() {
+        return {
+            dia_vis:false,
+            dia_title:'team info',
+        }
+    },
+
+    mounted(){
+        this.init();
+    },
+
+    methods:{
+        init(){
+
+        },
+
+        open_info(id, name, type){
+            this.dia_title = name;
+            this.dia_vis = true;
+        },
+
+    }
+
+}
+</script>
+
+<style scoped>
+@import url("../assets/common.css");
+@import url("../assets/dialog_style.css");
+
+h1{
+    text-indent: 25px;
+}
+
+.file_area{
+    padding: 0 30px;
+}
+
+.file_item{
+    margin: 6px 15px;
+    float:left;
+}
+
+@media (max-width: 1200px){
+    
+}
+</style>
