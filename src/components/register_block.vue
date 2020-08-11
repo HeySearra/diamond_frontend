@@ -9,8 +9,8 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="account">
-                    <el-input v-model="form.account" placeholder="请输入手机号或邮箱" @input="judge_phone_num" ref="account" @keyup.enter.native="$refs.pas.focus()" maxLength="50">
-                        <i slot="prefix" class="el-input__icon" :class="is_phone_num?'el-icon-phone':'el-icon-message'"></i>
+                    <el-input v-model="form.account" placeholder="请输入邮箱" ref="account" @keyup.enter.native="$refs.pas.focus()" maxLength="50">
+                        <i slot="prefix" class="el-input__icon el-icon-message"></i>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
@@ -18,10 +18,16 @@
                         <i slot="prefix" class="el-input__icon iconfont icon-lock-fill"></i>
                     </el-input>
                 </el-form-item>
+                <el-form-item prop="ver_code">
+                    <el-input v-model="form.ver_code" placeholder="请输入验证码" ref="ver_code" maxLength="6" style="width:56%">
+                        <i slot="prefix" class="el-input__icon el-icon-magic-stick"></i>
+                    </el-input>
+                    <el-button :disabled="ver_code_disabled" style="width:40%; height:40px; float:right; letter-spacing:0; padding:0; text-indent:0; text-align:center" @click="get_ver_code">{{ver_code_disabled ? '重发 ('+ rest_time + ' s)' : '获取验证码'}}</el-button>
+                </el-form-item>
             </el-form>
             <el-button type="primary" @click="submit('form')">注册</el-button>
         </div>
-        <a @click="to_login">已有账号？立即登录</a>
+        <router-link :to="{path:'/login', query:from}">已有账号？立即登录</router-link>
     </el-card>
 </template>
 
@@ -32,7 +38,8 @@ export default {
             form:{
                 name: '',
                 account: '',
-                password: ''
+                password: '',
+                ver_code:''
             },
             rules:{
                 name:[
@@ -45,12 +52,43 @@ export default {
                 ],
                 account:[
                     { validator: this.check_account, trigger: 'blur'}
+                ],
+                ver_code:[
+                    {required:true, message:'请输入验证码', trigger:'blur'},
+                    {min:6,max:6,message:'请输入 6 位验证码',trigger:'blur'}
                 ]
             },
-            is_phone_num:false
+            from:'',
+            ver_code_disabled: false,
+            rest_time:0,
+            rest_timer:undefined
         }
     },
+
+    mounted(){
+        this.init();
+    },
+
     methods:{
+        init(){
+            this.from = this.$route.query.from ? this.$route.query.from : '';
+            if(localStorage.getItem('res_time')){
+                this.rest_time = ((new Date(new Date(localStorage.getItem('res_time'))).getTime() + 60000) - new Date()) / 1000;
+                if(this.rest_time > 1){
+                    this.rest_time = parseInt(this.rest_time);
+                    this.ver_code_disabled = true;
+                    var that = this;
+                    this.rest_timer = setInterval(function(){
+                        that.rest_time--;
+                        if(that.rest_time == 0){
+                            that.ver_code_disabled = false;
+                            that.rest_timer ? clearInterval(that.rest_timer) : '';
+                            localStorage.removeItem('res_time');
+                        }
+                    }, 1000);
+                }
+            }
+        },
         getCookie (name) {
             var value = '; ' + document.cookie
             var parts = value.split('; ' + name + '=')
@@ -80,7 +118,7 @@ export default {
                             else{
                                 switch(res.status){
                                     case 4:
-                                        that.alert_box.msg('注册失败', '该邮箱或手机号已被注册');
+                                        that.alert_box.msg('注册失败', '该邮箱已被注册');
                                         break;
                                     case 2:
                                         that.alert_box.msg('注册失败', '密码至少要含有数字、小写字母、大写字母、特殊符号其中两个');
@@ -106,45 +144,35 @@ export default {
             })
             
         },
-        to_login(){
-            let from = this.$route.query.from;
-            if(from){
-                this.$router.push({path:'/login',query:{from:from}});
-            }
-            else{
-                this.$router.push({path:'/login'});
-            }
-        },
         check_account(rule, value, callback){
             const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
-            const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/;
             if (!value) {
-                return callback(new Error('请输入手机号或邮箱'))
+                return callback(new Error('请输入邮箱'))
             }
             setTimeout(() => {
             if (mailReg.test(value)) {
                 callback();
             } 
-            else if(phoneReg.test(value)){
-                callback();
-            }
             else{
-                callback(new Error('请输入正确的手机号或邮箱'));
+                callback(new Error('请输入正确的邮箱'));
             }
             }, 30)
         },
-        judge_phone_num(value){
-            const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/;
-            this.is_phone_num = phoneReg.test(value);
+        get_ver_code(){
+            this.ver_code_disabled = true;
+            this.rest_time = 60;
+            var that = this;
+            this.rest_timer = setInterval(function(){
+                that.rest_time--;
+                if(that.rest_time == 0){
+                    that.ver_code_disabled = false;
+                    that.rest_timer ? clearInterval(that.rest_timer) : '';
+                    localStorage.removeItem('res_time');
+                }
+            }, 1000);
+            localStorage.setItem('res_time', new Date());
         }
     },
-    // watch:{
-    //     $route:{
-    //         handler(route){
-
-    //         }
-    //     }
-    // }
 }
 </script>
 
@@ -175,12 +203,14 @@ export default {
         position: absolute;
         bottom:6px;
         right:10px;
+        text-decoration: none;
+        color:#333;
         cursor: pointer;
     }
 
     .el-card a:hover{
         text-decoration: underline;
-        color:hsl(1, 69%, 69%);
+        color:rgb(88, 99, 120);
     }
 
     .el-button{

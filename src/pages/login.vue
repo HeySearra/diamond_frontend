@@ -32,14 +32,14 @@ export default {
 @import url("../assets/common.css");
 
 .snow{
-  background-image: url("../assets/snow.jpg");
+  background-image: url("../assets/panda.jpg");
   background-size: cover;
   height:100vh;
   background-position: center;
+  opacity:0.69;
 }
 
 .nav>>>.el-menu{
   background-color: rgba(255, 255, 255, 0.87) !important;
 }
-
 </style>
