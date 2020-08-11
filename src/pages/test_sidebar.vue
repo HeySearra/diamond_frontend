@@ -4,8 +4,9 @@
       <el-header>
         <navbar class="nav"></navbar>
       </el-header>
-      <div style="margin-top:27vh"></div>
-      <login id="login"></login>
+      <el-aside>
+        <sidebar></sidebar>
+      </el-aside>
     </el-container>
   </div>
 </template>

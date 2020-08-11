@@ -74,7 +74,7 @@ export default {
 
 .new_buttons{
   border: solid 2px;
-  height: 100px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;

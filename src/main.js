@@ -17,6 +17,8 @@ import navbar from './components/header';
 import login from './components/login_block';
 import reg from './components/register_block';
 import sidebar from './components/team_sidebar'
+import forget_block from './components/forget_block';
+import forget_set_block from './components/forget_set_block';
 
 Vue.use(Element);
 Vue.use(echarts);
@@ -26,6 +28,8 @@ Vue.component('navbar', navbar);
 Vue.component('login', login);
 Vue.component('reg', reg);
 Vue.component('sidebar', sidebar);
+Vue.component('forget', forget_block);
+Vue.component('forget-set', forget_set_block);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'

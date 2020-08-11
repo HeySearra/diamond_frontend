@@ -4,8 +4,8 @@
             <h2><figure></figure></h2>
             <el-form :model="form" :rules="rules" ref="form" label-width="0">
                 <el-form-item prop="account">
-                    <el-input v-model="form.account" placeholder="请输入手机号或邮箱" @input="judge_phone_num" @keyup.enter.native="$refs.pas.focus()" maxLength="50">
-                        <i slot="prefix" class="el-input__icon" :class="is_phone_num?'el-icon-phone':'el-icon-message'"></i>
+                    <el-input v-model="form.account" placeholder="请输入账号的邮箱" @keyup.enter.native="$refs.pas.focus()" maxLength="50">
+                        <i slot="prefix" class="el-input__icon el-icon-message"></i>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
@@ -16,7 +16,8 @@
             </el-form>
             <el-button type="primary" @click="submit('form')">登录</el-button>
         </div>
-        <a @click="to_register">没有账号？立即注册</a>
+        <router-link class="register_link" :to="{path:'/register', query:from}">没有账号？立即注册</router-link>
+        <router-link class="forgot_link" :to="{path:'/forget', query:from}">忘记密码</router-link>
     </el-card>
 </template>
 
@@ -33,52 +34,41 @@ export default {
                     {required:true,message:'请输入密码',trigger:'blur'},
                 ],
                 account:[
-                    // {type:'email',required:true,message:'请输入邮箱',trigger:'blur'},
+                     {type:'email',required:true,message:'请输入邮箱',trigger:'blur'},
                     // { pattern:/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/, message: "请输入合法手机号/电话号", trigger: "blur" }
                     { validator: this.check_account, trigger: 'blur'}
                 ]
             },
-            is_phone_num:false
+            from:''
         }
     },
 
+    mounted(){
+        this.init();
+    },
+
     methods:{
+        init(){
+            this.from = this.$route.query.from ? this.$route.query.from : '';
+        },
         getCookie (name) {
             var value = '; ' + document.cookie
             var parts = value.split('; ' + name + '=')
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
-        to_register(){
-            $('#login').slideUp(200);
-            let from = this.$route.query.from;
-            if(from){
-                this.$router.push({path:'/register',query:{from:from}});
-            }
-            else{
-                this.$router.push({path:'/register'});
-            }
-        },
         check_account(rule, value, callback){
             const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+\.([a-zA-Z0-9_-])+/;
-            const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/;
             if (!value) {
-                return callback(new Error('请输入手机号或邮箱'))
+                return callback(new Error('请输入邮箱'))
             }
             setTimeout(() => {
                 if (mailReg.test(value)) {
                     callback();
                 } 
-                else if(phoneReg.test(value)){
-                    callback();
-                }
                 else{
-                    callback(new Error('请输入正确的手机号或邮箱'));
+                    callback(new Error('请输入正确的邮箱'));
                 }
             }, 30)
-        },
-        judge_phone_num(value){
-            const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/;
-            this.is_phone_num = phoneReg.test(value);
         },
         submit:function(formname){
             this.$refs[formname].validate((valid) => {
@@ -159,13 +149,22 @@ export default {
         font-size: 13px;
         position: absolute;
         bottom:6px;
-        right:10px;
+        text-decoration: none;
+        color:#333;
         cursor: pointer;
+    }
+
+    .register_link{
+        right:83px;
+    }
+
+    .forgot_link{
+        right:10px;
     }
 
     .el-card a:hover{
         text-decoration: underline;
-        color:hsl(1, 69%, 69%);
+        color:rgb(88, 99, 120);
     }
 
     .el-button{
