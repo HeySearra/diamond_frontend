@@ -1,26 +1,27 @@
 <template>
 <el-container>
-    <el-button size="mini" @click="visible">显示抽屉</el-button>
- <div v-if="drawerVisible" class="mask"></div>
-<transition :name="this.direction=='left'?'slide-right':'slide-left'">
-  <div v-if="drawerVisible" @click.stop=close class="drawer">
-<div
- class="drawer_body"
- :style="{
-  'right':direction=='right'?'0':'auto',
-  'left':direction=='left'?'0':'auto',
-  'width':width+'px',
-  'background': background,
-  'overflow-y':scroll?'scroll':'hidden'}"
->
-  </div>
-  </div>
-</transition>
+    <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">打开</el-button>
+<el-drawer
+  title="我是标题"
+  :visible.sync="drawer"
+  :with-header="false">
+
+     <el-table :data="gridData">
+      <el-table-column property="date" label="日期" width="150"></el-table-column>
+      <el-table-column property="name" label="姓名" width="200"></el-table-column>
+      <el-table-column property="address" label="地址"></el-table-column>
+    </el-table>
+</el-drawer>
 </el-container>
 </template>
 
 <script>
 export default {
+    data(){
+        return {
+            drawer: false,
+        }
+    },
     props: {
         // 是否显示drawer
         drawerVisible: Boolean,
@@ -28,35 +29,8 @@ export default {
         direction: {
             type: String,
             default: 'right',
-            validator(val) {
-                return ["right", "left"].indexOf(val) !== -1;
-            }
-        },
-        // drawer宽度
-        width: {
-            type: Number,
-            default: 400
-        },
-        // drawer背景色
-        background: {
-            type: String,
-            default: "#ffffff"
-        },
-        // 是否显示遮罩层
-        mask: {
-            type: Boolean,
-            default: true
         },
         title: String,
-        // 是否显示关闭按钮
-        closeBtn: {
-            type: Boolean,
-            default: false
-        },
-         scroll: {
-            type: Boolean,
-            default: false
-        }
     },
     methods:{
          visible() {
@@ -86,6 +60,12 @@ export default {
         height: 100%;
         position: absolute;
         z-index: 1000001;
+        background: #fff;
+        width: auto;
+        left: auto;
+        right: 0;
+        overflow-y: hidden;
+        width: 400px;
         background-color: #fff;
     }
     .mask {

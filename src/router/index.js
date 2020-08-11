@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import login from '@/pages/login.vue'
 import register from '@/pages/register.vue'
 import forget from '@/pages/forget.vue'
+import message_drawer from '@/components/message_drawer.vue'
 import forget_set from '@/pages/forget_set.vue'
 import test_sidebar from '@/pages/test_sidebar.vue'
 
@@ -57,6 +58,14 @@ const router =  new Router({
       component: forget_set,
       meta:{
         title:'DiaDoc 重置密码',
+      }
+    },
+    {
+      path: '/message_drawer',
+      name: 'message_drawer',
+      component: message_drawer,
+      meta:{
+        title:'消息抽屉',
       }
     },
     {
