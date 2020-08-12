@@ -4,7 +4,9 @@
 
 #### CKEditor配置
 
-`npm install`后，找到`node_modules/@ckeditor/ckeditor5-build-decoupled-document`文件夹，将里面的`build`文件夹替换为项目根目录下的`ckeditor5`文件夹中的`build`文件夹
+`npm install`后，找到`node_modules/@ckeditor/ckeditor5-build-decoupled-document`文件夹，将里面的`build`文件夹替换为项目根目录下的`ckeditor5`文件夹中的`build`文件夹。
+
+在`/test_sidebar`url中可以预览效果
 
 ## Build Setup
 
