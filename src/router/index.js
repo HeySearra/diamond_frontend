@@ -6,7 +6,12 @@ import register from '@/pages/register.vue'
 import forget from '@/pages/forget.vue'
 import message_drawer from '@/components/message_drawer.vue'
 import forget_set from '@/pages/forget_set.vue'
-import test_sidebar from '@/pages/test_sidebar.vue'
+import workbench from '@/pages/workbench.vue'
+import workbench_recent from '@/pages/workbench_recent.vue'
+import workbench_star from '@/pages/workbench_star.vue'
+import workbench_create from '@/pages/workbench_create.vue'
+import workbench_share from '@/pages/workbench_share.vue'
+import test from '@/components/team_block.vue'
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -61,19 +66,57 @@ const router =  new Router({
       }
     },
     {
-      path: '/message_drawer',
-      name: 'message_drawer',
-      component: message_drawer,
+      path: '/workbench',
+      name: 'workbench',
+      component: workbench,
       meta:{
-        title:'消息抽屉',
-      }
+        title:'DiaDoc 工作台',
+      },
+      children: [
+        {
+            path: '/workbench',
+            redirect:'/workbench/recent'
+        },
+        {
+          path:'/workbench/recent',
+          name: 'workbench_recent',
+          component: workbench_recent,
+          meta:{
+              title:'DiaDoc 最近浏览',
+          }
+        },
+        {
+          path:'/workbench/star',
+          name: 'workbench_star',
+          component: workbench_star,
+          meta:{
+              title:'DiaDoc 我的收藏',
+          }
+        },
+        {
+          path:'/workbench/create',
+          name: 'workbench_create',
+          component: workbench_create,
+          meta:{
+              title:'DiaDoc 我创建的',
+          }
+        },
+        {
+          path:'/workbench/share',
+          name: 'workbench_share',
+          component: workbench_share,
+          meta:{
+              title:'DiaDoc 共享文件',
+          }
+        },
+      ]
     },
     {
-      path: '/test_sidebar',
-      name: 'test_sidebar',
-      component: test_sidebar,
+      path: '/test',
+      name: 'test',
+      component: test,
       meta:{
-        title:'DiaDoc 侧边栏测试',
+        title:'test',
       }
     },
   ],

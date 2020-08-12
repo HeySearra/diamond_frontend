@@ -13,7 +13,7 @@
             <div class="file_item" 
                 v-for="item in list" 
                 :key="item.id"
-                draggable="true"
+                :draggable="drage"
                 @drag="start_drag($event, item)"
                 @drop="face_drop($event, item)"
                 @dragover="allow_drop($event, item)"
@@ -79,6 +79,10 @@ export default {
                     }
                 ]
             }
+        },
+        drage:{
+            type: Boolean,
+            default:true
         }
     },
     data() {
@@ -131,7 +135,9 @@ export default {
 @import url("../assets/dialog_style.css");
 
 h1{
+    font-size: 30px !important;
     text-indent: 25px;
+    margin-bottom:5px !important;;
 }
 
 .file_area{
@@ -166,7 +172,7 @@ h1{
     overflow: hidden;
 }
 
-@media (max-width: 1200px){
+@media (max-width: 1500px){
     .min_hide{
         display: none;
     }

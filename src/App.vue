@@ -16,7 +16,7 @@ export default {
   body, .el-header, .el-footer{
     margin:0;
     padding:0;
-    min-width:1000px;
+    min-width: 1200px;
   }
 
   body{

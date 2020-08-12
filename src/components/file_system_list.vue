@@ -1,15 +1,19 @@
 <template>
-    <div class="file_system_block">
+    <div class="file_system_list">
         <div class="clear_both divide_type"></div>
-        <div class="path">
+        <div class="path" v-if="type=='self'&&path.length">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item v-for="item in path" :key="item.id">{{item.name}}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="clear_both divide_type" style="height:10px"></div>
-        <file-display-list title="文件夹"></file-display-list>
-        <div class="clear_both divide_type"></div>
-        <file-display-list title="文件"></file-display-list>
+        <div v-for="item in list" :key="item.title">
+            <file-display-list :title="item.title" :list="item.content" :drage="drage" :context="context"></file-display-list>
+            <div class="clear_both divide_type"></div>
+        </div>
+        <div class="icon_part can_not_choose" @click="change_view">
+            <div class="icon_button"><span class="icon iconfont">&#xe663;</span></div>
+        </div>
     </div>
 </template>
 
@@ -20,12 +24,44 @@ export default {
             type:String,
             default: '1'
         },
+        drage:{
+            type:Boolean,
+            default:true
+        },
+        type:{
+            type:String,
+            default: 'self', // or 'from_out'
+        },
+        context:{
+            type:String,
+            default: 'file_system',
+        },
+        out_list:{
+            type: Array,
+            default(){
+                return [
+                    {
+                        title:'标题',
+                        content:[
+                            {
+                                type: 'file',
+                                id: 'id',
+                                is_link:false,
+                                is_starred:false,
+                                name:'file'
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
     },
     data() {
         return {
             path: [{name:'Apath',id:'idA'},{name:'Bpath',id:'idB'},{name:'Cpath',id:'idC'}],
-            fold_list:[],
-            file_list:[],
+            list:[
+
+            ]
         }
     },
 
@@ -35,7 +71,9 @@ export default {
 
     methods:{
         init(){
-
+            if(this.type == 'from_out'){
+                this.list = this.out_list;
+            }
         },
 
         open_info(id, name, type){
@@ -43,6 +81,9 @@ export default {
             this.dia_vis = true;
         },
 
+        change_view(){
+            this.$emit('change_view');
+        }
     }
 
 }
@@ -51,13 +92,18 @@ export default {
 <style scoped>
 @import url("../assets/common.css");
 @import url("../assets/dialog_style.css");
+.file_system_list{
+    position: relative;
+}
 
 .divide_type{
-    height: 30px;
+    height: 10px;
 }
 
 .path{
     padding: 0 15px;
+    border: solid 1px;
+    margin-right:100px;
 }
 
 .el-breadcrumb{
@@ -70,6 +116,28 @@ export default {
 
 .path>>>.el-breadcrumb__inner:hover{
     text-decoration: underline;
+}
+
+.icon_part{
+    height:30px;
+    width:80px;
+    position: absolute;
+    top:27px;
+    right:10px;
+    border:solid 1px;
+    text-align: center;
+}
+
+.icon_part .icon_button{
+    display:inline-block;
+    height:30px;
+    line-height:30px;
+    padding: 0 5px;
+    cursor:pointer
+}
+
+.icon_part .icon_button .icon{
+    font-size:27px;
 }
 
 @media (max-width: 1200px){

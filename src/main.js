@@ -17,7 +17,7 @@ import './assets/common.css'
 import navbar from './components/header';
 import login from './components/login_block';
 import reg from './components/register_block';
-import sidebar from './components/team_sidebar'
+import sidebar from './components/sidebar_block'
 import forget_block from './components/forget_block';
 import forget_set_block from './components/forget_set_block';
 import file_block from './components/file_block';
@@ -32,6 +32,8 @@ import template_block from './components/template_block';
 import template_display_block from './components/template_display_block';
 import doc_editor from './components/doc_editor';
 import message_item from './components/message_item';
+import file_system_block from './components/file_system_block';
+import file_system_list from './components/file_system_list';
 
 Vue.use(Element);
 Vue.use(echarts);
@@ -56,6 +58,8 @@ Vue.component('template-block', template_block);
 Vue.component('template-display-block', template_display_block);
 Vue.component('doc-editor', doc_editor);
 Vue.component('message-item', message_item);
+Vue.component('file-system-block', file_system_block);
+Vue.component('file-system-list', file_system_list);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'

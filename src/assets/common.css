@@ -26,39 +26,28 @@
 
 .el-aside {
     color: #333;
-    padding-top:50px;
-    padding-bottom:30px;
+    border:1px solid;
+    position:fixed;
+    left:0;
+    height: calc(100vh - 62px);
 }
 
 .el-main {
     color: #333;
-    padding-top:50px !important;
-    margin-right:10px;
-    margin-left:5px;
-    width:auto;
-    box-shadow: 0 2px 12px 1px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    border-radius: 1px;
-    padding-left:0;
-    padding-right:0;
+    width: calc(100% - 300px);
+    border:solid 1px;
+    position: fixed;
+    left:300px;
+    height: calc(100vh - 62px);
+    overflow-y: overlay;
+    overflow-x: hidden;
+    padding:0;
+    min-width: 870px;
 }
 
 .mid {
     margin-bottom: 40px;
-    width:1500px;
     margin:0 auto;
-}
-
-@media (max-width: 1560px){
-    .mid{
-        width:1250px;
-    }
-}
-
-@media (max-width: 1320px){
-    .mid{
-        width:1000px;
-    }
 }
 
 .clear_both{

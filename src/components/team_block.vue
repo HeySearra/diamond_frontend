@@ -17,6 +17,7 @@
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>进入</el-dropdown-item>
                     <el-dropdown-item command="team_info">团队信息</el-dropdown-item>
+                    <el-dropdown-item v-if="!is_creator" class="red_text">退出团队</el-dropdown-item>
                     <el-dropdown-item v-if="is_creator" class="red_text">解散团队</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
