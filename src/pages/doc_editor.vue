@@ -156,6 +156,8 @@ export default {
     initCKEditor() {
       CKEditor.create(document.querySelector('#editor'), {
         language: 'zh-cn',
+        initialData: appData.initialData,
+        extraPlugins: [ CommentsAdapter ],
         //initialData: appData.initialData,
         //extraPlugins: [CommentsAdapter],
         /*ckfinder: {
@@ -223,8 +225,8 @@ export default {
 
       }).then(editor => {
         window.editor = editor //Save the editor to get the contents of the editor at any time, perform some operations
-        editor.plugins.get('Users').addUser({id: '0'});
-        editor.plugins.get('Users').defineMe('0');
+        //editor.plugins.get('Users').addUser({id: '0'});
+        //editor.plugins.get('Users').defineMe('0');
         //editor.isReadOnly = true;
         const toolbarContainer = document.querySelector('#toolbar-container');
         toolbarContainer.appendChild(editor.ui.view.toolbar.element);

@@ -25,21 +25,9 @@
 <script>
 import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'; //中文包
-const appData = {
+var appData = {
   // Users data.
-  users: [
-    {
-      id: 'user-1',
-      name: 'Joe Doe',
-      // Note that the avatar is optional.
-      avatar: 'https://randomuser.me/api/portraits/thumb/men/26.jpg'
-    },
-    {
-      id: 'user-2',
-      name: 'Ella Harper',
-      avatar: 'https://randomuser.me/api/portraits/thumb/women/65.jpg'
-    }
-  ],
+  users: [],
 
   // The ID of the current user.
   userId: 'user-1',
@@ -116,8 +104,23 @@ class CommentsAdapter {
   }
 }
 export default {
+
   mounted() {
-    this.initCKEditor()
+    // 请求所有参与该文章评论的用户的ID，用户名以及头像
+    appData.users = [
+      {
+        id: 'user-1',
+        name: 'Joe Doe',
+        // Note that the avatar is optional.
+        avatar: 'https://randomuser.me/api/portraits/thumb/men/26.jpg'
+      },
+      {
+        id: 'user-2',
+        name: 'Ella Harper',
+        avatar: 'https://randomuser.me/api/portraits/thumb/women/65.jpg'
+      }
+    ];
+    this.initCKEditor();
   },
 
   data() {
