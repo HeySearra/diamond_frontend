@@ -27,19 +27,7 @@ import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'; //中文包
 const appData = {
   // Users data.
-  users: [
-    {
-      id: 'user-1',
-      name: 'Joe Doe',
-      // Note that the avatar is optional.
-      avatar: 'https://randomuser.me/api/portraits/thumb/men/26.jpg'
-    },
-    {
-      id: 'user-2',
-      name: 'Ella Harper',
-      avatar: 'https://randomuser.me/api/portraits/thumb/women/65.jpg'
-    }
-  ],
+  users: [],
 
   // The ID of the current user.
   userId: 'user-1',
@@ -114,7 +102,8 @@ class CommentsAdapter {
 
       getCommentThread( data ) {
         console.log( 'Getting comment thread', data );
-
+        console.log(new Date());
+        // data是thread的编号
         // Write a request to your database here. The returned `Promise`
         // should resolve with the comment thread data.
         return Promise.resolve( {
@@ -124,6 +113,12 @@ class CommentsAdapter {
               commentId: 'comment-1',
               authorId: 'user-2',
               content: '<p>Are we sure we want to use a made-up disorder name?</p>',
+              createdAt: new Date()
+            },
+            {
+              commentId: 'comment-2',
+              authorId: 'user-1',
+              content: '<p>We want to use a made-up disorder name.</p>',
               createdAt: new Date()
             }
           ],
@@ -135,6 +130,19 @@ class CommentsAdapter {
 }
 export default {
   mounted() {
+    appData.users = [
+      {
+        id: 'user-1',
+        name: 'Joe Doe',
+        // Note that the avatar is optional.
+        avatar: 'https://randomuser.me/api/portraits/thumb/men/26.jpg'
+      },
+      {
+        id: 'user-2',
+        name: 'Ella Harper',
+        avatar: 'https://randomuser.me/api/portraits/thumb/women/65.jpg'
+      }
+    ];
     this.initCKEditor()
   },
 

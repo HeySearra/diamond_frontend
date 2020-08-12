@@ -104,9 +104,7 @@ class CommentsAdapter {
   }
 }
 export default {
-
   mounted() {
-    // 请求所有参与该文章评论的用户的ID，用户名以及头像
     appData.users = [
       {
         id: 'user-1',
