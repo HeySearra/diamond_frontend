@@ -5,6 +5,7 @@
 import DecoupledDocumentEditor from '@ckeditor/ckeditor5-editor-decoupled/src/decouplededitor.js';
 import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment.js';
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat.js';
+import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave.js';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote.js';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold.js';
 import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder.js';
@@ -14,6 +15,7 @@ import CodeBlock from '@ckeditor/ckeditor5-code-block/src/codeblock.js';
 import Comments from '@ckeditor/ckeditor5-comments/src/comments.js';
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials.js';
 import ExportToPDF from '@ckeditor/ckeditor5-export-pdf/src/exportpdf.js';
+import FontColor from '@ckeditor/ckeditor5-font/src/fontcolor.js';
 import FontFamily from '@ckeditor/ckeditor5-font/src/fontfamily.js';
 import FontSize from '@ckeditor/ckeditor5-font/src/fontsize.js';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading.js';
@@ -39,7 +41,6 @@ import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation.js';
 import TodoList from '@ckeditor/ckeditor5-list/src/todolist';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline.js';
-import WordCount from '@ckeditor/ckeditor5-word-count/src/wordcount.js';
 
 class Editor extends DecoupledDocumentEditor {}
 
@@ -47,6 +48,7 @@ class Editor extends DecoupledDocumentEditor {}
 Editor.builtinPlugins = [
 	Alignment,
 	Autoformat,
+	Autosave,
 	BlockQuote,
 	Bold,
 	CKFinder,
@@ -56,6 +58,7 @@ Editor.builtinPlugins = [
 	Comments,
 	Essentials,
 	ExportToPDF,
+	FontColor,
 	FontFamily,
 	FontSize,
 	Heading,
@@ -80,8 +83,7 @@ Editor.builtinPlugins = [
 	TableToolbar,
 	TextTransformation,
 	TodoList,
-	Underline,
-	WordCount
+	Underline
 ];
 
 export default Editor;
