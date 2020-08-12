@@ -15,6 +15,9 @@ import team_center from '@/pages/team_center.vue'
 import file_system from '@/pages/file_system.vue'
 import team_file_system from '@/pages/team_file_system.vue'
 import test from '@/components/team_block.vue'
+import doc_editor from "@/pages/doc_editor.vue"
+import doc_read_only from "@/pages/doc_read_only.vue"
+import doc_comment_only from "@/pages/doc_comment_only.vue"
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -151,6 +154,30 @@ const router =  new Router({
     {
       path: '/file',
       redirect:'/file/desktop'
+    },
+    {
+      path: '/doc/edit',
+      name: 'doc_edit',
+      component: doc_editor,
+      meta:{
+        title:'DiaDoc 文章编辑',
+      }
+    },
+    {
+      path: '/doc/readonly',
+      name: 'doc_read_only',
+      component: doc_read_only,
+      meta:{
+        title:'DiaDoc 文章阅读',
+      }
+    },
+    {
+      path: '/doc/commentonly',
+      name: 'doc_comment_only',
+      component: doc_comment_only,
+      meta:{
+        title:'DiaDoc 文章评论',
+      }
     },
   ],
 });

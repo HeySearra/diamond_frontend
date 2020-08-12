@@ -30,7 +30,6 @@ import file_display_list from './components/file_display_list';
 import team_display_block from './components/team_display_block';
 import template_block from './components/template_block';
 import template_display_block from './components/template_display_block';
-import doc_editor from './components/doc_editor';
 import message_item from './components/message_item';
 import message_drawer from './components/message_drawer';
 import file_system_block from './components/file_system_block';
@@ -58,7 +57,6 @@ Vue.component('file-display-list', file_display_list);
 Vue.component('team-display-block', team_display_block);
 Vue.component('template-block', template_block);
 Vue.component('template-display-block', template_display_block);
-Vue.component('doc-editor', doc_editor);
 Vue.component('message-item', message_item);
 Vue.component('message-drawer', message_drawer);
 Vue.component('file-system-block', file_system_block);
@@ -69,6 +67,7 @@ import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
 import { view_type_manager } from './assets/global.js'
 import { login_manager } from './assets/login_state.js'
+
 Vue.prototype.alert_msg = alert_msg;
 Vue.prototype.alert_box = alert_box;
 Vue.prototype.login_manager = login_manager;
