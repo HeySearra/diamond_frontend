@@ -8,7 +8,15 @@
         </div>
         <div class="clear_both divide_type" style="height:10px"></div>
         <div v-for="item in list" :key="item.title">
-            <file-display-list :title="item.title" :list="item.content" :drage="drage" :context="context" @open_info="open_info"></file-display-list>
+            <file-display-list 
+                :title="item.title" 
+                :list="item.content" 
+                :drage="drage" 
+                :context="context" 
+                @open_info="open_info"
+                @move_item="move_item"
+                @share_item="share_item"
+                @copy_item="copy_item"></file-display-list>
             <div class="clear_both divide_type"></div>
         </div>
         <div class="icon_part can_not_choose" @click="change_view">
@@ -82,7 +90,19 @@ export default {
 
         change_view(){
             this.$emit('change_view');
-        }
+        },
+
+        move_item(id, type, name){
+            this.$emit('move_item', id, type, name);
+        },
+
+        share_item(did, name){
+            this.$emit('share_item', did, name);
+        },
+
+        copy_item(id, type, name){
+            this.$emit('copy_item', id, type, name);
+        },
     }
 
 }

@@ -24,7 +24,7 @@
                     <el-dropdown-item v-if="context!='recycle'">打开</el-dropdown-item>
                     <el-dropdown-item v-if="false">权限管理</el-dropdown-item>
                     <el-dropdown-item v-if="can_trade">打开所在文件夹</el-dropdown-item>
-                    <el-dropdown-item v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
+                    <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                     <el-dropdown-item v-if="(context=='file_system'||context=='team')&&!is_link&&false">复制</el-dropdown-item>
                     <el-dropdown-item v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
                     <el-dropdown-item class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
@@ -87,6 +87,9 @@ export default {
             switch(command){
                 case 'open_info':
                     this.$emit('open_info', this.name, 'file');
+                    break;
+                case 'move':
+                    this.$emit('move_item', this.did, 'file', this.name);
                     break;
             }
         }

@@ -20,7 +20,10 @@
                     :name="item.name" 
                     :context="context" 
                     :is_starred="item.is_starred"
-                    @open_info="open_info">
+                    @open_info="open_info"
+                    @move_item="move_item"
+                    @share_item="share_item"
+                    @copy_item="copy_item">
                 </component>
             </div>
         </div>
@@ -102,7 +105,19 @@ export default {
             this.draging_type = item.type;
             this.draging_id = item.id;
             this.$emit('set_draging_info', this.draging_type, this.draging_id);
-        }
+        },
+
+        move_item(id, type, name){
+            this.$emit('move_item', id, type, name);
+        },
+
+        share_item(did, name){
+            this.$emit('share_item', did, name);
+        },
+
+        copy_item(id, type, name){
+            this.$emit('copy_item', id, type, name);
+        },
     }
 
 }

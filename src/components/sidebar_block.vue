@@ -7,12 +7,12 @@
       </el-col>
       <el-col :span="16" class="username">DiaDoc钻石带会员</el-col>
     </el-row>
-    <el-divider></el-divider>
-    <el-row class="new_buttons">
+    <el-divider v-if="context!='doc'"></el-divider>
+    <el-row class="new_buttons" v-if="context!='doc'">
       <div class="button_container">
-        <el-row><el-button type="info" v-if="context!='team_center'" @click="$emit('create_new_file')">新 建 文 档</el-button></el-row>
-        <el-row><el-button type="info" v-if="context!='team_center'" @click="$emit('create_new_fold')">新 建 文 件 夹</el-button></el-row>
-        <el-row><el-button type="info" v-if="context=='team_center'" @click="$emit('create_new_team')">新 建 团 队</el-button></el-row>
+        <el-row><el-button type="primary" v-if="context!='team_center'" @click="$emit('create_new_file')">新 建 文 档</el-button></el-row>
+        <el-row><el-button type="primary" v-if="context!='team_center'" @click="$emit('create_new_fold')">新 建 文 件 夹</el-button></el-row>
+        <el-row><el-button type="primary" v-if="context=='team_center'" @click="$emit('create_new_team')">新 建 团 队</el-button></el-row>
       </div>
     </el-row>
     <el-divider></el-divider>
@@ -87,10 +87,36 @@
             <el-avatar></el-avatar>
           </el-tooltip>
         </div>
-        <el-row><el-button type="info" @click="$emit('manage_member')">管 理 成 员</el-button></el-row>
-        <el-row><el-button type="info" @click="$emit('setting_admin')">设 置 管 理 员</el-button></el-row>
+        <el-row><el-button type="primary" plain @click="$emit('edit_team_info')">修 改 团 队 信 息</el-button></el-row>
+        <el-row><el-button type="primary" plain @click="$emit('manage_member')">管 理 成 员</el-button></el-row>
+        <el-row><el-button type="primary" plain @click="$emit('edit_admin')">设 置 管 理 员</el-button></el-row>
         <el-row><el-button type="danger" @click="$emit('leave_team')">退 出 团 队</el-button></el-row>
         <el-row><el-button type="danger" @click="$emit('destroy_team')">解 散 团 队</el-button></el-row>
+      </el-row>
+      <div style="height:20px;"></div>
+    </el-row>
+    <el-row class="doc_info" v-if="context=='doc'">
+      <el-row>
+        <el-col :span="16" class="file_name">{{file_name}}</el-col>
+      </el-row>
+      <el-row>
+        <div class="doc_info">
+          <div class="info_item">
+            <div class="info_key">key：</div>
+            <div class="info_value">valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue</div>
+            <div class="clear_both"></div>
+          </div>
+          <div class="info_item">
+            <div class="info_key">key：</div>
+            <div class="info_value">valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue</div>
+            <div class="clear_both"></div>
+          </div>
+          <div class="info_item">
+            <div class="info_key">key：</div>
+            <div class="info_value">valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue</div>
+            <div class="clear_both"></div>
+          </div>
+        </div>
       </el-row>
       <div style="height:20px;"></div>
     </el-row>
@@ -126,6 +152,7 @@ export default {
   data() {
     return {
       team_name:'DiaDoc团队',
+      file_name:'file_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_name'
     }
   },
 
@@ -145,6 +172,7 @@ export default {
 @import url("../assets/common.css");
 
 .sidebar_menu {
+  background-color: #fefefe;
   font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif !important;
   border: solid 1px;
   margin:0 !important;
@@ -252,6 +280,39 @@ export default {
   margin-top: 2px;
   margin-bottom: 2px;
   width: 100%;
+}
+
+.file_name{
+  font-weight: bold;
+  font-size:17px;
+  margin: 0 6px;
+  width:auto;
+  line-height:27px;
+  word-break: break-all;
+}
+
+.doc_info{
+  padding: 0 10px 5px;
+}
+
+.doc_info .info_item{
+  float:none;
+  clear:both;
+  margin-top:10px;
+  font-size: 15px;
+}
+
+.info_key{
+  float:left;
+  width:60px;
+  text-align: right;
+  word-break: break-all;
+}
+
+.info_value{
+  float:right;
+  width:196px;
+  word-break: break-all;
 }
 
 </style>

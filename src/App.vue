@@ -1,11 +1,16 @@
 <template>
   <div id="app">
     <el-header>
-      <navbar @open_drawer="open_drawer"></navbar>
+      <navbar 
+        @open_drawer="open_drawer"
+        @edit_user_info="edit_user_info"
+        @change_password="change_password"></navbar>
     </el-header>
     <router-view/>
     <el-backtop></el-backtop>
     <message-drawer ref="message_drawer"></message-drawer>
+    <edit-user-info-dialog ref="edit_user_info_dialog"></edit-user-info-dialog>
+    <change-password-dialog ref="change_password_dialog"></change-password-dialog>
   </div>
 </template>
 
@@ -23,6 +28,12 @@ export default {
       this.show_drawer = true;
       this.$refs.message_drawer.open();
     },
+    edit_user_info(){
+      this.$refs.edit_user_info_dialog.open();
+    },
+    change_password(){
+      this.$refs.change_password_dialog.open();
+    }
   },
 }
 </script>

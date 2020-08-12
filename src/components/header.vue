@@ -56,12 +56,13 @@
           <span class="el-dropdown-link" @click="to_login" v-if="!is_login">
               <el-avatar>登录</el-avatar>
           </span>
-          <el-dropdown @click.native="dialogVisible = true" @command="to_link" v-if="is_login">
+          <el-dropdown @click.native="dialogVisible = true" @command="click_dropdown" v-if="is_login">
               <span class="el-dropdown-link">
                   <el-avatar :src="photo_src"></el-avatar>
               </span>
               <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="user_info">账号管理</el-dropdown-item>
+                  <el-dropdown-item command="user_info">修改信息</el-dropdown-item>
+                  <el-dropdown-item command="change_password">修改密码</el-dropdown-item>
                   <el-dropdown-item command="help">使用帮助</el-dropdown-item>
                   <el-dropdown-item command="logout">登出</el-dropdown-item>
               </el-dropdown-menu>
@@ -156,18 +157,20 @@
         this.$router.push({path:'/login', query:{from:this.$route.path}});
       },
 
-      to_link(url){
-        if(url == 'logout'){
-          this.logout();
-          return;
-        }
-        if(url == 'to_collection'){
-          if(this.$route.name != 'collection'){
-            this.$router.push({path:'/collection?from='+this.$route.path});
+      click_dropdown(command){
+          switch(command){
+            case 'user_info':
+              this.$emit('edit_user_info');
+              break;
+            case 'change_password':
+              this.$emit('change_password');
+              break;
+            case 'help':
+              break;
+            case 'logout':
+              this.logout();
+              break;
           }
-          return;
-        }
-        this.$router.push({path:url});
       },
 
       logout(){

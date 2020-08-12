@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <el-aside>
-      <sidebar></sidebar>
+      <sidebar context="doc"></sidebar>
     </el-aside>
     <el-row style="z-index: 999">
       <!-- Toolbar Container -->

@@ -10,20 +10,34 @@
                 :is="view_type=='block'?'file-system-block':'file-system-list'"
                 :fid="fid"
                 @change_view="change_view"
-                @open_info="open_info">
+                @open_info="open_info"
+                @move_item="move_item"
+                @share_item="share_item"
+                @copy_item="copy_item">
             </component>
           </div>
           <div style="height:50px"></div>
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar context="team" :tid="tid" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
+        <sidebar context="team" 
+            :tid="tid" 
+            @create_new_file="create_new_file" 
+            @create_new_fold="create_new_fold"
+            @edit_admin="edit_admin"
+            @manage_member="manage_member"
+            @edit_team_info="edit_team_info"></sidebar>
       </el-aside>
     </el-container>
     <el-footer></el-footer>
     </el-container>
     <new-dialog ref="new_dialog"></new-dialog>
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
+    <admin-edit-dialog ref="admin_edit_dialog"></admin-edit-dialog>
+    <manage-member-dialog ref="manage_member_dialog"></manage-member-dialog>
+    <choose-path-dialog ref="choose_path_dialog"></choose-path-dialog>
+    <edit-team-info-dialog ref="edit_team_info_dialog"></edit-team-info-dialog>
+    <share-dialog ref="share_dialog" context="team"></share-dialog>
   </div>
 </template>
 
@@ -65,7 +79,31 @@ export default {
 
     create_new_fold(){
         this.$refs.new_dialog.open('fold', this.fid);
-    }
+    },
+
+    edit_admin(){
+        this.$refs.admin_edit_dialog.open(this.tid);
+    },
+
+    manage_member(){
+        this.$refs.manage_member_dialog.open(this.tid);
+    },
+
+    move_item(id, type, name){
+        this.$refs.choose_path_dialog.open(this.fid, type, id, name, 'move')
+    },
+
+    edit_team_info(){
+      this.$refs.edit_team_info_dialog.open(this.tid);
+    },
+
+    share_item(did, name){
+      this.$refs.share_dialog.open(did, name);
+    },
+
+    copy_item(id, type, name){
+        this.$refs.choose_path_dialog.open(this.fid, type, id, name, 'copy');
+    },
   }
 }
 </script>

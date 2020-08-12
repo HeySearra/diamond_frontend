@@ -37,6 +37,15 @@ import file_system_list from './components/file_system_list';
 import file_info_dialog from './components/file_info_dialog';
 import move_file_window from './components/move_file_window';
 import new_dialog from './components/new_dialog';
+import admin_edit_dialog from './components/admin_edit_dialog';
+import user_list_item from './components/user_list_item';
+import manage_member_dialog from './components/manage_member_dialog';
+import choose_path_dialog from './components/choose_path_dialog';
+import choose_path_fold_list_item from './components/choose_path_fold_list_item';
+import edit_team_info_dialog from './components/edit_team_info_dialog';
+import share_dialog from './components/share_dialog';
+import edit_user_info_dialog from './components/edit_user_info_dialog';
+import change_password_dialog from './components/change_password_dialog';
 
 Vue.use(Element);
 Vue.use(echarts);
@@ -66,6 +75,15 @@ Vue.component('file-system-list', file_system_list);
 Vue.component('file-info-dialog', file_info_dialog);
 Vue.component('new-dialog', new_dialog);
 Vue.component('move-file-window', move_file_window);
+Vue.component('admin-edit-dialog', admin_edit_dialog);
+Vue.component('user-list-item', user_list_item);
+Vue.component('manage-member-dialog', manage_member_dialog);
+Vue.component('choose-path-dialog', choose_path_dialog);
+Vue.component('choose-path-fold-list-item', choose_path_fold_list_item);
+Vue.component('edit-team-info-dialog', edit_team_info_dialog);
+Vue.component('share-dialog', share_dialog);
+Vue.component('edit-user-info-dialog', edit_user_info_dialog);
+Vue.component('change-password-dialog',change_password_dialog);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'

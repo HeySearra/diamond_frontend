@@ -10,7 +10,10 @@
                 :is="view_type=='block'?'file-system-block':'file-system-list'"
                 :fid="fid"
                 @change_view="change_view"
-                @open_info="open_info">
+                @open_info="open_info"
+                @move_item="move_item"
+                @share_item="share_item"
+                @copy_item="copy_item">
             </component>
           </div>
           <div style="height:50px"></div>
@@ -24,6 +27,8 @@
     </el-container>
     <new-dialog ref="new_dialog"></new-dialog>
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
+    <choose-path-dialog ref="manage_member_dialog"></choose-path-dialog>
+    <share-dialog ref="share_dialog"></share-dialog>
   </div>
 </template>
 
@@ -65,7 +70,19 @@ export default {
 
     create_new_fold(){
         this.$refs.new_dialog.open('fold', this.fid);
-    }
+    },
+
+    move_item(id, type, name){
+        this.$refs.choose_path_dialog.open(this.fid, type, id, name, 'move');
+    },
+
+    share_item(did, name){
+      this.$refs.share_dialog.open(did, name);
+    },
+
+    copy_item(id, type, name){
+        this.$refs.choose_path_dialog.open(this.fid, type, id, name, 'copy');
+    },
   }
 }
 </script>
