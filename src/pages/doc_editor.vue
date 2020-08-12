@@ -1,5 +1,8 @@
 <template>
-  <el-main style="z-index: 999">
+  <el-main>
+    <el-aside>
+      <sidebar></sidebar>
+    </el-aside>
     <el-row style="z-index: 999">
       <!-- Toolbar Container -->
       <div id="toolbar-container"></div>
@@ -9,10 +12,10 @@
         <sidebar></sidebar>
       </el-col-->
       <el-col class="editor-container" style="border: solid 2px;" :span="18">
-        <!-- Editor Container -->
-        <div id="editor">
-          <p>This is the initial editor content.</p>
-        </div>
+          <!-- Editor Container -->
+          <div id="editor">
+            <p>This is the initial editor content.</p>
+          </div>
       </el-col>
       <el-col :span="6" id="comment-sidebar" style="border: solid 2px;"><br></el-col>
     </el-row>
@@ -161,7 +164,42 @@ export default {
         },*/
         toolbar: {
           items: [
+            'exportPdf',
+            'undo',
+            'redo',
+            '|',
+            'heading',
+            '|',
+            'fontSize',
+            'fontFamily',
+            '|',
+            'bold',
+            'italic',
+            'underline',
+            'strikethrough',
+            'highlight',
+            '|',
+            'alignment',
+            'pageBreak',
+            '|',
+            'numberedList',
+            'bulletedList',
+            '|',
+            'indent',
+            'outdent',
+            '|',
+            'todoList',
+            'link',
+            'blockQuote',
+            'imageUpload',
+            'insertTable',
+            'mediaEmbed',
+            '|',
             'comment',
+            'code',
+            'codeBlock',
+            'MathType',
+            'ChemType'
           ]
         },
         image: {
@@ -213,7 +251,7 @@ export default {
 }
 
 #editor {
-  height: 93%;
+  height: 95%;
   margin-top: 1%;
 }
 
@@ -223,10 +261,9 @@ export default {
 
 .el-main {
   background-color: rgba(0, 0, 0, 0);
-  height: 98vh;
   border: solid 2px;
-  padding: 0 !important;
   overflow: inherit;
+  margin-top: 60px;
 }
 
 </style>

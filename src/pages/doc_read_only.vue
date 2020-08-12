@@ -1,5 +1,8 @@
 <template>
-  <el-main style="z-index: 999">
+  <el-main>
+    <el-aside>
+      <sidebar></sidebar>
+    </el-aside>
     <el-row style="z-index: 999">
       <!-- Toolbar Container -->
       <div id="toolbar-container"></div>
@@ -22,7 +25,28 @@
 <script>
 import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'; //中文包
+const appData = {
+  // Users data.
+  users: [
+    {
+      id: 'user-1',
+      name: 'Joe Doe',
+      // Note that the avatar is optional.
+      avatar: 'https://randomuser.me/api/portraits/thumb/men/26.jpg'
+    },
+    {
+      id: 'user-2',
+      name: 'Ella Harper',
+      avatar: 'https://randomuser.me/api/portraits/thumb/women/65.jpg'
+    }
+  ],
 
+  // The ID of the current user.
+  userId: 'user-1',
+
+  // Editor initial data.
+  initialData: ''
+};
 class CommentsAdapter {
   constructor( editor ) {
     this.editor = editor;
@@ -120,72 +144,17 @@ export default {
           uploadUrl: ''
           // Back-end processing upload logic returns json data, including uploaded (option true / false) and url two fields
         },*/
-        toolbar: {
-          items: [
-            'exportPdf',
-            'undo',
-            'redo',
-            '|',
-            'heading',
-            '|',
-            'fontSize',
-            'fontFamily',
-            '|',
-            'bold',
-            'italic',
-            'underline',
-            'strikethrough',
-            'highlight',
-            '|',
-            'alignment',
-            'pageBreak',
-            '|',
-            'numberedList',
-            'bulletedList',
-            '|',
-            'indent',
-            'outdent',
-            '|',
-            'todoList',
-            'link',
-            'blockQuote',
-            'imageUpload',
-            'insertTable',
-            'mediaEmbed',
-            '|',
-            'comment',
-            'code',
-            'codeBlock',
-            'MathType',
-            'ChemType'
-          ]
-        },
-        image: {
-          toolbar: [
-            'imageTextAlternative',
-            'imageStyle:full',
-            'imageStyle:side'
-          ]
-        },
-        table: {
-          contentToolbar: [
-            'tableColumn',
-            'tableRow',
-            'mergeTableCells'
-          ]
-        },
         licenseKey: 'seuYU5TnNtW9thIKlRcf3ArZw9c7Rf5d1JuDv3q8iNeo+V8m4o9xnds=',
         sidebar: {
           container: document.querySelector('#comment-sidebar')
         },
-
       }).then(editor => {
         window.editor = editor //Save the editor to get the contents of the editor at any time, perform some operations
         editor.plugins.get('Users').addUser({id: '0'});
         editor.plugins.get('Users').defineMe('0');
         editor.isReadOnly = true;
         const toolbarContainer = document.querySelector('#toolbar-container');
-        toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+        //toolbarContainer.appendChild(editor.ui.view.toolbar.element);
         document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
       }).catch(error => {
         console.error(error);
@@ -205,24 +174,23 @@ export default {
 }
 
 .editor-container {
-  height: 90vh;
+  height: 92vh;
 }
 
 #editor {
-  height: 93%;
+  height: 99%;
   margin-top: 1%;
 }
 
 #comment-sidebar {
-  height: 90vh;
+  height: 95vh;
 }
 
 .el-main {
   background-color: rgba(0, 0, 0, 0);
-  height: 98vh;
   border: solid 2px;
-  padding: 0 !important;
   overflow: inherit;
+  margin-top: 60px;
 }
 
 </style>
