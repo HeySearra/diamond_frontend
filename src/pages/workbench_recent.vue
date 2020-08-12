@@ -51,7 +51,8 @@ export default {
     },
     methods:{
         init(){
-            
+            this.$emit('active_change');
+            this.view_type = this.view_type_manager.get();
         },
         
         getCookie (name) {
@@ -62,6 +63,7 @@ export default {
 
         change_view(){
             this.view_type = this.view_type=='block' ? 'list' : 'block';
+            this.view_type_manager.set(this.view_type);
         }
         
     }

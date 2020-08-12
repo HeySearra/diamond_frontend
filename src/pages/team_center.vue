@@ -1,5 +1,5 @@
 <template>
-  <div class="workbench">
+  <div class="team_center">
     <el-container>
       <el-header>
       <navbar></navbar>
@@ -7,20 +7,16 @@
     <el-container class="mid">
       <el-container>
         <el-main>
-          <el-menu :default-active="active_index" class="workbench_menu" mode="horizontal" @select="handleSelect">
-          <el-menu-item index="1"><router-link class="register_link" :to="{path:'/workbench/recent'}">最近浏览</router-link></el-menu-item>
-          <el-menu-item index="2"><router-link class="register_link" :to="{path:'/workbench/star'}">我的收藏</router-link></el-menu-item>
-          <el-menu-item index="3"><router-link class="register_link" :to="{path:'/workbench/create'}">我创建的</router-link></el-menu-item>
-          <el-menu-item index="4"><router-link class="register_link" :to="{path:'/workbench/share'}">共享文件</router-link></el-menu-item>
-        </el-menu>
           <div style="padding: 0 40px 0 30px;">
-            <router-view @active_change="active_change"></router-view>
+            <team-display-block title="我创建的团队" :is_creator="true"></team-display-block>
+            <div class="clear_both"></div>
+            <team-display-block title="我参与的团队" :is_creator="false"></team-display-block>
           </div>
           <div style="height:50px"></div>
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar active="workbench"></sidebar>
+        <sidebar active="team_center" context="team_center"></sidebar>
       </el-aside>
     </el-container>
     <el-footer></el-footer>

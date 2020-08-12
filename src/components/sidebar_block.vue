@@ -93,9 +93,9 @@
       </el-row>
       <div style="height:20px;"></div>
     </el-row>
-    <el-row class="function_buttons">工作台</el-row>
-    <el-row class="function_buttons">我的团队</el-row>
-    <el-row class="function_buttons">我的桌面</el-row>
+    <el-row class="function_buttons" :class="active=='workbench'?'function_buttons_active':''"><router-link :to="{path:'/workbench/'}">工作台</router-link></el-row>
+    <el-row class="function_buttons" :class="active=='team_center'?'function_buttons_active':''"><router-link :to="{path:'/team/'}">我的团队</router-link></el-row>
+    <el-row class="function_buttons"><router-link :class="active=='desktop'?'function_buttons_active':''" :to="{path:'/file/'}">我的桌面</router-link></el-row>
     <el-row class="function_buttons">模版库</el-row>
     <el-row class="function_buttons">回收站</el-row>
   </div>
@@ -106,6 +106,14 @@ export default {
       context:{
         type:String,
         default: 'normal',  // 'normal', 'team', 'team_center'
+      },
+      active:{
+        type:String,
+        default: 'none'
+      },
+      tid:{
+        type:String,
+        default:'team'
       }
   },
 
@@ -115,7 +123,7 @@ export default {
 
   data() {
     return {
-      team_name:'DiaDoc团队'
+      team_name:'DiaDoc团队',
     }
   },
 
@@ -226,7 +234,15 @@ export default {
   cursor:pointer
 }
 
-.function_buttons:hover{
+.function_buttons a{
+  display: block;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+}
+
+.function_buttons:hover, .function_buttons_active{
   background-color: #ccc;
 }
 

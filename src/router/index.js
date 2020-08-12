@@ -11,6 +11,9 @@ import workbench_recent from '@/pages/workbench_recent.vue'
 import workbench_star from '@/pages/workbench_star.vue'
 import workbench_create from '@/pages/workbench_create.vue'
 import workbench_share from '@/pages/workbench_share.vue'
+import team_center from '@/pages/team_center.vue'
+import file_system from '@/pages/file_system.vue'
+import team_file_system from '@/pages/team_file_system.vue'
 import test from '@/components/team_block.vue'
 
 const originalPush = Router.prototype.push
@@ -109,7 +112,31 @@ const router =  new Router({
               title:'DiaDoc 共享文件',
           }
         },
+        {
+          path: '/workbench/*',
+          redirect:'/workbench/recent'
+        },
       ]
+    },
+    {
+      path: '/team',
+      name: 'team_center',
+      component: team_center,
+      meta:{
+        title:'DiaDoc 我的团队'
+      }
+    },
+    {
+      path: '/team/:tid/file/:id',
+      name: 'team_file_system',
+      component: team_file_system,
+      meta:{
+        title:'DiaDoc 团队空间'
+      }
+    },
+    {
+      path: '/team/:tid/',
+      redirect:'/team/:tid/file/desktop'
     },
     {
       path: '/test',
@@ -118,6 +145,18 @@ const router =  new Router({
       meta:{
         title:'test',
       }
+    },
+    {
+      path: '/file/:id',
+      name: 'file_system',
+      component: file_system,
+      meta:{
+        title:'DiaDoc 文件夹',
+      }
+    },
+    {
+      path: '/file',
+      redirect:'/file/desktop'
     },
   ],
 });
