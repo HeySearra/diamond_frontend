@@ -54,12 +54,16 @@ Vue.component('file-display-list', file_display_list);
 Vue.component('team-display-block', team_display_block);
 Vue.component('template-block', template_block);
 Vue.component('template-display-block', template_display_block);
-Vue.component('doc-editor', doc_editor);
 Vue.component('message-item', message_item);
+Vue.component('doc-editor', doc_editor);
+Vue.component('doc-read-only', doc_read_only);
+Vue.component('doc-comment-only', doc_comment_only);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
 import { login_manager } from './assets/login_state.js'
+import doc_comment_only from "./components/doc_comment_only";
+import doc_read_only from "./components/doc_read_only";
 Vue.prototype.alert_msg = alert_msg;
 Vue.prototype.alert_box = alert_box;
 Vue.prototype.login_manager = login_manager;

@@ -9,10 +9,10 @@
         <sidebar></sidebar>
       </el-col>
       <el-col class="editor-container" style="border: solid 2px;" :span="14">
-          <!-- Editor Container -->
-          <div id="editor">
-            <p>This is the initial editor content.</p>
-          </div>
+        <!-- Editor Container -->
+        <div id="editor">
+          <p>This is the initial editor content.</p>
+        </div>
       </el-col>
       <el-col :span="5" id="comment-sidebar" style="border: solid 2px;"><br></el-col>
     </el-row>
@@ -161,42 +161,7 @@ export default {
         },*/
         toolbar: {
           items: [
-            'exportPdf',
-            'undo',
-            'redo',
-            '|',
-            'heading',
-            '|',
-            'fontSize',
-            'fontFamily',
-            '|',
-            'bold',
-            'italic',
-            'underline',
-            'strikethrough',
-            'highlight',
-            '|',
-            'alignment',
-            'pageBreak',
-            '|',
-            'numberedList',
-            'bulletedList',
-            '|',
-            'indent',
-            'outdent',
-            '|',
-            'todoList',
-            'link',
-            'blockQuote',
-            'imageUpload',
-            'insertTable',
-            'mediaEmbed',
-            '|',
             'comment',
-            'code',
-            'codeBlock',
-            'MathType',
-            'ChemType'
           ]
         },
         image: {

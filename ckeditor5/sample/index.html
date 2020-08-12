@@ -36,9 +36,6 @@
 			<div class="row row-editor">
 				<div class="editor">
 					<h2>Bilingual Personality Disorder</h2>
-					<figure class="image image-style-side"><img src="https://c.cksource.com/a/1/img/docs/sample-image-bilingual-personality-disorder.jpg">
-						<figcaption>One language, one person.</figcaption>
-					</figure>
 					<p>
 						This may be the first time you hear about this made-up disorder but
 						it actually isn’t so far from the truth. Even the studies that were conducted almost half a century show that
@@ -92,6 +89,7 @@
 						<strong>the culture</strong> of languages varies substantially and the language a person speaks is an essential element of daily life.
 					</p>
 				</div>
+				<div class="sidebar"></div>
 			</div></div>
 		</div>
 	</main>
@@ -141,10 +139,11 @@
 						'insertTable',
 						'mediaEmbed',
 						'|',
-						'codeBlock',
 						'code',
+						'codeBlock',
 						'MathType',
-						'ChemType'
+						'ChemType',
+						'comment'
 					]
 				},
 				language: 'zh',
@@ -162,15 +161,17 @@
 						'mergeTableCells'
 					]
 				},
-				licenseKey: '',
-				
+				licenseKey: 'seuYU5TnNtW9thIKlRcf3ArZw9c7Rf5d1JuDv3q8iNeo+V8m4o9xnds=',
+				sidebar: {
+				container: document.querySelector( '.sidebar' )
+			},
 			} )
 			.then( editor => {
 				window.editor = editor;
 		
-				
-				
-				
+				// Learn more about users on https://ckeditor.com/docs/ckeditor5/latest/features/collaboration/users.html.
+				editor.plugins.get( 'Users' ).addUser( { id: '0' } );
+				editor.plugins.get( 'Users' ).defineMe( '0' );
 		
 				// Set a custom container for the toolbar.
 				document.querySelector( '.document-editor__toolbar' ).appendChild( editor.ui.view.toolbar.element );
@@ -179,7 +180,7 @@
 			.catch( error => {
 				console.error( 'Oops, something went wrong!' );
 				console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-				console.warn( 'Build id: z7x7x9frjxle-8mox3mmfjppg' );
+				console.warn( 'Build id: vvnt9c6beoo9-athmueo3brsl' );
 				console.error( error );
 			} );
 	</script>

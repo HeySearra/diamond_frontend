@@ -9,10 +9,10 @@
         <sidebar></sidebar>
       </el-col>
       <el-col class="editor-container" style="border: solid 2px;" :span="14">
-          <!-- Editor Container -->
-          <div id="editor">
-            <p>This is the initial editor content.</p>
-          </div>
+        <!-- Editor Container -->
+        <div id="editor">
+          <p>This is the initial editor content.</p>
+        </div>
       </el-col>
       <el-col :span="5" id="comment-sidebar" style="border: solid 2px;"><br></el-col>
     </el-row>
@@ -22,46 +22,7 @@
 <script>
 import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'; //中文包
-const appData = {
-  // Users data.
-  users: [
-    {
-      id: 'user-1',
-      name: 'Joe Doe',
-      // Note that the avatar is optional.
-      avatar: 'https://randomuser.me/api/portraits/thumb/men/26.jpg'
-    },
-    {
-      id: 'user-2',
-      name: 'Ella Harper',
-      avatar: 'https://randomuser.me/api/portraits/thumb/women/65.jpg'
-    }
-  ],
 
-  // The ID of the current user.
-  userId: 'user-1',
-
-  // Editor initial data.
-  initialData:
-    '<h2>\
-                    <comment id="thread-1" type="start"></comment>\
-                    Bilingual Personality Disorder\
-                    <comment id="thread-1" type="end"></comment>\
-                </h2>\
-                <p>\
-                    This may be the first time you hear about this made-up disorder but it actually isn’t so far from the truth.\
-                    As recent studies show, the language you speak has more effects on you than you realize.\
-                    According to the studies, the language a person speaks affects their cognition,\
-                    behavior, emotions and hence <strong>their personality</strong>.\
-                </p>\
-                <p>\
-                    This shouldn’t come as a surprise\
-                    <a href="https://en.wikipedia.org/wiki/Lateralization_of_brain_function">since we already know</a>\
-                    that different regions of the brain become more active depending on the activity.\
-                    The structure, information and especially <strong>the culture</strong> of languages varies substantially\
-                    and the language a person speaks is an essential element of daily life.\
-                </p>'
-};
 class CommentsAdapter {
   constructor( editor ) {
     this.editor = editor;
@@ -222,7 +183,7 @@ export default {
         window.editor = editor //Save the editor to get the contents of the editor at any time, perform some operations
         editor.plugins.get('Users').addUser({id: '0'});
         editor.plugins.get('Users').defineMe('0');
-        //editor.isReadOnly = true;
+        editor.isReadOnly = true;
         const toolbarContainer = document.querySelector('#toolbar-container');
         toolbarContainer.appendChild(editor.ui.view.toolbar.element);
         document.querySelector('.ck-toolbar').classList.add('ck-reset_all');

@@ -4,7 +4,7 @@
       <el-header>
         <navbar class="nav"></navbar>
       </el-header>
-      <el-main style="margin-top: 10px; display: flex; justify-content: center;">
+      <el-main style="margin-top: 10px; margin-bottom: 10px; border: solid 2px">
         <doc-editor></doc-editor>
       </el-main>
       <!--el-container>
@@ -57,6 +57,7 @@ export default {
 
 .el-main {
   background-color: rgba(0, 0, 0, 0);
-  height: 100vh;
+  height: 98vh;
+  overflow: hidden;
 }
 </style>

@@ -11,6 +11,7 @@ import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder.js';
 import CKFinderUploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter.js';
 import Code from '@ckeditor/ckeditor5-basic-styles/src/code.js';
 import CodeBlock from '@ckeditor/ckeditor5-code-block/src/codeblock.js';
+import Comments from '@ckeditor/ckeditor5-comments/src/comments.js';
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials.js';
 import ExportToPDF from '@ckeditor/ckeditor5-export-pdf/src/exportpdf.js';
 import FontFamily from '@ckeditor/ckeditor5-font/src/fontfamily.js';
@@ -52,6 +53,7 @@ Editor.builtinPlugins = [
 	CKFinderUploadAdapter,
 	Code,
 	CodeBlock,
+	Comments,
 	Essentials,
 	ExportToPDF,
 	FontFamily,
