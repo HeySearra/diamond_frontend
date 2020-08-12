@@ -4,7 +4,10 @@
       <el-header>
         <navbar class="nav"></navbar>
       </el-header>
-      <el-container>
+      <el-main style="margin-top: 10px; display: flex; justify-content: center;">
+        <doc-editor></doc-editor>
+      </el-main>
+      <!--el-container>
         <el-aside width="20vw">
           <sidebar></sidebar>
         </el-aside>
@@ -17,34 +20,22 @@
                       :config="editorConfig"></ckeditor>
           </div>
         </el-main>
-      </el-container>
+      </el-container-->
     </el-container>
   </div>
 </template>
 
 <script>
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
-import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'; //中文包
+
 export default {
 
   data() {
     return {
-      editor: DecoupledEditor,
-      editorData: '<p>Content of the editor.</p>',
-      editorConfig: {
-        // The configuration of the editor.
-        language: 'zh-cn',  // 中文
-      },
+
     }
   },
   methods: {
-    onReady( editor )  {
-      // Insert the toolbar before the editable area.
-      editor.ui.getEditableElement().parentElement.insertBefore(
-        editor.ui.view.toolbar.element,
-        editor.ui.getEditableElement()
-      );
-    }
+
   }
 }
 </script>
@@ -64,4 +55,8 @@ export default {
   background-color: rgba(255, 255, 255, 0.87) !important;
 }
 
+.el-main {
+  background-color: rgba(0, 0, 0, 0);
+  height: 100vh;
+}
 </style>

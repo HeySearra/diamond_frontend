@@ -30,11 +30,12 @@ import file_display_list from './components/file_display_list';
 import team_display_block from './components/team_display_block';
 import template_block from './components/template_block';
 import template_display_block from './components/template_display_block';
+import doc_editor from './components/doc_editor';
 
 Vue.use(Element);
 Vue.use(echarts);
 Vue.use(mavonEditor);
-Vue.use( CKEditor );
+Vue.use(CKEditor);
 
 Vue.component('navbar', navbar);
 Vue.component('login', login);
@@ -52,6 +53,7 @@ Vue.component('file-display-list', file_display_list);
 Vue.component('team-display-block', team_display_block);
 Vue.component('template-block', template_block);
 Vue.component('template-display-block', template_display_block);
+Vue.component('doc-editor', doc_editor);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
