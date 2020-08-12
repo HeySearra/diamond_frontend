@@ -4,26 +4,47 @@
       <el-header>
         <navbar class="nav"></navbar>
       </el-header>
-      <el-aside>
-        <sidebar></sidebar>
-      </el-aside>
+      <el-container>
+        <el-aside width="20vw">
+          <sidebar></sidebar>
+        </el-aside>
+        <el-main style="margin-top: 10px">
+          ckeditor所见即所得
+          <div style="border: solid 2px">
+            <ckeditor :editor="editor"
+                      @ready="onReady"
+                      v-model="editorData"
+                      :config="editorConfig"></ckeditor>
+          </div>
+        </el-main>
+      </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
+import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'; //中文包
 export default {
-  data () {
+
+  data() {
     return {
+      editor: DecoupledEditor,
+      editorData: '<p>Content of the editor.</p>',
+      editorConfig: {
+        // The configuration of the editor.
+        language: 'zh-cn',  // 中文
+      },
     }
   },
-  mounted(){
-    if(this.login_manager.get()){
-      let url = this.$route.query&&this.$route.query.from ? this.$route.query.from : '/index';
-      this.$router.push({path:url});
+  methods: {
+    onReady( editor )  {
+      // Insert the toolbar before the editable area.
+      editor.ui.getEditableElement().parentElement.insertBefore(
+        editor.ui.view.toolbar.element,
+        editor.ui.getEditableElement()
+      );
     }
-    document.documentElement.scrollTop = 0;
-    $(window).off('scroll');
   }
 }
 </script>
@@ -32,14 +53,14 @@ export default {
 <style scoped>
 @import url("../assets/common.css");
 
-.snow{
+.snow {
   background-image: url("../assets/snow.jpg");
   background-size: cover;
-  height:100vh;
+  height: 100vh;
   background-position: center;
 }
 
-.nav>>>.el-menu{
+.nav >>> .el-menu {
   background-color: rgba(255, 255, 255, 0.87) !important;
 }
 

@@ -7,6 +7,7 @@ import './assets/element.css'
 import Element from 'element-ui'
 import echarts from 'echarts'
 import mavonEditor from 'mavon-editor'
+import CKEditor from '@ckeditor/ckeditor5-vue';
 import 'jquery'
 import './assets/icon_store/iconfont.css'
 import './assets/diadoc_icon/iconfont.css'
@@ -22,7 +23,8 @@ import forget_set_block from './components/forget_set_block';
 
 Vue.use(Element);
 Vue.use(echarts);
-Vue.use(mavonEditor)
+Vue.use(mavonEditor);
+Vue.use( CKEditor );
 
 Vue.component('navbar', navbar);
 Vue.component('login', login);

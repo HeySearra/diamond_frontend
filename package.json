@@ -13,6 +13,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^21.0.0",
+    "@ckeditor/ckeditor5-build-decoupled-document": "^21.0.0",
+    "@ckeditor/ckeditor5-build-inline": "^21.0.0",
+    "@ckeditor/ckeditor5-vue": "^1.0.1",
     "echarts": "^4.7.0",
     "element-ui": "^2.13.1",
     "jquery": "^3.5.1",

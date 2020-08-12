@@ -128,6 +128,7 @@ export default {
   width: 18vw;
   height: 100%;
   border: solid 2px;
+  overflow: scroll;
 }
 
 .team_info {
