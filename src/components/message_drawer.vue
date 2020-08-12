@@ -1,6 +1,4 @@
 <template>
-<el-container>
-    <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">打开</el-button>
     <el-drawer
     title="消息中心"
     :visible.sync="drawer"
@@ -20,7 +18,6 @@
         <el-table-column property="address" label="地址"></el-table-column>
         </el-table> -->
     </el-drawer>
-</el-container>
 </template>
 
 <script>
@@ -28,28 +25,68 @@ export default {
     data(){
         return {
             drawer: false,
+            page: 0,
+            each: 10,
+            amount: 0,
+            list: [],
         }
     },
     props: {
-        // 是否显示drawer
-        drawerVisible: Boolean,
-        // drawer方向
-        direction: {
-            type: String,
-            default: 'right',
-        },
-        title: String,
+    },
+    mounted(){
     },
     methods:{
-         visible() {
-            this.drawerVisible = true;
-            this.title = "123";
+        init(){
+            var that = this;
+            that.loading = true;
+            that.page++;
+            $.ajax({
+                type:'get',
+                url:"/msg/list?page="+that.page+"&each=10",
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){
+                    that.page += 1;
+                    if(that.type=='search' && args && args.length){
+                        res.title = that.checkData(res.title);
+                        res.simple_content = that.checkData(res.simple_content);
+                        for(let i=0; i<args.length; i++){
+                            args[i] = that.checkData(args[i]);
+                            let reg = new RegExp(args[i].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'ig');
+                            res.title = res.title.replace(reg, function(word){
+                                return '<hl>'+word+'</hl>';
+                            });
+                            res.simple_content = res.simple_content.replace(reg, function(word){
+                                return '<hl>'+word+'</hl>';
+                            });
+                        }
+                    }
+                    that.title = res.title;
+                    that.tag = res.tag;
+                    that.intro = res.simple_content;
+                    that.url = '/article/'+that.aid;
+                    that.view = res.views;
+                    that.like = res.likes;
+                    that.collect = res.stars;
+                    that.comment_cnt = res.comments;
+                    that.author_p_src = res.author_portrait_url;
+                    that.author_name = res.author_name;
+                    that.is_member = res.author_is_member;
+                    that.auid = res.auid;
+                    that.loading = false;
+                    that.$emit('done');
+                },
+                error:function(){
+                    that.page--;
+                    console.log('连接失败');
+                    that.$emit('done');
+                }
+            });
         },
-         close() {
-            this.drawerVisible = false;
-            this.$emit("update:drawerVisible", false);
-            this.$emit("close");
-        }
+        open() {
+            this.drawer = true;
+        },
     }
 };
 </script>

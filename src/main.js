@@ -32,6 +32,7 @@ import template_block from './components/template_block';
 import template_display_block from './components/template_display_block';
 import doc_editor from './components/doc_editor';
 import message_item from './components/message_item';
+import message_drawer from './components/message_drawer';
 import file_system_block from './components/file_system_block';
 import file_system_list from './components/file_system_list';
 
@@ -58,6 +59,7 @@ Vue.component('template-block', template_block);
 Vue.component('template-display-block', template_display_block);
 Vue.component('doc-editor', doc_editor);
 Vue.component('message-item', message_item);
+Vue.component('message-drawer', message_drawer);
 Vue.component('file-system-block', file_system_block);
 Vue.component('file-system-list', file_system_list);
 

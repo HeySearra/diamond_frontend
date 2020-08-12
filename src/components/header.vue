@@ -67,7 +67,7 @@
               </el-dropdown-menu>
               </el-dropdown>
       </div>
-      <div class="header_icon">
+      <div class="header_icon" @click="click_open_drawer">
         <el-badge class="item" :value="message_count" :max="99" :hidden="message_count<=0">
           <span class="icon iconfont">&#xe60b;</span>
         </el-badge>
@@ -206,6 +206,10 @@
             that.$emit('init');
           }, 0)
         }
+      },
+
+      click_open_drawer(){
+        this.$emit('open_drawer');
       },
 
       set_search_word(keyword){

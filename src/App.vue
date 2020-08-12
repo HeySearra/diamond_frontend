@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <el-header>
-      <navbar></navbar>
+      <navbar @open_drawer="open_drawer"></navbar>
     </el-header>
     <router-view/>
     <el-backtop></el-backtop>
-    
+    <message-drawer ref="message_drawer"></message-drawer>
   </div>
 </template>
 
@@ -13,6 +13,17 @@
 
 export default {
   name: 'App',
+  data(){
+    return {
+      show_drawer: false,
+    }
+  },
+  methods:{
+    open_drawer(){
+      this.show_drawer = true;
+      this.$refs.message_drawer.open();
+    },
+  },
 }
 </script>
 

@@ -3,7 +3,7 @@
         <div class="item">
             <div class="profile">
                 <span v-if="type!='comment'" class="icon iconfont">&#xe622;</span>
-                <el-avatar v-if="type=='comment'" :src="img" size="big" style="vertical-align: middle;"></el-avatar>
+                <el-avatar v-if="type=='comment'" :src="img" style="vertical-align: middle;"></el-avatar>
             </div>
             <div class="content">
                 <h4 class="title">
@@ -48,7 +48,6 @@ export default {
             name:0, //发表评论的人
             img:'',
             loading: true,
-            is_read: false,
             if_click: true,
         }
     },
@@ -58,7 +57,19 @@ export default {
     methods:{
         init(){
 
-        }
+        },
+        to_doc(){
+
+        },
+        confirm_join(){
+
+        },
+        to_team(){
+
+        },
+        mark_read(){
+
+        },
     }
 }
 </script>
