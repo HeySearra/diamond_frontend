@@ -10,6 +10,8 @@
 
 8.12 19:38 `ckeditor5`更新，需要重新替换`build`文件夹
 
+8.13 02:04 `ckeditor5`更新，需要重新替换`build`文件夹
+
 ## Build Setup
 
 ``` bash
