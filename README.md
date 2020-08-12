@@ -8,6 +8,8 @@
 
 在`/test_sidebar`url中可以预览效果
 
+8.12 19:38 `ckeditor5`更新，需要重新替换`build`文件夹
+
 ## Build Setup
 
 ``` bash

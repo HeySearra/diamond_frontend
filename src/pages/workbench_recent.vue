@@ -1,5 +1,7 @@
 <template>
     <div class="workbench_recent">
+        <el-button @click="aa">fefre </el-button>
+        <move-file-window ref="move_file_window"></move-file-window>
         <component 
             :is="view_type=='block'?'file-system-block':'file-system-list'"
             type="from_out"

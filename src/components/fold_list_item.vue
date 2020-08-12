@@ -13,12 +13,12 @@
             <span class="icon iconfont">&#xe7b2;</span>
         </div>
         <div class="name">{{name}}</div>
-        <div class="info_area">
+        <div class="info_area" v-if="type=='full'">
             <div>{{creator}}</div>
             <div>{{recent_edit_time}}</div>
             <div class="min_hide">{{create_time}}</div>
         </div>
-        <div class="more_menu" :class="focus?'more_menu_focus':''">
+        <div class="more_menu" :class="focus?'more_menu_focus':''" v-if="type=='full'">
             <el-dropdown trigger="click" 
                 @visible-change="vis_change"
                 @command="click_dropdown_item">
@@ -79,6 +79,10 @@ export default {
         creator:{
             type:String,
             default:'ansdoasoda'
+        },
+        type:{
+            type:String,
+            default: 'full',
         }
     },
     data() {
