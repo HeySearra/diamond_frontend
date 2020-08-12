@@ -63,7 +63,7 @@ export default {
 
         click_dropdown_item(command){
             if(command == 'team_info'){
-                this.$emit('open_team_info', this.tid, this.tname);
+                this.$emit('open_info', this.tname, '');
             }
         }
     }

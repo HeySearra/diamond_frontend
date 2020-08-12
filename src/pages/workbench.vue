@@ -11,7 +11,7 @@
           <el-menu-item index="4"><router-link class="register_link" :to="{path:'/workbench/share'}">共享文件</router-link></el-menu-item>
         </el-menu>
           <div style="padding: 0 40px 0 30px;">
-            <router-view @active_change="active_change"></router-view>
+            <router-view @active_change="active_change" @open_info="open_info"></router-view>
           </div>
           <div style="height:50px"></div>
         </el-main>
@@ -22,6 +22,7 @@
     </el-container>
     <el-footer></el-footer>
     </el-container>
+    <file-info-dialog ref="file_info_dialog"></file-info-dialog>
   </div>
 </template>
 
@@ -57,6 +58,10 @@ export default {
       else if(this.$route.name == 'workbench_share'){
         this.active_index = '4';
       }
+    },
+
+    open_info(title, content){
+        this.$refs.file_info_dialog.open_info(title, content);
     }
   }
 }

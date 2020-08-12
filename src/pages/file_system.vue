@@ -16,7 +16,7 @@
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar active="normal"></sidebar>
+        <sidebar :active="sidebar_active"></sidebar>
       </el-aside>
     </el-container>
     <el-footer></el-footer>
@@ -29,7 +29,8 @@ export default {
   data () {
     return {
       view_type:'block',
-      fid:'desktop'
+      fid:'desktop',
+      sidebar_active:''
     }
   },
   mounted(){
@@ -37,9 +38,9 @@ export default {
   },
   methods:{
     init(){
-        this.$emit('active_change');
         this.view_type = this.view_type_manager.get();
-        this.fid = this.$router.params.id?this.$router.params.id:'desktop';
+        this.fid = this.$route.params.id?this.$route.params.id:'desktop';
+        this.sidebar_active = this.fid=='desktop' ? 'desktop' : '';
     },
 
     change_view(){
@@ -48,7 +49,7 @@ export default {
     },
 
     error(){
-        this.$route.push({path:'/'});
+        this.$router.push({path:'/'});
     }
   }
 }

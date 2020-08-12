@@ -24,21 +24,6 @@
                 </component>
             </div>
         </div>
-        <el-dialog
-            class="dialog_style"
-            :visible.sync="dia_vis"
-            width="700px">
-            <h3>{{dia_title}}</h3>
-            <div class="content">
-                <div class="info_list">
-                    <div class="info_title">文件名：</div>
-                    <div class="info_content">介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容</div>
-                </div>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dia_vis=false">关 闭</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
@@ -97,9 +82,8 @@ export default {
 
         },
 
-        open_info(id, name, type){
-            this.dia_title = name;
-            this.dia_vis = true;
+        open_info(title, content){
+            this.$emit('open_info', title, content);
         },
 
         allow_drop(e, item){

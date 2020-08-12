@@ -9,7 +9,8 @@
             <component
                 :is="view_type=='block'?'file-system-block':'file-system-list'"
                 :fid="fid"
-                @change_view="change_view">
+                @change_view="change_view"
+                @open_info="open_info">
             </component>
           </div>
           <div style="height:50px"></div>
@@ -21,6 +22,7 @@
     </el-container>
     <el-footer></el-footer>
     </el-container>
+    <file-info-dialog ref="file_info_dialog"></file-info-dialog>
   </div>
 </template>
 
@@ -50,6 +52,10 @@ export default {
 
     error(){
         this.$route.push({path:'/'});
+    },
+
+    open_info(title, content){
+        this.$refs.file_info_dialog.open_info(title, content);
     }
   }
 }

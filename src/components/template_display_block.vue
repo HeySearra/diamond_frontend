@@ -70,7 +70,9 @@ export default {
 @import url("../assets/dialog_style.css");
 
 h1{
+    font-size: 30px !important;
     text-indent: 25px;
+    margin-bottom:5px !important;;
 }
 
 .template_area{

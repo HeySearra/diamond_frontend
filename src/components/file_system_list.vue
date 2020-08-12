@@ -8,7 +8,7 @@
         </div>
         <div class="clear_both divide_type" style="height:10px"></div>
         <div v-for="item in list" :key="item.title">
-            <file-display-list :title="item.title" :list="item.content" :drage="drage" :context="context"></file-display-list>
+            <file-display-list :title="item.title" :list="item.content" :drage="drage" :context="context" @open_info="open_info"></file-display-list>
             <div class="clear_both divide_type"></div>
         </div>
         <div class="icon_part can_not_choose" @click="change_view">
@@ -76,9 +76,8 @@ export default {
             }
         },
 
-        open_info(id, name, type){
-            this.dia_title = name;
-            this.dia_vis = true;
+        open_info(name, content){
+            this.$emit('open_info', name, content);
         },
 
         change_view(){

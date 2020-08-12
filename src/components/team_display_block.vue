@@ -10,25 +10,10 @@
                     :tid="item.tid"
                     :is_creator="is_creator"
                     :name="item.name"
-                    @open_team_info="open_team_info">
+                    @open_info="open_info">
                 </team-block>
             </div>
         </div>
-        <el-dialog
-            class="dialog_style"
-            :visible.sync="dia_vis"
-            width="700px">
-            <h3>{{dia_title}}</h3>
-            <div class="content">
-                <div class="info_list">
-                    <div class="info_title">团队介绍：</div>
-                    <div class="info_content">介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容</div>
-                </div>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dia_vis=false">关 闭</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
@@ -57,8 +42,6 @@ export default {
     },
     data() {
         return {
-            dia_vis:false,
-            dia_title:'team info',
 
         }
     },
@@ -72,9 +55,8 @@ export default {
 
         },
 
-        open_team_info(tid, tname){
-            this.dia_title = tname;
-            this.dia_vis = true;
+        open_info(title, content){
+            this.$emit('open_info', title, content);
         }
     }
 

@@ -103,9 +103,8 @@ export default {
 
         },
 
-        open_info(id, name, type){
-            this.dia_title = name;
-            this.dia_vis = true;
+        open_info(title, content){
+            this.$emit('open_info', title, content);
         },
         
         allow_drop(e, item){

@@ -21,7 +21,7 @@
                     <i class="el-icon-s-tools"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>打开</el-dropdown-item>
+                    <el-dropdown-item v-if="context!='recycle'">打开</el-dropdown-item>
                     <el-dropdown-item v-if="context==false">权限管理</el-dropdown-item>
                     <el-dropdown-item v-if="can_trade">打开所在文件夹</el-dropdown-item>
                     <el-dropdown-item v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
@@ -88,7 +88,7 @@ export default {
         click_dropdown_item(command){
             switch(command){
                 case 'open_info':
-                    this.$emit('open_info', this.did, this.name, 'file');
+                    this.$emit('open_info', this.name, 'file');
                     break;
             }
         },

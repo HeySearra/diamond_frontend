@@ -10,9 +10,9 @@
     <el-divider></el-divider>
     <el-row class="new_buttons">
       <div class="button_container">
-        <el-row><el-button type="info" v-if="context!='team_center'">新 建 文 档</el-button></el-row>
-        <el-row><el-button type="info" v-if="context!='team_center'">新 建 文 件 夹</el-button></el-row>
-        <el-row><el-button type="info" v-if="context=='team_center'">新 建 团 队</el-button></el-row>
+        <el-row><el-button type="info" v-if="context!='team_center'" @click="$emit('create_new_file')">新 建 文 档</el-button></el-row>
+        <el-row><el-button type="info" v-if="context!='team_center'" @click="$emit('create_new_fold')">新 建 文 件 夹</el-button></el-row>
+        <el-row><el-button type="info" v-if="context=='team_center'" @click="$emit('create_new_team')">新 建 团 队</el-button></el-row>
       </div>
     </el-row>
     <el-divider></el-divider>
@@ -87,17 +87,19 @@
             <el-avatar></el-avatar>
           </el-tooltip>
         </div>
-        <el-row><el-button type="info">管 理 成 员</el-button></el-row>
-        <el-row><el-button type="info">设 置 管 理 员</el-button></el-row>
-        <el-row><el-button type="danger">解 散 团 队</el-button></el-row>
+        <el-row><el-button type="info" @click="$emit('manage_member')">管 理 成 员</el-button></el-row>
+        <el-row><el-button type="info" @click="$emit('setting_admin')">设 置 管 理 员</el-button></el-row>
+        <el-row><el-button type="danger" @click="$emit('leave_team')">退 出 团 队</el-button></el-row>
+        <el-row><el-button type="danger" @click="$emit('destroy_team')">解 散 团 队</el-button></el-row>
       </el-row>
       <div style="height:20px;"></div>
     </el-row>
     <el-row class="function_buttons" :class="active=='workbench'?'function_buttons_active':''"><router-link :to="{path:'/workbench/'}">工作台</router-link></el-row>
     <el-row class="function_buttons" :class="active=='team_center'?'function_buttons_active':''"><router-link :to="{path:'/team/'}">我的团队</router-link></el-row>
-    <el-row class="function_buttons"><router-link :class="active=='desktop'?'function_buttons_active':''" :to="{path:'/file/'}">我的桌面</router-link></el-row>
-    <el-row class="function_buttons">模版库</el-row>
-    <el-row class="function_buttons">回收站</el-row>
+    <el-row class="function_buttons" :class="active=='desktop'?'function_buttons_active':''"><router-link :to="{path:'/file/'}">我的桌面</router-link></el-row>
+    <el-row class="function_buttons" :class="active=='template'?'function_buttons_active':''"><router-link :to="{path:'/template'}">模版库</router-link></el-row>
+    <el-row class="function_buttons" :class="active=='recycle'?'function_buttons_active':''"><router-link :to="{path:'/recycle'}">回收站</router-link></el-row>
+
   </div>
 </template>
 <script>
@@ -134,7 +136,7 @@ export default {
 
     apply_for_info() {
       //向后台请求一些内容
-    }
+    },
   }
 }
 </script>

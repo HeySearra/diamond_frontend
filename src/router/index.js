@@ -14,6 +14,8 @@ import workbench_share from '@/pages/workbench_share.vue'
 import team_center from '@/pages/team_center.vue'
 import file_system from '@/pages/file_system.vue'
 import team_file_system from '@/pages/team_file_system.vue'
+import template_store from '@/pages/template_store.vue'
+import recycle from '@/pages/recycle.vue'
 import test from '@/components/team_block.vue'
 
 const originalPush = Router.prototype.push
@@ -151,6 +153,22 @@ const router =  new Router({
     {
       path: '/file',
       redirect:'/file/desktop'
+    },
+    {
+      path: '/template',
+      name: 'template_store',
+      component: template_store,
+      meta:{
+        title:'DiaDoc 模板库',
+      }
+    },
+    {
+      path: '/recycle',
+      name: 'recycle',
+      component: recycle,
+      meta:{
+        title:'DiaDoc 回收站',
+      }
     },
   ],
 });

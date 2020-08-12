@@ -35,6 +35,7 @@ import message_item from './components/message_item';
 import message_drawer from './components/message_drawer';
 import file_system_block from './components/file_system_block';
 import file_system_list from './components/file_system_list';
+import file_info_dialog from './components/file_info_dialog';
 
 Vue.use(Element);
 Vue.use(echarts);
@@ -62,6 +63,7 @@ Vue.component('message-item', message_item);
 Vue.component('message-drawer', message_drawer);
 Vue.component('file-system-block', file_system_block);
 Vue.component('file-system-list', file_system_list);
+Vue.component('file-info-dialog', file_info_dialog);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
