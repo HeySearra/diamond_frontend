@@ -57,7 +57,7 @@
               <el-avatar>登录</el-avatar>
           </span>
           <el-dropdown @click.native="dialogVisible = true" @command="to_link" v-if="is_login">
-              <span class="el-dropdown-link" @click="function(){$router.push({path:'/userInfo/'+uid})}">
+              <span class="el-dropdown-link">
                   <el-avatar :src="photo_src"></el-avatar>
               </span>
               <el-dropdown-menu slot="dropdown">

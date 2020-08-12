@@ -176,7 +176,7 @@ h1:focus, a:focus{
     opacity: 0;
 }
 
-.no_choose{
+.no_choose, .can_not_choose{
     -webkit-user-select:none;
     -moz-user-select:none;
     -ms-user-select:none;

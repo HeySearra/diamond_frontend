@@ -1,0 +1,32 @@
+.dialog_style h3{
+    position: absolute;
+    top:0;
+    left:23px;
+    font-size:21px;
+    width:calc(100% - 69px);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1; /* 行数 */
+    overflow: hidden;
+}
+
+.dialog_style .content{
+    padding: 15px 21px;
+}
+
+.dialog_style .info_list{
+    overflow: hidden;
+    line-height: 25px;
+    margin-top:15px;
+}
+
+.dialog_style .info_list .info_title{
+    float:left;
+    width:6em;
+    text-align: right;
+}
+
+.dialog_style .info_list .info_content{
+    float:right;
+    width: calc(100% - 6em - 5px);
+}
