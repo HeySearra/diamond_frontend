@@ -171,6 +171,9 @@ const router =  new Router({
       component: recycle,
       meta:{
         title:'DiaDoc 回收站',
+      },
+    },
+    {
       path: '/doc/edit',
       name: 'doc_edit',
       component: doc_editor,

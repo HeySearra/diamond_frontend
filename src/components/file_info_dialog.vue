@@ -28,10 +28,6 @@ export default {
         }
     },
 
-    mounted(){
-        this.init();
-    },
-
     methods:{
         open_info(title, content){
             this.title = title;

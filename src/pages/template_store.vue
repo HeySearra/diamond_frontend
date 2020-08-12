@@ -23,11 +23,12 @@
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar active="template"></sidebar>
+        <sidebar active="template" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
       </el-aside>
     </el-container>
     <el-footer></el-footer>
     </el-container>
+    <new-dialog ref="new_dialog"></new-dialog>
   </div>
 </template>
 
@@ -47,6 +48,14 @@ export default {
 
     error(){
         
+    },
+
+    create_new_file(){
+        this.$refs.new_dialog.open('file', this.fid);
+    },
+
+    create_new_fold(){
+        this.$refs.new_dialog.open('fold', this.fid);
     }
   }
 }

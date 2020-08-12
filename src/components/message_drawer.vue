@@ -1,22 +1,36 @@
 <template>
     <el-drawer
     title="消息中心"
+    width="100"
     :visible.sync="drawer"
-    :with-header="false">
-        <div class="el-drawer__header">
-            <div class="el-drawer__title">消息中心</div>
-            <div class="mark-read">全部已读</div>
+    :with-header="false"
+    class="message_box">
+        <div class="el-drawer__header" style="height:50px;padding:5px 20px 0;line-height:50px;margin:0">
+            <div class="el-drawer__title can_not_choose">消息中心</div>
+            <div class="mark-read can_not_choose">全部已读</div>
             <!-- <div class="close-icon"><span v-if="type!='comment'" class="icon iconfont">&#xe79b;</span></div> -->
         </div>
-        <message-item></message-item>
-        <message-item></message-item>
-        <message-item :is_read=true></message-item>
-        <message-item :is_read=true></message-item>
-        <!-- <el-table :data="gridData">
-        <el-table-column property="date" label="日期" width="150"></el-table-column>
-        <el-table-column property="name" label="姓名" width="200"></el-table-column>
-        <el-table-column property="address" label="地址"></el-table-column>
-        </el-table> -->
+        <el-divider></el-divider>
+        <div v-infinite-scroll="load" class="message_area" style="overflow-x:hidden;overflow-y:auto;border:solid 1px;height:calc(100vh - 50px)">
+            <message-item></message-item>
+            <message-item></message-item>
+            <message-item></message-item>
+            <message-item></message-item>
+            <message-item></message-item>
+            <message-item></message-item><message-item></message-item>
+            <message-item></message-item>
+            <message-item></message-item>
+            <message-item></message-item>
+            <message-item></message-item>
+            <message-item></message-item><message-item></message-item>
+            <message-item></message-item>
+            <message-item></message-item>
+            <message-item></message-item>
+            <message-item></message-item>
+            <message-item></message-item>
+            <p v-if="is_loading" class="not_found">加载中 <i class="el-icon-loading"></i></p>
+        </div>
+        
     </el-drawer>
 </template>
 
@@ -27,8 +41,8 @@ export default {
             drawer: false,
             page: 0,
             each: 10,
-            amount: 0,
             list: [],
+            is_loading:false
         }
     },
     props: {
@@ -37,62 +51,21 @@ export default {
     },
     methods:{
         init(){
-            var that = this;
-            that.loading = true;
-            that.page++;
-            $.ajax({
-                type:'get',
-                url:"/msg/list?page="+that.page+"&each=10",
-                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                processData: false,
-                contentType: false,
-                success:function (res){
-                    that.page += 1;
-                    if(that.type=='search' && args && args.length){
-                        res.title = that.checkData(res.title);
-                        res.simple_content = that.checkData(res.simple_content);
-                        for(let i=0; i<args.length; i++){
-                            args[i] = that.checkData(args[i]);
-                            let reg = new RegExp(args[i].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'ig');
-                            res.title = res.title.replace(reg, function(word){
-                                return '<hl>'+word+'</hl>';
-                            });
-                            res.simple_content = res.simple_content.replace(reg, function(word){
-                                return '<hl>'+word+'</hl>';
-                            });
-                        }
-                    }
-                    that.title = res.title;
-                    that.tag = res.tag;
-                    that.intro = res.simple_content;
-                    that.url = '/article/'+that.aid;
-                    that.view = res.views;
-                    that.like = res.likes;
-                    that.collect = res.stars;
-                    that.comment_cnt = res.comments;
-                    that.author_p_src = res.author_portrait_url;
-                    that.author_name = res.author_name;
-                    that.is_member = res.author_is_member;
-                    that.auid = res.auid;
-                    that.loading = false;
-                    that.$emit('done');
-                },
-                error:function(){
-                    that.page--;
-                    console.log('连接失败');
-                    that.$emit('done');
-                }
-            });
+            
         },
         open() {
             this.drawer = true;
         },
+
+        load(){
+            this.is_loading = true;
+        }
     }
 };
 </script>
 
 <style scoped>
-    >>>.el-drawer__body{
+    /* >>>.el-drawer__body{
         width: 600px;
         min-width: 300px !important;
     }
@@ -124,5 +97,17 @@ export default {
     }
     .mark-read:hover{
         color: hsl(219, 15%, 23%);
+    } */
+
+    .el-drawer__body>>>.message_area{
+        height:calc(100vh - 50px) !important;
+    }
+
+    .el-divider{
+        margin: 5px 0 0 0;
+    }
+
+    .message_box>>>.el-drawer__open .el-drawer.rtl{
+        width:430px !important;
     }
 </style>

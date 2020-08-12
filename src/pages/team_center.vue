@@ -18,21 +18,8 @@
     </el-container>
     <el-footer></el-footer>
     </el-container>
-    <el-dialog
-      class="dialog_style"
-      :visible.sync="new_team_dialog_vis"
-      width="500px">
-      <h3>创建新团队</h3>
-      <div class="content">
-        <div style="height:20px"></div>
-        <el-input v-model="new_team_name" placeholder="请输入团队名称" maxLength="60"></el-input>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="new_team_dialog_vis = false">取 消</el-button>
-        <el-button type="primary" @click="new_team_dialog_vis = false">确 定</el-button>
-      </span>
-    </el-dialog>
     <file-info-dialog ref="team_info_dialog"></file-info-dialog>
+    <new-dialog ref="new_dialog"></new-dialog>
   </div>
 </template>
 
@@ -41,8 +28,6 @@ export default {
   data () {
     return {
       active_index: '1',
-      new_team_dialog_vis: false,
-      new_team_name:''
     }
   },
   mounted(){
@@ -73,8 +58,7 @@ export default {
     },
 
     open_create_new_team_dialog(){
-        this.new_team_name = '';
-        this.new_team_dialog_vis = true;
+        this.$refs.new_dialog.open('team');
     },
 
     open_info(title, content){

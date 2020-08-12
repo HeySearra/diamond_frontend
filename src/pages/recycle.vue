@@ -20,12 +20,13 @@
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar active="recycle"></sidebar>
+        <sidebar active="recycle" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
       </el-aside>
     </el-container>
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
     <el-footer></el-footer>
     </el-container>
+    <new-dialog ref="new_dialog"></new-dialog>
   </div>
 </template>
 
@@ -95,6 +96,14 @@ export default {
 
     open_info(title, content){
         this.$refs.file_info_dialog.open_info(title, content);
+    },
+
+    create_new_file(){
+        this.$refs.new_dialog.open('file', this.fid);
+    },
+
+    create_new_fold(){
+        this.$refs.new_dialog.open('fold', this.fid);
     }
   }
 }

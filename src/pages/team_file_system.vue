@@ -17,11 +17,12 @@
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar context="team" :tid="tid"></sidebar>
+        <sidebar context="team" :tid="tid" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
       </el-aside>
     </el-container>
     <el-footer></el-footer>
     </el-container>
+    <new-dialog ref="new_dialog"></new-dialog>
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
   </div>
 </template>
@@ -56,6 +57,14 @@ export default {
 
     open_info(title, content){
         this.$refs.file_info_dialog.open_info(title, content);
+    },
+
+    create_new_file(){
+        this.$refs.new_dialog.open('file', this.fid);
+    },
+
+    create_new_fold(){
+        this.$refs.new_dialog.open('fold', this.fid);
     }
   }
 }
