@@ -68,12 +68,12 @@
               </el-dropdown>
       </div>
       <div class="header_icon">
-        <el-badge :value="message_count" class="item">
+        <el-badge class="item" :value="message_count" :max="99" :hidden="message_count<=0">
           <span class="icon iconfont">&#xe60b;</span>
         </el-badge>
       </div>
       <div class="header_icon">
-        <el-badge :is-dot="have_chat" class="item">
+        <el-badge class="item" :is-dot="have_chat">
           <span class="icon iconfont">&#xe7fe;</span>
         </el-badge>
       </div>

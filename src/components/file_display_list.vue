@@ -5,7 +5,12 @@
         <div class="file_area">
             <div class="file_item" 
                 v-for="item in list" 
-                :key="item.id">
+                :key="item.id"
+                draggable="true"
+                @drag="start_drag($event, item)"
+                @drop="face_drop($event, item)"
+                @dragover="allow_drop($event, item)"
+                >
                 <component 
                     :is="item.type=='file'?'file-list-item':'fold-list-item'" 
                     :is_link="item.is_link" 
@@ -73,6 +78,8 @@ export default {
         return {
             dia_vis:false,
             dia_title:'team info',
+            draging_type:'',
+            draging_id:'',
         }
     },
 
@@ -90,6 +97,23 @@ export default {
             this.dia_vis = true;
         },
         
+        allow_drop(e, item){
+            if(item.type=='fold'&&(this.draging_type!='fold'||this.draging_id!=item.id)){
+                e.preventDefault();
+            }
+        },
+
+        face_drop(e, item){
+            e.preventDefault();
+            this.$emit('face_drop', item.type, item.id);
+            alert(this.draging_type + '：' + this.draging_id + ' to ' + item.type + '：' + item.id);
+        },
+
+        start_drag(e, item){
+            this.draging_type = item.type;
+            this.draging_id = item.id;
+            this.$emit('set_draging_info', this.draging_type, this.draging_id);
+        }
     }
 
 }
