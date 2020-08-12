@@ -1,11 +1,7 @@
 <template>
   <div class="snow">
     <el-container>
-      <el-header>
-        <navbar class="nav"></navbar>
-      </el-header>
-      <div style="margin-top:27vh"></div>
-      <login id="login"></login>
+      <login id="login" style="margin-top:27vh"></login>
     </el-container>
   </div>
 </template>

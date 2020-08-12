@@ -1,11 +1,7 @@
 <template>
 <div class="snow">
   <el-container>
-    <el-header>
-      <navbar class="nav"></navbar>
-    </el-header>
-    <div style="margin-top:27vh"></div>
-    <forget-set></forget-set>
+    <forget-set style="margin-top:27vh"></forget-set>
   </el-container>
 </div>
 </template>

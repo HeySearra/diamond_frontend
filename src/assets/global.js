@@ -63,3 +63,10 @@ export const alert_box = {
         });
     }
 };
+
+export const view_type_manager = {
+    set: (type) => {
+        localStorage.setItem('view_type', type);
+    },
+    get: () => {return localStorage.getItem('view_type')&&localStorage.getItem('view_type')=='list' ? 'list' : 'block'}
+}

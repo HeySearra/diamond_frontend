@@ -1,16 +1,20 @@
 <template>
     <div class="message-item" @click="mark_read">
-        <div class="profile">
-            <span v-if="type!='comment'" class="icon iconfont">&#xe622;</span>
-            <el-avatar v-if="type=='comment'" :src="img" size="big" style="vertical-align: middle;"></el-avatar>
+        <div class="item">
+            <div class="profile">
+                <span v-if="type!='comment'" class="icon iconfont">&#xe622;</span>
+                <el-avatar v-if="type=='comment'" :src="img" style="vertical-align: middle;"></el-avatar>
+            </div>
+            <div class="content">
+                <h4 class="title">
+                    <div class="content">{{content}}</div>
+                    <div class="message-head" v-if="type=='comment'" @click="to_doc">{{title}}</div>
+                    <div class="message-head" v-if="type=='join'" @click="confirm_join">{{team_name}}</div>
+                    <div class="message-head" v-if="type=='admin' || type=='remove'" @click="type=='admin'? 'to_team':''">{{team_name}}</div>
+                </h4>
+                <div class='comment'>{{comment}}</div>
+            </div>
         </div>
-        <h4 class="title">
-            <div class="content">{{content}}</div>
-            <div class="message-head" v-if="type=='comment'" @click="to_doc">{{title}}</div>
-            <div class="message-head" v-if="type=='join'" @click="confirm_join">{{team_name}}</div>
-            <div class="message-head" v-if="type=='admin' || type=='remove'" @click="type=='admin'? 'to_team':''">{{team_name}}</div>
-        </h4>
-        <div class='comment'>{{comment}}</div>
         <div class="not-read" v-if="!is_read"></div>
     </div>
 </template>
@@ -36,15 +40,14 @@ export default {
         return {
             content: '我是前缀', //前缀
             did: 0, //文档id
-            title: '我是文档标题', //文档标题
-            comment: '3213', //评论
+            title: '我是文档标题 我是文档标题我是文档标题我是文档标题我是文档标题', //文档标题
+            comment: '321凤凰发灰黑服啊和附件和佛教咖啡机能让肌肤发基坑俊娥既然你3', //评论
             tid: 0,
             team_name: '我是团队名',
             muid:0, //发表评论的uid
             name:0, //发表评论的人
             img:'',
             loading: true,
-            is_read: false,
             if_click: true,
         }
     },
@@ -54,7 +57,19 @@ export default {
     methods:{
         init(){
 
-        }
+        },
+        to_doc(){
+
+        },
+        confirm_join(){
+
+        },
+        to_team(){
+
+        },
+        mark_read(){
+
+        },
     }
 }
 </script>
@@ -63,26 +78,39 @@ export default {
     position: relative;
     padding: 5px 0;
 }
+.item{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
 .profile{
-    float: left;
+    justify-content: flex-start;
     position: relative;
     padding: 10px;
+    width: 40px;
+    margin: 0 0 0 0;
 }
 .content{
-    display:inline-block;
-    *display:inline;
-    *zoom:1;
-    width:fit-content;
-    width:-webkit-fit-content;
-    width:-moz-fit-content;
+    display: flex;
+    flex-direction: column;
+    margin-right: 4px;
+    width:auto;
+    word-break:keep-all;
+    white-space:nowrap
 }
 .message-head{
     display:inline-block;
-    *display:inline;
-    *zoom:1;
+    width: auto;
+    max-width: 300px;
+    min-width: 180px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .title{
-    display:inline-block;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     width:fit-content;
     width:-webkit-fit-content;
     width:-moz-fit-content;
@@ -99,5 +127,12 @@ export default {
 }
 .comment{
     font-size: 95%;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    flex-grow:0;
+    flex-shrink:0;
+
 }
 </style>
