@@ -16,7 +16,7 @@ import file_system from '@/pages/file_system.vue'
 import team_file_system from '@/pages/team_file_system.vue'
 import template_store from '@/pages/template_store.vue'
 import recycle from '@/pages/recycle.vue'
-import test from '@/components/team_block.vue'
+import test from '@/components/chatting_room.vue'
 import doc_editor from "@/pages/doc_editor.vue"
 import doc_read_only from "@/pages/doc_read_only.vue"
 import doc_comment_only from "@/pages/doc_comment_only.vue"

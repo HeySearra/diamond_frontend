@@ -73,7 +73,7 @@
           <span class="icon iconfont">&#xe60b;</span>
         </el-badge>
       </div>
-      <div class="header_icon">
+      <div class="header_icon" @click="$emit('chatting')">
         <el-badge class="item" :is-dot="have_chat">
           <span class="icon iconfont">&#xe7fe;</span>
         </el-badge>

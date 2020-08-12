@@ -46,6 +46,9 @@ import edit_team_info_dialog from './components/edit_team_info_dialog';
 import share_dialog from './components/share_dialog';
 import edit_user_info_dialog from './components/edit_user_info_dialog';
 import change_password_dialog from './components/change_password_dialog';
+import chatting_bubble from './components/chatting_bubble';
+import chatting_room from './components/chatting_room';
+import chatting_dialog from './components/chatting_dialog';
 
 Vue.use(Element);
 Vue.use(echarts);
@@ -83,7 +86,10 @@ Vue.component('choose-path-fold-list-item', choose_path_fold_list_item);
 Vue.component('edit-team-info-dialog', edit_team_info_dialog);
 Vue.component('share-dialog', share_dialog);
 Vue.component('edit-user-info-dialog', edit_user_info_dialog);
-Vue.component('change-password-dialog',change_password_dialog);
+Vue.component('change-password-dialog', change_password_dialog);
+Vue.component('chatting-bubble', chatting_bubble);
+Vue.component('chatting-room', chatting_room);
+Vue.component('chatting-dialog', chatting_dialog);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
