@@ -1,13 +1,15 @@
 <template>
-  <div class="snow">
-    <el-container>
+  <el-container style="padding-top: 45px">
+    <doc-editor></doc-editor>
+  </el-container>
+    <!--el-container>
       <el-header>
         <navbar class="nav"></navbar>
       </el-header>
       <el-main style="margin-top: 10px; margin-bottom: 10px; border: solid 2px">
-        <doc-editor></doc-editor>
+
       </el-main>
-      <!--el-container>
+      <el-container>
         <el-aside width="20vw">
           <sidebar></sidebar>
         </el-aside>
@@ -20,9 +22,9 @@
                       :config="editorConfig"></ckeditor>
           </div>
         </el-main>
-      </el-container-->
-    </el-container>
-  </div>
+      </el-container>
+    </el-container-->
+
 </template>
 
 <script>

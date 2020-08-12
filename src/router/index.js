@@ -15,6 +15,7 @@ import team_center from '@/pages/team_center.vue'
 import file_system from '@/pages/file_system.vue'
 import team_file_system from '@/pages/team_file_system.vue'
 import test from '@/components/team_block.vue'
+import test_sidebar from "../pages/test_sidebar";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -151,6 +152,14 @@ const router =  new Router({
     {
       path: '/file',
       redirect:'/file/desktop'
+    },
+    {
+      path: '/test_sidebar',
+      name: 'test_sidebar',
+      component: test_sidebar,
+      meta:{
+        title:'test',
+      }
     },
   ],
 });

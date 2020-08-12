@@ -5,16 +5,16 @@
       <div id="toolbar-container"></div>
     </el-row>
     <el-row>
-      <el-col :span="5">
+      <!--el-col :span="5">
         <sidebar></sidebar>
-      </el-col>
-      <el-col class="editor-container" style="border: solid 2px;" :span="14">
+      </el-col-->
+      <el-col class="editor-container" style="border: solid 2px;" :span="18">
           <!-- Editor Container -->
           <div id="editor">
             <p>This is the initial editor content.</p>
           </div>
       </el-col>
-      <el-col :span="5" id="comment-sidebar" style="border: solid 2px;"><br></el-col>
+      <el-col :span="6" id="comment-sidebar" style="border: solid 2px;"><br></el-col>
     </el-row>
   </el-main>
 </template>
@@ -262,6 +262,7 @@ export default {
   border: solid 2px;
   padding: 0 !important;
   overflow: inherit;
+  margin-top: 20px;
 }
 
 </style>
