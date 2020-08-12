@@ -3,6 +3,13 @@
         <h1>{{title}}</h1>
         <el-divider></el-divider>
         <div class="file_area">
+            <div class="can_not_choose list_head">
+                <div class="info_area">
+                    <div>创建者</div>
+                    <div>最近编辑时间</div>
+                    <div class="min_hide">创建时间</div>
+                </div>
+            </div>
             <div class="file_item" 
                 v-for="item in list" 
                 :key="item.id"
@@ -131,7 +138,45 @@ h1{
     padding: 0 30px;
 }
 
+.list_head{
+    position: relative;
+    border: solid 1px;
+    height:50px;
+    overflow: hidden;
+}
+
+.info_area{
+    position: absolute;
+    width:56%;
+    line-height:50px;
+    height:50px;
+    top:0;
+    right:39px;
+}
+
+.info_area div{
+    width:33%;
+    float:left;
+    line-height:50px;
+    height:50px;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1; /* 行数 */
+    overflow: hidden;
+}
+
 @media (max-width: 1200px){
-    
+    .min_hide{
+        display: none;
+    }
+
+    .info_area{
+        width:50%;
+    }
+
+    .info_area div{
+        width:50%;
+    }
 }
 </style>
