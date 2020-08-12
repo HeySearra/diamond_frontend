@@ -31,6 +31,7 @@ import team_display_block from './components/team_display_block';
 import template_block from './components/template_block';
 import template_display_block from './components/template_display_block';
 import doc_editor from './components/doc_editor';
+import message_item from './components/message_item';
 
 Vue.use(Element);
 Vue.use(echarts);
@@ -54,6 +55,7 @@ Vue.component('team-display-block', team_display_block);
 Vue.component('template-block', template_block);
 Vue.component('template-display-block', template_display_block);
 Vue.component('doc-editor', doc_editor);
+Vue.component('message-item', message_item);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'

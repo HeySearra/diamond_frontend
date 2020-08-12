@@ -91,7 +91,7 @@ export default {
                     this.$emit('open_info', this.did, this.name, 'file');
                     break;
             }
-        }
+        },
     }
 
 }
