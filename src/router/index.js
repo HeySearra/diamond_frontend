@@ -28,13 +28,7 @@ const router =  new Router({
   routes: [
     {
       path: '/',
-      redirect:'/index',
-    },
-    {
-      path: '/index',
-      name: 'index',
-      component: login,
-
+      redirect:'/workbench',
     },
     {
       path: '/login',

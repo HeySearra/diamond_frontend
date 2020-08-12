@@ -1,9 +1,6 @@
 <template>
   <div class="team_file_system">
     <el-container>
-      <el-header>
-      <navbar></navbar>
-    </el-header>
     <el-container class="mid">
       <el-container>
         <el-main>

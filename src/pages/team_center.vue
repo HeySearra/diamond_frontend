@@ -1,9 +1,6 @@
 <template>
   <div class="team_center">
     <el-container>
-      <el-header>
-      <navbar></navbar>
-    </el-header>
     <el-container class="mid">
       <el-container>
         <el-main>

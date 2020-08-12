@@ -7,7 +7,7 @@
       background-color="#fff"
       text-color="#333"
       active-text-color="#efb7b6">
-      <h1><a class="logo_a" @click="$router.push({path:'/index'});renew_active()"></a></h1>
+      <h1><a class="logo_a" @click="$router.push({path:'/'});renew_active()"></a></h1>
       <div class="online_icon">
         <el-avatar>
           <el-dropdown>

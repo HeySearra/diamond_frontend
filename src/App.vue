@@ -1,7 +1,11 @@
 <template>
   <div id="app">
+    <el-header>
+      <navbar></navbar>
+    </el-header>
     <router-view/>
     <el-backtop></el-backtop>
+    
   </div>
 </template>
 
