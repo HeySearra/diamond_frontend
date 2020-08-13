@@ -12,6 +12,7 @@
                 @dragover="allow_drop($event, item)"
                 >
                 <component 
+                    ref="file_component"
                     :is="item.type=='file'?'file-block':'fold-block'" 
                     :is_link="item.is_link" 
                     :did="item.id" 
@@ -82,7 +83,13 @@ export default {
 
     methods:{
         init(){
-
+            var that = this;
+            setTimeout(function(){
+                let item = that.$refs.file_component;
+                for(let i=0; i<item.length; i++){
+                    item[i].init();
+                }
+            }, 0);
         },
 
         open_info(title, content){

@@ -9,6 +9,7 @@
         <div class="clear_both divide_type" style="height:10px"></div>
         <div v-for="item in list" :key="item.title">
             <file-display-block 
+                ref="display_component"
                 :title="item.title" 
                 :list="item.content" 
                 :drage="drage" 
@@ -141,6 +142,13 @@ export default {
                                 content: file,
                             });
                         }
+
+                        setTimeout(function(){
+                            let item = that.$refs.display_component;
+                            for(let i=0; i<item.length; i++){
+                                item[i].init();
+                            }
+                        }, 0);
                     }
                     else{
                         switch(res.status){
