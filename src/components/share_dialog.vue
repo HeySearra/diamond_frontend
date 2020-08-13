@@ -14,7 +14,8 @@
                         style="float:right"
                         v-model="sharable"
                         active-color="#67C23A"
-                        inactive-color="#bbb">
+                        inactive-color="#bbb"
+                        @change="change_switch">
                     </el-switch>
                 </div>
                 <div style="height:50px;"></div>
@@ -227,6 +228,40 @@ export default {
 
         copy_error(){
             this.alert_msg.error('复制失败');
+        },
+
+        change_share_type(value){
+            let url = '/doc/lock/';
+            let json_data = {did:this.did, is_locked:!value};
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url: url,
+                data: JSON.stringify(json_data),
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+ 
+                    }
+                    else{
+                        that.sharable = !value;
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('文档不存在');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
         }
     }
 
