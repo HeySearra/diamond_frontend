@@ -81,6 +81,12 @@ export default {
       this.$refs.new_dialog.open('fold', this.fid);
     },
 
+    getCookie (name) {
+      var value = '; ' + document.cookie
+      var parts = value.split('; ' + name + '=')
+      if (parts.length === 2) return parts.pop().split(';').shift()
+    },
+
     getAllTemplates() {
       var that = this;
       $.ajax({

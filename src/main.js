@@ -49,6 +49,7 @@ import change_password_dialog from './components/change_password_dialog';
 import chatting_bubble from './components/chatting_bubble';
 import chatting_room from './components/chatting_room';
 import chatting_dialog from './components/chatting_dialog';
+import team_invite_dialog from './components/team_invite_dialog';
 
 Vue.use(Element);
 Vue.use(echarts);
@@ -90,6 +91,7 @@ Vue.component('change-password-dialog', change_password_dialog);
 Vue.component('chatting-bubble', chatting_bubble);
 Vue.component('chatting-room', chatting_room);
 Vue.component('chatting-dialog', chatting_dialog);
+Vue.component('team_invite_dialog', team_invite_dialog);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
