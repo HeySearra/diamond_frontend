@@ -217,7 +217,7 @@ export default {
         },
 
         search_input(){
-            let url = '/search_user/';
+            let url = '/search_user';
             var that = this;
             $.ajax({ 
                 type:'post',
