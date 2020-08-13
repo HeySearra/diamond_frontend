@@ -81,6 +81,12 @@ export default {
 
         },
 
+        getCookie (name) {
+            var value = '; ' + document.cookie
+            var parts = value.split('; ' + name + '=')
+            if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
         vis_change(value){
             this.focus = value;
         },
@@ -88,7 +94,7 @@ export default {
         click_dropdown_item(command){
             switch(command){
                 case 'open_info':
-                    this.$emit('open_info', this.name, 'file');
+                    this.open_info();
                     break;
                 case 'move':
                     this.$emit('move_item', this.did, 'file', this.name);
@@ -104,6 +110,66 @@ export default {
 
         refresh(){
             this.$emit('refresh');
+        },
+
+        open_info(){
+            let url = '/fs/doc/info?did=' + this.did;
+            var that = this;
+            $.ajax({ 
+                type:'get',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        var content = [];
+                        content.push({
+                            key:'文档名',
+                            value:that.name
+                        });
+                        content.push({
+                            key:'创建者',
+                            value:res.cname
+                        });
+                        content.push({
+                            key:'字数',
+                            value:res.size
+                        });
+                        content.push({
+                            key:'是否可分享',
+                            value:res.is_locked?'否':'是'
+                        });
+                        let path = '';
+                        for(let i=0; i<res.path.length; i++){
+                            path += res.path[i].name;
+                            path += ' > ';
+                        }
+                        path += that.name;
+                        content.push({
+                            key:'路径',
+                            value:path
+                        });
+                        this.$emit('open_info', this.name, content);
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+            
         }
     }
 

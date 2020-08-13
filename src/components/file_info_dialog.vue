@@ -6,9 +6,9 @@
             width="700px">
             <h3>{{title}}</h3>
             <div class="content">
-                <div class="info_list">
-                    <div class="info_title">文件名：</div>
-                    <div class="info_content">介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容介绍的内容</div>
+                <div class="info_list" v-for="item in content" :key="item.key">
+                    <div class="info_title">{{item.key}}</div>
+                    <div class="info_content">{{item.value}}</div>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
