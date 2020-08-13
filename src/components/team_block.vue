@@ -80,7 +80,7 @@ export default {
         },
 
         open_team_info(){
-            let url = '/team/info' + this.tid;
+            let url = '/team/info?tid=' + this.tid;
             var that = this;
             $.ajax({ 
                 type:'get',
@@ -109,7 +109,7 @@ export default {
                             key:'创建时间',
                             value:res.create_dt
                         });
-                        that.$emit('open_info', that.tname, conetent);
+                        that.$emit('open_info', that.tname, content);
                     }
                     else{
                         switch(res.status){

@@ -131,6 +131,7 @@
         //     this.$router.push({name:'login'});
         //   }
         // }
+        this.apply_for_message();
         this.get_info();
       },
 
@@ -173,7 +174,7 @@
               }
               if(res.status == 0){
                 that.uid = res.uid;
-                if(!that.login_manager.get_por() || that.login_manager.get_por()!=res.portrait)
+                // if(!that.login_manager.get_por() || that.login_manager.get_por()!=res.portrait)
                   that.photo_src = res.portrait;
                 that.is_login = true;
                 that.login_manager.set(true, res.uid, res.name, res.portrait);

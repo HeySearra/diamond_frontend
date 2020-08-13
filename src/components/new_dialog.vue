@@ -27,7 +27,7 @@ export default {
         name:'',
         type:'',
         fid:'',
-        desktop_alert:false
+        desktop_alert:true
     }
   },
   methods:{
@@ -105,6 +105,7 @@ export default {
                         that.$emit('refresh');
                         that.dia_vis = false;
                     }
+                    
                 }
                 else{
                     switch(res.status){
