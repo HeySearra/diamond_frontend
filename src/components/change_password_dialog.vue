@@ -53,11 +53,11 @@ export default {
         },
 
         click_confirm(){
-            if(this.form.old_pwd == ''){
+            if(this.form.old_pwd.trim() == ''){
                 this.alert_msg.warning('请填写旧密码');
                 return;
             }
-            if(this.form.new_pwd == ''){
+            if(this.form.new_pwd.trim() == ''){
                 this.alert_msg.warning('请填写新密码');
                 return;
             }
