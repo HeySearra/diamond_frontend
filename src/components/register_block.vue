@@ -140,6 +140,8 @@ export default {
                                     case 6:
                                         that.alert_box.msg('注册失败', '该账户已存在');
                                         break;
+                                    case 7:
+                                        that.alert_box.msg('注册失败', '验证码已过期');
                                     default:
                                         that.alert_box.msg('注册失败', '请检查你所填写的信息');
                                         break;
