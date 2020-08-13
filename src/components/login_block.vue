@@ -97,17 +97,14 @@ export default {
                             }
                             else{
                                 switch(res.status){
-                                    case 1:
+                                    case 2:
                                         that.alert_box.msg('登录失败', '这个账号不存在呢');
                                         break;
-                                    case 2:
+                                    case 3:
                                         that.alert_box.msg('登录失败', '你的密码不对，你今天已经输错了 '+res.count+' 次密码，输错 5 次的话今天就不能登录了哦');
                                         break;
-                                    case 3:
-                                        that.alert_box.msg('登录失败', '你今天输错密码次数太多了，明天再来登录吧');
-                                        break;
                                     case 4:
-                                        that.alert_box.msg('登录失败', '你的账号由于违反规则已被封锁，请联系管理员处理');
+                                        that.alert_box.msg('登录失败', '你今天输错密码次数太多了，明天再来登录吧');
                                         break;
                                     default:
                                         that.alert_msg.error('登录出错啦');
