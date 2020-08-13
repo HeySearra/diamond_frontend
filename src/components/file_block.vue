@@ -28,7 +28,7 @@
                     <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                     <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link">复制</el-dropdown-item>
                     <el-dropdown-item command="share" v-if="(context=='file_system'||context=='team')&&!is_link">分享</el-dropdown-item>
-                    <el-dropdown-item v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
+                    <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
                     <el-dropdown-item command="remove_link" class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
                     <el-dropdown-item v-if="context=='recycle'">恢复</el-dropdown-item>
                     <el-dropdown-item class="red_text" v-if="context=='recycle'">彻底删除</el-dropdown-item>
@@ -147,6 +147,9 @@ export default {
                     break;
                 case 'remove_link':
                     this.remove_link();
+                    break;
+                case 'star':
+                    this.star();
                     break;
             }
         },
@@ -281,6 +284,42 @@ export default {
                                 that.alert_msg.error('权限不足');
                             case 3:
                                 that.alert_msg.error('找不到快捷方式');
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+        },
+
+        star(){
+            let url = '/fs/star';
+            let json_data = {id:this.did, type:'doc', is_starred:!this.is_starred};
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify(json_data),
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.is_starred = !that.is_starred;
+                        that.alert_msg.success('收藏成功');
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                            case 3:
+                                that.alert_msg.error('找不到文件');
                             default:
                                 that.alert_msg.error('发生了未知错误');
                         }

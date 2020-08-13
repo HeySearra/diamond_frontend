@@ -92,6 +92,10 @@ export default {
             }, 0);
         },
 
+        refresh(){
+            this.$emit('refresh');
+        },
+
         open_info(title, content){
             this.$emit('open_info', title, content);
         },
