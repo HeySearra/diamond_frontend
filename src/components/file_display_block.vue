@@ -45,7 +45,7 @@ export default {
             default: 'file_system'
         },
         type: {
-            type:Stirng,
+            type:String,
             default: 'self',
         },
         list: {
