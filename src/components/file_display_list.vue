@@ -5,9 +5,10 @@
         <div class="file_area">
             <div class="can_not_choose list_head">
                 <div class="info_area">
-                    <div>创建者</div>
-                    <div>最近编辑时间</div>
-                    <div class="min_hide">创建时间</div>
+                    <div v-if="type=='recent'">浏览时间</div>
+                    <div v-if="type!='recent'">创建者</div>
+                    <div v-if="type!='recent'">最近编辑时间</div>
+                    <div v-if="type!='recent'" class="min_hide">创建时间</div>
                 </div>
             </div>
             <div class="file_item" 
@@ -19,13 +20,16 @@
                 @dragover="allow_drop($event, item)"
                 >
                 <component 
+                    ref="file_component"
                     :is="item.type=='file'?'file-list-item':'fold-list-item'" 
                     :is_link="item.is_link" 
                     :did="item.id" 
                     :fid="item.id" 
                     :name="item.name" 
+                    :view_time="item.view_time"
                     :context="context" 
                     :is_starred="item.is_starred"
+                    :type="type"
                     @open_info="open_info"
                     @move_item="move_item"
                     @share_item="share_item"
@@ -62,6 +66,10 @@ export default {
             type:String,
             default: 'file_system'
         },
+        type:{
+            type:String,
+            default: "self", //'recent' 'from_out'
+        },
         list: {
             type: Array,
             default() {
@@ -72,6 +80,7 @@ export default {
                         is_link: false,
                         is_starred: true,
                         name: 'file',
+                        time: '',
                     },
                     {
                         type: 'fold', // or file
@@ -79,6 +88,7 @@ export default {
                         is_link: true,
                         is_starred: false,
                         name: 'folder',
+                        time: '',
                     }
                 ]
             }
@@ -103,7 +113,17 @@ export default {
 
     methods:{
         init(){
+            var that = this;
+            setTimeout(function(){
+                let item = that.$refs.file_component;
+                for(let i=0; i<item.length; i++){
+                    item[i].init();
+                }
+            }, 0);
+        },
 
+        refresh(){
+            this.$emit('refresh');
         },
 
         open_info(title, content){

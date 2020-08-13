@@ -2,9 +2,9 @@ export const login_manager = {
     set: function(state, account, name, por){
         if(state){
             localStorage.setItem('state', state);
-            localStorage.setItem('account', account);
-            localStorage.setItem('uname', name);
-            localStorage.setItem('por', por);
+            if(account)localStorage.setItem('account', account);
+            if(uname)localStorage.setItem('uname', name);
+            if(por)localStorage.setItem('por', por);
         }
         else{
             localStorage.setItem('state', false);

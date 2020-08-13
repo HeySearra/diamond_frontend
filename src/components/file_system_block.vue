@@ -9,10 +9,12 @@
         <div class="clear_both divide_type" style="height:10px"></div>
         <div v-for="item in list" :key="item.title">
             <file-display-block 
+                ref="display_component"
                 :title="item.title" 
                 :list="item.content" 
                 :drage="drage" 
                 :context="context" 
+                :type="type" 
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
@@ -38,7 +40,7 @@ export default {
         },
         type:{
             type:String,
-            default: 'self', // or 'from_out'
+            default: 'self', // or 'from_out' 'recent'
         },
         context:{
             type:String,
@@ -79,7 +81,7 @@ export default {
 
     methods:{
         init(){
-            if(this.type == 'from_out'){
+            if(this.type == 'from_out' || this.type == 'recent'){
                 this.list = this.out_list;
             }
             else if(this.type == 'self'){
@@ -141,6 +143,13 @@ export default {
                                 content: file,
                             });
                         }
+
+                        setTimeout(function(){
+                            let item = that.$refs.display_component;
+                            for(let i=0; i<item.length; i++){
+                                item[i].init();
+                            }
+                        }, 0);
                     }
                     else{
                         switch(res.status){

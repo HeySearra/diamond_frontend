@@ -12,6 +12,7 @@
                 @dragover="allow_drop($event, item)"
                 >
                 <component 
+                    ref="file_component"
                     :is="item.type=='file'?'file-block':'fold-block'" 
                     :is_link="item.is_link" 
                     :did="item.id" 
@@ -20,6 +21,8 @@
                     :name="item.name" 
                     :context="context" 
                     :is_starred="item.is_starred"
+                    :type="type"
+                    :view_time="item.view_time"
                     @open_info="open_info"
                     @move_item="move_item"
                     @share_item="share_item"
@@ -40,6 +43,10 @@ export default {
         context: {
             type:String,
             default: 'file_system'
+        },
+        type: {
+            type:String,
+            default: 'self',
         },
         list: {
             type: Array,
@@ -82,7 +89,17 @@ export default {
 
     methods:{
         init(){
+            var that = this;
+            setTimeout(function(){
+                let item = that.$refs.file_component;
+                for(let i=0; i<item.length; i++){
+                    item[i].init();
+                }
+            }, 0);
+        },
 
+        refresh(){
+            this.$emit('refresh');
         },
 
         open_info(title, content){

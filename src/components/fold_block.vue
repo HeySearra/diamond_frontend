@@ -24,15 +24,16 @@
                     <el-dropdown-item v-if="context!='recycle'">打开</el-dropdown-item>
                     <el-dropdown-item v-if="false">权限管理</el-dropdown-item>
                     <el-dropdown-item command="parent" v-if="(is_link||context=='workbench')&&pfid!=''">打开所在文件夹</el-dropdown-item>
-                    <el-dropdown-item v-if="is_in_desktop">转化为团队文件夹</el-dropdown-item>
+                    <el-dropdown-item command="team" v-if="is_in_desktop">转化为团队文件夹</el-dropdown-item>
+                    <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link">创建快捷方式到桌面</el-dropdown-item>
                     <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                     <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link&&false">复制</el-dropdown-item>
-                    <el-dropdown-item v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
-                    <el-dropdown-item class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
+                    <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
+                    <el-dropdown-item command="remove_link" class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
                     <el-dropdown-item v-if="context=='recycle'">恢复</el-dropdown-item>
                     <el-dropdown-item class="red_text" v-if="context=='recycle'">彻底删除</el-dropdown-item>
                     <el-dropdown-item v-if="false">导出</el-dropdown-item>
-                    <el-dropdown-item class="red_text" v-if="(context=='file_system'||context=='team')&&!is_link">删除</el-dropdown-item>
+                    <el-dropdown-item command="delete" class="red_text" v-if="(context=='file_system'||context=='team')&&!is_link">删除</el-dropdown-item>
                     <el-dropdown-item command="open_info" v-if="!is_link">文件夹信息</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -138,6 +139,21 @@ export default {
                 case 'parent':
                     this.open_fold(this.pfid);
                     break;
+                case 'create_link':
+                    this.create_link();
+                    break;
+                case 'remove_link':
+                    this.remove_link();
+                    break;
+                case 'star':
+                    this.star();
+                    break;
+                case 'delete':
+                    this.delete();
+                    break;
+                case 'team':
+                    this.team();
+                    break;
             }
         },
 
@@ -199,6 +215,192 @@ export default {
 
         open_fold(fid){
             this.$router.push({name:'file_system', params:{id:fid}});
+        },
+
+        create_link(){
+            let url = '/fs/link/new';
+            let json_data = {id:this.did, type:'doc'};
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify(json_data),
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.alert_box.msg('提示', '成功创建快捷方式', function(){
+                            that.$router.push({name:'file_system', params:{id:'desktop'}});
+                        });
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                            case 3:
+                                that.alert_msg.error('快捷方式已存在');
+                            case 4:
+                                that.alert_msg.error('找不到文件');
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+        },
+
+        remove_link(){
+            let url = '/fs/delete_link';
+            let json_data = {id:this.fid, type:'fold'};
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify(json_data),
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.$emit('refresh');
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                            case 3:
+                                that.alert_msg.error('找不到快捷方式');
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+        },
+
+        star(){
+            let url = '/fs/star';
+            let json_data = {id:this.fid, type:'fold', is_starred:!this.is_starred};
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify(json_data),
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.is_starred = !that.is_starred;
+                        that.alert_msg.success('收藏成功');
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                            case 3:
+                                that.alert_msg.error('找不到文件');
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+        },
+
+        delete(){
+            var that = this;
+            that.alert_box.confirm('提示', '确定删除 ' + that.name + ' ？', function(){
+                let url = '/fs/delete';
+                let json_data = {id:that.fid, type:'fold'};
+                $.ajax({ 
+                    type:'post',
+                    url: url,
+                    headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+                    data: JSON.stringify(json_data),
+                    processData: false,
+                    contentType: false,
+                    success:function (res){ 
+                        if(that.console_debug){
+                            console.log(url +  '：' + res.status);
+                        }
+                        if(res.status == 0){
+                            that.alert_msg.success('已删除 ' + that.name);
+                            that.$emit('refresh');
+                        }
+                        else{
+                            switch(res.status){
+                                case 2:
+                                    that.alert_msg.error('权限不足');
+                                case 3:
+                                    that.alert_msg.error('找不到文件夹');
+                                default:
+                                    that.alert_msg.error('发生了未知错误');
+                            }
+                        }
+                    },
+                    error:function(res){
+                        that.alert_msg.error('网络连接失败');
+                    }
+                });
+            })
+        },
+
+        team(){
+            var that = this;
+            that.alert_box.confirm('提示', '确定将 ' + that.name + ' 转为团队文件夹吗？', function(){
+                let url = '/team/new_from_fold';
+                let json_data = {id:that.fid};
+                $.ajax({ 
+                    type:'post',
+                    url: url,
+                    headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+                    data: JSON.stringify(json_data),
+                    processData: false,
+                    contentType: false,
+                    success:function (res){ 
+                        if(that.console_debug){
+                            console.log(url +  '：' + res.status);
+                        }
+                        if(res.status == 0){
+                            that.alert_msg.success('已转化为团队文件夹');
+                            that.$router.push({name:team_center});
+                        }
+                        else{
+                            switch(res.status){
+                                case 2:
+                                    that.alert_msg.error('权限不足');
+                                case 3:
+                                    that.alert_msg.error('转化过程中发生错误');
+                                default:
+                                    that.alert_msg.error('发生了未知错误');
+                            }
+                        }
+                    },
+                    error:function(res){
+                        that.alert_msg.error('网络连接失败');
+                    }
+                });
+            })
         }
     }
 
