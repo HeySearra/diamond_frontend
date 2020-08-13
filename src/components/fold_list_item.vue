@@ -13,14 +13,14 @@
             <span class="icon iconfont">&#xe7b2;</span>
         </div>
         <div class="name">{{name}}</div>
-        <div class="info_area" v-if="type=='full'">
-            <div v-if="type=='recycle'">{{delete_timer}}</div>
-            <div v-if="type=='recycle'">{{rest_time}}天</div>
-            <div v-if="type!='recycle'">{{creator}}</div>
-            <div v-if="type!='recycle'">{{recent_edit_time}}</div>
-            <div v-if="type!='recycle'" class="min_hide">{{create_time}}</div>
+        <div class="info_area">
+            <div v-if="context=='recycle'">{{delete_timer}}</div>
+            <div v-if="context=='recycle'">{{rest_time}}天</div>
+            <div v-if="context!='recycle'">{{creator}}</div>
+            <div v-if="context!='recycle'">{{recent_edit_time}}</div>
+            <div v-if="context!='recycle'" class="min_hide">{{create_time}}</div>
         </div>
-        <div class="more_menu" :class="focus?'more_menu_focus':''" v-if="type=='full'">
+        <div class="more_menu" :class="focus?'more_menu_focus':''">
             <el-dropdown trigger="click" 
                 @visible-change="vis_change"
                 @command="click_dropdown_item">
@@ -28,7 +28,7 @@
                     <i class="el-icon-s-tools"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item v-if="context!='recycle'">打开</el-dropdown-item>
+                    <el-dropdown-item command="open" v-if="context!='recycle'">打开</el-dropdown-item>
                     <el-dropdown-item v-if="false">权限管理</el-dropdown-item>
                     <el-dropdown-item command="parent" v-if="(is_link||context=='workbench')&&pfid!=''">打开所在文件夹</el-dropdown-item>
                     <el-dropdown-item command="team" v-if="is_in_desktop">转化为团队文件夹</el-dropdown-item>
@@ -137,7 +137,7 @@ export default {
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.pfid = pfid;
+                        that.pfid = res.pfid;
                     }
                     else{
                         switch(res.status){
@@ -185,6 +185,9 @@ export default {
                     break;
                 case 'team':
                     this.team();
+                    break;
+                case 'open':
+                    this.open_fold(this.fid);
                     break;
             }
         },
@@ -414,7 +417,7 @@ export default {
                         }
                         if(res.status == 0){
                             that.alert_msg.success('已转化为团队文件夹');
-                            that.$router.push({name:team_center});
+                            that.$router.push({name:'team_center'});
                         }
                         else{
                             switch(res.status){

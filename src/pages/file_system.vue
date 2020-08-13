@@ -45,6 +45,11 @@ export default {
       is_desktop:false
     }
   },
+  watch:{
+    $route(to,from){
+      this.init();
+    }
+  },
   mounted(){
     this.init();
   },
@@ -123,8 +128,9 @@ export default {
     change_view(){
         this.view_type = this.view_type=='block' ? 'list' : 'block';
         this.view_type_manager.set(this.view_type);
+        var that = this;
         setTimeout(function(){
-          this.$refs.file_system_component.init();
+          that.$refs.file_system_component.init();
         }, 0);
     },
 

@@ -95,7 +95,7 @@ export default {
                         }
                         if(res.status == 0){
                             that.alert_box.msg('提示', '成功退出团队', function(){
-                                that.$router.push({name:team_center});
+                                that.$router.push({name:'team_center'});
                             });
                         }
                         else{
@@ -136,7 +136,7 @@ export default {
                         }
                         if(res.status == 0){
                             that.alert_box.msg('提示', '成功解散团队', function(){
-                            that.$router.push({name:team_center});
+                            that.$router.push({name:'team_center'});
                             });
                         }
                         else{
