@@ -25,39 +25,78 @@
 <script>
 export default {
     props: {
-        type: {
-            // comment join admin remove member
-            type:String,
-            default: 'comment'
-        },
         mid:{
             type:String,
-            default:'mid'
-        },
-        is_read:{
-            type:Boolean,
-            default:false
+            default:''
         },
     },
     data () {
         return {
-            did: 0, //文档id
-            title: '我是文档标题 我是文档标题我是文档标题我是文档标题我是文档标题', //文档标题
-            comment: '321凤凰发灰黑服啊和附件和佛教咖啡机能让肌肤发基坑俊娥既然你3', //评论
-            tid: 0,
-            muid:0, //发表评论的uid
-            name:0, //发表评论的人
+            did: '', //文档id
+            type: 'comment',   //team comment
+            title: '我是文档标题 我是文档标题我是文档标题我是文档标题我是文档标题', //消息标题
+            comment: '321凤凰发灰黑服啊和附件和佛教咖啡机能让肌肤发基坑俊娥既然你3', //消息内容
+            tid: '',
+            muid: '', //发表评论的uid
+            name: '', //发表评论的人
             img:'',
             loading: true,
-
+            is_read: false,
+            is_dnd: false,
+            protrait: '',
+            time: '',
         }
     },
     mounted(){
-        this.init();
+        //this.init();
     },
     methods:{
         init(){
-
+            this.apply_for_info();
+        },
+        apply_for_info(){
+            var that = this;
+            $.ajax({
+                type:'get',
+                url: "/msg/info?mid=" + that.mid,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){
+                    if(that.console_debug)console.log("(post)/msg/info"+ " : " +res.status);
+                    if(res.status == 0){
+                        that.is_read = res.is_read;
+                        that.is_dnd = res.is_dnd;
+                        that.title = res.name;
+                        that.protrait = res.protrait;
+                        if(!res.protrait){
+                            that.type = 'team';
+                        }
+                        that.content = res.content;
+                        // var cur_dt = new Date(res.cur_dt);
+                        // var dt = new Date(res.dt);
+                        var cur_dt = res.cur_dt;
+                        var dt = res.dt;
+                        if(dt.substring(0, 4) == cur_dt.substring(0,4)){
+                            if(dt.substring(8, 10) == cur_dt.substring(8, 10)){
+                                that.time = '今天 ' + dt.substring(11, 19);
+                            }
+                            else{
+                                that.time = dt.substring(5, 16);
+                            }
+                        }
+                        else{
+                            that.time = dt.substring(0, 10);
+                        }
+                    }
+                    else{
+                        that.alert_box.msg('验证码发送失败，请重试');
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
+                }
+            });
         },
         to_doc(){
 

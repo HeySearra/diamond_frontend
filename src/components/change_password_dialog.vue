@@ -20,7 +20,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dia_vis=false">取 消</el-button>
-                <el-button type="primary" @click="dia_vis=false">确 定</el-button>
+                <el-button type="primary" @click="click_confirm">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -45,6 +45,59 @@ export default {
             this.form.new_pwd = '';
             this.dia_vis = true;
         },
+
+        getCookie (name) {
+            var value = '; ' + document.cookie
+            var parts = value.split('; ' + name + '=')
+            if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
+        click_confirm(){
+            if(this.form.old_pwd == ''){
+                this.alert_msg.warning('请填写旧密码');
+                return;
+            }
+            if(this.form.new_pwd == ''){
+                this.alert_msg.warning('请填写新密码');
+                return;
+            }
+            
+            let json_data = form
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url:'/user/set_pwd',
+                data: JSON.stringify(json_data),
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log('/user/set_pwd/：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.alert_box.msg('提醒', '成功修改密码', function(){
+                            that.dia_vis = false;
+                        });
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_box.msg('修改密码失败', '旧密码错误');
+                                break;
+                            case 3:
+                                that.alert_box.msg('修改密码失败', '密码长度限定为 6-32 ，且至少含有数字、小写字母、大写字母、特殊字符中的两个');
+                                break;
+                            default:
+                                that.alert_box.msg('修改密码失败', '发生了未知的错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+
+        }
     }
 
 }

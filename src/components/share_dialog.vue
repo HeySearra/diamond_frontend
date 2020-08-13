@@ -14,7 +14,8 @@
                         style="float:right"
                         v-model="sharable"
                         active-color="#67C23A"
-                        inactive-color="#bbb">
+                        inactive-color="#bbb"
+                        @change="change_switch">
                     </el-switch>
                 </div>
                 <div style="height:50px;"></div>
@@ -28,7 +29,8 @@
                 <div style="height:30px;"></div>
                 <div style="width:96%;margin:0 auto">
                     <el-input v-model="url" readonly :disabled="!sharable"></el-input>
-                    <el-button :disabled="!sharable" type="primary" plain>复制链接</el-button>
+                    <el-button :disabled="!sharable" type="primary" plain 
+                        v-clipboard:copy="url" v-clipboard:success="copy_success" v-clipboard:error="copy_error">复制链接</el-button>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
@@ -53,7 +55,10 @@ export default {
             did:'',
             url:'123',
             sharable:true,
-            share_type:''
+            share_type:'',
+            write_url:'',
+            comment_url:'',
+            read_url:''
         }
     },
 
@@ -61,11 +66,202 @@ export default {
         open(did, name){
             this.did = did;
             this.title = '分享 ' + name;
+            var flag = false;
+
+            var that = this;
+            $.ajax({ 
+                type:'get',
+                url:'/doc/lock?did=' + that.did,
+                data: JSON.stringify(json_data),
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log('/doc/lock?did=' + that.did +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.sharable = !res.is_locked;
+                        flag = true;
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('文档不存在');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+
+            if(!flag){
+                return;
+            }
+
+            flag = false;
+            $.ajax({ 
+                type:'get',
+                url:'/doc/share?did=' + that.did + '&auth=write',
+                data: JSON.stringify(json_data),
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log('/doc/share?did=' + that.did + '&auth=write' +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.write_url = '/doc/edit?dk=' + res.key;
+                        flag = true;
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('文档不存在');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+
+            if(!flag){
+                return;
+            }
+
+            flag = false;
+            $.ajax({ 
+                type:'get',
+                url:'/doc/share?did=' + that.did + '&auth=comment',
+                data: JSON.stringify(json_data),
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log('/doc/share?did=' + that.did + '&auth=comment' +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.comment_url = '/doc/comment?dk=' + res.key;
+                        flag = true;
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('文档不存在');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+
+            if(!flag){
+                return;
+            }
+
+            flag = false;
+            $.ajax({ 
+                type:'get',
+                url:'/doc/share?did=' + that.did + '&auth=read',
+                data: JSON.stringify(json_data),
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log('/doc/share?did=' + that.did + '&auth=read' +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.read_url = '/doc/read?dk=' + res.key;
+                        flag = true;
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('文档不存在');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+
+            if(!flag){
+                return;
+            }
+
             this.dia_vis = true;
         },
 
         change_share_type(value){
+            switch(value){
+                case '文档阅读分享':
+                    this.url = this.read_url;
+                    break;
+                case '文档评论分享':
+                    this.url = this.comment_url;
+                    break;
+                
+                case '文档编辑分享':
+                    this.url = this.write_url;
+                    break;
+            }
+        },
 
+        copy_success(){
+            this.alert_msg.success('复制成功');
+        },
+
+        copy_error(){
+            this.alert_msg.error('复制失败');
+        },
+
+        change_share_type(value){
+            let url = '/doc/lock/';
+            let json_data = {did:this.did, is_locked:!value};
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url: url,
+                data: JSON.stringify(json_data),
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+ 
+                    }
+                    else{
+                        that.sharable = !value;
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('文档不存在');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
         }
     }
 
