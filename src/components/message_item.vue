@@ -3,16 +3,16 @@
         <div style="height:10px;"></div>
         <div class="item">
             <div class="profile">
-                <span v-if="type!='comment'" class="icon iconfont">&#xe622;</span>
-                <el-avatar v-if="type=='comment'" :src="img" style="vertical-align: middle;"></el-avatar>
+                <span v-if="!portrait" class="icon iconfont">&#xe622;</span>
+                <el-avatar v-if="portrait" :src="img" style="vertical-align: middle;"></el-avatar>
             </div>
             <div class="content">
                 <h4 class="title">
-                    <div class="message-head" v-if="type=='comment'" @click="to_doc">{{title}}</div>
+                    <div class="message-head" @click="type=='doc'? 'jump_to_doc':type=='join'?'comfirm_to_join':type=='accept'?'jump_to_team':''">{{title}}</div>
                     <div class="message-head" v-if="type=='join'" @click="confirm_join">{{team_name}}</div>
                     <div class="message-head" v-if="type=='admin' || type=='remove'" @click="type=='admin'? 'to_team':''">{{team_name}}</div>
                 </h4>
-                <div class='comment'>{{comment}}</div>
+                <div class='comment' v-if="type=='doc'">{{comment}}</div>
             </div>
         </div>
         <div class="not-read" v-if="!is_read"></div>
@@ -27,23 +27,23 @@ export default {
     props: {
         mid:{
             type:String,
-            default:''
+            default:'mid',
         },
     },
     data () {
         return {
             did: '', //文档id
-            type: 'comment',   //team comment
+            type: 'doc',   //join accept out doc
             title: '我是文档标题 我是文档标题我是文档标题我是文档标题我是文档标题', //消息标题
             comment: '321凤凰发灰黑服啊和附件和佛教咖啡机能让肌肤发基坑俊娥既然你3', //消息内容
-            tid: '',
-            muid: '', //发表评论的uid
-            name: '', //发表评论的人
-            img:'',
+            id: '',
+            name: 'team_name',
             loading: true,
             is_read: false,
             is_dnd: false,
-            protrait: '',
+            uid: 'uid',     //发表评论的人的id
+            uname: 'uname',
+            portrait: '',
             time: '',
         }
     },
@@ -65,14 +65,18 @@ export default {
                 success:function (res){
                     if(that.console_debug)console.log("(get)/msg/info"+ " : " +res.status);
                     if(res.status == 0){
+                        that.type = res.type;
                         that.is_read = res.is_read;
                         that.is_dnd = res.is_dnd;
-                        that.title = res.name;
-                        that.protrait = res.protrait;
-                        if(!res.protrait){
-                            that.type = 'team';
+                        that.title = res.title;
+                        that.name = res.name;
+                        that.portrait = res.portrait;
+                        that.id = res.id;
+                        if(that.type == 'doc'){
+                            that.comment = res.content;
+                            that.uid = res.uid;
+                            that.uname = res.uname;
                         }
-                        that.content = res.content;
                         // var cur_dt = new Date(res.cur_dt);
                         // var dt = new Date(res.dt);
                         var cur_dt = res.cur_dt;
@@ -101,17 +105,42 @@ export default {
                 }
             });
         },
-        to_doc(){
-
+        jump_to_doc(){
+            that.$router.push({path: '/'}); //待定
         },
-        confirm_join(){
-
+        confirm_to_join(){
+            let data = {
+                tid: this.id,
+                team_name: this.name,
+            }
+            this.$emit('confirm_to_join', data);
         },
-        to_team(){
-
+        jump_to_team(){
+            that.$router.push({path: '/'}); //待定
         },
         mark_read(){
-            this.is_read = true;
+            let that = this;
+            let msg = {mid: that.mid};
+            $.ajax({
+                type:'post',
+                url: "/msg/ar" + that.mid,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify(msg),
+                processData: false,
+                contentType: false,
+                success:function (res){
+                    if(that.console_debug)console.log("(post)/msg/ar"+ " : " +res.status);
+                    if(res.status == 0){
+                        this.is_read = true;
+                    }
+                    else{
+                        that.alert_msg.msg('标记已读失败', '请重试');
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
+                }
+            });
         },
     }
 }
