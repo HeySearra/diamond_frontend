@@ -63,7 +63,7 @@ export default {
                 processData: false,
                 contentType: false,
                 success:function (res){
-                    if(that.console_debug)console.log("(post)/msg/info"+ " : " +res.status);
+                    if(that.console_debug)console.log("(get)/msg/info"+ " : " +res.status);
                     if(res.status == 0){
                         that.is_read = res.is_read;
                         that.is_dnd = res.is_dnd;
@@ -88,13 +88,16 @@ export default {
                         else{
                             that.time = dt.substring(0, 10);
                         }
+                        that.loading = false;
+                        that.$emit('done');
                     }
                     else{
-                        that.alert_box.msg('验证码发送失败，请重试');
+                        that.loading = true;
                     }
                 },
                 error:function(){
                     that.alert_msg.error('连接失败');
+                    that.loading = true;
                 }
             });
         },
