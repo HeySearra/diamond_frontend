@@ -10,6 +10,7 @@
                     :tid="item.tid"
                     :is_creator="is_creator"
                     :name="item.name"
+                    :refresh="apply_for_info"
                     @open_info="open_info">
                 </team-block>
             </div>
@@ -47,12 +48,16 @@ export default {
     },
 
     mounted(){
-        this.init();
+        // this.init();
     },
 
     methods:{
         init(){
+            this.apply_for_info();
+        },
 
+        apply_for_info(){
+            this.$emit("apply_for_info");
         },
 
         open_info(title, content){
