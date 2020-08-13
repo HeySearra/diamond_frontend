@@ -75,7 +75,13 @@ export default {
 
     create_new_item(type){
         let url = '/fs/new/';
-        let json_data = {name:this.name, pfid:this.fid, type:item};
+
+        if(this.name.trim() == ''){
+            this.alert_msg.warning('请输入'+(this.type=='file'?'文件':'文件夹')+'名称');
+            return;
+        }
+
+        let json_data = {name:this.name, pfid:this.fid, type:type};
         var that = this;
         $.ajax({ 
             type:'post',
@@ -125,6 +131,12 @@ export default {
 
     create_new_team(){
         let url = '/team/new/';
+
+        if(this.name.trim() == ''){
+            this.alert_msg.warning('请输入团队名称');
+            return;
+        }
+
         let json_data = {name:this.name};
         var that = this;
         $.ajax({ 
