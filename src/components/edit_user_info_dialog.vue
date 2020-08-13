@@ -110,7 +110,7 @@ export default {
             }
             var that = this;
             let form = new FormData();
-            form.append('profile', f.file);
+            form.append('file', f.file);
             $.ajax({ 
                 type:'post', 
                 url:'/upload/port',
@@ -121,7 +121,7 @@ export default {
                 success:function (res){ 
                     if(res.status == 0){
                         that.form.src = res.src;
-                        f.onSuccess();
+                        //f.onSuccess();
                     }
                     else{
                         switch(res){
@@ -132,13 +132,13 @@ export default {
                                 that.alert_msg.error('上传头像失败，请重试');
                         }
                         //that.form.src = '';
-                        f.onError();
+                        //f.onError();
                     }
                 },
                 error:function(){
                     that.alert_msg.error('连接失败');
                     //that.form.src = '';
-                    f.onError();
+                    //f.onError();
                 }
             });
         },
@@ -156,9 +156,12 @@ export default {
                 data: JSON.stringify(that.form),
                 async:false,
                 success:function (res){
+                    if(that.console_debug){
+                        console.log('/user/edit_info：' + res.status);
+                    }
                     if(res.status == 0){
-                        that.login_manager.set(true, '', that.form.name, that.form.img);
-                        that.$emit('apply_for_info');
+                        that.$emit('head_refresh');
+                        // that.$emit('apply_for_info');
                         that.alert_msg.success('修改信息成功！');
                         that.close();
                     }
@@ -171,7 +174,8 @@ export default {
                                 that.alert_msg.error('昵称不合法，请检查您的信息')
                                 break;
                             case 4:
-                                that.alert_msg.error('头像上传失败，请重新上传')
+                                that.alert_msg.error('头像上传失败，请重新上传');
+                                break;
                             default:
                                 that.alert_msg.error('修改信息失败，请检查你的信息');
                         }
@@ -181,7 +185,13 @@ export default {
                     console.log('连接失败');
                 }
             });
-        }
+        },
+
+        getCookie (name) {
+            var value = '; ' + document.cookie
+            var parts = value.split('; ' + name + '=')
+            if (parts.length === 2) return parts.pop().split(';').shift()
+        },
     },
 }
 </script>
