@@ -240,7 +240,7 @@ export default {
             this.alert_msg.error('复制失败');
         },
 
-        change_share_type(value){
+        change_switch(value){
             let url = '/doc/lock/';
             let json_data = {did:this.did, is_locked:!value};
             var that = this;
