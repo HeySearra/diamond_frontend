@@ -58,10 +58,10 @@ export default {
                     if(res.status == 0){
                         let item = that.$refs.message_item;
                         that.list.concat(res.list);
-                        for(let i=len; i < list.length; i++){
-                            setTimeout(function(){
+                        if(item){
+                            for(let i=0; i<item.length; i++){
                                 item[i].init();
-                            }, 0);
+                            }
                         }
                         that.drawer = true;
                         that.is_loading = false;
@@ -105,7 +105,7 @@ export default {
                     }
                     if(res.status == 0){
                         let item = that.$refs.message_item;
-                        for(let i = 0; i < item.length; i++){
+                        if(item){
                             setTimeout(function(){
                                 item[i].init();
                             }, 0);

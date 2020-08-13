@@ -33,7 +33,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dia_vis=false">取 消</el-button>
-                <el-button type="primary" @click="dia_vis=false">确 定</el-button>
+                <el-button type="primary" @click="submit">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -58,8 +58,14 @@ export default {
             this.init_info();
         },
 
+        getCookie (name) {
+            var value = '; ' + document.cookie
+            var parts = value.split('; ' + name + '=')
+            if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
         init_info(){
-            let url = '/team/info' + this.tid;
+            let url = '/team/info?tid=' + this.tid;
             var that = this;
             $.ajax({ 
                 type:'get',
@@ -113,7 +119,7 @@ export default {
 
         add_admin(uid){
             if(uid == this.creator_uid){
-                this.alert_msg.normal('Ta 已经是管理员了');
+                this.alert_msg.normal('Ta 都是创建者了');
                 return;
             }
 

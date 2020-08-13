@@ -74,7 +74,7 @@ export default {
         },
 
         open_team_info(){
-            let url = '/team/info' + this.tid;
+            let url = '/team/info?tid=' + this.tid;
             var that = this;
             $.ajax({ 
                 type:'get',
@@ -131,7 +131,7 @@ export default {
                     }
                     if(res.status == 0){
                         that.alert_msg.success('信息修改成功');
-                        that.dia_vis = true;
+                        that.dia_vis = false;
                     }
                     else{
                         switch(res.status){
@@ -170,7 +170,7 @@ export default {
             if (!isLt2M) {
                 this.alert_msg.error('上传图片的大小不能超过 10MB');
             }
-            return isJPG && isLt2M;
+            return is_pic && isLt2M;
         },
 
         upload_por(f){
@@ -191,8 +191,10 @@ export default {
                 contentType: false,
                 success:function (res){ 
                     if(res.status == 0){
-                        that.form.src = res.src;
-                        f.onSuccess();
+                        that.form.img = res.src;
+                        if(res.src[0] != '/'){
+                            that.form.img = '/' + that.form.img;
+                        }
                     }
                     else{
                         switch(res){
@@ -202,14 +204,14 @@ export default {
                             default:
                                 that.alert_msg.error('上传头像失败，请重试');
                         }
-                        //that.form.src = '';
-                        f.onError();
+                        //that.form.img = '';
+                        //f.onError();
                     }
                 },
                 error:function(){
                     that.alert_msg.error('连接失败');
-                    //that.form.src = '';
-                    f.onError();
+                    //that.form.img = '';
+                    //f.onError();
                 }
             });
         },

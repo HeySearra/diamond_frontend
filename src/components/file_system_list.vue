@@ -77,7 +77,7 @@ export default {
     },
     data() {
         return {
-            path: [{name:'Apath',id:'idA'},{name:'Bpath',id:'idB'},{name:'Cpath',id:'idC'}],
+            path: [/*{name:'Apath',id:'idA'},{name:'Bpath',id:'idB'},{name:'Cpath',id:'idC'}*/],
             list:[
 
             ]
@@ -95,8 +95,10 @@ export default {
                 var that = this;
                 setTimeout(function(){
                     let item = that.$refs.display_component;
-                    for(let i=0; i<item.length; i++){
-                        item[i].init();
+                    if(item){
+                        for(let i=0; i<item.length; i++){
+                            item[i].init();
+                        }
                     }
                 }, 0);
             }
@@ -115,7 +117,7 @@ export default {
             let url = '/fs/fold/elem?fid=' + this.fid;
             var that = this;
             $.ajax({ 
-                type:'post',
+                type:'get',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
@@ -169,8 +171,10 @@ export default {
 
                         setTimeout(function(){
                             let item = that.$refs.display_component;
-                            for(let i=0; i<item.length; i++){
-                                item[i].init();
+                            if(item){
+                                for(let i=0; i<item.length; i++){
+                                    item[i].init();
+                                }
                             }
                         }, 0);
                     }

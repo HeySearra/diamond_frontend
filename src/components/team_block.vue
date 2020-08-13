@@ -120,7 +120,7 @@ export default {
                     }
                 });
             });
-        }
+        },
 
         open_team_info(){
             let url = '/team/info?tid=' + this.tid;
@@ -151,6 +151,10 @@ export default {
                         content.push({
                             key:'创建时间',
                             value:res.create_dt
+                        });
+                        content.push({
+                            key:'文件数',
+                            value:res.doc_num
                         });
                         that.$emit('open_info', that.tname, content);
                     }
@@ -187,7 +191,7 @@ export default {
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        this.$router.push({name:'team_file_system', params:{tid:that.tid,fid:res.fid}});
+                        that.$router.push({name:'team_file_system', params:{tid:that.tid,fid:res.fid}});
                     }
                     else{
                         switch(res.status){

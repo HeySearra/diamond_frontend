@@ -54,7 +54,6 @@ export default {
             //this.get_user_info();
         },
         open(){
-            this.dia_vis = true;
             this.get_user_info();
         },
 
@@ -68,13 +67,13 @@ export default {
                 type:'get', 
                 url:'/user_info',
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')}, 
-                data:form,
                 processData: false,
                 contentType: false,
                 success:function (res){ 
                     if(res.status == 0){
                         that.form.img = res.portrait;
                         that.form.name = res.name;
+                        that.dia_vis = true;
                     }
                     else{
                         that.dia_vis = false;
@@ -99,7 +98,7 @@ export default {
             if (!isLt2M) {
                 this.alert_msg.error('上传图片的大小不能超过 10MB');
             }
-            return isJPG && isLt2M;
+            return is_pic && isLt2M;
         },
 
         upload_por(f){
@@ -120,7 +119,10 @@ export default {
                 contentType: false,
                 success:function (res){ 
                     if(res.status == 0){
-                        that.form.src = res.src;
+                        that.form.img = res.src;
+                        if(res.src[0] != '/'){
+                            that.form.img = '/' + that.form.img;
+                        }
                         //f.onSuccess();
                     }
                     else{
@@ -131,13 +133,13 @@ export default {
                             default:
                                 that.alert_msg.error('上传头像失败，请重试');
                         }
-                        //that.form.src = '';
+                        //that.form.img = '';
                         //f.onError();
                     }
                 },
                 error:function(){
                     that.alert_msg.error('连接失败');
-                    //that.form.src = '';
+                    //that.form.img = '';
                     //f.onError();
                 }
             });

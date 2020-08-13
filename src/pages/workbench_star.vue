@@ -24,36 +24,36 @@ export default {
                 {
                     title:'我的收藏',
                     content:[
-                        {
-                            type: 'file',
-                            id: 'id',
-                            is_link:false,
-                            is_starred:true,
-                            name:'file',
-                            creator:'',
-                            recent_time:'',
-                            create_time:''
-                        },
-                        {
-                            type: 'file',
-                            id: 'id',
-                            is_link:false,
-                            is_starred:true,
-                            name:'file',
-                            creator:'',
-                            recent_time:'',
-                            create_time:''
-                        },
-                        {
-                            type: 'fold',
-                            id: 'id',
-                            is_link:false,
-                            is_starred:true,
-                            name:'file',
-                            creator:'',
-                            recent_time:'',
-                            create_time:''
-                        }
+                        // {
+                        //     type: 'file',
+                        //     id: 'id',
+                        //     is_link:false,
+                        //     is_starred:true,
+                        //     name:'file',
+                        //     creator:'',
+                        //     recent_time:'',
+                        //     create_time:''
+                        // },
+                        // {
+                        //     type: 'file',
+                        //     id: 'id',
+                        //     is_link:false,
+                        //     is_starred:true,
+                        //     name:'file',
+                        //     creator:'',
+                        //     recent_time:'',
+                        //     create_time:''
+                        // },
+                        // {
+                        //     type: 'fold',
+                        //     id: 'id',
+                        //     is_link:false,
+                        //     is_starred:true,
+                        //     name:'file',
+                        //     creator:'',
+                        //     recent_time:'',
+                        //     create_time:''
+                        // }
                     ]
                 }
             ]
@@ -64,6 +64,7 @@ export default {
     },
     methods:{
         init(){
+            // this.list = [];
             this.$emit('active_change');
             this.view_type = this.view_type_manager.get();
             this.get_star_file_list();
@@ -88,7 +89,7 @@ export default {
                                 type: res.list[i].type,
                                 id: res.list[i].id,
                                 is_link: false,
-                                is_starred: false,
+                                is_starred: true,
                                 name: res.list[i].name,
                                 create_time: res.list[i].create_dt,
                                 creator: res.list[i].cname,

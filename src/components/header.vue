@@ -156,6 +156,7 @@
             }
           },
           error:function(){
+            that.message_count = 0;
           }
         });
       },

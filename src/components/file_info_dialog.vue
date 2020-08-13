@@ -7,7 +7,7 @@
             <h3>{{title}}</h3>
             <div class="content">
                 <div class="info_list" v-for="item in content" :key="item.key">
-                    <div class="info_title">{{item.key}}</div>
+                    <div class="info_title">{{item.key}}：</div>
                     <div class="info_content">{{item.value}}</div>
                 </div>
             </div>
