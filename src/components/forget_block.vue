@@ -62,13 +62,44 @@ export default {
         submit:function(formname){
             this.$refs[formname].validate((valid) => {
                 if(valid){
-
+                    var that = this;
+                    $.ajax({
+                        type:'get',
+                        url:"/user/forget/send_email?acc="+that.form.account,
+                        data: JSON.stringify(msg),
+                        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                        processData: false,
+                        contentType: false,
+                        success:function (res){
+                            if(that.console_debug){
+                                console.log("(get)/forget/send_email"+ " : " +res.status);
+                            }
+                            if(res.status == 0){
+                                that.alert_box.msg('提示', '验证链接发送成功，请到注册邮箱中点击链接重置密码');
+                            }
+                            else{
+                                switch(res.status){
+                                    case 2:
+                                        that.alert_box.msg('验证邮件发送失败', '帐号不合法，请检查您输入的信息');
+                                        break;
+                                    case 3:
+                                        that.alert_box.msg('验证邮件发送失败', '帐号不存在');
+                                        break;
+                                    default:
+                                        that.alert_box.msg('验证邮件发送失败', '请检查您输入的信息并重试')
+                                }
+                            }
+                        },
+                        error:function(){
+                            that.alert_msg.error('连接失败');
+                        }
+                    });
                 }
                 else{
                     return false;
                 }
             })
-            
+
         },
     }
 

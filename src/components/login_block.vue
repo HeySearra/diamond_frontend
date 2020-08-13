@@ -64,7 +64,7 @@ export default {
             setTimeout(() => {
                 if (mailReg.test(value)) {
                     callback();
-                } 
+                }
                 else{
                     callback(new Error('请输入正确的邮箱'));
                 }
@@ -75,14 +75,17 @@ export default {
                 if(valid){
                     var that = this;
                     var msg = this.form;
-                    $.ajax({ 
-                        type:'post', 
-                        url:"/login/submit",
+                    $.ajax({
+                        type:'post',
+                        url:"/user/login/submit",
                         data: JSON.stringify(msg),
-                        headers: {'X-CSRFToken': this.getCookie('csrftoken')}, 
+                        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                         processData: false,
                         contentType: false,
-                        success:function (res){ 
+                        success:function (res){
+                            if(that.console_debug){
+                                console.log("(post)/register/submit"+ " : " +res.status);
+                            }
                             if(res.status == 0){
                                 let from = that.$route.query.from;
                                 that.$router.push({path:from?from:'/index'});
@@ -116,7 +119,7 @@ export default {
                     return false;
                 }
             })
-            
+
         },
     }
 

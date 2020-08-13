@@ -40,7 +40,7 @@
                 <span>这是一个人</span>
               </el-dropdown-item>
             </el-dropdown-menu>
-          </el-dropdown> 
+          </el-dropdown>
         </el-avatar>
         <el-tooltip class="item" effect="dark" content="lkw" placement="top-start">
           <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
@@ -64,7 +64,7 @@
                   <el-dropdown-item command="user_info">修改信息</el-dropdown-item>
                   <el-dropdown-item command="change_password">修改密码</el-dropdown-item>
                   <el-dropdown-item command="help">使用帮助</el-dropdown-item>
-                  <el-dropdown-item command="logout">登出</el-dropdown-item>
+                  <el-dropdown-item command="logout" @click="logout">登出</el-dropdown-item>
               </el-dropdown-menu>
               </el-dropdown>
       </div>
@@ -118,19 +118,36 @@
         if(this.login_manager.get()){
           this.is_login = true;
           this.photo_src = this.login_manager.get_por();
+          $.ajax({
+            type:'get',
+            url:'/msg/unread_count',
+            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+            processData: false,
+            contentType: false,
+            success:function (res){
+              if(res.status){
+                that.message_count = res.count;
+              }
+              else{
+                that.message_count = 0;
+              }
+            },
+            error:function(){
+            }
+        });
         }
         //this.apply_for_info();
       },
 
       apply_for_info(){
         var that = this;
-        $.ajax({ 
-            type:'get', 
+        $.ajax({
+            type:'get',
             url:'/simple_user_info',
-            headers: {'X-CSRFToken': this.getCookie('csrftoken')}, 
+            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
             processData: false,
             contentType: false,
-            success:function (res){ 
+            success:function (res){
               if(res.uid){
                 that.uid = res.uid;
                 if(!that.login_manager.get_por() || that.login_manager.get_por()!=res.portrait)
@@ -152,7 +169,7 @@
             }
         });
       },
-      
+
       to_login(){
         this.$router.push({path:'/login', query:{from:this.$route.path}});
       },
@@ -175,16 +192,20 @@
 
       logout(){
         var that = this;
-        $.ajax({ 
-            type:'get', 
-            url:'/login/submit',
-            headers: {'X-CSRFToken': this.getCookie('csrftoken')}, 
+        $.ajax({
+            type:'get',
+            url:'/user/logout/submit',
+            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
             processData: false,
             contentType: false,
-            success:function (res){ 
+            success:function (res){
+              if(that.console_debug){
+                  console.log("(post)/register/submit"+ " : " +res.status);
+              }
               if(res.status == 0){
                 that.alert_msg.success('登出成功');
-                that.$router.go(0);
+                that.login_manager.set(false, '', '', '');
+                that.$router.go(0); //刷新
               }
               else{
                 that.alert_msg.error('登出失败，请重试');

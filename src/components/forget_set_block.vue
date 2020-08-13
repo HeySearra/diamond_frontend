@@ -32,6 +32,11 @@ export default {
                 password:[
                     {required:true, message:'请输入密码',trigger:'blur'},
                 ],
+                account:[
+                     {type:'email',required:true,message:'请输入邮箱',trigger:'blur'},
+                    // { pattern:/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/, message: "请输入合法手机号/电话号", trigger: "blur" }
+                    { validator: this.check_account, trigger: 'blur'}
+                ]
             },
         }
     },
@@ -68,14 +73,56 @@ export default {
             this.$refs[formname].validate((valid) => {
                 if(valid){
                     var that = this;
-                    var msg = this.form;
-                    
+                    var msg = {
+                        acc: this.form.account,
+                        pwd: this.form.password,
+                        key: this.form.key,
+                    }
+                    $.ajax({
+                        type:'post',
+                        url:"/user/forget/set_pwd",
+                        data: JSON.stringify(msg),
+                        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                        processData: false,
+                        contentType: false,
+                        success:function (res){
+                            if(that.console_debug)console.log("(post)/forget/set_pwd"+ " : " +res.status);
+                            if(res.status == 0){
+                                function _ok(that){
+                                    var from = that.$route.query.from;
+                                    that.$router.push({path:from?from:'/index'});
+                                }
+                                that.alert_box.msg('提示', '密码已重置', _ok(that));
+                                that.login_manager.set(true, that.form.account, that.form.name, '');
+                            }
+                            else{
+                                switch(res.status){
+                                    case 4:
+                                        that.alert_box.msg('重置失败', '密文不正确');
+                                        break;
+                                    case 2:
+                                        that.alert_box.msg('注册失败', '账号不存在');
+                                        break;
+                                    case 3:
+                                        that.alert_box.msg('注册失败', '密码长度应为6-32个字符，必须包含数字、小写字母、大写字母、特殊字符中至少两种');
+                                        break;
+                                    default:
+                                        that.alert_box.msg('注册失败', '请检查你所填写的信息');
+                                        break;
+                                }
+                                //that.alert_msg.normal('error:'+res.status);
+                            }
+                        },
+                        error:function(){
+                            that.alert_msg.error('连接失败');
+                        }
+                    });
                 }
                 else{
                     return false;
                 }
             })
-            
+
         },
         error(){
             var that = this;
