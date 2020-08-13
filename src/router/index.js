@@ -174,27 +174,11 @@ const router =  new Router({
       },
     },
     {
-      path: '/doc/edit',
-      name: 'doc_edit',
+      path: '/doc/:did',
+      name: 'doc',
       component: doc_editor,
       meta:{
-        title:'DiaDoc 文章编辑',
-      }
-    },
-    {
-      path: '/doc/readonly',
-      name: 'doc_read_only',
-      component: doc_read_only,
-      meta:{
-        title:'DiaDoc 文章阅读',
-      }
-    },
-    {
-      path: '/doc/commentonly',
-      name: 'doc_comment_only',
-      component: doc_comment_only,
-      meta:{
-        title:'DiaDoc 文章评论',
+        title:'DiaDoc 文章',
       }
     },
   ],
