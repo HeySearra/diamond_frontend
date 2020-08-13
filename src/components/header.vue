@@ -137,7 +137,6 @@
             }
           });
         }
-        this.get_info();
       },
       
       apply_for_info(){
@@ -162,7 +161,7 @@
                 if(!that.login_manager.get_por() || that.login_manager.get_por()!=res.portrait)
                   that.photo_src = res.portrait;
                 that.is_login = true;
-                that.login_manager.set(true, res.acc, res.name, res.portrait);
+                that.login_manager.set(true, res.uid, res.name, res.portrait);
               }
               else{
                 that.uid = 0;

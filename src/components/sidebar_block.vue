@@ -61,8 +61,8 @@
         <el-row><el-button type="primary" plain @click="$emit('edit_team_info')">修 改 团 队 信 息</el-button></el-row>
         <el-row><el-button type="primary" plain @click="$emit('manage_member')" v-if="is_admin">管 理 成 员</el-button></el-row>
         <el-row><el-button type="primary" plain @click="$emit('edit_admin')" v-if="is_creator">设 置 管 理 员</el-button></el-row>
-        <el-row><el-button type="danger" @click="$emit('leave_team')" v-if="!is_creator">退 出 团 队</el-button></el-row>
-        <el-row><el-button type="danger" @click="$emit('destroy_team')" v-if="is_creator">解 散 团 队</el-button></el-row>
+        <el-row><el-button type="danger" @click="quit_team" v-if="is_member||is_admin||true">退 出 团 队</el-button></el-row>
+        <el-row><el-button type="danger" @click="delete_team" v-if="is_creator">解 散 团 队</el-button></el-row>
       </el-row>
       <div style="height:20px;"></div>
     </el-row>
@@ -110,10 +110,6 @@ export default {
         type:String,
         default: 'none'
       },
-      tid:{
-        type:String,
-        default:'team'
-      }
   },
 
   mounted() {
@@ -132,13 +128,15 @@ export default {
       admin_list:[],
       member_list:[],
       is_creator:false,
-      is_admin:false
+      is_admin:false,
+      is_member:false,
+      tid:''
     }
   },
 
   methods: {
     init() {
-      this.apply_for_info();
+      
     },
 
     getCookie (name) {
@@ -148,6 +146,7 @@ export default {
     },
 
     init_team_info(tid){
+      this.tid = tid;
       let url = '/team/info?tid=' + tid;
       var that = this;
       $.ajax({ 
@@ -204,6 +203,8 @@ export default {
                     case 'admin':
                       that.is_admin = true;
                       break;
+                    case 'member':
+                      that.is_member = true;
                   }
               }
               else{
@@ -226,9 +227,87 @@ export default {
       });
     },
 
-    apply_for_info() {
-      //向后台请求一些内容
+    quit_team(){
+      var that = this;
+      this.alert_box.confirm_msg('警告', '确定退出团队 ' + that.team_name + ' 吗？', function(){
+        let url = '/team/quit'
+        $.ajax({ 
+            type:'post',
+            url: url,
+            headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+            data: JSON.stringify({tid:that.tid}),
+            processData: false,
+            contentType: false, 
+            success:function (res){ 
+                if(that.console_debug){
+                    console.log(url +  '：' + res.status);
+                }
+                if(res.status == 0){
+                    that.alert_box.msg('提示', '成功退出团队', function(){
+                      that.$router.push({name:team_center});
+                    });
+                }
+                else{
+                    switch(res.status){
+                        case 2:
+                            that.alert_msg.error('权限不足');
+                            break;
+                        case 3:
+                            that.alert_msg.error('找不到团队');
+                            break;
+                        default:
+                            that.alert_msg.error('发生了未知错误');
+                    }
+                    
+                }
+            },
+            error:function(res){
+                that.alert_msg.error('网络连接失败');
+            }
+        });
+      });
     },
+
+    delete_team(){
+      var that = this;
+      this.alert_box.confirm_msg('警告', '确定解散团队 ' + that.team_name + ' 吗？', function(){
+        let url = '/team/delete'
+        $.ajax({ 
+            type:'post',
+            url: url,
+            headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+            data: JSON.stringify({tid:that.tid}),
+            processData: false,
+            contentType: false, 
+            success:function (res){ 
+                if(that.console_debug){
+                    console.log(url +  '：' + res.status);
+                }
+                if(res.status == 0){
+                    that.alert_box.msg('提示', '成功解散团队', function(){
+                      that.$router.push({name:team_center});
+                    });
+                }
+                else{
+                    switch(res.status){
+                        case 2:
+                            that.alert_msg.error('权限不足');
+                            break;
+                        case 3:
+                            that.alert_msg.error('找不到团队');
+                            break;
+                        default:
+                            that.alert_msg.error('发生了未知错误');
+                    }
+                    
+                }
+            },
+            error:function(res){
+                that.alert_msg.error('网络连接失败');
+            }
+        });
+      });
+    }
   }
 }
 </script>

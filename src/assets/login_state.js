@@ -1,8 +1,8 @@
 export const login_manager = {
-    set: function(state, account, name, por){
+    set: function(state, uid, name, por){
         if(state){
             localStorage.setItem('state', state);
-            if(account)localStorage.setItem('account', account);
+            if(account)localStorage.setItem('uid', uid);
             if(uname)localStorage.setItem('uname', name);
             if(por)localStorage.setItem('por', por);
         }
@@ -11,8 +11,8 @@ export const login_manager = {
         }
     },
     get: function(){
-        if(localStorage.getItem('state') && localStorage.getItem('account')){
-            return localStorage.getItem('account');
+        if(localStorage.getItem('state') && localStorage.getItem('uid')){
+            return localStorage.getItem('uid');
         }
         else{
             return false;
@@ -20,12 +20,12 @@ export const login_manager = {
     },
     clear: function(){
         localStorage.removeItem('state');
-        localStorage.removeItem('account');
+        localStorage.removeItem('uid');
         localStorage.removeItem('uname');
         localStorage.removeItem('por');
     },
-    get_account: function(){
-        return localStorage.getItem('account');
+    get_uid: function(){
+        return localStorage.getItem('uid');
     },
     get_name: function(){
         return localStorage.getItem('uname');

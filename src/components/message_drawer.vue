@@ -12,7 +12,7 @@
         </div>
         <el-divider></el-divider>
         <div v-infinite-scroll="load" class="message_area" style="overflow-x:hidden;overflow-y:auto;border:solid 1px;height:calc(100vh - 50px)">
-            <message-item v-for="item in list" :key="item.mid" ref="message_item" :done="done"></message-item>
+            <message-item v-for="item in list" :key="item.mid" ref="message_item" :done="done" :confirm_to_join="deal_team_invite"></message-item>
             <p v-if="is_loading" class="not_found">加载中 <i class="el-icon-loading"></i></p>
         </div>
 
@@ -115,7 +115,9 @@ export default {
                 }
             });
         },
-
+        deal_team_invite(data){
+            this.$emit("deal_team_invite", data);
+        }
     }
 };
 </script>

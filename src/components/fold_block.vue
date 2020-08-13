@@ -329,7 +329,7 @@ export default {
 
         delete(){
             var that = this;
-            that.alert_box.confirm('提示', '确定删除 ' + that.name + ' ？', function(){
+            that.alert_box.confirm_msg('提示', '确定删除 ' + that.name + ' ？', function(){
                 let url = '/fs/delete';
                 let json_data = {id:that.fid, type:'fold'};
                 $.ajax({ 
@@ -367,7 +367,7 @@ export default {
 
         team(){
             var that = this;
-            that.alert_box.confirm('提示', '确定将 ' + that.name + ' 转为团队文件夹吗？', function(){
+            that.alert_box.confirm_msg('提示', '确定将 ' + that.name + ' 转为团队文件夹吗？', function(){
                 let url = '/team/new_from_fold';
                 let json_data = {id:that.fid};
                 $.ajax({ 
