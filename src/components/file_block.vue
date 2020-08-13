@@ -101,6 +101,10 @@ export default {
                     break;
             }
         },
+
+        refresh(){
+            this.$emit('refresh');
+        }
     }
 
 }

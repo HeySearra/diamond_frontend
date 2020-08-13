@@ -14,9 +14,11 @@
         </div>
         <div class="name">{{name}}</div>
         <div class="info_area">
-            <div>{{creator}}</div>
-            <div>{{recent_edit_time}}</div>
-            <div class="min_hide">{{create_time}}</div>
+            <div v-if="type=='recycle'">{{delete_timer}}</div>
+            <div v-if="type=='recycle'">{{rest_time}}天</div>
+            <div v-if="type!='recycle'">{{creator}}</div>
+            <div v-if="type!='recycle'">{{recent_edit_time}}</div>
+            <div v-if="type!='recycle'" class="min_hide">{{create_time}}</div>
         </div>
         <div class="more_menu" :class="focus?'more_menu_focus':''">
             <el-dropdown trigger="click" 
@@ -80,7 +82,15 @@ export default {
         creator:{
             type:String,
             default:'ansdoasoda'
-        }
+        },
+        delete_time:{
+            type:String,
+            default:'delete_time'
+        },
+        rest_time:{
+            type:String,
+            default:'rest_time'
+        },
     },
     data() {
         return {
@@ -117,6 +127,10 @@ export default {
                     this.$emit('copy_item', this.did, 'file', this.name);
                     break;
             }
+        },
+
+        refresh(){
+            this.$emit('refresh');
         }
     }
 

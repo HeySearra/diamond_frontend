@@ -14,9 +14,11 @@
         </div>
         <div class="name">{{name}}</div>
         <div class="info_area" v-if="type=='full'">
-            <div>{{creator}}</div>
-            <div>{{recent_edit_time}}</div>
-            <div class="min_hide">{{create_time}}</div>
+            <div v-if="type=='recycle'">{{delete_timer}}</div>
+            <div v-if="type=='recycle'">{{rest_time}}天</div>
+            <div v-if="type!='recycle'">{{creator}}</div>
+            <div v-if="type!='recycle'">{{recent_edit_time}}</div>
+            <div v-if="type!='recycle'" class="min_hide">{{create_time}}</div>
         </div>
         <div class="more_menu" :class="focus?'more_menu_focus':''" v-if="type=='full'">
             <el-dropdown trigger="click" 
@@ -28,9 +30,10 @@
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item v-if="context!='recycle'">打开</el-dropdown-item>
                     <el-dropdown-item v-if="false">权限管理</el-dropdown-item>
-                    <el-dropdown-item v-if="can_trade">打开所在文件夹</el-dropdown-item>
+                    <el-dropdown-item v-if="(is_link||context=='workbench')&&can_trade">打开所在文件夹</el-dropdown-item>
+                    <el-dropdown-item v-if="is_in_desktop">转化为团队文件夹</el-dropdown-item>
                     <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
-                    <el-dropdown-item v-if="(context=='file_system'||context=='team')&&!is_link&&false">复制</el-dropdown-item>
+                    <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link&&false">复制</el-dropdown-item>
                     <el-dropdown-item v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
                     <el-dropdown-item class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
                     <el-dropdown-item v-if="context=='recycle'">恢复</el-dropdown-item>
@@ -83,7 +86,19 @@ export default {
         type:{
             type:String,
             default: 'full',
-        }
+        },
+        delete_time:{
+            type:String,
+            default:'delete_time'
+        },
+        rest_time:{
+            type:String,
+            default:'rest_time'
+        },
+        is_in_desktop:{
+            type:Boolean,
+            default:false
+        },
     },
     data() {
         return {
@@ -114,6 +129,10 @@ export default {
                     this.$emit('move_item', this.did, 'file', this.name);
                     break;
             }
+        },
+
+        refresh(){
+            this.$emit('refresh');
         }
     }
 
