@@ -7,6 +7,7 @@
           <div style="padding: 0 40px 0 30px;">
               <div style="height:20px"></div>
             <component
+                ref="file_system_component"
                 :is="view_type=='block'?'file-system-block':'file-system-list'"
                 :fid="fid"
                 @change_view="change_view"

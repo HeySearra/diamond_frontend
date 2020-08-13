@@ -4,9 +4,11 @@
     <el-container class="mid">
       <el-container>
         <el-main>
+          <h1 style="text-indent:1.5em">回收站</h1>
           <div style="padding: 0 40px 0 30px;">
               <div style="height:20px"></div>
-            <component 
+            <component
+                ref="file_system_component"
                 :is="view_type=='block'?'file-system-block':'file-system-list'"
                 type="from_out"
                 context="recycle"
@@ -49,26 +51,6 @@ export default {
                         recent_time:'',
                         create_time:''
                     },
-                    {
-                        type: 'file',
-                        id: 'id',
-                        is_link:false,
-                        is_starred:false,
-                        name:'file',
-                        creator:'',
-                        recent_time:'',
-                        create_time:''
-                    },
-                    {
-                        type: 'fold',
-                        id: 'id',
-                        is_link:false,
-                        is_starred:true,
-                        name:'file',
-                        creator:'',
-                        recent_time:'',
-                        create_time:''
-                    }
                 ]
             }
         ]
@@ -79,14 +61,69 @@ export default {
   },
   methods:{
     init(){
-            this.$emit('active_change');
-            this.view_type = this.view_type_manager.get();
-        },
+        this.$emit('active_change');
+        this.view_type = this.view_type_manager.get();
+        var that = this;
+        setTimeout(function(){
+          that.apply_for_info();
+        }, 0);
+    },
         
     getCookie (name) {
         var value = '; ' + document.cookie
         var parts = value.split('; ' + name + '=')
         if (parts.length === 2) return parts.pop().split(';').shift()
+    },
+
+    apply_for_info(){
+      let url = '/fs/recycle/elem';
+      var that = this;
+      $.ajax({ 
+          type:'get',
+          url: url,
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false,
+          success:function (res){ 
+              if(that.console_debug){
+                  console.log(url +  '：' + res.status);
+              }
+              if(res.status == 0){
+                var file = [];
+                var fold = [];
+                for(let i=0; i<res.list.length; i++){
+                  let item = new Object();
+                  item.id = res.list[i].id;
+                  item.type = res.list[i].type;
+                  item.is_link = false;
+                  item.is_starred = false;
+                  item.name = res.list[i].name;
+                  item.delete_time = res.list[i].delete_dt;
+                  item.rest_time = res.list[i].is_dia ? '永久' : parseInt((new Date((new Date(res.cur_dt).getTime()+30*24*60*60*1000))-new Date(res.list[i].delete_dt))/1000/60/60/24);
+                  res.list[i].type=='doc' ? file.push(item) : fold.push(item);
+                }
+
+                fold.length ? that.list.push({title:'文件夹', content:fold}) : '';
+                file.length ? that.list.push({title:'文件', content:file}) : '';
+
+                setTimeout(function(){
+                  that.$refs.file_system_component.init();
+                }, 0);
+              }
+              else{
+                  switch(res.status){
+                      case 2:
+                          that.alert_msg.error('权限不足');
+                          break;
+                      default:
+                          that.alert_msg.error('发生了未知错误');
+                  }
+              }
+          },
+          error:function(res){
+              that.alert_msg.error('网络连接失败');
+          }
+      });
     },
     
     change_view(){
