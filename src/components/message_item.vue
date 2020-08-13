@@ -106,7 +106,7 @@ export default {
             });
         },
         jump_to_doc(){
-            that.$router.push({path: '/'}); //待定
+            that.$router.push({path: '/doc/' + this.id}); //待定
         },
         confirm_to_join(){
             let data = {
@@ -116,7 +116,7 @@ export default {
             this.$emit('confirm_to_join', data);
         },
         jump_to_team(){
-            that.$router.push({path: '/'}); //待定
+            that.$router.push({path: '/team/' + this.id + "/file/desktop"});
         },
         mark_read(){
             let that = this;

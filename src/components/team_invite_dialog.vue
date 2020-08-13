@@ -12,8 +12,8 @@
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="click_to_accept">接 受</el-button>
-                <el-button type="primary" @click="dia_vis=false">拒 绝</el-button>
+                <el-button @click="click_to_accept(true)">接 受</el-button>
+                <el-button type="primary" @click="click_to_accept(false)">拒 绝</el-button>
             </span>
         </el-dialog>
     </div>
@@ -36,8 +36,57 @@ export default {
             this.team_name = data.team_name;
             this.dia_vis = true;
         },
-        click_to_accept(){
 
+        click_to_accept(if_accept){
+            var that = this;
+            var msg = {
+                tid: that.tid,
+                result: if_accept,
+            };
+            $.ajax({
+                type:'post',
+                url:"/team/invitation/confirm",
+                data: JSON.stringify(msg),
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){
+                    if(that.console_debug){
+                        console.log("(post)/team/invitation/confirm"+ " : " +res.status);
+                    }
+                    if(res.status == 0){
+                        this.dia_vis = false;
+                        that.alert_box.msg('已成功加入团队！');
+                        that.$router.push({path: '/team/' + this.tid + "/file/desktop"});
+                    }
+                    else{
+                        if(if_accept){
+                            switch(res.status){
+                                case 2:
+                                    that.alert_box.msg('接受邀请失败', '用户未登录或没有权限');
+                                    break;
+                                case 3:
+                                    that.alert_box.msg('接受邀请失败', '您已在团队中');
+                                    break;
+                                default:
+                                    that.alert_msg.error('出错啦');
+                            }
+                        }
+                        else{
+                            switch(res.status){
+                                case 2:
+                                    that.alert_box.msg('拒绝邀请失败', '用户未登录或没有权限');
+                                    break;
+                                default:
+                                    that.alert_msg.error('出错啦');
+                            }
+                        }
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
+                }
+            });
         },
     }
 
