@@ -22,28 +22,7 @@ export default {
                 {
                     title:'最近浏览',
                     content:[
-                        {
-                            type: 'file',
-                            id: 'id',
-                            is_link:false,
-                            is_starred:false,
-                            recent_time: '',
-                            name:'file'
-                        },
-                        {
-                            type: 'file',
-                            id: 'id',
-                            is_link:false,
-                            is_starred:false,
-                            name:'file'
-                        },
-                        {
-                            type: 'file',
-                            id: 'id',
-                            is_link:false,
-                            is_starred:false,
-                            name:'file'
-                        }
+                    
                     ]
                 }
             ]

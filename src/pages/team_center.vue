@@ -8,7 +8,7 @@
             <team-display-block title="我创建的团队" 
               :is_creator="true" 
               @open_info="open_info"
-              
+              :list="my_list"
             ></team-display-block>
             <div class="clear_both"></div>
             <team-display-block title="我参与的团队" 
@@ -75,7 +75,7 @@ export default {
                         that.alert_msg.error('权限不足');
                         break;
                     default:
-                        that.alert_msg.error('发生了未知错误');
+                        that.alert_msg.error('请求团队信息错误');
                 }
                 
             }
@@ -85,6 +85,11 @@ export default {
           }
       });
     },
+
+    refresh(){
+      this.apply_for_info();
+    },
+
     handleSelect(key, keypath){
 
     },

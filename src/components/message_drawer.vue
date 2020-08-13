@@ -12,7 +12,7 @@
         </div>
         <el-divider></el-divider>
         <div v-infinite-scroll="load" class="message_area" style="overflow-x:hidden;overflow-y:auto;border:solid 1px;height:calc(100vh - 50px)">
-            <message-item v-for="item in list" :key="item.mid" ref="message_item" :done="done" :confirm_to_join="deal_team_invite"></message-item>
+            <message-item v-for="item in list" :key="item.mid" ref="message_item" @confirm_to_join="deal_team_invite"></message-item>
             <p v-if="is_loading" class="not_found">加载中 <i class="el-icon-loading"></i></p>
         </div>
 
@@ -36,6 +36,12 @@ export default {
         //this.init();
     },
     methods:{
+        getCookie (name) {
+            var value = '; ' + document.cookie
+            var parts = value.split('; ' + name + '=')
+            if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
         apply_for_info(){
             var that = this;
             that.page++;
@@ -50,40 +56,39 @@ export default {
                         console.log("(get)/msg/list/"+ " : " +res.status);
                     }
                     if(res.status == 0){
-                        let len = that.list.length;
                         let item = that.$refs.message_item;
-                        for(let i=0; i < res.list.length; i++){
-                            that.list.push({
-                                mid: res.list[i].mid,
-                            });
-                        }
+                        that.list.concat(res.list);
                         for(let i=len; i < list.length; i++){
                             setTimeout(function(){
                                 item[i].init();
                             }, 0);
                         }
+                        that.drawer = true;
+                        that.is_loading = false;
                     }
                     else{
                         that.page--;
-                        that.alert_box.msg('加载消息失败，请重试');
+                        that.alert_msg.error('加载消息失败，请重试');
+                        that.is_loading = false
                     }
                 },
                 error:function(){
                     that.page--;
                     that.alert_msg.error('连接失败');
+                    that.is_loading = false
                 }
             });
         },
         open() {
-            this.drawer = true;
+            this.list = [];
+            this.is_loading = true;
+            this.page = 0;
+            this.apply_for_info();
         },
 
         load(){
             this.is_loading = true;
-        },
-
-        done(){
-            this.is_loading = false;
+            this.apply_for_info();
         },
 
         mark_all_read(){
@@ -107,7 +112,7 @@ export default {
                         }
                     }
                     else{
-                        that.alert_box.msg('获取消息失败，请重试');
+                        that.alert_msg.error('获取消息失败，请重试');
                     }
                 },
                 error:function(){
@@ -115,6 +120,7 @@ export default {
                 }
             });
         },
+
         deal_team_invite(data){
             this.$emit("deal_team_invite", data);
         }

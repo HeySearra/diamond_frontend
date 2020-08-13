@@ -55,6 +55,13 @@ export default {
         this.sidebar_active = this.fid=='desktop' ? 'desktop' : '';
 
         this.fid=='desktop' ? this.get_desktop_id() : '';
+        if(this.fid == 'desktop'){
+          var that = this;
+          setTimeout(function(){
+            that.alert_msg.error('请求桌面信息错误');
+          }, 0)
+          return;
+        }
         var that = this;
         setTimeout(function(){
           that.$refs.file_system_component.init();
@@ -98,11 +105,11 @@ export default {
               }
               else{
                   switch(res.status){
-                      case 2:
-                          that.alert_msg.error('权限不足');
-                          break;
-                      default:
-                          that.alert_msg.error('发生了未知错误');
+                    case 2:
+                        that.alert_msg.error('权限不足');
+                        break;
+                    default:
+                        that.alert_msg.error('发生了未知错误');
                   }
                   
               }

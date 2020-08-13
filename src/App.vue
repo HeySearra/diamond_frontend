@@ -14,7 +14,7 @@
     <edit-user-info-dialog ref="edit_user_info_dialog" @apply_for_info='apply_for_info'></edit-user-info-dialog>
     <change-password-dialog ref="change_password_dialog"></change-password-dialog>
     <chatting-dialog ref="chatting_dialog"></chatting-dialog>
-    <team-invite-dialog ref="team-invite-dialog"></team-invite-dialog>
+    <team-invite-dialog ref="team_invite_dialog"></team-invite-dialog>
   </div>
 </template>
 
@@ -29,7 +29,6 @@ export default {
   },
   methods:{
     open_drawer(){
-      this.show_drawer = true;
       this.$refs.message_drawer.open();
     },
     edit_user_info(){
