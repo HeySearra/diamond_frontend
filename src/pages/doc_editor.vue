@@ -102,7 +102,7 @@ class CommentsAdapter {
           async: false,
           success: function (res) {
             if (console_debug) {
-              console.log("(get)/doc/comment/add" + " : " + res.status);
+              console.log("(post)/doc/comment/add" + " : " + res.status);
             }
             if (res.status !== 0) {
               switch (res.status) {
@@ -152,7 +152,7 @@ class CommentsAdapter {
           async: false,
           success: function (res) {
             if (console_debug) {
-              console.log("(get)/doc/comment/update" + " : " + res.status);
+              console.log("(post)/doc/comment/update" + " : " + res.status);
             }
             if (res.status !== 0) {
               switch (res.status) {
@@ -197,7 +197,7 @@ class CommentsAdapter {
           async: false,
           success: function (res) {
             if (console_debug) {
-              console.log("(get)/doc/comment/remove" + " : " + res.status);
+              console.log("(post)/doc/comment/remove" + " : " + res.status);
             }
             if (res.status !== 0) {
               switch (res.status) {
@@ -552,7 +552,7 @@ export default {
         contentType: false,
         success: function (res) {
           if (that.console_debug) {
-            console.log("(get)/doc/edit" + " : " + res.status);
+            console.log("(post)/doc/edit" + " : " + res.status);
           }
           if (res.status === 0) {
             //提示成功
@@ -691,6 +691,15 @@ export default {
   border: solid 2px;
   overflow: inherit;
   margin-top: 60px;
+}
+
+.el-aside::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.el-aside {
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
 }
 
 </style>

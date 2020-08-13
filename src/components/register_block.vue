@@ -119,7 +119,7 @@ export default {
                             if(res.status == 0){
                                 function _ok(that){
                                     var from = that.$route.query.from;
-                                    that.$router.push({path:from?from:'/index'});
+                                    that.$router.push({path:from?from:'/workbench/recent'});
                                 }
                                 that.alert_box.msg('提示', '注册成功', _ok(that));
                                 that.login_manager.set(true, that.form.account, that.form.name, '');

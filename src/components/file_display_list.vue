@@ -11,23 +11,26 @@
                     <div v-if="type!='recent'" class="min_hide">创建时间</div>
                 </div>
             </div>
-            <div class="file_item" 
-                v-for="item in list" 
+            <div class="file_item"
+                v-for="item in list"
                 :key="item.id"
                 :draggable="drage"
                 @drag="start_drag($event, item)"
                 @drop="face_drop($event, item)"
                 @dragover="allow_drop($event, item)"
                 >
-                <component 
+                <component
                     ref="file_component"
-                    :is="item.type=='file'?'file-list-item':'fold-list-item'" 
-                    :is_link="item.is_link" 
-                    :did="item.id" 
-                    :fid="item.id" 
-                    :name="item.name" 
+                    :is="item.type=='file'?'file-list-item':'fold-list-item'"
+                    :is_link="item.is_link"
+                    :did="item.id"
+                    :fid="item.id"
+                    :name="item.name"
                     :view_time="item.view_time"
-                    :context="context" 
+                    :create_time="item.create_time"
+                    :recent_edit_time="item.recent_edit_time"
+                    :creator="creator"
+                    :context="context"
                     :is_starred="item.is_starred"
                     :type="type"
                     :is_in_desktop="is_in_desktop"
@@ -135,7 +138,7 @@ export default {
         open_info(title, content){
             this.$emit('open_info', title, content);
         },
-        
+
         allow_drop(e, item){
             if(item.type=='fold'&&(this.draging_type!='fold'||this.draging_id!=item.id)){
                 e.preventDefault();

@@ -12,7 +12,7 @@
         </div>
         <el-divider></el-divider>
         <div v-infinite-scroll="load" class="message_area" style="overflow-x:hidden;overflow-y:auto;border:solid 1px;height:calc(100vh - 50px)">
-            <message-item v-for="item in list" :key="item.mid" ref="message_item"></message-item>
+            <message-item v-for="item in list" :key="item.mid" ref="message_item" :done="done"></message-item>
             <p v-if="is_loading" class="not_found">加载中 <i class="el-icon-loading"></i></p>
         </div>
 
@@ -38,7 +38,7 @@ export default {
     methods:{
         apply_for_info(){
             var that = this;
-            that.page
+            that.page++;
             $.ajax({
                 type:'get',
                 url:"/msg/list?page=" + that.page + "&each=" + that.each,
@@ -64,10 +64,12 @@ export default {
                         }
                     }
                     else{
-                        that.alert_box.msg('验证码发送失败，请重试');
+                        that.page--;
+                        that.alert_box.msg('加载消息失败，请重试');
                     }
                 },
                 error:function(){
+                    that.page--;
                     that.alert_msg.error('连接失败');
                 }
             });
@@ -80,8 +82,38 @@ export default {
             this.is_loading = true;
         },
 
-        mark_all_read(){
+        done(){
+            this.is_loading = false;
+        },
 
+        mark_all_read(){
+            var that = this;
+            $.ajax({
+                type:'post',
+                url:"/msg/ar_all",
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){
+                    if(that.console_debug){
+                        console.log("(get)/msg/ar_all"+ " : " +res.status);
+                    }
+                    if(res.status == 0){
+                        let item = that.$refs.message_item;
+                        for(let i = 0; i < item.length; i++){
+                            setTimeout(function(){
+                                item[i].init();
+                            }, 0);
+                        }
+                    }
+                    else{
+                        that.alert_box.msg('获取消息失败，请重试');
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
+                }
+            });
         },
 
     }
