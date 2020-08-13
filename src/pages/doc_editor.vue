@@ -25,14 +25,15 @@
 <script>
 import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn';
-const appData = {
+
+const pageData = {
+  commentsOnly: false,
+  readOnly: false,
   // Users data.
   users: [],
-
   // The ID of the current user.
   userId: 'user-1',
-
-  // Editor initial data.
+  // Editor initial data(for testing).
   initialData:
     '<h2>\
                     <comment id="thread-1" type="start"></comment>\
@@ -64,12 +65,12 @@ class CommentsAdapter {
     const commentsRepositoryPlugin = this.editor.plugins.get('CommentsRepository');
 
     // Load the users data.
-    for (const user of appData.users) {
+    for (const user of pageData.users) {
       usersPlugin.addUser(user);
     }
 
     // Set the current user.
-    usersPlugin.defineMe(appData.userId);
+    usersPlugin.defineMe(pageData.userId);
 
     // Set the adapter on the `CommentsRepository#adapter` property.
     commentsRepositoryPlugin.adapter = {
@@ -129,9 +130,10 @@ class CommentsAdapter {
     };
   }
 }
+
 export default {
   mounted() {
-    appData.users = [
+    pageData.users = [
       {
         id: 'user-1',
         name: 'Joe Doe',
@@ -166,10 +168,8 @@ export default {
       var that = this;
       CKEditor.create(document.querySelector('#editor'), {
         language: 'zh-cn',
-        initialData: appData.initialData,
+        initialData: pageData.initialData,
         extraPlugins: [CommentsAdapter],
-        //initialData: appData.initialData,
-        //extraPlugins: [CommentsAdapter],
         /*ckfinder: {
           uploadUrl: ''
           // Back-end processing upload logic returns json data, including uploaded (option true / false) and url two fields
@@ -229,23 +229,31 @@ export default {
             'mergeTableCells'
           ]
         },
-        //plugins: [Autosave],
         licenseKey: 'seuYU5TnNtW9thIKlRcf3ArZw9c7Rf5d1JuDv3q8iNeo+V8m4o9xnds=',
         sidebar: {
           container: document.querySelector('#comment-sidebar')
         },
+        commentsOnly: pageData.commentsOnly,
         autosave: {
-          save( editor ) {
+          //waitingTime: 5000,
+          save(editor) {
             that.updateDocContent(editor.getData());
+            //console.log(editor.model.document.getRootNames());
+            //editor.model.change( writer => {
+            //writer.setSelection( writer.createPositionAt( editor.model.document.getRoot(), 0 ) );
+            //} );
+            // autosave.forceDisabled("key");
+            //this.forceDisabled("autosave");
+            //editor.setData("ko"); //并不适合在此处更新文章
+            //this.autosave.clearForceDisabled("autosave");
             //console.log( editor.getData() );
           }
         }
-
       }).then(editor => {
         window.editor = editor; //Save the editor to get the contents of the editor at any time, perform some operations
         //editor.plugins.get('Users').addUser({id: '0'});
         //editor.plugins.get('Users').defineMe('0');
-        //editor.isReadOnly = true;
+        editor.isReadOnly = pageData.readOnly;
         const toolbarContainer = document.querySelector('#toolbar-container');
         toolbarContainer.appendChild(editor.ui.view.toolbar.element);
         document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
@@ -253,20 +261,77 @@ export default {
         console.error(error);
       });
     },
-    getDocContent() {
-      //通过路由获取文章id
-      const did = '1';
+    getDocAuth() {
+      var that = this;
+      const did = this.$route.params.did;
+      let msg = {
+        'did': did
+      };
       $.ajax({
         type: 'get',
-        url: '',
-        data: {
-          'did': did
-        },
-        dataType: 'json',
+        url: '/doc/auth',
+        data: JSON.stringify(msg),
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        processData: false,
+        contentType: false,
         success: function (res) {
+          if (that.console_debug) {
+            console.log("(get)/doc/auth" + " : " + res.status);
+          }
+          if (res.status === 0) {
+            switch (res.auth) {
+              case "read":
+                pageData.readOnly = true;
+                break;
+              case "comment":
+                pageData.commentsOnly = true;
+                break;
+              default:
+                break;
+            }
+          } else {
+            switch (res.status) {
+              case 1:
+                this.alert_box.msg('加载失败', '键值错误');
+                break;
+              case 2:
+                this.alert_box.msg('加载失败', '您的权限不足或还没有登录');
+                break;
+              case 3:
+                this.alert_box.msg('加载失败', '文档不存在');
+                break;
+              default:
+                this.alert_msg.error('未知错误');
+            }
+            that.router.push({path:'/workbench/recent'});
+          }
+        },
+        error: function () {
+          this.alert_msg.error('连接失败');
+        }
+      });
+    },
+    getDocContent() {
+      //通过路由获取文章id
+      var that = this;
+      const did = this.$route.params.did;
+      let msg = {
+        'did': did
+      };
+      $.ajax({
+        type: 'get',
+        url: '/doc/all',
+        data: JSON.stringify(msg),
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        processData: false,
+        contentType: false,
+        success: function (res) {
+          if (that.console_debug) {
+            console.log("(get)/doc/all" + " : " + res.status);
+          }
           if (res.status === 0) {
             //res.name
-            appData.initialData = res.content;
+            pageData.initialData = res.content;
           } else {
             switch (res.status) {
               case 1:
@@ -282,6 +347,7 @@ export default {
                 this.alert_msg.error('未知错误');
             }
             //跳转到首页
+            that.router.push({path:'/workbench/recent'});
           }
         },
         error: function () {
@@ -291,21 +357,27 @@ export default {
     },
     updateDocContent(content) {
       //console.log( window.editor.getData() );
-      console.log( content );
+      console.log(content);
     },
     updateDocContent1(content) {
-      //通过路由获取文章id
-      const did = '1';
+      var that = this;
+      const did = this.$route.params.did;
+      let msg = {
+        'did': did,
+        'content': content,
+        'name': ''
+      };
       $.ajax({
         type: 'post',
-        url: '',
-        data: {
-          'did': did,
-          'content': content,
-          'name': ''
-        },
-        dataType: 'json',
+        url: '/doc/edit',
+        data: JSON.stringify(msg),
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        processData: false,
+        contentType: false,
         success: function (res) {
+          if (that.console_debug) {
+            console.log("(get)/doc/edit" + " : " + res.status);
+          }
           if (res.status === 0) {
             //提示成功
           } else {
@@ -328,6 +400,7 @@ export default {
               default:
                 this.alert_msg.error('未知错误');
             }
+            that.router.push({path:'/workbench/recent'});
           }
         },
         error: function () {
