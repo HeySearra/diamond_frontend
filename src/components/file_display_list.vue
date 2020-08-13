@@ -113,8 +113,6 @@ export default {
 
     methods:{
         init(){
-<<<<<<< HEAD
-=======
             var that = this;
             setTimeout(function(){
                 let item = that.$refs.file_component;
@@ -122,7 +120,6 @@ export default {
                     item[i].init();
                 }
             }, 0);
->>>>>>> 1c804dab069ac4bf0309c25a2d350dbd2f10be05
         },
 
         refresh(){

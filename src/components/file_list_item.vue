@@ -16,7 +16,7 @@
         <div class="info_area">
             <div v-if="type=='recycle'">{{delete_timer}}</div>
             <div v-if="type=='recycle'">{{rest_time}}天</div>
-            <div v-if="type=='recent'">{{view_time}}<div>
+            <div v-if="type=='recent'">{{view_time}}</div>
             <div v-if="type!='recycle'&&type!='recent'">{{creator}}</div>
             <div v-if="type!='recycle'&&type!='recent'">{{recent_edit_time}}</div>
             <div v-if="type!='recycle'&&type!='recent'" class="min_hide">{{create_time}}</div>
@@ -46,7 +46,7 @@
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
-        <div ></div>
+        <div></div>
     </div>
 </template>
 
