@@ -31,12 +31,13 @@
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item v-if="context!='recycle'">打开</el-dropdown-item>
                     <el-dropdown-item v-if="context==false">权限管理</el-dropdown-item>
-                    <el-dropdown-item v-if="can_trade">打开所在文件夹</el-dropdown-item>
+                    <el-dropdown-item command="parent" v-if="(is_link||context=='workbench')&&pfid!=''">打开所在文件夹</el-dropdown-item>
+                    <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link">创建快捷方式到桌面</el-dropdown-item>
                     <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                     <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link">复制</el-dropdown-item>
                     <el-dropdown-item command="share" v-if="(context=='file_system'||context=='team')&&!is_link">分享</el-dropdown-item>
                     <el-dropdown-item v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
-                    <el-dropdown-item class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
+                    <el-dropdown-item command="remove_link" class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
                     <el-dropdown-item v-if="context=='recycle'">恢复</el-dropdown-item>
                     <el-dropdown-item class="red_text" v-if="context=='recycle'">彻底删除</el-dropdown-item>
                     <el-dropdown-item v-if="false">导出</el-dropdown-item>
@@ -62,7 +63,7 @@ export default {
         },
         name:{
             type:String,
-            default: 'new file aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+            default: 'new file'
         },
         context:{
             type:String,
@@ -92,15 +93,22 @@ export default {
             type:String,
             default:'rest_time'
         },
+<<<<<<< HEAD
         view_time: {
             type:String,
             default: 'recent_time',
         }
+=======
+        is_in_desktop:{
+            type:Boolean,
+            default:false
+        },
+>>>>>>> 1c804dab069ac4bf0309c25a2d350dbd2f10be05
     },
     data() {
         return {
             focus: false,
-            can_trade: false
+            pfid:''
         }
     },
 
@@ -110,7 +118,46 @@ export default {
 
     methods:{
         init(){
+            this.apply_for_parent();
+        },
 
+        getCookie (name) {
+            var value = '; ' + document.cookie
+            var parts = value.split('; ' + name + '=')
+            if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
+        apply_for_parent(){
+            let url = '/fs/father?id=' + this.did + '&type=doc';
+            var that = this;
+            $.ajax({ 
+                type:'get',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.pfid = pfid;
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                            case 3:
+                                that.pfid = '';
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
         },
 
         vis_change(value){
@@ -120,7 +167,7 @@ export default {
         click_dropdown_item(command){
             switch(command){
                 case 'open_info':
-                    this.$emit('open_info', this.name, 'file');
+                    this.open_info();
                     break;
                 case 'move':
                     this.$emit('move_item', this.did, 'file', this.name);
@@ -131,11 +178,157 @@ export default {
                 case 'copy':
                     this.$emit('copy_item', this.did, 'file', this.name);
                     break;
+                case 'parent':
+                    this.open_fold(this.pfid);
+                    break;
+                case 'create_link':
+                    this.create_link();
+                    break;
+                case 'remove_link':
+                    this.remove_link();
+                    break;
             }
         },
 
         refresh(){
             this.$emit('refresh');
+        },
+
+        open_info(){
+            let url = '/fs/doc/info?did=' + this.did;
+            var that = this;
+            $.ajax({ 
+                type:'get',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        var content = [];
+                        content.push({
+                            key:'文档名',
+                            value:that.name
+                        });
+                        content.push({
+                            key:'创建者',
+                            value:res.cname
+                        });
+                        content.push({
+                            key:'字数',
+                            value:res.size
+                        });
+                        content.push({
+                            key:'是否可分享',
+                            value:res.is_locked?'否':'是'
+                        });
+                        let path = '';
+                        for(let i=0; i<res.path.length; i++){
+                            path += res.path[i].name;
+                            path += ' > ';
+                        }
+                        path += that.name;
+                        content.push({
+                            key:'路径',
+                            value:path
+                        });
+                        this.$emit('open_info', this.name, content);
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+        },
+
+        open_fold(fid){
+            this.$router.push({name:'file_system', params:{id:fid}});
+        },
+
+        create_link(){
+            let url = '/fs/link/new';
+            let json_data = {id:this.did, type:'doc'};
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify(json_data),
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.alert_box.msg('提示', '成功创建快捷方式', function(){
+                            that.$router.push({name:'file_system', params:{id:'desktop'}});
+                        });
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                            case 3:
+                                that.alert_msg.error('快捷方式已存在');
+                            case 4:
+                                that.alert_msg.error('找不到文件');
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+        },
+
+        remove_link(){
+            let url = '/fs/delete_link';
+            let json_data = {id:this.did, type:'doc'};
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify(json_data),
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.$emit('refresh');
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                            case 3:
+                                that.alert_msg.error('找不到快捷方式');
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
         }
     }
 
