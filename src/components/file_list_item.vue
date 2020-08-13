@@ -31,6 +31,7 @@
                     <el-dropdown-item v-if="context!='recycle'">打开</el-dropdown-item>
                     <el-dropdown-item v-if="context==false">权限管理</el-dropdown-item>
                     <el-dropdown-item command="parent" v-if="(is_link||context=='workbench')&&pfid!=''">打开所在文件夹</el-dropdown-item>
+                    <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link">创建快捷方式到桌面</el-dropdown-item>
                     <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                     <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link">复制</el-dropdown-item>
                     <el-dropdown-item command="share" v-if="(context=='file_system'||context=='team')&&!is_link">分享</el-dropdown-item>
@@ -90,6 +91,10 @@ export default {
         rest_time:{
             type:String,
             default:'rest_time'
+        },
+        is_in_desktop:{
+            type:Boolean,
+            default:false
         },
     },
     data() {
@@ -168,6 +173,9 @@ export default {
                 case 'parent':
                     this.open_fold(this.pfid);
                     break;
+                case 'create_link':
+                    this.create_link();
+                    break;
             }
         },
 
@@ -236,6 +244,45 @@ export default {
 
         open_fold(fid){
             this.$router.push({name:'file_system', params:{id:fid}});
+        },
+
+        create_link(){
+            let url = '/fs/link/new';
+            let json_data = {id:this.did, type:'doc'};
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify(json_data),
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.alert_box.msg('提示', '成功创建快捷方式', function(){
+                            that.$router.push({name:'file_system', params:{id:'desktop'}});
+                        });
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                            case 3:
+                                that.alert_msg.error('快捷方式已存在');
+                            case 4:
+                                that.alert_msg.error('找不到文件');
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
         }
     }
 
