@@ -134,10 +134,6 @@ const router =  new Router({
       }
     },
     {
-      path: '/team/:tid/',
-      redirect:'/team/:tid/file/desktop'
-    },
-    {
       path: '/test',
       name: 'test',
       component: test,
