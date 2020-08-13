@@ -84,7 +84,7 @@ export default {
                         contentType: false,
                         success:function (res){
                             if(that.console_debug){
-                                console.log("(post)/register/submit"+ " : " +res.status);
+                                console.log("(post)/user/register/submit"+ " : " +res.status);
                             }
                             if(res.status == 0){
                                 let from = that.$route.query.from;

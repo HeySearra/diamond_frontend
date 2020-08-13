@@ -28,7 +28,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dia_vis=false">取 消</el-button>
-                <el-button type="primary" @click="dia_vis=false">确 定</el-button>
+                <el-button type="primary" @click="submit">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -43,13 +43,50 @@ export default {
             form:{
                 img: '',
                 name: '',
-            }
+            },
         }
     },
-
+    mounted(){
+        //this.init();
+    },
     methods:{
+        init(){
+            //this.get_user_info();
+        },
         open(){
             this.dia_vis = true;
+            this.get_user_info();
+        },
+
+        close(){
+            this.dia_vis = false;
+        },
+
+        get_user_info(){
+            let that = this;
+            $.ajax({ 
+                type:'get', 
+                url:'/user_info',
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')}, 
+                data:form,
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(res.status == 0){
+                        that.form.img = res.portrait;
+                        that.form.name = res.name;
+                    }
+                    else{
+                        that.dia_vis = false;
+                        that.form.img = '';
+                        that.form.name = '';
+                        that.alert_msg.error('获取信息失败');
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
+                }
+            });
         },
 
         beforeAvatarUpload(file) {
@@ -66,12 +103,86 @@ export default {
         },
 
         upload_por(f){
+            const isJPG = f.file.type === 'image/jpeg';
+            if (!isJPG) {
+                this.alert_msg.error('上传头像图片只能是 JPG 格式');
+                return;
+            }
             var that = this;
             let form = new FormData();
-            form.append('file', f.file);
-        }
-    }
+            form.append('profile', f.file);
+            $.ajax({ 
+                type:'post', 
+                url:'/upload/port',
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')}, 
+                data:form,
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(res.status == 0){
+                        that.form.src = res.src;
+                        f.onSuccess();
+                    }
+                    else{
+                        switch(res){
+                            case 1:
+                                that.alert_msg.error('错误，图片过大');
+                                break;
+                            default:
+                                that.alert_msg.error('上传头像失败，请重试');
+                        }
+                        //that.form.src = '';
+                        f.onError();
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
+                    //that.form.src = '';
+                    f.onError();
+                }
+            });
+        },
 
+        submit(){
+            var that = this;
+            if(that.form.name == ''){
+                that.alert_msg.warning('昵称不得为空');
+                return;
+            }
+            $.ajax({ 
+                type:'post', 
+                url:"/user/edit_info",
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')}, 
+                data: JSON.stringify(that.form),
+                async:false,
+                success:function (res){
+                    if(res.status == 0){
+                        that.login_manager.set(true, '', that.form.name, that.form.img);
+                        that.$emit('apply_for_info');
+                        that.alert_msg.success('修改信息成功！');
+                        that.close();
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('您未登录本站');
+                                break;
+                            case 3:
+                                that.alert_msg.error('昵称不合法，请检查您的信息')
+                                break;
+                            case 4:
+                                that.alert_msg.error('头像上传失败，请重新上传')
+                            default:
+                                that.alert_msg.error('修改信息失败，请检查你的信息');
+                        }
+                    }
+                },
+                error:function(){
+                    console.log('连接失败');
+                }
+            });
+        }
+    },
 }
 </script>
 
