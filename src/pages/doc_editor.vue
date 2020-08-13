@@ -110,6 +110,7 @@ class CommentsAdapter {
         // should resolve with the comment thread data.
         return Promise.resolve({
           threadId: data.threadId,
+          //commmets: this.getCommentsOfThread(data.threadId),
           comments: [
             {
               commentId: 'comment-1',
@@ -125,6 +126,49 @@ class CommentsAdapter {
             }
           ],
           isFromAdapter: true
+        });
+      },
+
+      getCommentsOfThread(threadId) {
+        var that = this;
+        const did = this.$route.params.did;
+        let msg = {
+          'did': did,
+          'threadId': threadId
+        };
+        $.ajax({
+          type: 'get',
+          url: '/doc/comment/get_comments_of_thread',
+          data: JSON.stringify(msg),
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false,
+          async: false,
+          success: function (res) {
+            if (that.console_debug) {
+              console.log("(get)/doc/comment/get_comments_of_thread" + " : " + res.status);
+            }
+            if (res.status === 0) {
+              return res.list;
+            } else {
+              switch (res.status) {
+                case 1:
+                  this.alert_box.msg('加载评论失败', '键值错误');
+                  break;
+                case 2:
+                  this.alert_box.msg('加载评论失败', '您的权限不足或还没有登录');
+                  break;
+                case 3:
+                  this.alert_box.msg('加载评论失败', '文档不存在');
+                  break;
+                default:
+                  this.alert_msg.error('未知错误');
+              }
+            }
+          },
+          error: function () {
+            this.alert_msg.error('连接失败');
+          }
         });
       }
     };
@@ -419,6 +463,83 @@ export default {
       })
     }
   },
+  getAllCommentedUsers() {
+    var that = this;
+    const did = this.$route.params.did;
+    let msg = {
+      'did': did
+    };
+    $.ajax({
+      type: 'get',
+      url: '/doc/comment/get_users',
+      data: JSON.stringify(msg),
+      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+      processData: false,
+      contentType: false,
+      async: false,
+      success: function (res) {
+        if (that.console_debug) {
+          console.log("(get)/doc/comment/get_users" + " : " + res.status);
+        }
+        if (res.status === 0) {
+          pageData.users = res.list;
+        } else {
+          switch (res.status) {
+            case 1:
+              this.alert_box.msg('加载评论用户失败', '键值错误');
+              break;
+            case 2:
+              this.alert_box.msg('加载评论用户失败', '您的权限不足或还没有登录');
+              break;
+            case 3:
+              this.alert_box.msg('加载评论用户失败', '文档不存在');
+              break;
+            default:
+              this.alert_msg.error('未知错误');
+          }
+        }
+        //跳转到首页
+        that.router.push({path:'/workbench/recent'});
+      },
+      error: function () {
+        this.alert_msg.error('连接失败');
+      }
+    });
+  },
+  getCurrentUserId(){
+    var that = this;
+    $.ajax({
+      type:'get',
+      url:'/user_info',
+      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+      processData: false,
+      contentType: false,
+      async: false,
+      success:function (res){
+        if (that.console_debug) {
+          console.log("(get)/user_info" + " : " + res.status);
+        }
+        if (res.status === 0) {
+          pageData.userId = res.uid;
+        } else {
+          switch (res.status) {
+            case 1:
+              this.alert_box.msg('加载用户信息失败', '键值错误');
+              break;
+            case 2:
+              this.alert_box.msg('加载用户信息失败', '您还没有登录');
+              break;
+            default:
+              this.alert_msg.error('未知错误');
+          }
+        }
+      },
+      error:function(){
+        this.alert_msg.error('连接失败');
+      }
+    });
+  },
+
 }
 </script>
 
