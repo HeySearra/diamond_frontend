@@ -8,7 +8,7 @@
       text-color="#333"
       active-text-color="#efb7b6">
       <h1><a class="logo_a" @click="$router.push({path:'/'});renew_active()"></a></h1>
-      <div class="online_icon">
+      <div class="online_icon" v-if="is_login">
         <el-avatar>
           <el-dropdown>
             <span class="el-dropdown-link">
@@ -68,17 +68,17 @@
               </el-dropdown-menu>
               </el-dropdown>
       </div>
-      <div class="header_icon" @click="click_open_drawer">
+      <div class="header_icon" @click="click_open_drawer" v-if="is_login">
         <el-badge class="item" :value="message_count" :max="99" :hidden="message_count<=0">
           <span class="icon iconfont">&#xe60b;</span>
         </el-badge>
       </div>
-      <div class="header_icon" @click="$emit('chatting')">
+      <div class="header_icon" @click="$emit('chatting')" v-if="is_login">
         <el-badge class="item" :is-dot="have_chat">
           <span class="icon iconfont">&#xe7fe;</span>
         </el-badge>
       </div>
-      <div class="search">
+      <div class="search" v-if="is_login">
           <div>
               <el-input v-model="search" placeholder="请输入搜索内容" @keyup.enter.native="click_search" maxLength="50">
                 <el-button slot="append" @click="click_search" icon="el-icon-search"></el-button>
@@ -115,6 +115,7 @@
       },
       
       init(){
+        this.get_info();
         if(this.login_manager.get()){
           this.is_login = true;
           this.photo_src = this.login_manager.get_por();
