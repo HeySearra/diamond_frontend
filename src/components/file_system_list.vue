@@ -74,7 +74,7 @@ export default {
     },
 
     mounted(){
-        this.init();
+
     },
 
     methods:{
@@ -82,7 +82,101 @@ export default {
             if(this.type == 'from_out'){
                 this.list = this.out_list;
             }
+            else if(this.type == 'self'){
+                this.apply_for_info();
+            }
         },
+
+        getCookie (name) {
+            var value = '; ' + document.cookie
+            var parts = value.split('; ' + name + '=')
+            if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
+        apply_for_info(){
+            let url = '/fs/fold/elem?fid=' + this.fid;
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.list = [];
+                        let fold = [];
+                        let file = [];
+                        for(let i=0; i<res.list.length; i++){
+                            if(res.list[i].type == 'doc'){
+                                file.push({
+                                    type:'file',
+                                    id: res.list[i].id,
+                                    name: res.list[i].name,
+                                    is_link: res.list[i].is_link,
+                                    is_starred: res.list[i].is_starred,
+                                    creator: res.list[i].cname,
+                                    create_time: that.datetime_format(res.list[i].create_dt, res.cur_dt),
+                                    recent_edit_time: that.datetime_format(res.list[i].edit_dt, res.cur_dt),
+                                });
+                            }
+                            else if(res.list[i].type == 'fold'){
+                                fold.push({
+                                    type:'fold',
+                                    id: res.list[i].id,
+                                    name: res.list[i].name,
+                                    is_link: res.list[i].is_link,
+                                    is_starred: res.list[i].is_starred,
+                                    creator: res.list[i].cname,
+                                    create_time: that.datetime_format(res.list[i].create_dt, res.cur_dt),
+                                    recent_edit_time: that.datetime_format(res.list[i].edit_dt, res.cur_dt),
+                                });
+                            }
+                        }
+                        if(fold.length){
+                            that.list.push({
+                                title: '文件夹',
+                                content: fold,
+                            });
+                        }
+                        if(file.length){
+                            that.list.push({
+                                title: '文件',
+                                content: file,
+                            });
+                        }
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            case 3:
+                                that.alert_msg.error('文件夹不存在');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+        },
+
+        refresh(out_list){
+            if(this.type == 'self'){
+                this.apply_for_info();
+            }
+            else if(this.type == 'from_out'){
+                this.list = out_list;
+            }
+        },
+
 
         open_info(name, content){
             this.$emit('open_info', name, content);

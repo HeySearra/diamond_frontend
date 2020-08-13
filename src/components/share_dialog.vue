@@ -73,6 +73,7 @@ export default {
                 type:'get',
                 url:'/doc/lock?did=' + that.did,
                 data: JSON.stringify(json_data),
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
@@ -107,6 +108,7 @@ export default {
                 type:'get',
                 url:'/doc/share?did=' + that.did + '&auth=write',
                 data: JSON.stringify(json_data),
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
@@ -141,6 +143,7 @@ export default {
                 type:'get',
                 url:'/doc/share?did=' + that.did + '&auth=comment',
                 data: JSON.stringify(json_data),
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
@@ -175,6 +178,7 @@ export default {
                 type:'get',
                 url:'/doc/share?did=' + that.did + '&auth=read',
                 data: JSON.stringify(json_data),
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
@@ -244,6 +248,7 @@ export default {
                 type:'post',
                 url: url,
                 data: JSON.stringify(json_data),
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){

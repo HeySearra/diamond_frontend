@@ -57,7 +57,59 @@ export default {
     init(){
         this.$emit('active_change');
         this.view_type = this.view_type_manager.get();
-        this.fid = this.$router.params.id?this.$router.params.id:'desktop';
+        try{
+          this.tid = this.$route.params.tid;
+        }
+        catch(err){
+          this.$router.push({path:'/'});
+        }
+        this.fid = this.$route.params.id?this.$route.params.id:'desktop';
+
+        fid=='desktop' ? this.get_desktop_id() : '';
+        setTimeout(function(){
+          this.$refs.file_system_component.init();
+        }, 0);
+    },
+
+    getCookie (name) {
+      var value = '; ' + document.cookie
+      var parts = value.split('; ' + name + '=')
+      if (parts.length === 2) return parts.pop().split(';').shift()
+    },
+
+    refresh(){
+      this.$refs.file_system_component.init();
+    },
+
+    get_desktop_id(){
+      let url = 'fs/team/root?tid=' + this.tid;
+      var that = this;
+      $.ajax({ 
+          type:'get',
+          url: url,
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          async:false, 
+          success:function (res){ 
+              if(that.console_debug){
+                  console.log(url +  '：' + res.status);
+              }
+              if(res.status == 0){
+                that.fid = res.fid;
+              }
+              else{
+                  switch(res.status){
+                      case 2:
+                          that.alert_msg.error('权限不足');
+                          break;
+                      default:
+                          that.alert_msg.error('发生了未知错误');
+                  }
+              }
+          },
+          error:function(res){
+              that.alert_msg.error('网络连接失败');
+          }
+      });
     },
 
     change_view(){

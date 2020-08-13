@@ -81,6 +81,7 @@ export default {
             type:'post',
             url: url,
             data: JSON.stringify(json_data),
+            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
             async:false, 
             success:function (res){ 
                 if(that.console_debug){

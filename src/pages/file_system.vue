@@ -7,6 +7,7 @@
           <div style="padding: 0 40px 0 30px;">
               <div style="height:20px"></div>
             <component
+                ref="file_system_component"
                 :is="view_type=='block'?'file-system-block':'file-system-list'"
                 :fid="fid"
                 @change_view="change_view"
@@ -25,9 +26,9 @@
     </el-container>
     <el-footer></el-footer>
     </el-container>
-    <new-dialog ref="new_dialog"></new-dialog>
+    <new-dialog @refresh="refresh" ref="new_dialog"></new-dialog>
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
-    <choose-path-dialog ref="manage_member_dialog"></choose-path-dialog>
+    <choose-path-dialog @refresh="refresh" ref="manage_member_dialog"></choose-path-dialog>
     <share-dialog ref="share_dialog"></share-dialog>
   </div>
 </template>
@@ -49,11 +50,61 @@ export default {
         this.view_type = this.view_type_manager.get();
         this.fid = this.$route.params.id?this.$route.params.id:'desktop';
         this.sidebar_active = this.fid=='desktop' ? 'desktop' : '';
+
+        fid=='desktop' ? this.get_desktop_id() : '';
+        setTimeout(function(){
+          this.$refs.file_system_component.init();
+        }, 0);
+    },
+
+    getCookie (name) {
+      var value = '; ' + document.cookie
+      var parts = value.split('; ' + name + '=')
+      if (parts.length === 2) return parts.pop().split(';').shift()
+    },
+
+    refresh(){
+      this.$refs.file_system_component.init();
+    },
+
+    get_desktop_id(){
+      let url = '/fs/user/root';
+      var that = this;
+      $.ajax({ 
+          type:'get',
+          url: url,
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          async:false, 
+          success:function (res){ 
+              if(that.console_debug){
+                  console.log(url +  '：' + res.status);
+              }
+              if(res.status == 0){
+                that.fid = res.fid;
+              }
+              else{
+                  switch(res.status){
+                      case 2:
+                          that.alert_msg.error('权限不足');
+                          break;
+                      default:
+                          that.alert_msg.error('发生了未知错误');
+                  }
+                  
+              }
+          },
+          error:function(res){
+              that.alert_msg.error('网络连接失败');
+          }
+      });
     },
 
     change_view(){
         this.view_type = this.view_type=='block' ? 'list' : 'block';
         this.view_type_manager.set(this.view_type);
+        setTimeout(function(){
+          this.$refs.file_system_component.init();
+        }, 0);
     },
 
     error(){
