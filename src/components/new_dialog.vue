@@ -90,7 +90,7 @@ export default {
                 if(res.status == 0){
                     if(that.desktop_alert){
                         that.alert_box.msg('提示', '已成功在桌面创建 '+that.name + '！', function(){
-                            that.$emit('refresh');
+                            that.$router.push({name:'file_system', params:{id:'desktop'}});
                         });
                     }
                     else{
@@ -115,6 +115,44 @@ export default {
                             that.alert_msg.error('发生了未知错误');
                     }
                     
+                }
+            },
+            error:function(res){
+                that.alert_msg.error('网络连接失败');
+            }
+        });
+    },
+
+    create_new_team(){
+        let url = '/team/new/';
+        let json_data = {name:this.name};
+        var that = this;
+        $.ajax({ 
+            type:'post',
+            url: url,
+            data: JSON.stringify(json_data),
+            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+            async:false, 
+            success:function (res){ 
+                if(that.console_debug){
+                    console.log(url +  '：' + res.status);
+                }
+                if(res.status == 0){
+                    that.alert_msg.success('成功创建团队');
+                    that.dia_vis = false;
+                    that.$emit('refresh');
+                }
+                else{
+                    switch(res.status){
+                        case 2:
+                            that.alert_msg.error('权限不足');
+                            break;
+                        case 3:
+                            that.alert_msg.error('团队名字非法');
+                            break;
+                        default:
+                            that.alert_msg.error('发生了未知错误');
+                    }
                 }
             },
             error:function(res){

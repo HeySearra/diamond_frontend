@@ -31,7 +31,7 @@
                     <el-dropdown-item v-if="context!='recycle'">打开</el-dropdown-item>
                     <el-dropdown-item v-if="false">权限管理</el-dropdown-item>
                     <el-dropdown-item command="parent" v-if="(is_link||context=='workbench')&&pfid!=''">打开所在文件夹</el-dropdown-item>
-                    <el-dropdown-item v-if="is_in_desktop">转化为团队文件夹</el-dropdown-item>
+                    <el-dropdown-item command="team" v-if="is_in_desktop">转化为团队文件夹</el-dropdown-item>
                     <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link&&!is_in_desktop">创建快捷方式到桌面</el-dropdown-item>
                     <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                     <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link&&false">复制</el-dropdown-item>
@@ -182,6 +182,9 @@ export default {
                     break;
                 case 'delete':
                     this.delete();
+                    break;
+                case 'team':
+                    this.team();
                     break;
             }
         },
@@ -381,6 +384,44 @@ export default {
                                     that.alert_msg.error('权限不足');
                                 case 3:
                                     that.alert_msg.error('找不到文件夹');
+                                default:
+                                    that.alert_msg.error('发生了未知错误');
+                            }
+                        }
+                    },
+                    error:function(res){
+                        that.alert_msg.error('网络连接失败');
+                    }
+                });
+            })
+        },
+
+        team(){
+            var that = this;
+            that.alert_box.confirm('提示', '确定将 ' + that.name + ' 转为团队文件夹吗？', function(){
+                let url = '/team/new_from_fold';
+                let json_data = {id:that.fid};
+                $.ajax({ 
+                    type:'post',
+                    url: url,
+                    headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+                    data: JSON.stringify(json_data),
+                    processData: false,
+                    contentType: false,
+                    success:function (res){ 
+                        if(that.console_debug){
+                            console.log(url +  '：' + res.status);
+                        }
+                        if(res.status == 0){
+                            that.alert_msg.success('已转化为团队文件夹');
+                            that.$router.push({name:team_center});
+                        }
+                        else{
+                            switch(res.status){
+                                case 2:
+                                    that.alert_msg.error('权限不足');
+                                case 3:
+                                    that.alert_msg.error('转化过程中发生错误');
                                 default:
                                     that.alert_msg.error('发生了未知错误');
                             }
