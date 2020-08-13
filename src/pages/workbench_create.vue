@@ -68,7 +68,7 @@ export default {
                     }
                     if(res.status == 0){
                         for(let i; i < res.list.length; i++){
-                            that.list.content.push({
+                            that.list[0].content.push({
                                 type: res.list[i].type,
                                 id: res.list[i].id,
                                 is_link: false,
