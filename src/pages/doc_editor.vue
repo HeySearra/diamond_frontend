@@ -129,7 +129,6 @@ class CommentsAdapter {
     };
   }
 }
-let window_editor;
 export default {
   mounted() {
     appData.users = [
@@ -244,7 +243,6 @@ export default {
 
       }).then(editor => {
         window.editor = editor; //Save the editor to get the contents of the editor at any time, perform some operations
-        window_editor = editor;
         //editor.plugins.get('Users').addUser({id: '0'});
         //editor.plugins.get('Users').defineMe('0');
         //editor.isReadOnly = true;
@@ -292,6 +290,7 @@ export default {
       })
     },
     updateDocContent(content) {
+      //console.log( window.editor.getData() );
       console.log( content );
     },
     updateDocContent1(content) {
