@@ -17,8 +17,8 @@
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="in">进入</el-dropdown-item>
                     <el-dropdown-item command="team_info">团队信息</el-dropdown-item>
-                    <el-dropdown-item v-if="!is_creator" class="red_text">退出团队</el-dropdown-item>
-                    <el-dropdown-item v-if="is_creator" class="red_text" @click="dismiss_team">解散团队</el-dropdown-item>
+                    <el-dropdown-item v-if="!is_creator" class="red_text" @click="quit_team">退出团队</el-dropdown-item>
+                    <el-dropdown-item v-if="is_creator" class="red_text" @click="delete_team">解散团队</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -78,28 +78,25 @@ export default {
                     break;
             }
         },
-
-        dismiss_team(){
+        quit_team(){
             var that = this;
-            this.alert_box.confirm_msg("确定要解散团队"+ this.tname +"吗？",'', function(){
-                let url = '/team/delete' + this.tid;
-                let msg = {
-                    tid: that.tid,
-                }
+            this.alert_box.confirm_msg('警告', '确定退出团队 ' + that.team_name + ' 吗？', function(){
+                let url = '/team/quit'
                 $.ajax({ 
                     type:'post',
                     url: url,
-                    data: JSON.stringify(msg),
-                    headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                    async:false,
+                    headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+                    data: JSON.stringify({tid:that.tid}),
+                    processData: false,
+                    contentType: false, 
                     success:function (res){ 
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
                         if(res.status == 0){
-                            setTimeout(() => {
-                                that.$emit("refresh");
-                            }, 0);
+                            that.alert_box.msg('提示', '成功退出团队', function(){
+                                that.$router.push({name:team_center});
+                            });
                         }
                         else{
                             switch(res.status){
@@ -121,6 +118,49 @@ export default {
                 });
             });
         },
+        delete_team(){
+            var that = this;
+            this.console('rwr');
+            this.alert_box.confirm_msg('警告', '确定解散团队 ' + that.team_name + ' 吗？', function(){
+                let url = '/team/delete'
+                $.ajax({ 
+                    type:'post',
+                    url: url,
+                    headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+                    data: JSON.stringify({tid:that.tid}),
+                    processData: false,
+                    contentType: false, 
+                    success:function (res){ 
+                        if(that.console_debug){
+                            console.log(url +  '：' + res.status);
+                        }
+                        if(res.status == 0){
+                            that.alert_box.msg('提示', '成功解散团队', function(){
+                            that.$router.push({name:team_center});
+                            });
+                        }
+                        else{
+                            switch(res.status){
+                                case 2:
+                                    that.alert_msg.error('权限不足');
+                                    break;
+                                case 3:
+                                    that.alert_msg.error('找不到团队');
+                                    break;
+                                default:
+                                    that.alert_msg.error('发生了未知错误');
+                            }
+                            
+                        }
+                    },
+                    error:function(res){
+                        that.alert_msg.error('网络连接失败');
+                    }
+                });
+            });
+        },
+
+
 
         open_team_info(){
             let url = '/team/info?tid=' + this.tid;
