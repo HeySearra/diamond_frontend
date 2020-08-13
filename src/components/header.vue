@@ -113,7 +113,7 @@
         var parts = value.split('; ' + name + '=')
         if (parts.length === 2) return parts.pop().split(';').shift()
       },
-
+      
       init(){
         if(this.login_manager.get()){
           this.is_login = true;
@@ -134,16 +134,24 @@
             },
             error:function(){
             }
-        });
+          });
         }
-        //this.apply_for_info();
+        this.get_info();
+      },
+      
+      apply_for_info(){
+        if(this.login_manager.get()){
+          this.is_login = true;
+          this.photo_src = this.login_manager.get_por();
+          this.name = this.login_manager.get_name();
+        }
       },
 
-      apply_for_info(){
+      get_info(){
         var that = this;
         $.ajax({
             type:'get',
-            url:'/simple_user_info',
+            url:'/user_info',
             headers: {'X-CSRFToken': this.getCookie('csrftoken')},
             processData: false,
             contentType: false,
@@ -153,7 +161,7 @@
                 if(!that.login_manager.get_por() || that.login_manager.get_por()!=res.portrait)
                   that.photo_src = res.portrait;
                 that.is_login = true;
-                that.login_manager.set(true, res.uid, res.name, res.portrait);
+                that.login_manager.set(true, res.acc, res.name, res.portrait);
               }
               else{
                 that.uid = 0;
@@ -200,7 +208,7 @@
             contentType: false,
             success:function (res){
               if(that.console_debug){
-                  console.log("(post)/register/submit"+ " : " +res.status);
+                  console.log("(post)/user/register/submit"+ " : " +res.status);
               }
               if(res.status == 0){
                 that.alert_msg.success('登出成功');

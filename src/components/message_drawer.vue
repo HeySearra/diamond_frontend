@@ -7,30 +7,15 @@
     class="message_box">
         <div class="el-drawer__header" style="height:50px;padding:5px 20px 0;line-height:50px;margin:0">
             <div class="el-drawer__title can_not_choose">消息中心</div>
-            <div class="mark-read can_not_choose">全部已读</div>
+            <div class="mark-read can_not_choose" @click="mark_all_read">全部已读</div>
             <!-- <div class="close-icon"><span v-if="type!='comment'" class="icon iconfont">&#xe79b;</span></div> -->
         </div>
         <el-divider></el-divider>
         <div v-infinite-scroll="load" class="message_area" style="overflow-x:hidden;overflow-y:auto;border:solid 1px;height:calc(100vh - 50px)">
-            <message-item></message-item>
-            <message-item></message-item>
-            <message-item></message-item>
-            <message-item></message-item>
-            <message-item></message-item>
-            <message-item></message-item><message-item></message-item>
-            <message-item></message-item>
-            <message-item></message-item>
-            <message-item></message-item>
-            <message-item></message-item>
-            <message-item></message-item><message-item></message-item>
-            <message-item></message-item>
-            <message-item></message-item>
-            <message-item></message-item>
-            <message-item></message-item>
-            <message-item></message-item>
+            <message-item v-for="item in list" :key="item.mid" ref="message_item"></message-item>
             <p v-if="is_loading" class="not_found">加载中 <i class="el-icon-loading"></i></p>
         </div>
-        
+
     </el-drawer>
 </template>
 
@@ -48,10 +33,42 @@ export default {
     props: {
     },
     mounted(){
+        //this.init();
     },
     methods:{
-        init(){
-            
+        apply_for_info(){
+            var that = this;
+            that.page
+            $.ajax({
+                type:'get',
+                url:"/msg/list?page=" + that.page + "&each=" + that.each,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){
+                    if(that.console_debug){
+                        console.log("(get)/msg/list/"+ " : " +res.status);
+                    }
+                    if(res.status == 0){
+                        let len = that.list.length;
+                        let item = that.$refs.message_item;
+                        for(let i=0; i < res.list.length; i++){
+                            that.list.push({
+                                mid: res.list[i].mid,
+                            });
+                        }
+                        for(let i=len; i < list.length; i++){
+                            item[i].init();
+                        }
+                    }
+                    else{
+                        that.alert_box.msg('验证码发送失败，请重试');
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
+                }
+            });
         },
         open() {
             this.drawer = true;
@@ -59,7 +76,12 @@ export default {
 
         load(){
             this.is_loading = true;
-        }
+        },
+
+        mark_all_read(){
+
+        },
+
     }
 };
 </script>
