@@ -19,79 +19,50 @@
     <el-row class="team_info" v-if="context=='team'">
       <el-row>
         <el-col :span="8" class="avatar">
-          <el-avatar></el-avatar>
+          <el-avatar :src="team_src"></el-avatar>
         </el-col>
         <el-col :span="16" class="teamname" style="line-height:40px">{{team_name}}</el-col>
       </el-row>
       <el-row>
-        <el-col :span="16" class="team_intro">介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍</el-col>
+        <el-col :span="16" class="team_intro">{{team_intro}}</el-col>
       </el-row>
       <el-row class="team_member can_not_choose">
         <h4>创建者</h4>
         <el-divider></el-divider>
         <div class="member_img">
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
+          <div class="item">
+            <el-tooltip effect="dark" :content="creator_name" placement="top-end">
+            <el-avatar :src="creator_src"></el-avatar>
           </el-tooltip>
+          </div>
+          <div class="clear_both"></div>
         </div>
-        <h4>管理员</h4>
-        <el-divider></el-divider>
-        <div class="member_img">
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
+        <div class="clear_both"></div>
+        <h4 v-if="admin_list.length">管理员</h4>
+        <el-divider v-if="admin_list.length"></el-divider>
+        <div v-if="admin_list.length" class="member_img">
+          <div class="item" v-for="item in admin_list" :key="item.uid">
+            <el-tooltip effect="dark" :content="item.name" placement="top-end">
+              <el-avatar :src="item.src"></el-avatar>
+            </el-tooltip>
+          </div>
         </div>
-        <h4>成员</h4>
-        <el-divider></el-divider>
-        <div class="member_img">
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Top Right 提示文字" placement="top-end">
-            <el-avatar></el-avatar>
-          </el-tooltip>
+        <div class="clear_both"></div>
+        <h4 v-if="member_list.length">成员</h4>
+        <el-divider v-if="member_list.length"></el-divider>
+        <div v-if="member_list.length" class="member_img">
+          <div class="item" v-for="item in member_list" :key="item.uid">
+            <el-tooltip effect="dark" :content="item.name" placement="top-end">
+              <el-avatar :src="item.src"></el-avatar>
+            </el-tooltip>
+          </div>
         </div>
+        <div class="clear_both"></div>
         <el-row><el-button type="primary" plain @click="$emit('edit_team_info')">修 改 团 队 信 息</el-button></el-row>
-        <el-row><el-button type="primary" plain @click="$emit('manage_member')">管 理 成 员</el-button></el-row>
-        <el-row><el-button type="primary" plain @click="$emit('edit_admin')">设 置 管 理 员</el-button></el-row>
-        <el-row><el-button type="danger" @click="$emit('leave_team')">退 出 团 队</el-button></el-row>
-        <el-row><el-button type="danger" @click="$emit('destroy_team')">解 散 团 队</el-button></el-row>
+        <el-row><el-button type="primary" plain @click="$emit('manage_member')" v-if="is_admin">管 理 成 员</el-button></el-row>
+        <el-row><el-button type="primary" plain @click="$emit('edit_admin')" v-if="is_creator">设 置 管 理 员</el-button></el-row>
+        <el-row><el-button type="danger" @click="$emit('leave_team')" v-if="!is_creator">退 出 团 队</el-button></el-row>
+        <el-row><el-button type="danger" @click="$emit('destroy_team')" v-if="is_creator">解 散 团 队</el-button></el-row>
       </el-row>
       <div style="height:20px;"></div>
     </el-row>
@@ -152,13 +123,107 @@ export default {
   data() {
     return {
       team_name:'DiaDoc团队',
-      file_name:'file_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_namefile_name'
+      file_name:'file_namefile_namefile_namefiamefile_namefile_namefile_name',
+      team_src:'',
+      team_intro:'',
+      creator_id:'',
+      creator_name:'',
+      creator_src:'',
+      admin_list:[],
+      member_list:[],
+      is_creator:false,
+      is_admin:false
     }
   },
 
   methods: {
     init() {
       this.apply_for_info();
+    },
+
+    getCookie (name) {
+        var value = '; ' + document.cookie
+        var parts = value.split('; ' + name + '=')
+        if (parts.length === 2) return parts.pop().split(';').shift()
+    },
+
+    init_team_info(tid){
+      let url = '/team/info?tid=' + tid;
+      var that = this;
+      $.ajax({ 
+          type:'get',
+          url: url,
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false, 
+          success:function (res){ 
+              if(that.console_debug){
+                  console.log(url +  '：' + res.status);
+              }
+              if(res.status == 0){
+                  that.team_name = res.team_name;
+                  that.team_intro = res.intro;
+                  that.team_src = res.portrait;
+                  that.creator_id = res.cuid;
+                  that.creator_name = res.cname;
+                  that.creator_src = res.csrc;
+                  that.admin_list = res.admin;
+                  that.member_list = res.norm;
+              }
+              else{
+                  switch(res.status){
+                      case 2:
+                          that.alert_msg.error('权限不足');
+                          break;
+                      default:
+                          that.alert_msg.error('发生了未知错误');
+                  }
+                  
+              }
+          },
+          error:function(res){
+              that.alert_msg.error('网络连接失败');
+          }
+      });
+
+      let url2 = '/team/identity?tid' + tid;
+      $.ajax({ 
+          type:'get',
+          url: url2,
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false, 
+          success:function (res){ 
+              if(that.console_debug){
+                  console.log(url2 +  '：' + res.status);
+              }
+              if(res.status == 0){
+                  switch(res.identity){
+                    case 'owner':
+                      that.is_creator = true;
+                    case 'admin':
+                      that.is_admin = true;
+                      break;
+                  }
+              }
+              else{
+                  switch(res.status){
+                      case 2:
+                          that.alert_msg.error('权限不足');
+                          break;
+                      case 3:
+                          that.alert_msg.error('找不到团队');
+                          break;
+                      default:
+                          that.alert_msg.error('发生了未知错误');
+                  }
+                  
+              }
+          },
+          error:function(res){
+              that.alert_msg.error('网络连接失败');
+          }
+      });
     },
 
     apply_for_info() {
@@ -215,7 +280,7 @@ export default {
 
 .team_member .member_img{
   padding: 5px 15px;
-  margin-bottom:15px;
+  margin-bottom:25px !important;
 }
 
 .team_member .el-tooltip{
@@ -313,6 +378,11 @@ export default {
   float:right;
   width:196px;
   word-break: break-all;
+}
+
+.item{
+  float:left;
+  margin:6px;
 }
 
 </style>

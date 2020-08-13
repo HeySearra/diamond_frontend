@@ -15,7 +15,8 @@
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
-                @copy_item="copy_item">
+                @copy_item="copy_item"
+                @refresh="refresh">
             </component>
           </div>
           <div style="height:50px"></div>

@@ -22,7 +22,7 @@
       </el-container>
       <el-aside>
         <sidebar context="team" 
-            :tid="tid" 
+            ref="sidebar"
             @create_new_file="create_new_file" 
             @create_new_fold="create_new_fold"
             @edit_admin="edit_admin"
@@ -66,9 +66,11 @@ export default {
         }
         this.fid = this.$route.params.id?this.$route.params.id:'desktop';
 
-        fid=='desktop' ? this.get_desktop_id() : '';
+        this.fid=='desktop' ? this.get_desktop_id() : '';
+        var that = this;
         setTimeout(function(){
-          this.$refs.file_system_component.init();
+          that.$refs.file_system_component.init();
+          that.$refs.sidebar.init_team_info(that.tid);
         }, 0);
     },
 
