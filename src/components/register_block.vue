@@ -122,7 +122,6 @@ export default {
                                     that.$router.push({path:from?from:'/workbench/recent'});
                                 }
                                 that.alert_box.msg('提示', '注册成功', _ok(that));
-                                that.login_manager.set(true, that.form.account, that.form.name, '');
                             }
                             else{
                                 switch(res.status){
