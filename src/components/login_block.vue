@@ -75,6 +75,10 @@ export default {
                 if(valid){
                     var that = this;
                     var msg = this.form;
+                    var msg = {
+                        acc: this.form.account,
+                        pwd: this.form.pwd,
+                    }
                     $.ajax({
                         type:'post',
                         url:"/user/login/submit",
