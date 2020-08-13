@@ -98,10 +98,12 @@ export default {
                         that.$refs.file_system_item.init();
                     }
                     else{
+                        that.page--;
                         that.alert_msg.error('获取文件列表失败', '请重试');
                     }
                 },
                 error:function(){
+                    that.page--;
                     that.alert_msg.error('连接失败');
                 }
             });

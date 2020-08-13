@@ -60,7 +60,8 @@ export default {
                 type:'get',
                 url:"/workbench/create?page=" + that.page + "&each=" + that.each,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async:false,
+                processData: false,
+                contentType: false,
                 success:function (res){
                     if(that.console_debug){
                         console.log("(get)/workbench/create"+ " : " +res.status);
@@ -80,10 +81,12 @@ export default {
                         that.$refs.file_system_item.init();
                     }
                     else{
+                        that.page--;
                         that.alert_msg.error('获取文件列表失败', '请重试');
                     }
                 },
                 error:function(){
+                    that.page--;
                     that.alert_msg.error('连接失败');
                 }
             });
