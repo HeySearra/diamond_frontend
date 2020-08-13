@@ -11,7 +11,7 @@
             </el-form>
             <el-button type="primary" @click="submit('form')">找回密码</el-button>
         </div>
-        <router-link :to="{path:'/login', query:from}">返回登录</router-link>
+        <router-link :to="{path:'/login'+(from!=''?'?from='+from:'')}">返回登录</router-link>
 
     </el-card>
 </template>

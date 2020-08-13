@@ -7,7 +7,7 @@
       background-color="#fff"
       text-color="#333"
       active-text-color="#efb7b6">
-      <h1><a class="logo_a" @click="$router.push({path:'/'});renew_active()"></a></h1>
+      <h1><a class="logo_a" @click="$router.push({path:'/'});"></a></h1>
       <div class="online_icon" v-if="is_login">
         <el-avatar>
           <el-dropdown>
@@ -92,6 +92,11 @@
 <script>
   export default {
     name:'navbar',
+    watch:{
+      $route(to,from){
+        this.init();
+      }
+    },
     mounted(){
       this.init();
     },
@@ -115,36 +120,43 @@
       },
       
       init(){
-        this.get_info();
-        if(this.login_manager.get()){
-          this.is_login = true;
-          this.photo_src = this.login_manager.get_por();
-          $.ajax({
-            type:'get',
-            url:'/msg/unread_count',
-            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-            processData: false,
-            contentType: false,
-            success:function (res){
-              if(res.status){
-                that.message_count = res.count;
-              }
-              else{
-                that.message_count = 0;
-              }
-            },
-            error:function(){
-            }
-          });
-        }
-      },
-      
-      apply_for_info(){
         if(this.login_manager.get()){
           this.is_login = true;
           this.photo_src = this.login_manager.get_por();
           this.name = this.login_manager.get_name();
         }
+        else{
+          let route_name = this.$router.history.current.name;
+          if(route_name!='login' && route_name!='register' && route_name!='forget' && route_name!='forget_set'){
+            this.$router.push({name:'login'});
+          }
+        }
+        this.get_info();
+      },
+
+      apply_for_message(){
+        let url = '/msg/unread_count';
+        var that = this;
+        $.ajax({
+          type:'get',
+          url:url,
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false,
+          success:function (res){
+            if(that.debug){
+              console.log(url + '：' + res.status);
+            }
+            if(res.status){
+              that.message_count = res.count;
+            }
+            else{
+              that.message_count = 0;
+            }
+          },
+          error:function(){
+          }
+        });
       },
 
       get_info(){
@@ -156,7 +168,10 @@
             processData: false,
             contentType: false,
             success:function (res){
-              if(res.uid){
+              if(that.console_debug){
+                console.log('/user_info：' + res.status);
+              }
+              if(res.status == 0){
                 that.uid = res.uid;
                 if(!that.login_manager.get_por() || that.login_manager.get_por()!=res.portrait)
                   that.photo_src = res.portrait;
@@ -174,6 +189,9 @@
               that.uid = 0;
               that.photo_src = ''
               that.is_login = false;
+              if(that.console_debug){
+                console.log('/user_info：' + 'error');
+              }
             }
         });
       },
@@ -208,11 +226,11 @@
             contentType: false,
             success:function (res){
               if(that.console_debug){
-                  console.log("(post)/user/register/submit"+ " : " +res.status);
+                  console.log("/user/logout/submit"+ " : " +res.status);
               }
               if(res.status == 0){
                 that.alert_msg.success('登出成功');
-                that.login_manager.set(false, '', '', '');
+                that.login_manager.clear();
                 that.$router.go(0); //刷新
               }
               else{

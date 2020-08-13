@@ -2,7 +2,7 @@ export const login_manager = {
     set: function(state, uid, name, por){
         if(state){
             localStorage.setItem('state', state);
-            if(account)localStorage.setItem('uid', uid);
+            if(uid)localStorage.setItem('uid', uid);
             if(uname)localStorage.setItem('uname', name);
             if(por)localStorage.setItem('por', por);
         }

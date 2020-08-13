@@ -116,6 +116,9 @@ export default {
                             case 2:
                                 that.alert_msg.error('权限不足');
                                 break;
+                            case 3:
+                                that.alert_msg.error('找不到团队');
+                                break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
                         }

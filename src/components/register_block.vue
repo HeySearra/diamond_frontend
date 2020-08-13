@@ -27,7 +27,7 @@
             </el-form>
             <el-button type="primary" @click="submit('form')">注册</el-button>
         </div>
-        <router-link :to="{path:'/login', query:from}">已有账号？立即登录</router-link>
+        <router-link :to="{path:'/login'+(from!=''?'?from='+from:'')}">已有账号？立即登录</router-link>
     </el-card>
 </template>
 
@@ -66,8 +66,7 @@ export default {
     },
 
     mounted(){
-
-        //this.init();
+        this.init();
     },
 
     methods:{
@@ -173,6 +172,11 @@ export default {
             }, 30)
         },
         get_ver_code(){
+            if(this.form.account.trim() == ''){
+                this.alert_msg.warning('请填写邮箱');
+                return;
+            }
+
             var that = this;
             let msg = {acc :that.form.account,}
             $.ajax({
@@ -199,7 +203,7 @@ export default {
                         localStorage.setItem('res_time', new Date());
                     }
                     else{
-                        that.alert_box.msg('验证码发送失败，请重试');
+                        that.alert_msg.error('验证码发送失败，请重试');
                     }
                 },
                 error:function(){

@@ -32,7 +32,7 @@ export default {
   background-size: cover;
   height:100vh;
   background-position: center;
-  opacity: 0.69;
+  /* opacity: 0.69; */
 }
 
 .nav>>>.el-menu{

@@ -16,8 +16,8 @@
             </el-form>
             <el-button type="primary" @click="submit('form')">登录</el-button>
         </div>
-        <router-link class="register_link" :to="{path:'/register', query:from}">没有账号？立即注册</router-link>
-        <router-link class="forgot_link" :to="{path:'/forget', query:from}">忘记密码</router-link>
+        <router-link class="register_link" :to="{path:'/register'+(from!=''?'?from='+from:'')}">没有账号？立即注册</router-link>
+        <router-link class="forgot_link" :to="{path:'/forget'+(from!=''?'?from='+from:'')}">忘记密码</router-link>
     </el-card>
 </template>
 
@@ -77,7 +77,7 @@ export default {
                     var msg = this.form;
                     var msg = {
                         acc: this.form.account,
-                        pwd: this.form.pwd,
+                        pwd: this.form.password,
                     }
                     $.ajax({
                         type:'post',

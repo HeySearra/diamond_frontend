@@ -28,7 +28,7 @@ export default {
 @import url("../assets/common.css");
 
 .snow{
-  background-image: url("../assets/snow.jpg");
+  background-image: url("../assets/panda.jpg");
   background-size: cover;
   height:100vh;
   background-position: center;
