@@ -120,7 +120,7 @@ export default {
                 }
             });
         },
-
+        
         vis_change(value){
             this.focus = value;
         },

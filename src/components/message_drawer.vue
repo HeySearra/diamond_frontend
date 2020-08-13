@@ -58,7 +58,9 @@ export default {
                             });
                         }
                         for(let i=len; i < list.length; i++){
-                            item[i].init();
+                            setTimeout(function(){
+                                item[i].init();
+                            }, 0);
                         }
                     }
                     else{

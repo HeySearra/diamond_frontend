@@ -16,9 +16,10 @@
         <div class="info_area">
             <div v-if="type=='recycle'">{{delete_timer}}</div>
             <div v-if="type=='recycle'">{{rest_time}}天</div>
-            <div v-if="type!='recycle'">{{creator}}</div>
-            <div v-if="type!='recycle'">{{recent_edit_time}}</div>
-            <div v-if="type!='recycle'" class="min_hide">{{create_time}}</div>
+            <div v-if="type=='recent'">{{view_time}}<div>
+            <div v-if="type!='recycle'&&type!='recent'">{{creator}}</div>
+            <div v-if="type!='recycle'&&type!='recent'">{{recent_edit_time}}</div>
+            <div v-if="type!='recycle'&&type!='recent'" class="min_hide">{{create_time}}</div>
         </div>
         <div class="more_menu" :class="focus?'more_menu_focus':''">
             <el-dropdown trigger="click" 
@@ -91,6 +92,10 @@ export default {
         rest_time:{
             type:String,
             default:'rest_time'
+        },
+        view_time: {
+            type:String,
+            default: 'recent_time',
         },
         is_in_desktop:{
             type:Boolean,
