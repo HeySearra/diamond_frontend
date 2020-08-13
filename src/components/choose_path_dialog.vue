@@ -38,7 +38,9 @@ export default {
             id:'',
             type:'file', // 'file', 'fold'
             op_type:'',
-            dia_vis:false
+            dia_vis:false,
+            is_root:false,
+            fid:''
         }
     },
 
@@ -46,9 +48,35 @@ export default {
         open(fid, type, id, name, op_type){
             this.type = type;
             this.id = id;
+            this.fid = fid;
             this.op_type = op_type;
             this.title = (this.op_type=='move'?'移动':'复制') + ' ' + name + ' 到';
             this.dia_vis = true;
+        },
+
+        judge_root(){
+            let url = '/fs/father?fid=' + this.fid;
+            var that = this;
+            $.ajax({
+                type:'get',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                async:false, 
+                success:function (res){
+                    if(that.console_debug){
+                        console.log(url+ " : " +res.status);
+                    }
+                    if(res.status == 0){
+                        
+                    }
+                    else{
+                        that.alert_msg.error('加载消息失败，请重试');
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
+                }
+            });
         }
     }
 

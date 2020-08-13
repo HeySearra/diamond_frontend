@@ -94,7 +94,7 @@
     name:'navbar',
     watch:{
       $route(to,from){
-        //this.init();
+        this.init();
       }
     },
     mounted(){
@@ -125,12 +125,12 @@
           this.photo_src = this.login_manager.get_por();
           this.name = this.login_manager.get_name();
         }
-        else{
-          let route_name = this.$router.history.current.name;
-          if(route_name!='login' && route_name!='register' && route_name!='forget' && route_name!='forget_set'){
-            this.$router.push({name:'login'});
-          }
-        }
+        // else{
+        //   let route_name = this.$router.history.current.name;
+        //   if(route_name!='login' && route_name!='register' && route_name!='forget' && route_name!='forget_set'){
+        //     this.$router.push({name:'login'});
+        //   }
+        // }
         this.get_info();
       },
 

@@ -9,7 +9,7 @@
                 <team-block
                     :tid="item.tid"
                     :is_creator="is_creator"
-                    :name="item.name"
+                    :tname="item.name"
                     @open_info="open_info">
                 </team-block>
             </div>
