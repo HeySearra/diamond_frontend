@@ -42,13 +42,13 @@ export default {
             let that = this;
             $.ajax({
                 type:'get',
-                url:"/workbench/recent_view",
+                url:"/workbench/recent",
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
                 success:function (res){
                     if(that.console_debug){
-                        console.log("(get)/workbench/recent_view"+ " : " +res.status);
+                        console.log("(get)/workbench/recent"+ " : " +res.status);
                     }
                     if(res.status == 0){
                         for(let i; i < res.list.length; i++){

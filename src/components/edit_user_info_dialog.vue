@@ -157,7 +157,7 @@ export default {
                 async:false,
                 success:function (res){
                     if(that.console_debug){
-                        console.log('/user/edit_info：' + res.status);
+                        console.log('/info：' + res.status);
                     }
                     if(res.status == 0){
                         that.$emit('head_refresh');

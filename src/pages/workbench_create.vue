@@ -78,7 +78,42 @@ export default {
 
         open_info(title, content){
             this.$emit('open_info', title, content);
-        }
+        },
+
+        get_my_create_list(){
+            let that = this;
+            $.ajax({
+                type:'get',
+                url:"/workbench/create",
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                async:false,
+                success:function (res){
+                    if(that.console_debug){
+                        console.log("(get)/workbench/create"+ " : " +res.status);
+                    }
+                    if(res.status == 0){
+                        for(let i; i < res.list.length; i++){
+                            that.list.content.push({
+                                type: res.list[i].type,
+                                pfid: res.list[i].pfid,
+                                id: res.list[i].id,
+                                is_link: false,
+                                is_starred: res.list[i].is_starred,
+                                name: res.list[i].name,
+                                view_time: res.list[i].dt,
+                            })
+                        }
+                        that.$refs.file_system_item.init();
+                    }
+                    else{
+                        that.alert_msg.error('获取文件列表失败', '请重试');
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
+                }
+            });
+        },
     }
 }
 </script>

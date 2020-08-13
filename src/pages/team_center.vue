@@ -9,13 +9,15 @@
               :is_creator="true" 
               @open_info="open_info"
               :list="my_list"
+              :apply_for_info="apply_for_info"
             ></team-display-block>
             <div class="clear_both"></div>
             <team-display-block title="我参与的团队" 
               :is_creator="false" 
               @open_info="open_info" 
-              :list="other_list">
-            </team-display-block>
+              :list="other_list"
+              :apply_for_info="apply_for_info"
+            ></team-display-block>
           </div>
           <div style="height:50px"></div>
         </el-main>
@@ -77,7 +79,6 @@ export default {
                     default:
                         that.alert_msg.error('请求团队信息错误');
                 }
-                
             }
           },
           error:function(res){
