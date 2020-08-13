@@ -120,7 +120,7 @@ export default {
                     }
                 });
             });
-        }
+        },
 
         open_team_info(){
             let url = '/team/info' + this.tid;
