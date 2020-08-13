@@ -108,7 +108,48 @@ export default {
           this.alert_msg.error('连接失败');
         }
       });
-    }
+    },
+
+    createDocFromTemplate() {
+      var that = this;
+      let msg = {
+        'tid': this.tid
+      };
+      $.ajax({
+        type:'post',
+        url:'/temp/new_doc',
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        data: JSON.stringify(msg),
+        processData: false,
+        contentType: false,
+        async: false,
+        success:function (res){
+          if (that.console_debug) {
+            console.log("(post)/temp/new_doc" + " : " + res.status);
+          }
+          if (res.status === 0) {
+            that.router.push({path:'/doc/' + res.did});
+          } else {
+            switch (res.status) {
+              case 1:
+                this.alert_box.msg('创建失败', '键错误');
+                break;
+              case 2:
+                this.alert_box.msg('创建失败', '您的权限不足或还没有登录');
+                break;
+              case 3:
+                this.alert_box.msg('创建失败', '模版不存在');
+                break;
+              default:
+                this.alert_msg.error('未知错误');
+            }
+          }
+        },
+        error:function(){
+          this.alert_msg.error('连接失败');
+        }
+      });
+    },
   }
 }
 </script>
