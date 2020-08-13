@@ -336,7 +336,7 @@ export default {
 
         delete(){
             var that = this;
-            that.alert_box.confirm('提示', '确定删除 ' + that.name + ' ？', function(){
+            that.alert_box.confirm_msg('提示', '确定删除 ' + that.name + ' ？', function(){
                 let url = '/fs/delete';
                 let json_data = {id:that.did, type:'doc'};
                 $.ajax({ 
