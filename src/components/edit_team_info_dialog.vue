@@ -63,8 +63,8 @@ export default {
     methods:{
         open(tid){
             this.form.tid = tid;
-            this.dia_vis = true;
-            //this.open_team_info();
+            //this.dia_vis = true;
+            this.open_team_info();
         },
         
         getCookie (name) {

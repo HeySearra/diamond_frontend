@@ -21,11 +21,11 @@
                     <i class="el-icon-s-tools"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item v-if="context!='recycle'">打开</el-dropdown-item>
+                    <el-dropdown-item command="open" v-if="context!='recycle'">打开</el-dropdown-item>
                     <el-dropdown-item v-if="false">权限管理</el-dropdown-item>
                     <el-dropdown-item command="parent" v-if="(is_link||context=='workbench')&&pfid!=''">打开所在文件夹</el-dropdown-item>
                     <el-dropdown-item command="team" v-if="is_in_desktop">转化为团队文件夹</el-dropdown-item>
-                    <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link">创建快捷方式到桌面</el-dropdown-item>
+                    <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link&&!is_in_desk">创建快捷方式到桌面</el-dropdown-item>
                     <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                     <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link&&false">复制</el-dropdown-item>
                     <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
@@ -105,7 +105,7 @@ export default {
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.pfid = pfid;
+                        that.pfid = res.pfid;
                     }
                     else{
                         switch(res.status){
@@ -196,6 +196,9 @@ export default {
                 case 'team':
                     this.team();
                     break;
+                case 'open':
+                    this.open_fold(this.fid);
+                    break;
             }
         },
 
@@ -261,7 +264,7 @@ export default {
 
         create_link(){
             let url = '/fs/link/new';
-            let json_data = {id:this.did, type:'doc'};
+            let json_data = {id:this.fid, type:'doc'};
             var that = this;
             $.ajax({ 
                 type:'post',
@@ -425,7 +428,7 @@ export default {
                         }
                         if(res.status == 0){
                             that.alert_msg.success('已转化为团队文件夹');
-                            that.$router.push({name:team_center});
+                            that.$router.push({name:'team_center'});
                         }
                         else{
                             switch(res.status){

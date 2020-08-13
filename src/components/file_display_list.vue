@@ -29,7 +29,7 @@
                     :view_time="item.view_time"
                     :create_time="item.create_time"
                     :recent_edit_time="item.recent_edit_time"
-                    :creator="creator"
+                    :creator="item.creator"
                     :context="context"
                     :is_starred="item.is_starred"
                     :type="type"

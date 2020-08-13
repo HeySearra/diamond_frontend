@@ -24,7 +24,7 @@
                     <el-dropdown-item v-if="context!='recycle'">打开</el-dropdown-item>
                     <el-dropdown-item v-if="context==false">权限管理</el-dropdown-item>
                     <el-dropdown-item command="parent" v-if="(is_link||context=='workbench')&&pfid!=''">打开所在文件夹</el-dropdown-item>
-                    <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link">创建快捷方式到桌面</el-dropdown-item>
+                    <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link&&!is_in_desktop">创建快捷方式到桌面</el-dropdown-item>
                     <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                     <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link">复制</el-dropdown-item>
                     <el-dropdown-item command="share" v-if="(context=='file_system'||context=='team')&&!is_link">分享</el-dropdown-item>
@@ -102,7 +102,7 @@ export default {
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.pfid = pfid;
+                        that.pfid = res.pfid;
                     }
                     else{
                         switch(res.status){

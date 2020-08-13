@@ -32,7 +32,7 @@
     </el-container>
     <el-footer></el-footer>
     </el-container>
-    <new-dialog ref="new_dialog"></new-dialog>
+    <new-dialog ref="new_dialog" @refresh="refresh"></new-dialog>
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
     <admin-edit-dialog ref="admin_edit_dialog"></admin-edit-dialog>
     <manage-member-dialog ref="manage_member_dialog"></manage-member-dialog>
