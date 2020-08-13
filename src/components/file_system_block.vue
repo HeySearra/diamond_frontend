@@ -13,6 +13,7 @@
                 :list="item.content" 
                 :drage="drage" 
                 :context="context" 
+                :type="type" 
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
@@ -38,7 +39,7 @@ export default {
         },
         type:{
             type:String,
-            default: 'self', // or 'from_out'
+            default: 'self', // or 'from_out' 'recent'
         },
         context:{
             type:String,
@@ -79,7 +80,7 @@ export default {
 
     methods:{
         init(){
-            if(this.type == 'from_out'){
+            if(this.type == 'from_out' || this.type == 'recent'){
                 this.list = this.out_list;
             }
             else if(this.type == 'self'){

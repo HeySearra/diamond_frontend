@@ -20,6 +20,8 @@
                     :name="item.name" 
                     :context="context" 
                     :is_starred="item.is_starred"
+                    :type="type"
+                    :view_time="item.view_time"
                     @open_info="open_info"
                     @move_item="move_item"
                     @share_item="share_item"
@@ -40,6 +42,10 @@ export default {
         context: {
             type:String,
             default: 'file_system'
+        },
+        type: {
+            type:Stirng,
+            default: 'self',
         },
         list: {
             type: Array,

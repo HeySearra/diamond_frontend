@@ -7,7 +7,8 @@
             :drage="false"
             :out_list="list"
             @change_view="change_view"
-            @open_info="open_info">
+            @open_info="open_info"
+            ref="file_system_item">
         </component>
     </div>
 </template>
@@ -17,6 +18,8 @@ export default {
     data () {
         return {
             view_type:'list',
+            page: 0,
+            each: 15,
             list: [
                 {
                     title:'我的收藏',
@@ -64,7 +67,43 @@ export default {
             this.$emit('active_change');
             this.view_type = this.view_type_manager.get();
         },
-        
+
+        get_star_file_list(){
+            let that = this;
+            that.page++;
+            $.ajax({
+                type:'get',
+                url:"/workbench/star?page=" + that.page + "&each=" + that.each,
+                data: JSON.stringify(msg),
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){
+                    if(that.console_debug){
+                        console.log("(get)/workbench/star"+ " : " +res.status);
+                    }
+                    if(res.status == 0){
+                        for(let i; i < res.list.length; i++){
+                            that.list.content.push({
+                                type: res.list[i].type,
+                                id: res.list[i].id,
+                                is_link: false,
+                                is_starred: false,
+                                name: res.list[i].name,
+                            })
+                        }
+                        that.$refs.file_system_item.init();
+                    }
+                    else{
+                        that.alert_box.msg('获取文件列表失败', '请重试');
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
+                }
+            });
+        },
+
         getCookie (name) {
             var value = '; ' + document.cookie
             var parts = value.split('; ' + name + '=')

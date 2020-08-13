@@ -80,7 +80,7 @@ export default {
         init(){
 
         },
-
+        
         vis_change(value){
             this.focus = value;
         },
