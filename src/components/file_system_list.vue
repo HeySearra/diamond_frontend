@@ -18,8 +18,7 @@
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
-                @copy_item="copy_item"
-                ref="file_display_list"></file-display-list>
+                @copy_item="copy_item"></file-display-list>
             <div class="clear_both divide_type"></div>
         </div>
         <div class="icon_part can_not_choose" @click="change_view">

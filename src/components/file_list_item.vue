@@ -93,17 +93,14 @@ export default {
             type:String,
             default:'rest_time'
         },
-<<<<<<< HEAD
         view_time: {
             type:String,
             default: 'recent_time',
-        }
-=======
+        },
         is_in_desktop:{
             type:Boolean,
             default:false
         },
->>>>>>> 1c804dab069ac4bf0309c25a2d350dbd2f10be05
     },
     data() {
         return {
