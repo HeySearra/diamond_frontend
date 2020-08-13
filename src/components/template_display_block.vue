@@ -3,9 +3,9 @@
         <h1>{{title}}</h1>
         <el-divider></el-divider>
         <div class="template_area">
-            <template-block 
-                class="template_item" 
-                v-for="item in list" 
+            <template-block
+                class="template_item"
+                v-for="item in list"
                 :key="item.tid"
                 :name="item.name"
                 :tid="item.tid"
@@ -60,6 +60,7 @@ export default {
             this.dia_vis = true;
         },
 
+
     }
 
 }
@@ -85,6 +86,6 @@ h1{
 }
 
 @media (max-width: 1200px){
-    
+
 }
 </style>
