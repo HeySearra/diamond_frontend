@@ -120,9 +120,6 @@ export default {
                 success:function (res){ 
                     if(res.status == 0){
                         that.form.img = res.src;
-                        if(res.src[0] != '/'){
-                            that.form.img = '/' + that.form.img;
-                        }
                         //f.onSuccess();
                     }
                     else{
@@ -150,6 +147,10 @@ export default {
             if(that.form.name == ''){
                 that.alert_msg.warning('昵称不得为空');
                 return;
+            }
+            let msg = {
+                name: that.form.name,
+                img: that.form.img,
             }
             $.ajax({ 
                 type:'post', 
