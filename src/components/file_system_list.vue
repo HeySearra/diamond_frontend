@@ -3,7 +3,9 @@
         <div class="clear_both divide_type"></div>
         <div class="path" v-if="type=='self'&&path.length">
             <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item v-for="item in path" :key="item.id">{{item.name}}</el-breadcrumb-item>
+                <el-breadcrumb-item v-for="item in path" :key="item.fid">
+                    <router-link :to="'/file/'+item.fid">{{item.name}}</router-link>
+                </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="clear_both divide_type" style="height:10px"></div>
@@ -15,6 +17,7 @@
                 :drage="drage" 
                 :context="context" 
                 :type="type"
+                :is_in_desktop="is_in_desktop"
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
@@ -45,6 +48,10 @@ export default {
         context:{
             type:String,
             default: 'file_system',
+        },
+        is_in_desktop:{
+            type:Boolean,
+            default: false,
         },
         out_list:{
             type: Array,
@@ -110,6 +117,7 @@ export default {
                     }
                     if(res.status == 0){
                         that.list = [];
+                        that.path = res.path;
                         let fold = [];
                         let file = [];
                         for(let i=0; i<res.list.length; i++){

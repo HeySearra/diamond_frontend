@@ -64,7 +64,6 @@ export default {
             $.ajax({
                 type:'get',
                 url:"/workbench/recent_view",
-                data: JSON.stringify(msg),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
@@ -86,7 +85,7 @@ export default {
                         that.$refs.file_system_item.init();
                     }
                     else{
-                        that.alert_box.msg('获取文件列表失败', '请重试');
+                        that.alert_msg.error('获取文件列表失败', '请重试');
                     }
                 },
                 error:function(){

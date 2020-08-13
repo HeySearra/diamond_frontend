@@ -30,6 +30,7 @@
                     :context="context" 
                     :is_starred="item.is_starred"
                     :type="type"
+                    :is_in_desktop="is_in_desktop"
                     @open_info="open_info"
                     @move_item="move_item"
                     @share_item="share_item"
@@ -69,6 +70,10 @@ export default {
         type:{
             type:String,
             default: "self", //'recent' 'from_out'
+        },
+        is_in_desktop:{
+            type:Boolean,
+            default: false,
         },
         list: {
             type: Array,

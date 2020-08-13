@@ -67,7 +67,7 @@
                   <el-dropdown-item command="logout" @click="logout">登出</el-dropdown-item>
               </el-dropdown-menu>
               </el-dropdown>
-      </div>
+        </div>
       <div class="header_icon" @click="click_open_drawer" v-if="is_login">
         <el-badge class="item" :value="message_count" :max="99" :hidden="message_count<=0">
           <span class="icon iconfont">&#xe60b;</span>
@@ -100,7 +100,7 @@
         search: '',
         active_index: 0,
         uid:0,
-        is_login:true,
+        is_login:false,
         photo_src:'',
         online_icon_list:[],
         message_count:11,

@@ -10,6 +10,7 @@
                 ref="file_system_component"
                 :is="view_type=='block'?'file-system-block':'file-system-list'"
                 :fid="fid"
+                :is_in_desktop="is_desktop"
                 @change_view="change_view"
                 @open_info="open_info"
                 @move_item="move_item"
@@ -39,7 +40,8 @@ export default {
     return {
       view_type:'block',
       fid:'desktop',
-      sidebar_active:''
+      sidebar_active:'',
+      is_desktop:false
     }
   },
   mounted(){
@@ -51,9 +53,10 @@ export default {
         this.fid = this.$route.params.id?this.$route.params.id:'desktop';
         this.sidebar_active = this.fid=='desktop' ? 'desktop' : '';
 
-        fid=='desktop' ? this.get_desktop_id() : '';
+        this.fid=='desktop' ? this.get_desktop_id() : '';
+        var that = this;
         setTimeout(function(){
-          this.$refs.file_system_component.init();
+          that.$refs.file_system_component.init();
         }, 0);
     },
 
@@ -80,7 +83,17 @@ export default {
                   console.log(url +  '：' + res.status);
               }
               if(res.status == 0){
-                that.fid = res.fid;
+                if(that.fid == 'desktop'){
+                  that.fid = res.fid;
+                  that.is_desktop = true;
+                }
+                else if(that.fid == res.fid){
+                  that.fid = res.fid;
+                  that.is_desktop = true;
+                }
+                else{
+                  that.is_desktop = false;
+                }
               }
               else{
                   switch(res.status){
