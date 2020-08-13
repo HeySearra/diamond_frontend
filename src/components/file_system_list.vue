@@ -92,6 +92,12 @@ export default {
         init(){
             if(this.type == 'from_out' || this.type == 'recent'){
                 this.list = this.out_list;
+                setTimeout(function(){
+                    let item = this.$refs.display_component;
+                    for(let i=0; i<item.length; i++){
+                        item[i].init();
+                    }
+                }, 0);
             }
             else if(this.type == 'self'){
                 this.apply_for_info();

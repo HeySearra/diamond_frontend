@@ -126,6 +126,10 @@ export default {
           }
       });
     },
+
+    refresh(){
+      this.apply_for_info();
+    },
     
     change_view(){
         this.view_type = this.view_type=='block' ? 'list' : 'block';

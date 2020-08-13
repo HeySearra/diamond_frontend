@@ -67,6 +67,13 @@ export default {
         this.fid = this.$route.params.id?this.$route.params.id:'desktop';
 
         this.fid=='desktop' ? this.get_desktop_id() : '';
+        if(this.fid == 'desktop'){
+          var that = this;
+          setTimeout(function(){
+            that.alert_msg.error('请求团队文件夹的信息发生了错误');
+          }, 0)
+          return;
+        }
         var that = this;
         setTimeout(function(){
           that.$refs.file_system_component.init();

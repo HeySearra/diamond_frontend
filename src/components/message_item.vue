@@ -3,8 +3,8 @@
         <div style="height:10px;"></div>
         <div class="item">
             <div class="profile">
-                <span v-if="!portrait" class="icon iconfont">&#xe622;</span>
-                <el-avatar v-if="portrait" :src="img" style="vertical-align: middle;"></el-avatar>
+                <span v-if="portrait==''" class="icon iconfont">&#xe622;</span>
+                <el-avatar v-if="portrait==''" :src="portrait" style="vertical-align: middle;"></el-avatar>
             </div>
             <div class="content">
                 <h4 class="title">
@@ -34,8 +34,8 @@ export default {
         return {
             did: '', //文档id
             type: 'doc',   //join accept out doc
-            title: '我是文档标题 我是文档标题我是文档标题我是文档标题我是文档标题', //消息标题
-            comment: '321凤凰发灰黑服啊和附件和佛教咖啡机能让肌肤发基坑俊娥既然你3', //消息内容
+            title: '', //消息标题
+            comment: '', //消息内容
             id: '',
             name: 'team_name',
             loading: true,
@@ -55,6 +55,7 @@ export default {
             this.apply_for_info();
         },
         apply_for_info(){
+            this.loading = true;
             var that = this;
             $.ajax({
                 type:'get',
@@ -81,32 +82,20 @@ export default {
                         // var dt = new Date(res.dt);
                         var cur_dt = res.cur_dt;
                         var dt = res.dt;
-                        if(dt.substring(0, 4) == cur_dt.substring(0,4)){
-                            if(dt.substring(8, 10) == cur_dt.substring(8, 10)){
-                                that.time = '今天 ' + dt.substring(11, 19);
-                            }
-                            else{
-                                that.time = dt.substring(5, 16);
-                            }
-                        }
-                        else{
-                            that.time = dt.substring(0, 10);
-                        }
+                        that.time = that.datetime_format(res.cur_dt, res.dt);
                         that.loading = false;
-                        that.$emit('done');
                     }
                     else{
-                        that.loading = true;
+                        
                     }
                 },
                 error:function(){
                     that.alert_msg.error('连接失败');
-                    that.loading = true;
                 }
             });
         },
         jump_to_doc(){
-            that.$router.push({path: '/doc/' + this.id}); //待定
+            this.$router.push({path: '/doc/' + this.id}); //待定
         },
         confirm_to_join(){
             let data = {
@@ -116,10 +105,10 @@ export default {
             this.$emit('confirm_to_join', data);
         },
         jump_to_team(){
-            that.$router.push({path: '/team/' + this.id + "/file/desktop"});
+            this.$router.push({path: '/team/' + this.id + "/file/desktop"});
         },
         mark_read(){
-            let that = this;
+            var that = this;
             let msg = {mid: that.mid};
             $.ajax({
                 type:'post',
@@ -129,12 +118,14 @@ export default {
                 processData: false,
                 contentType: false,
                 success:function (res){
-                    if(that.console_debug)console.log("(post)/msg/ar"+ " : " +res.status);
+                    if(that.console_debug){
+                        console.log("(post)/msg/ar"+ " : " +res.status);
+                    }
                     if(res.status == 0){
-                        this.is_read = true;
+                        that.is_read = true;
                     }
                     else{
-                        that.alert_msg.msg('标记已读失败', '请重试');
+                        that.alert_msg.error('标记已读失败', '请重试');
                     }
                 },
                 error:function(){

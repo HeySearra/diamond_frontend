@@ -53,16 +53,16 @@ export default {
         },
 
         click_confirm(){
-            if(this.form.old_pwd == ''){
+            if(this.form.old_pwd.trim() == ''){
                 this.alert_msg.warning('请填写旧密码');
                 return;
             }
-            if(this.form.new_pwd == ''){
+            if(this.form.new_pwd.trim() == ''){
                 this.alert_msg.warning('请填写新密码');
                 return;
             }
             
-            let json_data = form
+            var json_data = this.form
             var that = this;
             $.ajax({ 
                 type:'post',
@@ -75,20 +75,19 @@ export default {
                         console.log('/user/set_pwd/：' + res.status);
                     }
                     if(res.status == 0){
-                        that.alert_box.msg('提醒', '成功修改密码', function(){
-                            that.dia_vis = false;
-                        });
+                        that.alert_msg.success('密码修改成功');
+                        that.dia_vis = false;
                     }
                     else{
                         switch(res.status){
                             case 2:
-                                that.alert_box.msg('修改密码失败', '旧密码错误');
+                                that.alert_msg.error('旧密码错误');
                                 break;
                             case 3:
                                 that.alert_box.msg('修改密码失败', '密码长度限定为 6-32 ，且至少含有数字、小写字母、大写字母、特殊字符中的两个');
                                 break;
                             default:
-                                that.alert_box.msg('修改密码失败', '发生了未知的错误');
+                                that.alert_msg.error('发生了未知的错误');
                         }
                         
                     }

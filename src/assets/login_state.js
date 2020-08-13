@@ -3,7 +3,7 @@ export const login_manager = {
         if(state){
             localStorage.setItem('state', state);
             if(uid)localStorage.setItem('uid', uid);
-            if(uname)localStorage.setItem('uname', name);
+            if(name)localStorage.setItem('name', name);
             if(por)localStorage.setItem('por', por);
         }
         else{
@@ -21,14 +21,14 @@ export const login_manager = {
     clear: function(){
         localStorage.removeItem('state');
         localStorage.removeItem('uid');
-        localStorage.removeItem('uname');
+        localStorage.removeItem('name');
         localStorage.removeItem('por');
     },
     get_uid: function(){
         return localStorage.getItem('uid');
     },
     get_name: function(){
-        return localStorage.getItem('uname');
+        return localStorage.getItem('name');
     },
     get_por: function(){
         return localStorage.getItem('por');
