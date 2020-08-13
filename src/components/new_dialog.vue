@@ -99,9 +99,11 @@ export default {
                         that.alert_box.msg('提示', '已成功在桌面创建 '+that.name + '！', function(){
                             that.$router.push({name:'file_system', params:{id:'desktop'}});
                         });
+                        that.dia_vis = false;
                     }
                     else{
                         that.$emit('refresh');
+                        that.dia_vis = false;
                     }
                 }
                 else{
@@ -131,7 +133,7 @@ export default {
     },
 
     create_new_team(){
-        let url = '/team/new/';
+        let url = '/team/new';
 
         if(this.name.trim() == ''){
             this.alert_msg.warning('请输入团队名称');
