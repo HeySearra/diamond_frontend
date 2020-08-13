@@ -3,9 +3,9 @@
     <div style="height:20px;"></div>
     <el-row class="user_info">
       <el-col :span="8" class="avatar">
-        <el-avatar></el-avatar>
+        <el-avatar :src="user_src"></el-avatar>
       </el-col>
-      <el-col :span="16" class="username">DiaDoc钻石带会员</el-col>
+      <el-col :span="16" class="username">{{user_name}}</el-col>
     </el-row>
     <el-divider v-if="context!='doc'"></el-divider>
     <el-row class="new_buttons" v-if="context!='doc'">
@@ -59,9 +59,9 @@
         </div>
         <div class="clear_both"></div>
         <el-row><el-button type="primary" plain @click="$emit('edit_team_info')">修 改 团 队 信 息</el-button></el-row>
-        <el-row><el-button type="primary" plain @click="$emit('manage_member')" v-if="is_admin">管 理 成 员</el-button></el-row>
+        <el-row><el-button type="primary" plain @click="$emit('manage_member')" v-if="is_admin||is_creator">管 理 成 员</el-button></el-row>
         <el-row><el-button type="primary" plain @click="$emit('edit_admin')" v-if="is_creator">设 置 管 理 员</el-button></el-row>
-        <el-row><el-button type="danger" @click="quit_team" v-if="is_member||is_admin||true">退 出 团 队</el-button></el-row>
+        <el-row><el-button type="danger" @click="quit_team" v-if="is_member||is_admin">退 出 团 队</el-button></el-row>
         <el-row><el-button type="danger" @click="delete_team" v-if="is_creator">解 散 团 队</el-button></el-row>
       </el-row>
       <div style="height:20px;"></div>
@@ -118,8 +118,8 @@ export default {
 
   data() {
     return {
-      team_name:'DiaDoc团队',
-      file_name:'file_namefile_namefile_namefiamefile_namefile_namefile_name',
+      team_name:'',
+      file_name:'',
       team_src:'',
       team_intro:'',
       creator_id:'',
@@ -130,13 +130,16 @@ export default {
       is_creator:false,
       is_admin:false,
       is_member:false,
-      tid:''
+      tid:'',
+      user_name:'',
+      user_src:'',
     }
   },
 
   methods: {
     init() {
-      
+      this.user_name = this.login_manager.get_name();
+      this.user_src = this.login_manager.get_por();
     },
 
     getCookie (name) {
@@ -160,7 +163,7 @@ export default {
                   console.log(url +  '：' + res.status);
               }
               if(res.status == 0){
-                  that.team_name = res.team_name;
+                  that.team_name = res.name;
                   that.team_intro = res.intro;
                   that.team_src = res.portrait;
                   that.creator_id = res.cuid;
@@ -185,7 +188,7 @@ export default {
           }
       });
 
-      let url2 = '/team/identity?tid' + tid;
+      let url2 = '/team/identity?tid=' + tid;
       $.ajax({ 
           type:'get',
           url: url2,
@@ -200,6 +203,7 @@ export default {
                   switch(res.identity){
                     case 'owner':
                       that.is_creator = true;
+                      break;
                     case 'admin':
                       that.is_admin = true;
                       break;

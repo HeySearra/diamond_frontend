@@ -58,20 +58,20 @@ export default {
             type: Array,
             default() {
                 return [
-                    {
-                        type: 'file', // or fold
-                        id: '1',
-                        is_link: false,
-                        is_starred: true,
-                        name: 'file',
-                    },
-                    {
-                        type: 'fold', // or file
-                        id: '2',
-                        is_link: true,
-                        is_starred: false,
-                        name: 'folder',
-                    }
+                    // {
+                    //     type: 'file', // or fold
+                    //     id: '1',
+                    //     is_link: false,
+                    //     is_starred: true,
+                    //     name: 'file',
+                    // },
+                    // {
+                    //     type: 'fold', // or file
+                    //     id: '2',
+                    //     is_link: true,
+                    //     is_starred: false,
+                    //     name: 'folder',
+                    // }
                 ]
             }
         },
@@ -98,8 +98,10 @@ export default {
             var that = this;
             setTimeout(function(){
                 let item = that.$refs.file_component;
-                for(let i=0; i<item.length; i++){
-                    item[i].init();
+                if(item){
+                    for(let i=0; i<item.length; i++){
+                        item[i].init();
+                    }
                 }
             }, 0);
         },

@@ -103,7 +103,7 @@ export default {
                   item.rest_time = res.list[i].is_dia ? '永久' : parseInt((new Date((new Date(res.cur_dt).getTime()+30*24*60*60*1000))-new Date(res.list[i].delete_dt))/1000/60/60/24);
                   res.list[i].type=='doc' ? file.push(item) : fold.push(item);
                 }
-
+                that.list = [];
                 fold.length ? that.list.push({title:'文件夹', content:fold}) : '';
                 file.length ? that.list.push({title:'文件', content:file}) : '';
 

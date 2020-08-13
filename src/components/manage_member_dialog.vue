@@ -10,8 +10,8 @@
                     <el-tab-pane label="团内成员" name="1">
                         <div style="height:5px"></div>
                         <div style="padding:0 25px">
-                            <div class="member_icon" v-for="item in all_list" :key="item.uid" @click="function(){remove_member(item.uid, item.name)}">
-                                <el-tooltip class="item" effect="dark" :content="item.name" placement="top">
+                            <div class="member_small_icon item" v-for="item in all_list" :key="item.uid" @click="function(){remove_member(item.uid, item.name)}">
+                                <el-tooltip effect="dark" :content="item.name" placement="top">
                                     <el-avatar class="close_icon"><span class="icon iconfont">&#xe79b;</span></el-avatar>
                                     <el-avatar class="user_port" :src="item.src"></el-avatar>
                                 </el-tooltip>
@@ -53,7 +53,7 @@ export default {
         return {
             title:'团队成员管理',
             tid:'',
-            dia_vis:true,
+            dia_vis:false,
             activeName:'1',
             search_input:'',
             creator_id:'',
@@ -125,7 +125,7 @@ export default {
         },
 
         apply_team_info(){
-            let url = '/team/info' + this.tid;
+            let url = '/team/info?tid=' + this.tid;
             var that = this;
             var result;
             $.ajax({ 
@@ -216,7 +216,7 @@ export default {
             });
         },
 
-        search_input(){
+        search_user(){
             let url = '/search_user';
             var that = this;
             $.ajax({ 
@@ -293,7 +293,7 @@ export default {
 @import url("../assets/common.css");
 @import url("../assets/dialog_style.css");
 
-.member_icon{
+.member_small_icon{
     float:left;
     margin:5px 10px;
     cursor:pointer;
