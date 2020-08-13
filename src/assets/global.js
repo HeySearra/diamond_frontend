@@ -70,3 +70,23 @@ export const view_type_manager = {
     },
     get: () => {return localStorage.getItem('view_type')&&localStorage.getItem('view_type')=='list' ? 'list' : 'block'}
 }
+
+export const datetime_format = (t, ct) => {
+    let time = new Date(t);
+    let cur = new Date(ct);
+    if(cur - time < 5*60*1000){
+        return '刚刚';
+    }
+    else if(cur - time < 60*60*1000){
+        return parseInt((cur-time)/1000/60) + '分钟前';
+    }
+    else if(cur - time < 24*60*60*1000){
+        return parseInt((cur-time)/60/60/1000) + '小时前';
+    }
+    else if(cur.getFullYear() == time.getFullYear()){
+        return (time.getMonth()+1) + '-' + time.getDate() + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
+    }
+    else{
+        return t;
+    }
+}
