@@ -74,7 +74,7 @@ export default {
     },
 
     create_new_item(type){
-        let url = '/fs/new/';
+        let url = '/fs/new';
 
         if(this.name.trim() == ''){
             this.alert_msg.warning('请输入'+(this.type=='file'?'文件':'文件夹')+'名称');
