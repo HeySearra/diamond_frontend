@@ -491,7 +491,7 @@ export default {
               default:
                 that.alert_msg.error('未知错误');
             }
-            that.router.push({path:'/workbench/recent'});
+            that.router.push({path:'/workbench/recent_view'});
           }
         },
         error: function () {
@@ -536,7 +536,7 @@ export default {
                 that.alert_msg.error('未知错误');
             }
             //跳转到首页
-            that.router.push({path:'/workbench/recent'});
+            that.router.push({path:'/workbench/recent_view'});
           }
         },
         error: function () {

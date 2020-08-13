@@ -92,7 +92,7 @@ export default {
                             }
                             if(res.status == 0){
                                 let from = that.$route.query.from;
-                                that.$router.push({path:from?from:'/workbench/recent'});
+                                that.$router.push({path:from?from:'/workbench/recent_view'});
                                 that.login_manager.set(true);
                             }
                             else{

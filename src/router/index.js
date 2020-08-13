@@ -77,10 +77,10 @@ const router =  new Router({
       children: [
         {
             path: '/workbench',
-            redirect:'/workbench/recent'
+            redirect:'/workbench/recent_view'
         },
         {
-          path:'/workbench/recent',
+          path:'/workbench/recent_view',
           name: 'workbench_recent',
           component: workbench_recent,
           meta:{
@@ -88,7 +88,7 @@ const router =  new Router({
           }
         },
         {
-          path:'/workbench/star',
+          path:'/workbench/star_view',
           name: 'workbench_star',
           component: workbench_star,
           meta:{
@@ -96,7 +96,7 @@ const router =  new Router({
           }
         },
         {
-          path:'/workbench/create',
+          path:'/workbench/create_view',
           name: 'workbench_create',
           component: workbench_create,
           meta:{
@@ -104,7 +104,7 @@ const router =  new Router({
           }
         },
         {
-          path:'/workbench/share',
+          path:'/workbench/share_view',
           name: 'workbench_share',
           component: workbench_share,
           meta:{
@@ -113,7 +113,7 @@ const router =  new Router({
         },
         {
           path: '/workbench/*',
-          redirect:'/workbench/recent'
+          redirect:'/workbench/recent_view'
         },
       ]
     },

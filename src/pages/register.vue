@@ -14,7 +14,7 @@ export default {
   },
   mounted(){
     if(this.login_manager.get()){
-      let url = this.$route.query&&this.$route.query.from ? this.$route.query.from : '/workbench/recent';
+      let url = this.$route.query&&this.$route.query.from ? this.$route.query.from : '/workbench/recent_view';
       this.$router.push({path:url});
     }
     document.documentElement.scrollTop = 0;
