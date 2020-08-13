@@ -241,7 +241,7 @@ export default {
         },
 
         change_switch(value){
-            let url = '/doc/lock/';
+            let url = '/doc/lock';
             let json_data = {did:this.did, is_locked:!value};
             var that = this;
             $.ajax({ 

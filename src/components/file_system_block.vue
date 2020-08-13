@@ -116,7 +116,8 @@ export default {
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async:false, 
+                processData: false,
+                contentType: false,
                 success:function (res){ 
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
