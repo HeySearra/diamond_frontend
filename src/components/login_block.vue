@@ -77,7 +77,7 @@ export default {
                     var msg = this.form;
                     var msg = {
                         acc: this.form.account,
-                        pwd: this.form.pwd,
+                        pwd: this.form.password,
                     }
                     $.ajax({
                         type:'post',
