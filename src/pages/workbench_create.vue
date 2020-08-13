@@ -17,40 +17,12 @@ export default {
     data () {
         return {
             view_type:'list',
+            page: 0,
+            each: 15,
             list: [
                 {
                     title:'我创建的',
                     content:[
-                        {
-                            type: 'file',
-                            id: 'id',
-                            is_link:false,
-                            is_starred:true,
-                            name:'file',
-                            creator:'',
-                            recent_time:'',
-                            create_time:''
-                        },
-                        {
-                            type: 'file',
-                            id: 'id',
-                            is_link:false,
-                            is_starred:false,
-                            name:'file',
-                            creator:'',
-                            recent_time:'',
-                            create_time:''
-                        },
-                        {
-                            type: 'fold',
-                            id: 'id',
-                            is_link:false,
-                            is_starred:true,
-                            name:'file',
-                            creator:'',
-                            recent_time:'',
-                            create_time:''
-                        }
                     ]
                 }
             ]
@@ -63,6 +35,7 @@ export default {
         init(){
             this.$emit('active_change');
             this.view_type = this.view_type_manager.get();
+            this.get_my_create_list();
         },
         
         getCookie (name) {
@@ -82,9 +55,10 @@ export default {
 
         get_my_create_list(){
             let that = this;
+            this.page++;
             $.ajax({
                 type:'get',
-                url:"/workbench/create",
+                url:"/workbench/create?page=" + that.page + "&each=" + that.each,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false,
                 success:function (res){
@@ -95,12 +69,12 @@ export default {
                         for(let i; i < res.list.length; i++){
                             that.list.content.push({
                                 type: res.list[i].type,
-                                pfid: res.list[i].pfid,
                                 id: res.list[i].id,
                                 is_link: false,
                                 is_starred: res.list[i].is_starred,
                                 name: res.list[i].name,
-                                view_time: res.list[i].dt,
+                                create_time: res.list[i].create_dt,
+                                creator: res.list[i].cname,
                             })
                         }
                         that.$refs.file_system_item.init();
