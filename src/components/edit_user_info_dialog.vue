@@ -90,8 +90,8 @@ export default {
         },
 
         beforeAvatarUpload(file) {
-            const is_pic = file.type=='image/jpeg' || file.type=='image/png';
-            const isLt2M = file.size / 1024 / 1024 < 10;
+            var is_pic = file.type=='image/jpeg' || file.type=='image/png';
+            var isLt2M = file.size / 1024 / 1024 < 10;
 
             if (!is_pic) {
                 this.alert_msg.error('请上传图片');
@@ -103,7 +103,7 @@ export default {
         },
 
         upload_por(f){
-            const isJPG = f.file.type === 'image/jpeg';
+            var isJPG = f.file.type === 'image/jpeg';
             if (!isJPG) {
                 this.alert_msg.error('上传头像图片只能是 JPG 格式');
                 return;

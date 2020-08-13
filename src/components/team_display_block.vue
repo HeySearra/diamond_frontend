@@ -9,6 +9,7 @@
                 <team-block
                     :tid="item.tid"
                     :is_creator="is_creator"
+                    :tname="item.name"
                     :name="item.name"
                     :refresh="apply_for_info"
                     @open_info="open_info">

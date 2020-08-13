@@ -94,7 +94,7 @@
     name:'navbar',
     watch:{
       $route(to,from){
-        //this.init();
+        this.init();
       }
     },
     mounted(){
@@ -125,12 +125,13 @@
           this.photo_src = this.login_manager.get_por();
           this.name = this.login_manager.get_name();
         }
-        else{
-          let route_name = this.$router.history.current.name;
-          if(route_name!='login' && route_name!='register' && route_name!='forget' && route_name!='forget_set'){
-            this.$router.push({name:'login'});
-          }
-        }
+        // else{
+        //   let route_name = this.$router.history.current.name;
+        //   if(route_name!='login' && route_name!='register' && route_name!='forget' && route_name!='forget_set'){
+        //     this.$router.push({name:'login'});
+        //   }
+        // }
+        this.apply_for_message();
         this.get_info();
       },
 
@@ -173,7 +174,7 @@
               }
               if(res.status == 0){
                 that.uid = res.uid;
-                if(!that.login_manager.get_por() || that.login_manager.get_por()!=res.portrait)
+                // if(!that.login_manager.get_por() || that.login_manager.get_por()!=res.portrait)
                   that.photo_src = res.portrait;
                 that.is_login = true;
                 that.login_manager.set(true, res.uid, res.name, res.portrait);
