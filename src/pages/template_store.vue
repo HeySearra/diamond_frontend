@@ -17,12 +17,14 @@
                         src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
                         name: '退学专用模板'
                     },]"></template-display-block-->
-                <template-display-block
-                  context="official"
-                  v-for="item in official_list"
-                  :key="item.tid"
-                  :title="item.title"
-                  :list="item.temps"></template-display-block>
+                <div v-for="item in official_list" :key="item.tid">
+                  <template-display-block
+                    context="official"
+                    :title="item.title"
+                    :list="item.temps">
+                  </template-display-block>
+                  <div class="clear_both divide_type"></div>
+                </div>
               </div>
             </div>
             <div style="height:50px"></div>
@@ -66,7 +68,7 @@ export default {
   },
   methods: {
     init() {
-
+      this.getAllTemplates();
     },
 
     error() {
@@ -101,17 +103,17 @@ export default {
             console.log("(get)/temp/all" + " : " + res.status);
           }
           if (res.status === 0) {
-            this.my_list = res.my_list;
-            this.official_list = res.official_list;
+            that.my_list = res.my_list;
+            that.official_list = res.official_list;
           } else {
             switch (res.status) {
               default:
-                this.alert_msg.error('未知错误');
+                that.alert_msg.error('未知错误');
             }
           }
         },
         error:function(){
-          this.alert_msg.error('连接失败');
+          that.alert_msg.error('连接失败');
         }
       });
     },
@@ -137,22 +139,22 @@ export default {
             that.router.push({path:'/doc/' + res.did});
           } else {
             switch (res.status) {
-              case 1:
-                this.alert_box.msg('创建失败', '键错误');
-                break;
+              // case 1:
+              //    that.alert_msg.error('创建失败', '键错误');
+              //   break;
               case 2:
-                this.alert_box.msg('创建失败', '您的权限不足或还没有登录');
+                 that.alert_msg.error('权限不足');
                 break;
               case 3:
-                this.alert_box.msg('创建失败', '模版不存在');
+                 that.alert_msg.error('模版不存在');
                 break;
               default:
-                this.alert_msg.error('未知错误');
+                that.alert_msg.error('未知错误');
             }
           }
         },
         error:function(){
-          this.alert_msg.error('连接失败');
+          that.alert_msg.error('连接失败');
         }
       });
     },
