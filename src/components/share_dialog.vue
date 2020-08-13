@@ -207,6 +207,12 @@ export default {
             this.dia_vis = true;
         },
 
+        getCookie (name) {
+            var value = '; ' + document.cookie
+            var parts = value.split('; ' + name + '=')
+            if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
         change_share_type(value){
             switch(value){
                 case '文档阅读分享':
