@@ -1,6 +1,6 @@
 <template>
     <div class="can_not_choose team_block">
-        <div class="click_area" :class="focus?'click_area_focus':''"></div>
+        <div class="click_area" :class="focus?'click_area_focus':''" @click="open"></div>
         <div class="big_icon">
             <div>
                 <span class="icon iconfont">&#xe6cb;</span>
@@ -15,7 +15,7 @@
                     <i class="el-icon-s-tools"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>进入</el-dropdown-item>
+                    <el-dropdown-item command="in">进入</el-dropdown-item>
                     <el-dropdown-item command="team_info">团队信息</el-dropdown-item>
                     <el-dropdown-item v-if="!is_creator" class="red_text">退出团队</el-dropdown-item>
                     <el-dropdown-item v-if="is_creator" class="red_text">解散团队</el-dropdown-item>
@@ -35,7 +35,7 @@ export default {
         },
         tname:{
             type:String,
-            default: 'new team aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+            default: 'new team'
         },
         is_creator:{
             type:Boolean,
@@ -57,14 +57,107 @@ export default {
 
         },
 
+        getCookie (name) {
+            var value = '; ' + document.cookie
+            var parts = value.split('; ' + name + '=')
+            if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
+
         vis_change(value){
             this.focus = value;
         },
 
         click_dropdown_item(command){
-            if(command == 'team_info'){
-                this.$emit('open_info', this.tname, '');
+            switch(command){
+                case 'team_info':
+                    this.open_team_info();
+                    break;
+                case 'in':
+                    this.open();
+                    break;
             }
+        },
+
+        open_team_info(){
+            let url = '/team/info' + this.tid;
+            var that = this;
+            $.ajax({ 
+                type:'get',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        var content = [];
+                        content.push({
+                            key:'团队名',
+                            value:res.name
+                        });
+                        content.push({
+                            key:'团队介绍',
+                            value:res.intro
+                        });
+                        content.push({
+                            key:'创建者',
+                            value:res.cname
+                        });
+                        content.push({
+                            key:'创建时间',
+                            value:res.create_dt
+                        });
+                        that.$emit('open_info', that.tname, conetent);
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+        },
+
+        open(){
+            let url = '/fs/team/root?tid=' + this.tid;
+            var that = this;
+            $.ajax({ 
+                type:'get',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        this.$router.push({name:'team_file_system', params:{tid:that.tid,fid:res.fid}});
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
         }
     }
 

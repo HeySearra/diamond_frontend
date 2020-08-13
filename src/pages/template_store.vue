@@ -53,7 +53,11 @@ export default {
             tid: '1',
             src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
             name: '退学专用模板'
-          },]
+          },{
+            tid: '2',
+            src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+            name: '上学专用模板'
+          }]
         },]
     }
   },
@@ -75,6 +79,12 @@ export default {
 
     create_new_fold() {
       this.$refs.new_dialog.open('fold', this.fid);
+    },
+
+    getCookie (name) {
+      var value = '; ' + document.cookie
+      var parts = value.split('; ' + name + '=')
+      if (parts.length === 2) return parts.pop().split(';').shift()
     },
 
     getAllTemplates() {
@@ -104,7 +114,48 @@ export default {
           this.alert_msg.error('连接失败');
         }
       });
-    }
+    },
+
+    createDocFromTemplate() {
+      var that = this;
+      let msg = {
+        'tid': this.tid
+      };
+      $.ajax({
+        type:'post',
+        url:'/temp/new_doc',
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        data: JSON.stringify(msg),
+        processData: false,
+        contentType: false,
+        async: false,
+        success:function (res){
+          if (that.console_debug) {
+            console.log("(post)/temp/new_doc" + " : " + res.status);
+          }
+          if (res.status === 0) {
+            that.router.push({path:'/doc/' + res.did});
+          } else {
+            switch (res.status) {
+              case 1:
+                this.alert_box.msg('创建失败', '键错误');
+                break;
+              case 2:
+                this.alert_box.msg('创建失败', '您的权限不足或还没有登录');
+                break;
+              case 3:
+                this.alert_box.msg('创建失败', '模版不存在');
+                break;
+              default:
+                this.alert_msg.error('未知错误');
+            }
+          }
+        },
+        error:function(){
+          this.alert_msg.error('连接失败');
+        }
+      });
+    },
   }
 }
 </script>

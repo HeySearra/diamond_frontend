@@ -1,7 +1,7 @@
 <template>
     <div class="can_not_choose template_block">
         <div class="click_area" :class="focus?'click_area_focus':''"></div>
-        
+
         <el-image
             class="preview_img"
             :src="src"
@@ -10,7 +10,7 @@
         <div class="name">{{name}}</div>
         <el-button class="use_button" type="primary" plain>使用</el-button>
         <div class="more_menu" :class="focus?'more_menu_focus':''" v-if="context=='my'">
-            <el-dropdown trigger="click" 
+            <el-dropdown trigger="click"
                 @visible-change="vis_change"
                 @command="click_dropdown_item">
                 <span class="el-dropdown-link">
@@ -18,6 +18,7 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item class="red_text" v-if="context=='my'">删除</el-dropdown-item>
+                    <!--是否需要对删除的二次确认-->
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -66,8 +67,55 @@ export default {
 
         click_dropdown_item(command){
             switch(command){
-                
+
             }
+        },
+
+        getCookie (name) {
+          var value = '; ' + document.cookie
+          var parts = value.split('; ' + name + '=')
+          if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+      
+        deleteMyTemplate() {
+          var that = this;
+          let msg = {
+            'tid': this.tid
+          };
+          $.ajax({
+            type:'post',
+            url:'/temp/delete',
+            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+            data: JSON.stringify(msg),
+            processData: false,
+            contentType: false,
+            async: false,
+            success:function (res){
+              if (that.console_debug) {
+                console.log("(post)/temp/delete" + " : " + res.status);
+              }
+              if (res.status === 0) {
+                this.alert_box.msg('删除成功', '您的模版已删除');
+              } else {
+                switch (res.status) {
+                  case 1:
+                    this.alert_box.msg('删除失败', '键错误');
+                    break;
+                  case 2:
+                    this.alert_box.msg('删除失败', '您的权限不足或还没有登录');
+                    break;
+                  case 3:
+                    this.alert_box.msg('删除失败', '模版不存在');
+                    break;
+                  default:
+                    this.alert_msg.error('未知错误');
+                }
+              }
+            },
+            error:function(){
+              this.alert_msg.error('连接失败');
+            }
+          });
         }
     }
 
