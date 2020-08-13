@@ -25,8 +25,10 @@
 <script>
 import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn';
+import {alert_box, alert_msg, console_debug} from "../assets/global";
 
 const pageData = {
+  did: '',
   commentsOnly: false,
   readOnly: false,
   // Users data.
@@ -74,9 +76,54 @@ class CommentsAdapter {
 
     // Set the adapter on the `CommentsRepository#adapter` property.
     commentsRepositoryPlugin.adapter = {
+
+      getCookie (name) {
+        var value = '; ' + document.cookie
+        var parts = value.split('; ' + name + '=')
+        if (parts.length === 2) return parts.pop().split(';').shift()
+      },
+
       addComment(data) {
         console.log('Comment added', data);
-
+        /*let msg = {
+          'did': pageData.did,
+          'uid': pageData.userId,
+          'threadId': data.threadId,
+          'commentId': data.commentId,
+          'content': data.content
+        };
+        $.ajax({
+          type: 'post',
+          url: '/doc/comment/add',
+          data: JSON.stringify(msg),
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false,
+          async: false,
+          success: function (res) {
+            if (console_debug) {
+              console.log("(get)/doc/comment/add" + " : " + res.status);
+            }
+            if (res.status !== 0) {
+              switch (res.status) {
+                case 1:
+                  alert_box.msg('上传评论失败', '键值错误');
+                  break;
+                case 2:
+                  alert_box.msg('上传评论失败', '您的权限不足或还没有登录');
+                  break;
+                case 3:
+                  alert_box.msg('上传评论失败', '文档不存在');
+                  break;
+                default:
+                  alert_msg.error('未知错误');
+              }
+            }
+          },
+          error: function () {
+            alert_msg.error('连接失败');
+          }
+        });*/
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         // When the promise resolves with the comment data object, it
@@ -88,7 +135,45 @@ class CommentsAdapter {
 
       updateComment(data) {
         console.log('Comment updated', data);
-
+        /*let msg = {
+          'did': pageData.did,
+          'uid': pageData.userId,
+          'threadId': data.threadId,
+          'commentId': data.commentId,
+          'content': data.content
+        };
+        $.ajax({
+          type: 'post',
+          url: '/doc/comment/update',
+          data: JSON.stringify(msg),
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false,
+          async: false,
+          success: function (res) {
+            if (console_debug) {
+              console.log("(get)/doc/comment/update" + " : " + res.status);
+            }
+            if (res.status !== 0) {
+              switch (res.status) {
+                case 1:
+                  alert_box.msg('上传评论失败', '键值错误');
+                  break;
+                case 2:
+                  alert_box.msg('上传评论失败', '您的权限不足或还没有登录');
+                  break;
+                case 3:
+                  alert_box.msg('上传评论失败', '文档不存在');
+                  break;
+                default:
+                  alert_msg.error('未知错误');
+              }
+            }
+          },
+          error: function () {
+            alert_msg.error('连接失败');
+          }
+        });*/
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         return Promise.resolve();
@@ -96,7 +181,44 @@ class CommentsAdapter {
 
       removeComment(data) {
         console.log('Comment removed', data);
-
+        /*let msg = {
+          'did': pageData.did,
+          'uid': pageData.userId,
+          'threadId': data.threadId,
+          'commentId': data.commentId,
+        };
+        $.ajax({
+          type: 'post',
+          url: '/doc/comment/remove',
+          data: JSON.stringify(msg),
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false,
+          async: false,
+          success: function (res) {
+            if (console_debug) {
+              console.log("(get)/doc/comment/remove" + " : " + res.status);
+            }
+            if (res.status !== 0) {
+              switch (res.status) {
+                case 1:
+                  alert_box.msg('上传评论失败', '键值错误');
+                  break;
+                case 2:
+                  alert_box.msg('上传评论失败', '您的权限不足或还没有登录');
+                  break;
+                case 3:
+                  alert_box.msg('上传评论失败', '文档不存在');
+                  break;
+                default:
+                  alert_msg.error('未知错误');
+              }
+            }
+          },
+          error: function () {
+            alert_msg.error('连接失败');
+          }
+        });*/
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         return Promise.resolve();
@@ -130,10 +252,8 @@ class CommentsAdapter {
       },
 
       getCommentsOfThread(threadId) {
-        var that = this;
-        const did = this.$route.params.did;
         let msg = {
-          'did': did,
+          'did': pageData.did,
           'threadId': threadId
         };
         $.ajax({
@@ -145,7 +265,7 @@ class CommentsAdapter {
           contentType: false,
           async: false,
           success: function (res) {
-            if (that.console_debug) {
+            if (console_debug) {
               console.log("(get)/doc/comment/get_comments_of_thread" + " : " + res.status);
             }
             if (res.status === 0) {
@@ -153,21 +273,21 @@ class CommentsAdapter {
             } else {
               switch (res.status) {
                 case 1:
-                  this.alert_box.msg('加载评论失败', '键值错误');
+                  alert_box.msg('加载评论失败', '键值错误');
                   break;
                 case 2:
-                  this.alert_box.msg('加载评论失败', '您的权限不足或还没有登录');
+                  alert_box.msg('加载评论失败', '您的权限不足或还没有登录');
                   break;
                 case 3:
-                  this.alert_box.msg('加载评论失败', '文档不存在');
+                  alert_box.msg('加载评论失败', '文档不存在');
                   break;
                 default:
-                  this.alert_msg.error('未知错误');
+                  alert_msg.error('未知错误');
               }
             }
           },
           error: function () {
-            this.alert_msg.error('连接失败');
+            alert_msg.error('连接失败');
           }
         });
       }
@@ -177,6 +297,7 @@ class CommentsAdapter {
 
 export default {
   mounted() {
+    pageData.did = this.$route.params.did;
     pageData.users = [
       {
         id: 'user-1',
@@ -190,6 +311,7 @@ export default {
         avatar: 'https://randomuser.me/api/portraits/thumb/women/65.jpg'
       }
     ];
+
     //this.getDocAuth();
     //this.getInitialDocContent();
     this.initCKEditor();
