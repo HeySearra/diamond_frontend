@@ -576,7 +576,7 @@ export default {
               default:
                 this.alert_msg.error('未知错误');
             }
-            that.router.push({path:'/workbench/recent'});
+            //that.router.push({path:'/workbench/recent'});
           }
         },
         error: function () {
@@ -585,6 +585,57 @@ export default {
       })
     }
   },
+
+  //将文档内容存储为模版
+  saveAsTemplate() {
+    var that = this;
+    const did = this.$route.params.did;
+    let msg = {
+      'name': '',
+      'content': content,
+    };
+    $.ajax({
+      type: 'post',
+      url: '/temp/new',
+      data: JSON.stringify(msg),
+      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+      processData: false,
+      contentType: false,
+      async: false,
+      success: function (res) {
+        if (that.console_debug) {
+          console.log("(post)/temp/new" + " : " + res.status);
+        }
+        if (res.status === 0) {
+          return res.tid;
+        } else {
+          switch (res.status) {
+            case 1:
+              this.alert_box.msg('保存模板失败', '键值错误');
+              break;
+            case 2:
+              this.alert_box.msg('保存模板失败', '您的权限不足或还没有登录');
+              break;
+            case 3:
+              this.alert_box.msg('保存模板失败', '您的模板名称不合法');
+              break;
+            /*case 4:
+              this.alert_box.msg('保存模板失败', '您的内容不合法');
+              break;
+            case 5:
+              this.alert_box.msg('保存模板失败', '同目录下存在同名文件');
+              break;*/
+            default:
+              this.alert_msg.error('未知错误');
+          }
+        }
+      },
+      error: function () {
+        this.alert_msg.error('连接失败');
+      }
+    })
+  },
+
   getAllCommentedUsers() {
     var that = this;
     const did = this.$route.params.did;
@@ -744,7 +795,50 @@ export default {
         this.alert_msg.error('连接失败');
       }
     });
-  }
+  },
+
+  //多人实时同步编辑不好实现
+  //此函数可以用来获取当前正在浏览这篇文章的用户
+  getCurrentEditingUser(){
+    var that = this;
+    const did = this.$route.params.did;
+    let msg = {
+      'id': did,
+    };
+    $.ajax({
+      type:'get',
+      url:'/doc/online',
+      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+      data: JSON.stringify(msg),
+      processData: false,
+      contentType: false,
+      success:function (res){
+        if (that.console_debug) {
+          console.log("(get)/doc/online" + " : " + res.status);
+        }
+        if (res.status === 0) {
+          return res.list;
+        } else {
+          switch (res.status) {
+            case 1:
+              this.alert_box.msg('获取正在编辑用户失败', '键值错误');
+              break;
+            case 2:
+              this.alert_box.msg('获取正在编辑用户失败', '您的权限不足或还没有登录');
+              break;
+            case 3:
+              this.alert_box.msg('获取正在编辑用户失败', '文档不存在');
+              break;
+            default:
+              this.alert_msg.error('未知错误');
+          }
+        }
+      },
+      error:function(){
+        this.alert_msg.error('连接失败');
+      }
+    });
+  },
 }
 </script>
 
