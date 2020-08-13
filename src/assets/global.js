@@ -1,5 +1,5 @@
 import { Message, MessageBox } from 'element-ui'
-
+export const console_debug = true;
 export const alert_msg = {
     success:function(msg){
         Message({
@@ -7,21 +7,21 @@ export const alert_msg = {
             message: msg,
             type: 'success'
         });
-    }, 
+    },
     error:function(msg){
         Message({
             showClose: true,
             message: msg,
             type: 'error'
         });
-    }, 
+    },
     warning:function(msg){
         Message({
             showClose: true,
             message: msg,
             type: 'warning'
         });
-    }, 
+    },
     normal:function(msg){
         Message({
             showClose: true,

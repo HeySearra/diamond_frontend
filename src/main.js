@@ -95,11 +95,13 @@ import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
 import { view_type_manager } from './assets/global.js'
 import { login_manager } from './assets/login_state.js'
+import { console_debug } from './assets/global.js';
 
 Vue.prototype.alert_msg = alert_msg;
 Vue.prototype.alert_box = alert_box;
 Vue.prototype.login_manager = login_manager;
 Vue.prototype.view_type_manager = view_type_manager;
+Vue.prototype.console_debug = console_debug;
 
 Vue.config.productionTip = false;
 Vue.prototype.$echarts = echarts;

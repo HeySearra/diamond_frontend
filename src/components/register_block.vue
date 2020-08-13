@@ -66,7 +66,8 @@ export default {
     },
 
     mounted(){
-        this.init();
+
+        //this.init();
     },
 
     methods:{
@@ -95,36 +96,50 @@ export default {
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
         submit:function(formname){
+            var that = this;
             this.$refs[formname].validate((valid) => {
                 if(valid){
-                    var that = this;
-                    var msg = this.form;
-                    $.ajax({ 
-                        type:'post', 
-                        url:"/api/register/submit",
+                    let msg = {
+                        acc: this.form.account,
+                        ver_code: this.form.ver_code,
+                        pwd: this.form.password,
+                        name: this.form.name,
+                    };
+                    $.ajax({
+                        type:'post',
+                        url:"/user/register/submit",
                         data: JSON.stringify(msg),
-                        headers: {'X-CSRFToken': this.getCookie('csrftoken')}, 
+                        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                         processData: false,
                         contentType: false,
-                        success:function (res){ 
+                        success:function (res){
+                            if(that.console_debug){
+                                console.log("(post)/register/submit"+ " : " +res.status);
+                            }
                             if(res.status == 0){
                                 function _ok(that){
                                     var from = that.$route.query.from;
                                     that.$router.push({path:from?from:'/index'});
                                 }
                                 that.alert_box.msg('提示', '注册成功', _ok(that));
-                                that.login_manager.set(true);
+                                that.login_manager.set(true, that.form.account, that.form.name, '');
                             }
                             else{
                                 switch(res.status){
                                     case 4:
-                                        that.alert_box.msg('注册失败', '该邮箱已被注册');
+                                        that.alert_box.msg('注册失败', '验证码错误');
                                         break;
                                     case 2:
-                                        that.alert_box.msg('注册失败', '密码至少要含有数字、小写字母、大写字母、特殊符号其中两个');
+                                        that.alert_box.msg('注册失败', '邮箱不合法');
                                         break;
                                     case 3:
-                                        that.alert_box.msg('注册失败', '昵称不合法');
+                                        that.alert_box.msg('注册失败', '密码长度应为6-32个字符，必须包含数字、小写字母、大写字母、特殊字符中至少两种');
+                                        break;
+                                    case 5:
+                                        that.alert_box.msg('注册失败', '昵称不合法，昵称不能超过32个字符');
+                                        break;
+                                    case 6:
+                                        that.alert_box.msg('注册失败', '该账户已存在');
                                         break;
                                     default:
                                         that.alert_box.msg('注册失败', '请检查你所填写的信息');
@@ -142,7 +157,7 @@ export default {
                     return false;
                 }
             })
-            
+
         },
         check_account(rule, value, callback){
             const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
@@ -152,25 +167,46 @@ export default {
             setTimeout(() => {
             if (mailReg.test(value)) {
                 callback();
-            } 
+            }
             else{
                 callback(new Error('请输入正确的邮箱'));
             }
             }, 30)
         },
         get_ver_code(){
-            this.ver_code_disabled = true;
-            this.rest_time = 60;
             var that = this;
-            this.rest_timer = setInterval(function(){
-                that.rest_time--;
-                if(that.rest_time == 0){
-                    that.ver_code_disabled = false;
-                    that.rest_timer ? clearInterval(that.rest_timer) : '';
-                    localStorage.removeItem('res_time');
+            let msg = {acc :that.form.account,}
+            $.ajax({
+                type:'get',
+                url:"/user/register/submit?acc=" + msg.acc,
+                data: JSON.stringify(msg),
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){
+                    if(that.console_debug)console.log("(post)/register/submit"+ " : " +res.status);
+                    if(res.status == 0){
+                        that.alert_box.msg('提示', '验证码发送成功');
+                        that.ver_code_disabled = true;
+                        that.rest_time = 60;
+                        that.rest_timer = setInterval(function(){
+                            that.rest_time--;
+                            if(that.rest_time == 0){
+                                that.ver_code_disabled = false;
+                                that.rest_timer ? clearInterval(that.rest_timer) : '';
+                                localStorage.removeItem('res_time');
+                            }
+                        }, 1000);
+                        localStorage.setItem('res_time', new Date());
+                    }
+                    else{
+                        that.alert_box.msg('验证码发送失败，请重试');
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
                 }
-            }, 1000);
-            localStorage.setItem('res_time', new Date());
+            });
         }
     },
 }
