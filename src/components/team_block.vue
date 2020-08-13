@@ -231,7 +231,7 @@ export default {
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.$router.push({name:'team_file_system', params:{tid:that.tid,fid:res.fid}});
+                        that.$router.push({path: "/team/" + that.tid + "/file/"+ that.id});
                     }
                     else{
                         switch(res.status){
