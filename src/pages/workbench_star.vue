@@ -1,6 +1,6 @@
 <template>
     <div class="workbench_star">
-        <component 
+        <component
             :is="view_type=='block'?'file-system-block':'file-system-list'"
             type="from_out"
             context="workbench"
@@ -66,6 +66,7 @@ export default {
         init(){
             this.$emit('active_change');
             this.view_type = this.view_type_manager.get();
+            this.get_star_file_list();
         },
 
         get_star_file_list(){
@@ -74,7 +75,6 @@ export default {
             $.ajax({
                 type:'get',
                 url:"/workbench/star?page=" + that.page + "&each=" + that.each,
-                data: JSON.stringify(msg),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
@@ -90,6 +90,8 @@ export default {
                                 is_link: false,
                                 is_starred: false,
                                 name: res.list[i].name,
+                                create_time: res.list[i].create_dt,
+                                creator: res.list[i].cname,
                             })
                         }
                         that.$refs.file_system_item.init();
@@ -109,7 +111,7 @@ export default {
             var parts = value.split('; ' + name + '=')
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
-        
+
         change_view(){
             this.view_type = this.view_type=='block' ? 'list' : 'block';
             this.view_type_manager.set(this.view_type);

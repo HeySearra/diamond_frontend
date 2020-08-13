@@ -14,7 +14,7 @@
         </div>
         <div class="name">{{name}}</div>
         <div class="info_area">
-            <div v-if="type=='recycle'">{{delete_timer}}</div>
+            <div v-if="type=='recycle'">{{delete_time}}</div>
             <div v-if="type=='recycle'">{{rest_time}}天</div>
             <div v-if="type=='recent'">{{view_time}}</div>
             <div v-if="type!='recycle'&&type!='recent'">{{creator}}</div>
@@ -22,7 +22,7 @@
             <div v-if="type!='recycle'&&type!='recent'" class="min_hide">{{create_time}}</div>
         </div>
         <div class="more_menu" :class="focus?'more_menu_focus':''">
-            <el-dropdown trigger="click" 
+            <el-dropdown trigger="click"
                 @visible-change="vis_change"
                 @command="click_dropdown_item">
                 <span class="el-dropdown-link">
@@ -127,13 +127,13 @@ export default {
         apply_for_parent(){
             let url = '/fs/father?id=' + this.did + '&type=doc';
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'get',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -200,13 +200,13 @@ export default {
         open_info(){
             let url = '/fs/doc/info?did=' + this.did;
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'get',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -264,14 +264,14 @@ export default {
             let url = '/fs/link/new';
             let json_data = {id:this.did, type:'doc'};
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(json_data),
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -303,14 +303,14 @@ export default {
             let url = '/fs/delete_link';
             let json_data = {id:this.did, type:'doc'};
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(json_data),
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -338,14 +338,14 @@ export default {
             let url = '/fs/star';
             let json_data = {id:this.did, type:'doc', is_starred:!this.is_starred};
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(json_data),
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -375,14 +375,14 @@ export default {
             that.alert_box.confirm('提示', '确定删除 ' + that.name + ' ？', function(){
                 let url = '/fs/delete';
                 let json_data = {id:that.did, type:'doc'};
-                $.ajax({ 
+                $.ajax({
                     type:'post',
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify(json_data),
                     processData: false,
                     contentType: false,
-                    success:function (res){ 
+                    success:function (res){
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
