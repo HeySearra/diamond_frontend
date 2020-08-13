@@ -39,7 +39,7 @@ export default {
         },
 
         get_recent_file_list(){
-            let that = this;
+            var that = this;
             $.ajax({
                 type:'get',
                 url:"/workbench/recent",

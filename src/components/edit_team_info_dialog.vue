@@ -131,6 +131,7 @@ export default {
                     }
                     if(res.status == 0){
                         that.alert_msg.success('信息修改成功');
+                        that.$emit('refresh');
                         that.dia_vis = false;
                     }
                     else{

@@ -37,7 +37,7 @@
     <admin-edit-dialog ref="admin_edit_dialog"></admin-edit-dialog>
     <manage-member-dialog ref="manage_member_dialog"></manage-member-dialog>
     <choose-path-dialog ref="choose_path_dialog"></choose-path-dialog>
-    <edit-team-info-dialog ref="edit_team_info_dialog"></edit-team-info-dialog>
+    <edit-team-info-dialog ref="edit_team_info_dialog" @refresh="refresh_team_info"></edit-team-info-dialog>
     <share-dialog ref="share_dialog" context="team"></share-dialog>
   </div>
 </template>
@@ -89,6 +89,10 @@ export default {
 
     refresh(){
       this.$refs.file_system_component.init();
+    },
+
+    refresh_team_info(){
+      this.$refs.sidebar.init_team_info(this.tid);
     },
 
     get_desktop_id(){

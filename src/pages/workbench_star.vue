@@ -71,7 +71,7 @@ export default {
         },
 
         get_star_file_list(){
-            let that = this;
+            var that = this;
             that.page++;
             $.ajax({
                 type:'get',

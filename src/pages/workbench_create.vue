@@ -54,7 +54,7 @@ export default {
         },
 
         get_my_create_list(){
-            let that = this;
+            var that = this;
             this.page++;
             $.ajax({
                 type:'get',
