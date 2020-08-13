@@ -661,7 +661,90 @@ export default {
       }
     });
   },
+  //is_stared: true：请求收藏，false：请求取消收藏
+  starTheDoc(is_stared) {
+    var that = this;
+    const did = this.$route.params.did;
+    let msg = {
+      'id': did,
+      'type': 'doc',
+      'is_stared': is_stared
+    };
+    $.ajax({
+      type:'post',
+      url:'/fs/star',
+      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+      data: JSON.stringify(msg),
+      processData: false,
+      contentType: false,
+      success:function (res){
+        if (that.console_debug) {
+          console.log("(post)/fs/star" + " : " + res.status);
+        }
+        if (res.status === 0) {
+          //提示收藏成功/收藏图标变化
+        } else {
+          const op = is_stared ? '收藏' : '取消收藏';
+          switch (res.status) {
+            case 1:
+              this.alert_box.msg(op + '失败', '键值错误');
+              break;
+            case 2:
+              this.alert_box.msg(op + '失败', '您的权限不足或还没有登录');
+              break;
+            case 3:
+              this.alert_box.msg(op + '失败', '文档不存在');
+              break;
+            default:
+              this.alert_msg.error('未知错误');
+          }
+        }
+      },
+      error:function(){
+        this.alert_msg.error('连接失败');
+      }
+    });
+  },
 
+  getStarStatus() {
+    var that = this;
+    const did = this.$route.params.did;
+    let msg = {
+      'id': did,
+      'type': 'doc',
+    };
+    $.ajax({
+      type:'get',
+      url:'/fs/star_condition',
+      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+      data: JSON.stringify(msg),
+      processData: false,
+      contentType: false,
+      async: false,
+      success:function (res){
+        if (that.console_debug) {
+          console.log("(post)/fs/star_condition" + " : " + res.status);
+        }
+        if (res.status === 0) {
+          return res.is_stared;
+        } else {
+          switch (res.status) {
+            case 1:
+              this.alert_box.msg('获取收藏状态失败', '键值错误');
+              break;
+            case 2:
+              this.alert_box.msg('获取收藏状态失败', '文档不存在');
+              break;
+            default:
+              this.alert_msg.error('未知错误');
+          }
+        }
+      },
+      error:function(){
+        this.alert_msg.error('连接失败');
+      }
+    });
+  }
 }
 </script>
 
