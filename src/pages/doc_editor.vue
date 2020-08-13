@@ -146,6 +146,8 @@ export default {
         avatar: 'https://randomuser.me/api/portraits/thumb/women/65.jpg'
       }
     ];
+    //this.getDocAuth();
+    //this.getInitialDocContent();
     this.initCKEditor();
   },
 
@@ -162,6 +164,12 @@ export default {
 
     apply_for_info() {
       //向后台请求一些内容
+    },
+
+    getCookie (name) {
+      var value = '; ' + document.cookie
+      var parts = value.split('; ' + name + '=')
+      if (parts.length === 2) return parts.pop().split(';').shift()
     },
 
     initCKEditor() {
@@ -274,6 +282,7 @@ export default {
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         processData: false,
         contentType: false,
+        async: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(get)/doc/auth" + " : " + res.status);
@@ -311,7 +320,7 @@ export default {
         }
       });
     },
-    getDocContent() {
+    getInitialDocContent() {
       //通过路由获取文章id
       var that = this;
       const did = this.$route.params.did;
@@ -325,6 +334,7 @@ export default {
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         processData: false,
         contentType: false,
+        async: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(get)/doc/all" + " : " + res.status);
