@@ -95,25 +95,25 @@ export default {
                 console.log("(post)/temp/delete" + " : " + res.status);
               }
               if (res.status === 0) {
-                this.alert_box.msg('删除成功', '您的模版已删除');
+                that.alert_box.msg('删除成功', '您的模版已删除');
               } else {
                 switch (res.status) {
                   case 1:
-                    this.alert_box.msg('删除失败', '键错误');
+                    that.alert_box.msg('删除失败', '键错误');
                     break;
                   case 2:
-                    this.alert_box.msg('删除失败', '您的权限不足或还没有登录');
+                    that.alert_box.msg('删除失败', '您的权限不足或还没有登录');
                     break;
                   case 3:
-                    this.alert_box.msg('删除失败', '模版不存在');
+                    that.alert_box.msg('删除失败', '模版不存在');
                     break;
                   default:
-                    this.alert_msg.error('未知错误');
+                    that.alert_msg.error('未知错误');
                 }
               }
             },
             error:function(){
-              this.alert_msg.error('连接失败');
+              that.alert_msg.error('连接失败');
             }
           });
         }

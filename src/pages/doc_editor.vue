@@ -480,22 +480,22 @@ export default {
           } else {
             switch (res.status) {
               case 1:
-                this.alert_box.msg('加载失败', '键值错误');
+                that.alert_box.msg('加载失败', '键值错误');
                 break;
               case 2:
-                this.alert_box.msg('加载失败', '您的权限不足或还没有登录');
+                that.alert_box.msg('加载失败', '您的权限不足或还没有登录');
                 break;
               case 3:
-                this.alert_box.msg('加载失败', '文档不存在');
+                that.alert_box.msg('加载失败', '文档不存在');
                 break;
               default:
-                this.alert_msg.error('未知错误');
+                that.alert_msg.error('未知错误');
             }
             that.router.push({path:'/workbench/recent'});
           }
         },
         error: function () {
-          this.alert_msg.error('连接失败');
+          that.alert_msg.error('连接失败');
         }
       });
     },
@@ -524,23 +524,23 @@ export default {
           } else {
             switch (res.status) {
               case 1:
-                this.alert_box.msg('加载失败', '键值错误');
+                that.alert_box.msg('加载失败', '键值错误');
                 break;
               case 2:
-                this.alert_box.msg('加载失败', '您的权限不足或还没有登录');
+                that.alert_box.msg('加载失败', '您的权限不足或还没有登录');
                 break;
               case 3:
-                this.alert_box.msg('加载失败', '文档不存在');
+                that.alert_box.msg('加载失败', '文档不存在');
                 break;
               default:
-                this.alert_msg.error('未知错误');
+                that.alert_msg.error('未知错误');
             }
             //跳转到首页
             that.router.push({path:'/workbench/recent'});
           }
         },
         error: function () {
-          this.alert_msg.error('连接失败');
+          that.alert_msg.error('连接失败');
         }
       })
     },
@@ -572,28 +572,28 @@ export default {
           } else {
             switch (res.status) {
               case 1:
-                this.alert_box.msg('编辑失败', '键值错误');
+                that.alert_box.msg('编辑失败', '键值错误');
                 break;
               case 2:
-                this.alert_box.msg('编辑失败', '您的权限不足或还没有登录');
+                that.alert_box.msg('编辑失败', '您的权限不足或还没有登录');
                 break;
               case 3:
-                this.alert_box.msg('编辑失败', '您的标题不合法');
+                that.alert_box.msg('编辑失败', '您的标题不合法');
                 break;
               case 4:
-                this.alert_box.msg('编辑失败', '您的内容不合法');
+                that.alert_box.msg('编辑失败', '您的内容不合法');
                 break;
               case 5:
-                this.alert_box.msg('编辑失败', '同目录下存在同名文件');
+                that.alert_box.msg('编辑失败', '同目录下存在同名文件');
                 break;
               default:
-                this.alert_msg.error('未知错误');
+                that.alert_msg.error('未知错误');
             }
             //that.router.push({path:'/workbench/recent'});
           }
         },
         error: function () {
-          this.alert_msg.error('连接失败');
+          that.alert_msg.error('连接失败');
         }
       })
     }
@@ -624,27 +624,27 @@ export default {
         } else {
           switch (res.status) {
             case 1:
-              this.alert_box.msg('保存模板失败', '键值错误');
+              that.alert_box.msg('保存模板失败', '键值错误');
               break;
             case 2:
-              this.alert_box.msg('保存模板失败', '您的权限不足或还没有登录');
+              that.alert_box.msg('保存模板失败', '您的权限不足或还没有登录');
               break;
             case 3:
-              this.alert_box.msg('保存模板失败', '您的模板名称不合法');
+              that.alert_box.msg('保存模板失败', '您的模板名称不合法');
               break;
             /*case 4:
-              this.alert_box.msg('保存模板失败', '您的内容不合法');
+              that.alert_box.msg('保存模板失败', '您的内容不合法');
               break;
             case 5:
-              this.alert_box.msg('保存模板失败', '同目录下存在同名文件');
+              that.alert_box.msg('保存模板失败', '同目录下存在同名文件');
               break;*/
             default:
-              this.alert_msg.error('未知错误');
+              that.alert_msg.error('未知错误');
           }
         }
       },
       error: function () {
-        this.alert_msg.error('连接失败');
+        that.alert_msg.error('连接失败');
       }
     })
   },
@@ -672,23 +672,23 @@ export default {
         } else {
           switch (res.status) {
             case 1:
-              this.alert_box.msg('加载评论用户失败', '键值错误');
+              that.alert_box.msg('加载评论用户失败', '键值错误');
               break;
             case 2:
-              this.alert_box.msg('加载评论用户失败', '您的权限不足或还没有登录');
+              that.alert_box.msg('加载评论用户失败', '您的权限不足或还没有登录');
               break;
             case 3:
-              this.alert_box.msg('加载评论用户失败', '文档不存在');
+              that.alert_box.msg('加载评论用户失败', '文档不存在');
               break;
             default:
-              this.alert_msg.error('未知错误');
+              that.alert_msg.error('未知错误');
           }
         }
         //跳转到首页
         that.router.push({path:'/workbench/recent'});
       },
       error: function () {
-        this.alert_msg.error('连接失败');
+        that.alert_msg.error('连接失败');
       }
     });
   },
@@ -710,18 +710,18 @@ export default {
         } else {
           switch (res.status) {
             case 1:
-              this.alert_box.msg('加载用户信息失败', '键值错误');
+              that.alert_box.msg('加载用户信息失败', '键值错误');
               break;
             case 2:
-              this.alert_box.msg('加载用户信息失败', '您还没有登录');
+              that.alert_box.msg('加载用户信息失败', '您还没有登录');
               break;
             default:
-              this.alert_msg.error('未知错误');
+              that.alert_msg.error('未知错误');
           }
         }
       },
       error:function(){
-        this.alert_msg.error('连接失败');
+        that.alert_msg.error('连接失败');
       }
     });
   },
@@ -751,21 +751,21 @@ export default {
           const op = is_stared ? '收藏' : '取消收藏';
           switch (res.status) {
             case 1:
-              this.alert_box.msg(op + '失败', '键值错误');
+              that.alert_box.msg(op + '失败', '键值错误');
               break;
             case 2:
-              this.alert_box.msg(op + '失败', '您的权限不足或还没有登录');
+              that.alert_box.msg(op + '失败', '您的权限不足或还没有登录');
               break;
             case 3:
-              this.alert_box.msg(op + '失败', '文档不存在');
+              that.alert_box.msg(op + '失败', '文档不存在');
               break;
             default:
-              this.alert_msg.error('未知错误');
+              that.alert_msg.error('未知错误');
           }
         }
       },
       error:function(){
-        this.alert_msg.error('连接失败');
+        that.alert_msg.error('连接失败');
       }
     });
   },
@@ -794,18 +794,18 @@ export default {
         } else {
           switch (res.status) {
             case 1:
-              this.alert_box.msg('获取收藏状态失败', '键值错误');
+              that.alert_box.msg('获取收藏状态失败', '键值错误');
               break;
             case 2:
-              this.alert_box.msg('获取收藏状态失败', '文档不存在');
+              that.alert_box.msg('获取收藏状态失败', '文档不存在');
               break;
             default:
-              this.alert_msg.error('未知错误');
+              that.alert_msg.error('未知错误');
           }
         }
       },
       error:function(){
-        this.alert_msg.error('连接失败');
+        that.alert_msg.error('连接失败');
       }
     });
   },
@@ -834,21 +834,21 @@ export default {
         } else {
           switch (res.status) {
             case 1:
-              this.alert_box.msg('获取正在编辑用户失败', '键值错误');
+              that.alert_box.msg('获取正在编辑用户失败', '键值错误');
               break;
             case 2:
-              this.alert_box.msg('获取正在编辑用户失败', '您的权限不足或还没有登录');
+              that.alert_box.msg('获取正在编辑用户失败', '您的权限不足或还没有登录');
               break;
             case 3:
-              this.alert_box.msg('获取正在编辑用户失败', '文档不存在');
+              that.alert_box.msg('获取正在编辑用户失败', '文档不存在');
               break;
             default:
-              this.alert_msg.error('未知错误');
+              that.alert_msg.error('未知错误');
           }
         }
       },
       error:function(){
-        this.alert_msg.error('连接失败');
+        that.alert_msg.error('连接失败');
       }
     });
   },
