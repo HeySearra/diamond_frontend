@@ -348,6 +348,19 @@ export default {
           uploadUrl: ''
           // Back-end processing upload logic returns json data, including uploaded (option true / false) and url two fields
         },*/
+        simpleUpload: {
+          // The URL that the images are uploaded to.
+          uploadUrl: 'http://example.com',
+
+          // Enable the XMLHttpRequest.withCredentials property.
+          withCredentials: true,
+
+          // Headers sent along with the XMLHttpRequest to the upload server.
+          headers: {
+            'X-CSRF-TOKEN': 'CSFR-Token',
+            Authorization: 'Bearer <JSON Web Token>'
+          }
+        },
         toolbar: {
           items: [
             'undo',
