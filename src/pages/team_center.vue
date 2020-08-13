@@ -5,9 +5,17 @@
       <el-container>
         <el-main>
           <div style="padding: 0 40px 0 30px;">
-            <team-display-block title="我创建的团队" :is_creator="true" @open_info="open_info"></team-display-block>
+            <team-display-block title="我创建的团队" 
+              :is_creator="true" 
+              @open_info="open_info"
+              
+            ></team-display-block>
             <div class="clear_both"></div>
-            <team-display-block title="我参与的团队" :is_creator="false" @open_info="open_info"></team-display-block>
+            <team-display-block title="我参与的团队" 
+              :is_creator="false" 
+              @open_info="open_info" 
+              :list="other_list">
+            </team-display-block>
           </div>
           <div style="height:50px"></div>
         </el-main>
@@ -18,8 +26,8 @@
     </el-container>
     <el-footer></el-footer>
     </el-container>
-    <file-info-dialog ref="team_info_dialog"></file-info-dialog>
-    <new-dialog ref="new_dialog"></new-dialog>
+    <file-info-dialog ref="team_info_dialog" @refresh="refresh"></file-info-dialog>
+    <new-dialog ref="new_dialog" @refresh="refresh"></new-dialog>
   </div>
 </template>
 
@@ -27,7 +35,8 @@
 export default {
   data () {
     return {
-      active_index: '1',
+      my_list:[],
+      other_list:[]
     }
   },
   mounted(){
@@ -35,9 +44,47 @@ export default {
   },
   methods:{
     init(){
-
+      this.apply_for_info();
     },
 
+    getCookie (name) {
+      var value = '; ' + document.cookie
+      var parts = value.split('; ' + name + '=')
+      if (parts.length === 2) return parts.pop().split(';').shift()
+    },
+
+    apply_for_info(){
+      let url = '/team/all';
+      var that = this;
+      $.ajax({ 
+          type:'get',
+          url: url,
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          async:false, 
+          success:function (res){ 
+            if(that.console_debug){
+                console.log(url +  '：' + res.status);
+            }
+            if(res.status == 0){
+              that.my_list = res.my_team;
+              that.other_list = res.join_team;
+            }
+            else{
+                switch(res.status){
+                    case 2:
+                        that.alert_msg.error('权限不足');
+                        break;
+                    default:
+                        that.alert_msg.error('发生了未知错误');
+                }
+                
+            }
+          },
+          error:function(res){
+              that.alert_msg.error('网络连接失败');
+          }
+      });
+    },
     handleSelect(key, keypath){
 
     },

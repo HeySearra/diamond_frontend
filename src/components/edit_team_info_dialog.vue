@@ -39,7 +39,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dia_vis=false">取 消</el-button>
-                <el-button type="primary" @click="dia_vis=false">确 定</el-button>
+                <el-button type="primary" @click="submit">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -64,6 +64,100 @@ export default {
         open(tid){
             this.form.tid = tid;
             this.dia_vis = true;
+            //this.open_team_info();
+        },
+        
+        getCookie (name) {
+            var value = '; ' + document.cookie
+            var parts = value.split('; ' + name + '=')
+            if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
+        open_team_info(){
+            let url = '/team/info' + this.tid;
+            var that = this;
+            $.ajax({ 
+                type:'get',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.form.intro = res.intro;
+                        that.form.name = res.name;
+                        that.form.img = res.portrait;
+                        that.dia_vis = true;
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            case 3:
+                                that.alert_msg.error('找不到团队');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+        },
+
+        submit(){
+            if(this.form.name.trim() == ''){
+                this.alert_msg.warning('团队名称不得为空');
+                return;
+            }
+            
+            let url = '/team/edit_info';
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify(this.form),
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.alert_msg.success('信息修改成功');
+                        that.dia_vis = true;
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            case 3:
+                                that.alert_msg.error('找不到团队');
+                                break;
+                            case 4:
+                                that.alert_msg.error('团队名称非法');
+                                break;
+                            case 5:
+                                that.alert_msg.error('团队介绍非法');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+            
         },
 
         beforeAvatarUpload(file) {
@@ -80,10 +174,45 @@ export default {
         },
 
         upload_por(f){
+            const isJPG = f.file.type === 'image/jpeg';
+            if (!isJPG) {
+                this.alert_msg.error('上传头像图片只能是 JPG 格式');
+                return;
+            }
             var that = this;
             let form = new FormData();
-            form.append('file', f.file);
-        }
+            form.append('profile', f.file);
+            $.ajax({ 
+                type:'post', 
+                url:'/upload/port',
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')}, 
+                data:form,
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(res.status == 0){
+                        that.form.src = res.src;
+                        f.onSuccess();
+                    }
+                    else{
+                        switch(res){
+                            case 1:
+                                that.alert_msg.error('错误，图片过大');
+                                break;
+                            default:
+                                that.alert_msg.error('上传头像失败，请重试');
+                        }
+                        //that.form.src = '';
+                        f.onError();
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
+                    //that.form.src = '';
+                    f.onError();
+                }
+            });
+        },
     }
 
 }

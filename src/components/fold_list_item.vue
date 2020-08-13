@@ -1,6 +1,6 @@
 <template>
     <div class="can_not_choose fold_list_item">
-        <div class="click_area" :class="focus?'click_area_focus':''" @click="open_fold(fid)"></div>
+        <div class="click_area" :class="focus?'click_area_focus':''" @click="function(){open_fold(fid)}"></div>
         <div class="big_icon">
             <div>
                 <span class="icon iconfont">&#xe7ed;</span>

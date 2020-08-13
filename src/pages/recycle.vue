@@ -15,7 +15,8 @@
                 :drage="false"
                 :out_list="list"
                 @change_view="change_view"
-                @open_info="open_info">
+                @open_info="open_info"
+                @refresh="refresh">
             </component>
           </div>
           <div style="height:50px"></div>
