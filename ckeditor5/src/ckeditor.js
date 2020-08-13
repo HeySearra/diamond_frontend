@@ -9,7 +9,6 @@ import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave.js';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote.js';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold.js';
 import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder.js';
-import CKFinderUploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter.js';
 import Code from '@ckeditor/ckeditor5-basic-styles/src/code.js';
 import CodeBlock from '@ckeditor/ckeditor5-code-block/src/codeblock.js';
 import Comments from '@ckeditor/ckeditor5-comments/src/comments.js';
@@ -35,6 +34,7 @@ import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed.js';
 import PageBreak from '@ckeditor/ckeditor5-page-break/src/pagebreak.js';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph.js';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
+import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter.js';
 import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough.js';
 import Table from '@ckeditor/ckeditor5-table/src/table.js';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
@@ -52,7 +52,6 @@ Editor.builtinPlugins = [
 	BlockQuote,
 	Bold,
 	CKFinder,
-	CKFinderUploadAdapter,
 	Code,
 	CodeBlock,
 	Comments,
@@ -78,6 +77,7 @@ Editor.builtinPlugins = [
 	PageBreak,
 	Paragraph,
 	PasteFromOffice,
+	SimpleUploadAdapter,
 	Strikethrough,
 	Table,
 	TableToolbar,
