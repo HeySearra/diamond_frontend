@@ -40,7 +40,7 @@
                     <el-dropdown-item v-if="context=='recycle'">恢复</el-dropdown-item>
                     <el-dropdown-item class="red_text" v-if="context=='recycle'">彻底删除</el-dropdown-item>
                     <el-dropdown-item v-if="false">导出</el-dropdown-item>
-                    <el-dropdown-item class="red_text" v-if="(context=='file_system'||context=='team')&&!is_link">删除</el-dropdown-item>
+                    <el-dropdown-item command="delete" class="red_text" v-if="(context=='file_system'||context=='team')&&!is_link">删除</el-dropdown-item>
                     <el-dropdown-item command="open_info" v-if="!is_link">文件夹信息</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -179,6 +179,9 @@ export default {
                     break;
                 case 'star':
                     this.star();
+                    break;
+                case 'delete':
+                    this.delete();
                     break;
             }
         },
@@ -350,8 +353,48 @@ export default {
                     that.alert_msg.error('网络连接失败');
                 }
             });
+        },
+
+        delete(){
+            var that = this;
+            that.alert_box.confirm('提示', '确定删除 ' + that.name + ' ？', function(){
+                let url = '/fs/delete';
+                let json_data = {id:that.fid, type:'fold'};
+                $.ajax({ 
+                    type:'post',
+                    url: url,
+                    headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+                    data: JSON.stringify(json_data),
+                    processData: false,
+                    contentType: false,
+                    success:function (res){ 
+                        if(that.console_debug){
+                            console.log(url +  '：' + res.status);
+                        }
+                        if(res.status == 0){
+                            that.alert_msg.success('已删除 ' + that.name);
+                            that.$emit('refresh');
+                        }
+                        else{
+                            switch(res.status){
+                                case 2:
+                                    that.alert_msg.error('权限不足');
+                                case 3:
+                                    that.alert_msg.error('找不到文件夹');
+                                default:
+                                    that.alert_msg.error('发生了未知错误');
+                            }
+                        }
+                    },
+                    error:function(res){
+                        that.alert_msg.error('网络连接失败');
+                    }
+                });
+            })
         }
-    }
+    },
+
+    
 
 }
 </script>
