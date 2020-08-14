@@ -57,14 +57,16 @@
       </el-row>
       <el-divider></el-divider>
     </el-row>
-    <el-row class="doc_info" v-if="context=='doc'">
+    <el-row class="doc_info" v-if="context==='doc'">
       <el-row>
-        <el-col :span="16" class="file_name">{{file_name}}</el-col>
+        <div id="file_name">
+          {{file_name}}
+        </div>
       </el-row>
       <el-row>
         <div class="doc_info">
           <div class="info_item">
-            <div class="info_key">key：{{file_name}}</div>
+            <div class="info_key">key：</div>
             <div class="info_value">valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue</div>
             <div class="clear_both"></div>
           </div>
@@ -306,9 +308,15 @@ export default {
             }
         });
       });
+    },
+
+    edit_file_name() {
+      console.log('edit', value);
+      this.file_name = value;
     }
   }
 }
+
 </script>
 
 <style scoped>
@@ -433,13 +441,18 @@ export default {
   width: 100%;
 }
 
-.file_name{
+#file_name{
   font-weight: bold;
   font-size:17px;
   margin: 0 6px;
   width:auto;
   line-height:27px;
   word-break: break-all;
+  text-align: center;
+  border: none !important;
+  background-color: rgba(0,0,0,0) !important;
+  display: flex;
+  justify-content: center;
 }
 
 .doc_info{

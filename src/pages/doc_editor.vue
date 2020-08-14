@@ -614,7 +614,7 @@ export default {
     var that = this;
     const did = this.$route.params.did;
     let msg = {
-      name: '',
+      name: that.file_name,
       content: content,
     };
     $.ajax({
@@ -889,7 +889,7 @@ export default {
 .el-main {
   background-color: rgba(0, 0, 0, 0);
   overflow: inherit;
-  margin-top: 60px;
+  margin-top: 62px;
 }
 
 .el-aside::-webkit-scrollbar {
