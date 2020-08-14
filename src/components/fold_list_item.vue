@@ -269,7 +269,7 @@ export default {
                     this.open_info();
                     break;
                 case 'move':
-                    this.$emit('move_item', this.did, 'file', this.name);
+                    this.$emit('move_item', this.fid, 'file', this.name);
                     break;
                 case 'parent':
                     this.open_fold(this.pfid);
