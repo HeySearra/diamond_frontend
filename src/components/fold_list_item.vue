@@ -164,7 +164,7 @@ export default {
             var that = this;
             var msg = {
                 id: that.did,
-                type: 'file',
+                type: 'fold',
             };
             let url = '/fs/recycle/recover'
             $.ajax({ 
