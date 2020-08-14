@@ -32,6 +32,7 @@
     border-right:solid 2px hsl(0, 0%, 90%);
     background-color: #f6f6f6;
     width:320px !important;
+    overflow-y:overlay;
 }
 
 .el-main {

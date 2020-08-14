@@ -3,7 +3,7 @@
     <el-container>
     <el-container class="mid">
       <el-container>
-        <el-main>
+        <el-main v-loading="is_loading">
           <div style="padding: 0 40px 0 30px;">
               <div style="height:20px"></div>
             <component
@@ -11,13 +11,16 @@
                 :is="view_type=='block'?'file-system-block':'file-system-list'"
                 :fid="fid"
                 :addable="true"
+                context="team"
                 @change_view="change_view"
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
                 @copy_item="copy_item"
                 @add_item="add_item"
-                @refresh="refresh">
+                @refresh="refresh"
+                @in_loading="in_loading"
+                @out_loading="out_loading">
             </component>
           </div>
           <div style="height:50px"></div>
@@ -49,7 +52,13 @@ export default {
     return {
       view_type:'block',
       fid:'desktop',
-      tid:''
+      tid:'',
+      is_loading:true
+    }
+  },
+  watch:{
+    $route(to,from){
+      this.init();
     }
   },
   mounted(){
@@ -172,6 +181,13 @@ export default {
         this.$refs.choose_path_dialog.open(this.fid, type, id, name, 'copy');
     },
     
+    in_loading(){
+      this.is_loading = true;
+    },
+
+    out_loading(){
+      this.is_loading = false;
+    }
   }
 }
 </script>

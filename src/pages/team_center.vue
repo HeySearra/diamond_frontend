@@ -3,7 +3,7 @@
     <el-container>
     <el-container class="mid">
       <el-container>
-        <el-main>
+        <el-main v-loading="is_loading">
           <div style="padding: 0 40px 0 30px;">
             <div style="height:30px"></div>
             <team-display-block title="我创建的团队" 
@@ -41,7 +41,8 @@ export default {
   data () {
     return {
       my_list:[],
-      other_list:[]
+      other_list:[],
+      is_loading:true
     }
   },
   mounted(){
@@ -59,6 +60,7 @@ export default {
     },
 
     apply_for_info(){
+      this.is_loading = true;
       let url = '/team/all';
       var that = this;
       $.ajax({ 
@@ -73,6 +75,7 @@ export default {
             if(res.status == 0){
               that.my_list = res.my_team;
               that.other_list = res.join_team;
+              that.is_loading = false;
             }
             else{
                 switch(res.status){

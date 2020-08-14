@@ -109,6 +109,9 @@ export default {
         },
 
         apply_for_parent(){
+            if(this.context == 'recycle'){
+                return;
+            }
             let url = '/fs/father?id=' + this.did + '&type=doc';
             var that = this;
             $.ajax({
@@ -400,7 +403,12 @@ export default {
         },
 
         open_fold(fid){
-            this.$router.push({name:'file_system', params:{id:fid}});
+            if(this.context == 'team'){
+                this.$router.push({name:'team_file_system', params:{id:fid, tid:this.$route.params.tid}});
+            }
+            else{
+                this.$router.push({name:'file_system', params:{id:fid}});
+            }
         },
 
         create_link(){
@@ -672,9 +680,9 @@ export default {
 
 .name{
     position: absolute;
-    width:130px;
+    width:120px;
     top:93px;
-    left:13px;
+    left:18px;
     text-align: center;
     margin-top:10px;
     word-break: break-all;

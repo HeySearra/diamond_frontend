@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar_menu sidebar_block">
+  <div class="sidebar_menu sidebar_block" v-loading="is_loading">
     <div style="height:35px;"></div>
     <el-row>
       <div class="avatar"><el-avatar :src="user_src"></el-avatar></div>
@@ -124,6 +124,7 @@ export default {
       tid:'',
       user_name:'',
       user_src:'',
+      is_loading:false
     }
   },
 
@@ -139,10 +140,14 @@ export default {
         if (parts.length === 2) return parts.pop().split(';').shift()
     },
 
-    init_team_info(tid){
+    init_team_info(tid, refresh){
+      if(this.tid==tid && !refresh){
+        return;
+      }
       this.tid = tid;
       let url = '/team/info?tid=' + tid;
       var that = this;
+      this.is_loading = true;
       $.ajax({ 
           type:'get',
           url: url,
@@ -171,7 +176,6 @@ export default {
                       default:
                           that.alert_msg.error('发生了未知错误');
                   }
-                  
               }
           },
           error:function(res){
@@ -201,6 +205,9 @@ export default {
                     case 'member':
                       that.is_member = true;
                   }
+                  setTimeout(function(){
+                    that.is_loading = false;
+                  }, 300);
               }
               else{
                   switch(res.status){

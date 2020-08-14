@@ -1,5 +1,5 @@
 <template>
-    <div class="workbench_recent">
+    <div class="workbench_recent" v-loading="is_loading">
         <component 
             :is="view_type=='block'?'file-system-block':'file-system-list'"
             type="recent"
@@ -10,6 +10,7 @@
             @open_info="open_info"
             ref="file_system_component">
         </component>
+        <div style="height:50px"></div>
     </div>
 </template>
 
@@ -25,7 +26,8 @@ export default {
                     
                     ]
                 }
-            ]
+            ],
+            is_loading:true
         }
     },
     mounted(){
@@ -33,6 +35,7 @@ export default {
     },
     methods:{
         init(){
+             this.is_loading = true;
             this.$emit('active_change');
             this.view_type = this.view_type_manager.get();
             this.get_recent_file_list();
@@ -62,6 +65,7 @@ export default {
                             })
                         }
                         that.$refs.file_system_component.init();
+                        that.is_loading = false;
                     }
                     else{
                         that.alert_msg.error('获取文件列表失败', '请重试');
@@ -98,6 +102,11 @@ export default {
 
 <style scoped>
 @import url("../assets/common.css");
+
+.workbench_recent{
+    width: calc(100% - 350px);
+    height:calc(100% - 130px);
+}
 
 h1{
     font-size: 30px;

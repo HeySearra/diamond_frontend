@@ -3,7 +3,7 @@
     <el-container>
     <el-container class="mid">
       <el-container>
-        <el-main>
+        <el-main v-loading="is_loading">
           <div style="padding: 0 40px 0 30px;">
               <div style="height:20px"></div>
             <component
@@ -18,7 +18,9 @@
                 @share_item="share_item"
                 @copy_item="copy_item"
                 @refresh="refresh"
-                @add_item="add_item">
+                @add_item="add_item"
+                @in_loading="in_loading"
+                @out_loading="out_loading">
             </component>
           </div>
           <div style="height:50px"></div>
@@ -44,7 +46,8 @@ export default {
       view_type:'block',
       fid:'desktop',
       sidebar_active:'',
-      is_desktop:false
+      is_desktop:false,
+      is_loading:true
     }
   },
   watch:{
@@ -159,6 +162,14 @@ export default {
     copy_item(id, type, name){
         this.$refs.choose_path_dialog.open(this.fid, type, id, name, 'copy');
     },
+
+    in_loading(){
+      this.is_loading = true;
+    },
+
+    out_loading(){
+      this.is_loading = false;
+    }
   }
 }
 </script>

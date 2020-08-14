@@ -88,8 +88,7 @@ export default {
             url: url,
             data: JSON.stringify(json_data),
             headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-            processData: false,
-            contentType: false,
+            async:false, 
             success:function (res){ 
                 if(that.console_debug){
                     console.log(url +  '：' + res.status);

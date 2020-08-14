@@ -59,8 +59,8 @@ export default {
 
   body{
     background-color: hsl(0, 0%, 99%);
-    width:100vw !important;
-    overflow-x: hidden;
+    overflow-x:hidden;
+    overflow-y:overlay;
   }
 
   /* #app{

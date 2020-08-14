@@ -326,9 +326,9 @@ export default {
 
 .name{
     position: absolute;
-    width:130px;
+    width:120px;
     top:93px;
-    left:13px;
+    left:18px;
     text-align: center;
     margin-top:10px;
     word-break: break-all;

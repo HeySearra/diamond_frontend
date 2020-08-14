@@ -119,6 +119,7 @@ export default {
         },
 
         apply_for_info(){
+            this.$emit('in_loading');
             let url = '/fs/fold/elem?fid=' + this.fid;
             var that = this;
             $.ajax({ 
@@ -179,6 +180,7 @@ export default {
                                 }
                             }
                         }, 0);
+                        that.$emit('out_loading');
                     }
                     else{
                         switch(res.status){

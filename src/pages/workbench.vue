@@ -5,15 +5,14 @@
       <el-container>
         <el-main>
           <el-menu :default-active="active_index" class="workbench_menu" mode="horizontal" @select="handleSelect">
-          <el-menu-item index="1"><router-link class="register_link" :to="{path:'/workbench/recent_view'}">最近浏览</router-link></el-menu-item>
-          <el-menu-item index="2"><router-link class="register_link" :to="{path:'/workbench/star_view'}">我的收藏</router-link></el-menu-item>
-          <el-menu-item index="3"><router-link class="register_link" :to="{path:'/workbench/create_view'}">我创建的</router-link></el-menu-item>
-          <el-menu-item index="4"><router-link class="register_link" :to="{path:'/workbench/share_view'}">共享文件</router-link></el-menu-item>
+            <el-menu-item index="1"><router-link class="register_link" :to="{path:'/workbench/recent_view'}">最近浏览</router-link></el-menu-item>
+            <el-menu-item index="2"><router-link class="register_link" :to="{path:'/workbench/star_view'}">我的收藏</router-link></el-menu-item>
+            <el-menu-item index="3"><router-link class="register_link" :to="{path:'/workbench/create_view'}">我创建的</router-link></el-menu-item>
+            <el-menu-item index="4"><router-link class="register_link" :to="{path:'/workbench/share_view'}">共享文件</router-link></el-menu-item>
         </el-menu>
           <div style="padding: 0 40px 0 30px;">
-            <router-view @active_change="active_change" @open_info="open_info"></router-view>
+            <router-view class="workbench_content" @active_change="active_change" @open_info="open_info"></router-view>
           </div>
-          <div style="height:50px"></div>
         </el-main>
       </el-container>
       <el-aside>
@@ -98,6 +97,19 @@ export default {
 .el-menu-item{
   padding:0;
   margin: 0 10px;
+}
+
+.workbench_menu{
+  position:fixed;
+  width:100%;
+}
+
+.workbench_content{
+  position:fixed;
+  top:132px;
+  overflow: auto;
+  right: 0;
+  padding-left: 31px;
 }
 
 </style>

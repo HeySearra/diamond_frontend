@@ -264,6 +264,7 @@ export default {
                     }
                     if(res.status == 0){
                         that.alert_msg.success('已发送邀请');
+                        that.search_input = '';
                     }
                     else{
                         switch(res.status){
