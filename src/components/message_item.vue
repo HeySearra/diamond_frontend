@@ -103,8 +103,7 @@ export default {
         },
         confirm_to_join(){
             let data = {
-                tid: this.id,
-                team_name: this.name,
+                mid: this.id,
             }
             this.$emit('confirm_to_join', data);
         },

@@ -32,15 +32,14 @@ export default {
 
     methods:{
         open(data){
-            this.tid = data.tid;
-            this.team_name = data.team_name;
+            this.mid = data.mid;
             this.dia_vis = true;
         },
 
         click_to_accept(if_accept){
             var that = this;
             var msg = {
-                tid: that.tid,
+                mid: that.mid,
                 result: if_accept,
             };
             $.ajax({
