@@ -14,7 +14,7 @@
         </div>
         <div class="name">{{name}}</div>
         <div class="more_menu" :class="focus?'more_menu_focus':''">
-            <el-dropdown trigger="click" 
+            <el-dropdown trigger="click"
                 @visible-change="vis_change"
                 @command="click_dropdown_item">
                 <span class="el-dropdown-link">
@@ -63,7 +63,7 @@ export default {
         },
         is_starred:{
             type:Boolean,
-            default:false 
+            default:false
         },
     },
     data() {
@@ -74,7 +74,7 @@ export default {
     },
 
     mounted(){
-        
+
     },
 
     methods:{
@@ -91,13 +91,13 @@ export default {
         apply_for_parent(){
             let url = '/fs/father?id=' + this.did + '&type=doc';
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'get',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -129,14 +129,14 @@ export default {
                     type: 'doc',
                 };
                 let url = '/fs/recycle/delete'
-                $.ajax({ 
+                $.ajax({
                     type:'post',
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify(msg),
                     processData: false,
-                    contentType: false, 
-                    success:function (res){ 
+                    contentType: false,
+                    success:function (res){
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
@@ -155,7 +155,7 @@ export default {
                                 default:
                                     that.alert_msg.error('发生了未知错误');
                             }
-                            
+
                         }
                     },
                     error:function(res){
@@ -172,14 +172,14 @@ export default {
                 type: 'doc',
             };
             let url = '/fs/recycle/recover'
-            $.ajax({ 
+            $.ajax({
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                 data: JSON.stringify(msg),
                 processData: false,
-                contentType: false, 
-                success:function (res){ 
+                contentType: false,
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -198,7 +198,7 @@ export default {
                             default:
                                 that.alert_msg.error('发生了未知错误');
                         }
-                        
+
                     }
                 },
                 error:function(res){
@@ -206,7 +206,7 @@ export default {
                 }
             });
         },
-        
+
         vis_change(value){
             this.focus = value;
         },
@@ -256,13 +256,13 @@ export default {
         click_to_delete(){
             let url = '/fs/doc/info?did=' + this.did;
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'get',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -312,16 +312,20 @@ export default {
             });
         },
 
+        open_doc() {
+          this.$router.push({name:'doc', params:{id:fid}});
+        },
+
         open_info(){
             let url = '/fs/doc/info?did=' + this.did;
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'get',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -379,14 +383,14 @@ export default {
             let url = '/fs/link/new';
             let json_data = {id:this.did, type:'doc'};
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(json_data),
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -399,10 +403,13 @@ export default {
                         switch(res.status){
                             case 2:
                                 that.alert_msg.error('权限不足');
+                                break;
                             case 3:
                                 that.alert_msg.error('快捷方式已存在');
+                                break;
                             case 4:
                                 that.alert_msg.error('找不到文件');
+                                break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
                         }
@@ -418,14 +425,14 @@ export default {
             let url = '/fs/delete_link';
             let json_data = {id:this.did, type:'doc'};
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(json_data),
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -436,8 +443,10 @@ export default {
                         switch(res.status){
                             case 2:
                                 that.alert_msg.error('权限不足');
+                                break;
                             case 3:
                                 that.alert_msg.error('找不到快捷方式');
+                                break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
                         }
@@ -453,14 +462,14 @@ export default {
             let url = '/fs/star';
             let json_data = {id:this.did, type:'doc', is_starred:!this.is_starred};
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(json_data),
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -472,8 +481,10 @@ export default {
                         switch(res.status){
                             case 2:
                                 that.alert_msg.error('权限不足');
+                                break;
                             case 3:
                                 that.alert_msg.error('找不到文件');
+                                break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
                         }
@@ -490,14 +501,14 @@ export default {
             that.alert_box.confirm_msg('提示', '确定删除 ' + that.name + ' ？', function(){
                 let url = '/fs/delete';
                 let json_data = {id:that.did, type:'doc'};
-                $.ajax({ 
+                $.ajax({
                     type:'post',
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify(json_data),
                     processData: false,
                     contentType: false,
-                    success:function (res){ 
+                    success:function (res){
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
@@ -509,8 +520,10 @@ export default {
                             switch(res.status){
                                 case 2:
                                     that.alert_msg.error('权限不足');
+                                    break;
                                 case 3:
                                     that.alert_msg.error('找不到文件');
+                                    break;
                                 default:
                                     that.alert_msg.error('发生了未知错误');
                             }
