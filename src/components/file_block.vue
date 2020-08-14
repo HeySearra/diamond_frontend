@@ -31,7 +31,7 @@
                     <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
                     <el-dropdown-item command="remove_link" class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
                     <el-dropdown-item v-if="context=='recycle'" @click="click_to_recover">恢复</el-dropdown-item>
-                    <el-dropdown-item class="red_text" v-if="context=='recycle'">彻底删除</el-dropdown-item>
+                    <el-dropdown-item class="red_text" v-if="context=='recycle'" @click="click_to_delete_forever">彻底删除</el-dropdown-item>
                     <el-dropdown-item v-if="false">导出</el-dropdown-item>
                     <el-dropdown-item command="delete" class="red_text" v-if="(context=='file_system'||context=='team')&&!is_link">删除</el-dropdown-item>
                     <el-dropdown-item command="open_info" v-if="!is_link">文档信息</el-dropdown-item>
@@ -121,18 +121,60 @@ export default {
             });
         },
 
+        click_to_delete_forever(){
+            var that = this;
+            var msg = {
+                id: that.did,
+                type: 'doc',
+            };
+            let url = '/fs/recycle/delete'
+            $.ajax({ 
+                type:'post',
+                url: url,
+                headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+                data: JSON.stringify(msg),
+                processData: false,
+                contentType: false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.alert_box.msg('提示', '恢复成功');
+                        that.$emit('refresh');
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            case 3:
+                                that.alert_msg.error('找不到该内容');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+        },
+
         click_to_recover(){
             var that = this;
             var msg = {
                 id: that.did,
-                type: 'file',
+                type: 'doc',
             };
             let url = '/fs/recycle/recover'
             $.ajax({ 
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': that.getCookie('csrftoken')},
-                data: JSON.stringify({tid:that.tid}),
+                data: JSON.stringify(msg),
                 processData: false,
                 contentType: false, 
                 success:function (res){ 
@@ -202,6 +244,65 @@ export default {
         refresh(){
             this.$emit('refresh');
         },
+
+        click_to_delete(){
+            let url = '/fs/doc/info?did=' + this.did;
+            var that = this;
+            $.ajax({ 
+                type:'get',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        var content = [];
+                        content.push({
+                            key:'文档名',
+                            value:that.name
+                        });
+                        content.push({
+                            key:'创建者',
+                            value:res.cname
+                        });
+                        content.push({
+                            key:'字数',
+                            value:res.size
+                        });
+                        content.push({
+                            key:'是否可分享',
+                            value:res.is_locked?'否':'是'
+                        });
+                        let path = '';
+                        for(let i=0; i<res.path.length; i++){
+                            path += res.path[i].name;
+                            path += ' > ';
+                        }
+                        path += that.name;
+                        content.push({
+                            key:'路径',
+                            value:path
+                        });
+                        this.$emit('open_info', this.name, content);
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+        }
 
         open_info(){
             let url = '/fs/doc/info?did=' + this.did;

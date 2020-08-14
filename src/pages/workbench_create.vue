@@ -7,7 +7,8 @@
             :drage="false"
             :out_list="list"
             @change_view="change_view"
-            @open_info="open_info">
+            @open_info="open_info"
+            @ref="file_system_item">
         </component>
     </div>
 </template>
