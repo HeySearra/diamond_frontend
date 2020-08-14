@@ -23,7 +23,7 @@
                             <div style="height:30px"></div>
                             <div class="search_input">
                                 <el-input v-model="search_input" style="width:83%" placeholder="搜索用户账号" maxlength="70" @input="search_user"></el-input>
-                                <el-button type="primary" style="width:15%;float:right">邀请</el-button>
+                                <el-button type="primary" style="width:15%;float:right" @click="inviate">邀请</el-button>
                             </div>
                             <div style="height:35px"></div>
                             <div class="user_part">
@@ -256,7 +256,7 @@ export default {
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                data: {tid:that.tid, account:that.search_input},
+                data: JSON.stringify({tid:that.tid, acc:that.search_input}),
                 async:false,
                 success:function (res){ 
                     if(that.console_debug){
