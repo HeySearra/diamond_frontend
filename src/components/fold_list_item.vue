@@ -215,7 +215,7 @@ export default {
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': that.getCookie('csrftoken')},
-                data: JSON.stringifymsg),
+                data: JSON.stringify(msg),
                 processData: false,
                 contentType: false, 
                 success:function (res){ 
