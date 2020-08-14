@@ -66,9 +66,9 @@ export default {
                         if(that.list.length >= res.amount){
                             that.is_final = true;
                         }
-                        let item = that.$refs.message_item;
-                        if(item){
+                        if(that.list.length){
                             setTimeout(() => {
+                                let item = that.$refs.message_item;
                                 if(item instanceof Array){
                                     for(let i = len; i<item.length; i++){
                                         item[i].init();
