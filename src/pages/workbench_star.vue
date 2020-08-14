@@ -84,8 +84,8 @@ export default {
                         console.log("(get)/workbench/star"+ " : " +res.status);
                     }
                     if(res.status == 0){
-                        for(let i; i < res.list.length; i++){
-                            that.list.content.push({
+                        for(let i=0; i < res.list.length; i++){
+                            that.list[0].content.push({
                                 type: res.list[i].type,
                                 id: res.list[i].id,
                                 is_link: false,

@@ -74,7 +74,7 @@ export default {
         },
 
         open_team_info(){
-            let url = '/team/info?tid=' + this.tid;
+            let url = '/team/info?tid=' + this.form.tid;
             var that = this;
             $.ajax({ 
                 type:'get',

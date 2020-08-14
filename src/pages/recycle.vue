@@ -29,7 +29,7 @@
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
     <el-footer></el-footer>
     </el-container>
-    <new-dialog ref="new_dialog"></new-dialog>
+    <new-dialog ref="new_dialog" :desktop_alert="true"></new-dialog>
   </div>
 </template>
 

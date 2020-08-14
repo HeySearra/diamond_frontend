@@ -1,6 +1,7 @@
 <template>
     <div class="workbench_create">
         <component 
+            ref="file_system_item"
             :is="view_type=='block'?'file-system-block':'file-system-list'"
             type="from_out"
             context="workbench"
@@ -67,8 +68,8 @@ export default {
                         console.log("(get)/workbench/create"+ " : " +res.status);
                     }
                     if(res.status == 0){
-                        for(let i; i < res.list.length; i++){
-                            that.list.content.push({
+                        for(let i=0; i < res.list.length; i++){
+                            that.list[0].content.push({
                                 type: res.list[i].type,
                                 id: res.list[i].id,
                                 is_link: false,
@@ -79,6 +80,7 @@ export default {
                             })
                         }
                         that.$refs.file_system_item.init();
+                        alert(that.list[0])
                     }
                     else{
                         that.page--;

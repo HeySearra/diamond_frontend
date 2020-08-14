@@ -229,7 +229,7 @@ export default {
                             key:'路径',
                             value:path
                         });
-                        this.$emit('open_info', this.name, content);
+                        that.$emit('open_info', that.name, content);
                     }
                     else{
                         switch(res.status){
