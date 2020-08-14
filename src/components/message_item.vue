@@ -4,7 +4,7 @@
         <div class="item">
             <div class="profile">
                 <span v-if="portrait==''" class="icon iconfont">&#xe622;</span>
-                <el-avatar v-if="portrait==''" :src="portrait" style="vertical-align: middle;"></el-avatar>
+                <el-avatar v-if="portrait!=''" :src="portrait" style="vertical-align: middle;"></el-avatar>
             </div>
             <div class="content">
                 <h4 class="title">
@@ -32,7 +32,6 @@ export default {
     },
     data () {
         return {
-            did: '', //文档id
             type: 'doc',   //join accept out doc
             title: '', //消息标题
             comment: '', //消息内容
@@ -40,6 +39,7 @@ export default {
             name: 'team_name',
             loading: true,
             is_read: false,
+            is_process: false,
             is_dnd: false,
             uid: 'uid',     //发表评论的人的id
             uname: 'uname',
