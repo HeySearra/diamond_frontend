@@ -145,8 +145,10 @@ export default {
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
 
-        apply_for_info(){
-            this.$emit('in_loading');
+        apply_for_info(no_loading){
+            if(!no_loading){
+                this.$emit('in_loading');
+            }
             let url = '/fs/fold/elem?fid=' + this.fid;
             var that = this;
             $.ajax({ 
@@ -238,9 +240,9 @@ export default {
             });
         },
 
-        refresh(out_list){
+        refresh(out_list, no_loading){
             if(this.type == 'self'){
-                this.apply_for_info();
+                this.apply_for_info(no_loading);
             }
             else if(this.type == 'from_out'){
                 this.list = out_list;
