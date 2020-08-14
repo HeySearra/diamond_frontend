@@ -103,10 +103,10 @@ export default {
         type:String,
         default: 'none'
       },
-      file_name:{
-        type:String,
-        default: '',
-      }
+      // file_name:{
+      //   type:String,
+      //   default: '',
+      // }
   },
 
   mounted() {
@@ -244,8 +244,7 @@ export default {
             url: url,
             headers: {'X-CSRFToken': that.getCookie('csrftoken')},
             data: JSON.stringify({tid:that.tid}),
-            processData: false,
-            contentType: false,
+            async:false, 
             success:function (res){
                 if(that.console_debug){
                     console.log(url +  '：' + res.status);
@@ -285,8 +284,7 @@ export default {
             url: url,
             headers: {'X-CSRFToken': that.getCookie('csrftoken')},
             data: JSON.stringify({tid:that.tid}),
-            processData: false,
-            contentType: false,
+            async:false, 
             success:function (res){
                 if(that.console_debug){
                     console.log(url +  '：' + res.status);

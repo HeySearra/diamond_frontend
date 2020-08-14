@@ -83,8 +83,7 @@ export default {
                         url:"/user/forget/set_pwd",
                         data: JSON.stringify(msg),
                         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                        processData: false,
-                        contentType: false,
+                        async:false, 
                         success:function (res){
                             if(that.console_debug)console.log("(post)/forget/set_pwd"+ " : " +res.status);
                             if(res.status == 0){

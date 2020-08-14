@@ -132,13 +132,13 @@ export default {
         face_drop(e, item){
             e.preventDefault();
             this.$emit('face_drop', item.type, item.id);
-            alert(this.draging_type + '：' + this.draging_id + ' to ' + item.type + '：' + item.id);
+            //alert(this.draging_type + '：' + this.draging_id + ' to ' + item.type + '：' + item.id);
         },
 
         start_drag(e, item){
             this.draging_type = item.type;
             this.draging_id = item.id;
-            this.$emit('set_draging_info', this.draging_type, this.draging_id);
+            this.$emit('start_drop', this.draging_type, this.draging_id);
         },
 
         move_item(id, type, name){

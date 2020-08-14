@@ -1,14 +1,18 @@
 <template>
-    <div class="file_system_block">
+    <div class="file_system_block" id="file_system_block">
         <div class="clear_both"></div>
-        <div class="path" v-if="type=='self'&&path.length">
+        <div class="go_button can_not_choose" v-if="type=='self'&&path.length">
+            <div @click="go_left" :class="opa?'opa':''"><span class="el-icon-arrow-left"></span></div>
+            <div @click="go_right" :class="opa?'opa':''"><span class="el-icon-arrow-right"></span></div>
+        </div>
+        <div class="path" :class="opa?'opa':''" v-if="type=='self'&&path.length">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item v-for="item in path" :key="item.fid">
-                    <router-link :to="'/file/'+item.fid">{{item.name}}</router-link>
+                    <router-link :to="item.fid!=''?'/file/'+item.fid:''">{{item.name}}</router-link>
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="clear_both divide_type" style="height:10px"></div>
+        <div class="clear_both divide_type" :style="type=='self'&&path.length?'height:50px':'height:20px'"></div>
         <div v-for="item in list" :key="item.title">
             <file-display-block 
                 ref="display_component"
@@ -19,6 +23,8 @@
                 :context="context" 
                 :type="type" 
                 :is_in_desktop="is_in_desktop"
+                @start_drop="start_drag"
+                @face_drop="end_drag"
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
@@ -27,6 +33,7 @@
                 @add_item="add_item"></file-display-block>
             <div class="clear_both divide_type"></div>
         </div>
+        <div class="clear_both" style="height:50px"></div>
         <div class="icon_part can_not_choose" @click="change_view">
             <div class="icon_button"><span class="icon iconfont">&#xe7e4;</span></div>
         </div>
@@ -83,9 +90,12 @@ export default {
     data() {
         return {
             path: [/*{name:'Apath',id:'idA'},{name:'Bpath',id:'idB'},{name:'Cpath',id:'idC'}*/],
-            list:[
-
-            ]
+            list:[],
+            opa:false,
+            draging:{
+                type:'',
+                id:''
+            }
         }
     },
 
@@ -95,6 +105,7 @@ export default {
 
     methods:{
         init(){
+            this.init_scroll();
             if(this.type == 'from_out' || this.type == 'recent'){
                 this.list = this.out_list;
                 var that = this;
@@ -112,14 +123,31 @@ export default {
             }
         },
 
+        init_scroll(){
+            var that = this;
+            $('#main').off('scroll');
+            $('#main').scroll(function() {
+                var scroH = $('#main').scrollTop();
+                if(scroH >= 69){  //距离顶部大于100px时
+                    that.opa = true;
+                }
+                else{
+                    that.opa = false;
+                }
+                //console.log(scroH);
+            });
+        },
+
         getCookie (name) {
             var value = '; ' + document.cookie
             var parts = value.split('; ' + name + '=')
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
 
-        apply_for_info(){
-            this.$emit('in_loading');
+        apply_for_info(no_loading){
+            if(!no_loading){
+                this.$emit('in_loading');
+            }
             let url = '/fs/fold/elem?fid=' + this.fid;
             var that = this;
             $.ajax({ 
@@ -135,6 +163,10 @@ export default {
                     if(res.status == 0){
                         that.list = [];
                         that.path = res.path;
+                        that.path.push({
+                            fid:'',
+                            name:res.name
+                        });
                         let fold = [];
                         let file = [];
                         for(let i=0; i<res.list.length; i++){
@@ -202,9 +234,9 @@ export default {
             });
         },
 
-        refresh(out_list){
+        refresh(out_list, no_loading){
             if(this.type == 'self'){
-                this.apply_for_info();
+                this.apply_for_info(no_loading);
             }
             else if(this.type == 'from_out'){
                 this.list = out_list;
@@ -233,6 +265,60 @@ export default {
 
         add_item(type){
             this.$emit('add_item', type, this.fid);
+        },
+
+        go_left(){
+            history.go(-1);
+        },
+
+        go_right(){
+            history.go(1);
+        },
+
+        start_drag(type, id){
+            this.draging.type = type=='file' ? 'doc' : 'fold';
+            this.draging.id = id;
+        },
+
+        end_drag(type, id){
+            let url = '/fs/move';
+            var that = this;
+            $.ajax({
+                type:'post',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify({id:this.draging.id, type:this.draging.type, pfid:id}),
+                async:false, 
+                success:function (res){
+                    if(that.console_debug){
+                        console.log(url+ " : " +res.status);
+                    }
+                    if(res.status == 0){
+                        that.refresh({}, true);
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            case 3:
+                                that.alert_msg.warning('该目录下已经有同名的文件或文件夹');
+                                break;
+                            case 4:
+                                that.alert_msg.normal('该'+(that.draging.type=='file'?'文件':'文件夹')+'已经在目录中');
+                                break;
+                            case 5:
+                                that.alert_msg.error('找不到内容');
+                                break;
+                            default:
+                                that.alert_msg.error('发生未知错误');
+                        }
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
+                }
+            });
         }
     }
 
@@ -246,6 +332,7 @@ export default {
 
 .file_system_block{
     position: relative;
+    
 }
 
 .divide_type{
@@ -253,9 +340,50 @@ export default {
 }
 
 .path{
-    padding: 0 15px;
-    border: solid 1px;
+    padding: 1px 15px;
+    border-radius: 3px;
     margin-right:100px;
+    background-color: hsla(0, 0%, 93%, .7);
+    border:2px solid hsl(0, 0%, 93%);
+    color:#555;
+    position: fixed;
+    left:438px;
+    width: calc(83% - 350px);
+    transition:all 0.2s linear;
+    z-index:3;
+}
+
+.go_button{
+    padding: 1px 0;
+    position: fixed;
+    z-index:3;
+}
+
+.go_button div{
+    display:inline-block;
+    padding: 3px 8px;
+    border:solid 1px;
+    background-color: hsla(0, 0%, 93%, .7);
+    border:2px solid hsl(0, 0%, 93%);
+    border-radius: 3px;
+    cursor:pointer;
+    color:#999;
+    font-weight: bold;
+    transition:all 0.2s linear;
+}
+
+.opa{
+    opacity: .5;
+}
+
+.path:hover, .go_button div:hover{
+    background-color: hsla(0, 0%, 93%, .78);
+    border:2px solid hsl(0, 0%, 87%);
+    opacity: 1;
+}
+
+.el-breadcrumb__inner a, .el-breadcrumb__inner.is-link{
+    color:#555;
 }
 
 .el-breadcrumb{
@@ -270,12 +398,17 @@ export default {
     text-decoration: underline;
 }
 
+.path>>>.router-link-active, .path>>>.el-breadcrumb__item[aria-current="page"] span{
+    cursor:default !important;
+    text-decoration: none !important;
+}
+
 .icon_part{
     height:40px;
     width:60px;
     position: absolute;
-    top:27px;
-    right:23px;
+    top:50px;
+    right:25px;
     /* border:solid 1px; */
     text-align: center;
     border-radius: 5px;

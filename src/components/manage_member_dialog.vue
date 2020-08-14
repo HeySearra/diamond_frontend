@@ -224,8 +224,7 @@ export default {
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify({key:that.search_input}),
-                processData: false,
-                contentType: false,
+                async:false, 
                 success:function (res){ 
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);

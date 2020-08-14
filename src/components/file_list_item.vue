@@ -198,8 +198,7 @@ export default {
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify(msg),
-                    processData: false,
-                    contentType: false, 
+                    async:false, 
                     success:function (res){ 
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
@@ -241,8 +240,7 @@ export default {
                 url: url,
                 headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                 data: JSON.stringify(msg),
-                processData: false,
-                contentType: false, 
+                async:false, 
                 success:function (res){ 
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
@@ -391,8 +389,7 @@ export default {
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(json_data),
-                processData: false,
-                contentType: false,
+                async:false, 
                 success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
@@ -430,8 +427,7 @@ export default {
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(json_data),
-                processData: false,
-                contentType: false,
+                async:false, 
                 success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
@@ -465,15 +461,14 @@ export default {
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(json_data),
-                processData: false,
-                contentType: false,
+                async:false, 
                 success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
                         that.is_starred = !that.is_starred;
-                        that.alert_msg.success('收藏成功');
+                        that.alert_msg.success(that.is_starred?'收藏成功':'已取消收藏');
                     }
                     else{
                         switch(res.status){
@@ -502,8 +497,7 @@ export default {
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify(json_data),
-                    processData: false,
-                    contentType: false,
+                    async:false, 
                     success:function (res){
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
@@ -540,7 +534,7 @@ export default {
 
 .file_list_item{
     position: relative;
-    cursor:pointer;
+    /* cursor:pointer; */
     /* border: solid 1px; */
     border-bottom: solid 1px rgba(0, 0, 0, 0.1);
     height:50px;
@@ -624,7 +618,9 @@ export default {
     right:18px;
     font-size:15px;
     opacity: 0;
-    z-index:3
+    z-index:3;
+    cursor:pointer;
+    transition: all 0.1s linear;
 }
 
 .more_menu span{

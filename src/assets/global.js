@@ -91,4 +91,4 @@ export const datetime_format = (t, ct) => {
     }
 }
 
-export const magic_word = [];
+export var magic_word = [''];

@@ -12,14 +12,14 @@
               :list="my_list"
               addable="team"
               @add_item="add_item"
-              :apply_for_info="apply_for_info"
+              @refresh="refresh"
             ></team-display-block>
             <div class="clear_both"></div>
             <team-display-block title="我参与的团队" 
               :is_creator="false" 
               @open_info="open_info" 
               :list="other_list"
-              :apply_for_info="apply_for_info"
+              @refresh="refresh"
             ></team-display-block>
           </div>
           <div style="height:50px"></div>
@@ -75,7 +75,9 @@ export default {
             if(res.status == 0){
               that.my_list = res.my_team;
               that.other_list = res.join_team;
-              that.is_loading = false;
+              setTimeout(function(){
+                that.is_loading = false;
+              }, 200);
             }
             else{
                 switch(res.status){

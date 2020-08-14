@@ -4,16 +4,16 @@
             class="dialog_style"
             :visible.sync="dia_vis"
             width="600px">
-            <h3>{{title}}</h3>
+            <h3>来自{{team_name}}的{{title}}</h3>
             <div class="content">
                 <div style="height:10px"></div>
                 <div class="item_area">
-                    是否接受团队<b>{{team_name}}</b>的加入邀请？接受后您将成为该团队的成员
+                    是否接受团队<b> {{team_name}} </b>的加入邀请？接受后您将成为该团队的成员
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="click_to_accept(true)">接 受</el-button>
-                <el-button type="primary" @click="click_to_accept(false)">拒 绝</el-button>
+                <el-button type="danger" @click="click_to_accept(false)">拒 绝</el-button>
+                <el-button type="success" @click="click_to_accept(true)">接 受</el-button>
             </span>
         </el-dialog>
     </div>
@@ -53,25 +53,24 @@ export default {
                 url:"/team/invitation/confirm",
                 data: JSON.stringify(msg),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                processData: false,
-                contentType: false,
+                async:false, 
                 success:function (res){
                     if(that.console_debug){
                         console.log("(post)/team/invitation/confirm"+ " : " +res.status);
                     }
                     if(res.status == 0){
+                        that.alert_msg.success('已' + (if_accept?'成功':'拒绝') +'加入团队！');
+                        if_accept ? that.$router.push({path: '/team/' + res.tid + "/file/desktop"}) : '';
                         that.dia_vis = false;
-                        that.alert_box.msg('已成功加入团队！');
-                        that.$router.push({path: '/team/' + res.tid + "/file/desktop"});
                     }
                     else{
                         if(if_accept){
                             switch(res.status){
                                 case 2:
-                                    that.alert_box.msg('接受邀请失败', '用户未登录或没有权限');
+                                    that.alert_msg.error('用户未登录或没有权限');
                                     break;
                                 case 3:
-                                    that.alert_box.msg('接受邀请失败', '您已在团队中');
+                                    that.alert_msg.normal('您已在团队中');
                                     break;
                                 default:
                                     that.alert_msg.error('出错啦');
@@ -80,7 +79,7 @@ export default {
                         else{
                             switch(res.status){
                                 case 2:
-                                    that.alert_box.msg('拒绝邀请失败', '用户未登录或没有权限');
+                                    that.alert_msg.error('用户未登录或没有权限');
                                     break;
                                 default:
                                     that.alert_msg.error('出错啦');

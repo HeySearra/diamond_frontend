@@ -103,7 +103,7 @@ export default {
         },
         confirm_to_join(){
             let data = {
-                mid: this.id,
+                mid: this.mid,
             }
             this.$emit('confirm-to-join', data);
         },
@@ -132,8 +132,7 @@ export default {
                 url: "/msg/ar",
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(msg),
-                processData: false,
-                contentType: false,
+                async:false, 
                 success:function (res){
                     if(that.console_debug){
                         console.log("(post)/msg/ar"+ " : " +res.status);

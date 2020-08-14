@@ -3,7 +3,7 @@
     <el-container>
     <el-container class="mid">
       <el-container>
-        <el-main v-loading="is_loading">
+        <el-main v-loading="is_loading" id="main">
           <div style="padding: 0 40px 0 30px;">
               <div style="height:20px"></div>
             <component
@@ -27,7 +27,7 @@
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar :active="sidebar_active"></sidebar>
+        <sidebar :active="(sidebar_active=='desktop'||is_desktop)?'desktop':''"></sidebar>
       </el-aside>
     </el-container>
     <el-footer></el-footer>
@@ -64,7 +64,7 @@ export default {
         this.fid = this.$route.params.id?this.$route.params.id:'desktop';
         this.sidebar_active = this.fid=='desktop' ? 'desktop' : '';
 
-        this.fid=='desktop' ? this.get_desktop_id() : '';
+        this.get_desktop_id();
         if(this.fid == 'desktop'){
           var that = this;
           setTimeout(function(){
@@ -168,7 +168,10 @@ export default {
     },
 
     out_loading(){
-      this.is_loading = false;
+      var that = this;
+      setTimeout(function(){
+        that.is_loading = false;
+      }, 200);
     }
   }
 }

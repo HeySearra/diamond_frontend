@@ -140,6 +140,7 @@ export default {
 .workbench_star{
     width: calc(100% - 350px);
     height:calc(100% - 130px);
+    min-width:600px;
 }
 
 h1{

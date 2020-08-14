@@ -52,7 +52,7 @@ export default {
             this.view_type_manager.set(this.view_type);
             var that = this;
             setTimeout(function(){
-            that.$refs.file_system_component.init();
+                that.$refs.file_system_item.init();
             }, 0);
         },
 
@@ -109,6 +109,7 @@ export default {
 .workbench_create{
     width: calc(100% - 350px);
     height:calc(100% - 130px);
+    min-width:600px;
 }
 
 h1{

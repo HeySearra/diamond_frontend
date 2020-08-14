@@ -87,8 +87,6 @@ export default {
             url:'/temp/delete',
             headers: {'X-CSRFToken': this.getCookie('csrftoken')},
             data: JSON.stringify(msg),
-            processData: false,
-            contentType: false,
             async: false,
             success:function (res){
               if (that.console_debug) {

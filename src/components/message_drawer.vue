@@ -123,8 +123,7 @@ export default {
                 type:'post',
                 url:"/msg/ar_all",
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                processData: false,
-                contentType: false,
+                async:false, 
                 success:function (res){
                     if(that.console_debug){
                         console.log("(get)/msg/ar_all"+ " : " +res.status);

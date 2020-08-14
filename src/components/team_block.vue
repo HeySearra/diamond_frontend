@@ -1,6 +1,6 @@
 <template>
     <div class="can_not_choose team_block" :class="focus?'team_block_focus':''">
-        <div class="click_area" :class="focus?'click_area_focus':''" @click="open"></div>
+        <div class="click_area" :class="focus?'click_area_focus':''" @click="click"></div>
         <div class="big_icon">
             <div>
                 <span class="icon iconfont">&#xe6cb;</span>
@@ -39,7 +39,9 @@ export default {
         },
         is_creator:{
             type:Boolean,
-            default:false
+            default:false,
+            timer:undefined,
+            click_flag: false
         },
     },
     data() {
@@ -61,6 +63,20 @@ export default {
             var value = '; ' + document.cookie
             var parts = value.split('; ' + name + '=')
             if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
+        click(){
+            this.timer ? clearTimeout(this.timer) : '';
+            if(this.click_flag){
+                this.open();
+            }
+            else{
+                this.click_flag = true;
+                var that = this;
+                this.timer = setTimeout(function(){
+                    that.click_flag = false;
+                }, 500);
+            }
         },
 
         vis_change(value){
@@ -86,16 +102,14 @@ export default {
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify({tid:that.tid}),
-                    processData: false,
-                    contentType: false, 
+                    async:false, 
                     success:function (res){ 
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
                         if(res.status == 0){
-                            that.alert_box.msg('提示', '成功退出团队', function(){
-                                that.$router.push({name:'team_center'});
-                            });
+                            that.alert_msg.success('成功退出团队');
+                            that.$emit('refresh');
                         }
                         else{
                             switch(res.status){
@@ -119,7 +133,6 @@ export default {
         },
         delete_team(){
             var that = this;
-            this.console('rwr');
             this.alert_box.confirm_msg('警告', '确定解散团队 ' + that.team_name + ' 吗？', function(){
                 let url = '/team/delete'
                 $.ajax({ 
@@ -127,16 +140,14 @@ export default {
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify({tid:that.tid}),
-                    processData: false,
-                    contentType: false, 
+                    async:false, 
                     success:function (res){ 
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
                         if(res.status == 0){
-                            that.alert_box.msg('提示', '成功解散团队', function(){
-                            that.$router.push({name:'team_center'});
-                            });
+                            that.alert_msg.success('成功解散团队');
+                            that.$emit('refresh');
                         }
                         else{
                             switch(res.status){
@@ -265,7 +276,6 @@ export default {
     padding: 15px;
     overflow: hidden;
     border-radius: 5px;
-    cursor:pointer;
 }
 
 .team_block:hover, .team_block_focus{

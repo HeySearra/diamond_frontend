@@ -84,8 +84,7 @@ export default {
                         url:"/user/login/submit",
                         data: JSON.stringify(msg),
                         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                        processData: false,
-                        contentType: false,
+                        async:false, 
                         success:function (res){
                             if(that.console_debug){
                                 console.log("(post)/user/register/submit"+ " : " +res.status);

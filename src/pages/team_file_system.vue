@@ -76,7 +76,7 @@ export default {
         }
         this.fid = this.$route.params.id?this.$route.params.id:'desktop';
 
-        this.fid=='desktop' ? this.get_desktop_id() : '';
+        this.get_desktop_id();
         if(this.fid == 'desktop'){
           var that = this;
           setTimeout(function(){
@@ -106,7 +106,7 @@ export default {
     },
 
     get_desktop_id(){
-      let url = 'fs/team/root?tid=' + this.tid;
+      let url = '/fs/team/root?tid=' + this.tid;
       var that = this;
       $.ajax({ 
           type:'get',
@@ -118,7 +118,9 @@ export default {
                   console.log(url +  '：' + res.status);
               }
               if(res.status == 0){
-                that.fid = res.fid;
+                if(that.fid == 'desktop'){
+                  that.fid = res.fid;
+                }
               }
               else{
                   switch(res.status){
@@ -186,7 +188,10 @@ export default {
     },
 
     out_loading(){
-      this.is_loading = false;
+      var that = this;
+      setTimeout(function(){
+        that.is_loading = false;
+      }, 200);
     }
   }
 }

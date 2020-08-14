@@ -107,9 +107,10 @@ export default {
 .workbench_content{
   position:fixed;
   top:132px;
-  overflow: auto;
+  overflow-y: overlay;
   right: 0;
   padding-left: 31px;
+  min-width:600px;
 }
 
 </style>
