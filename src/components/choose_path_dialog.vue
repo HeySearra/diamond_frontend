@@ -171,7 +171,7 @@ export default {
             let url = '/fs/move';
             var that = this;
             $.ajax({
-                type:'psot',
+                type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify({id:this.id, type:this.type, pfid:this.fid}),
@@ -215,7 +215,7 @@ export default {
             let url = '/fs/copy';
             var that = this;
             $.ajax({
-                type:'psot',
+                type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify({id:this.id, type:this.type, pfid:this.fid}),

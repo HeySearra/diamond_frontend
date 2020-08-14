@@ -164,7 +164,7 @@ export default {
 
         remove_member(uid, name){
             if(uid == this.login_manager.get_uid()){
-                this.alert_msg.warning('对自己好一些，呵呵');
+                this.alert_msg.warning('对自己好一些' + this.magic_word[parseInt((Math.random()*1000))%this.magic_word.length]);
                 return;
             }
 

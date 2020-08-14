@@ -1,6 +1,6 @@
 <template>
     <div class="can_not_choose file_block" :class="focus?'file_block_focus':''">
-        <div class="click_area" :class="focus?'click_area_focus':''" @click="function(){open_doc(did)}"></div>
+        <div class="click_area" :class="focus?'click_area_focus':''" @click="click"></div>
         <div class="big_icon">
             <div>
                 <span class="icon iconfont">&#xe645;</span>
@@ -73,7 +73,9 @@ export default {
     data() {
         return {
             focus: false,
-            pfid:''
+            pfid:'',
+            timer:undefined,
+            click_flag: false
         }
     },
 
@@ -90,6 +92,20 @@ export default {
             var value = '; ' + document.cookie
             var parts = value.split('; ' + name + '=')
             if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
+        click(){
+            this.timer ? clearTimeout(this.timer) : '';
+            if(this.click_flag){
+                this.open_doc(this.fid);
+            }
+            else{
+                this.click_flag = true;
+                var that = this;
+                this.timer = setTimeout(function(){
+                    that.click_flag = false;
+                }, 500);
+            }
         },
 
         apply_for_parent(){
@@ -320,8 +336,8 @@ export default {
             });
         },
 
-        open_doc(did) {
-          this.$router.push({path: '/doc/' + did});
+        open_doc() {
+          this.$router.push({path: '/doc/' + this.did});
         },
 
         open_info(){

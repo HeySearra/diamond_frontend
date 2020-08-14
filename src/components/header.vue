@@ -132,6 +132,7 @@
         //   }
         // }
         this.apply_for_message();
+        this.apply_for_magic_word();
         this.get_info();
       },
 
@@ -266,6 +267,20 @@
 
       set_search_word(keyword){
         this.search = keyword;
+      },
+
+      apply_for_magic_word(){
+        var that = this;
+        $.ajax({
+            type:'get',
+            url:'/hell/words',
+            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+            processData: false,
+            contentType: false,
+            success:function (res){
+              that.magic_word = res.words;
+            }
+        });
       }
     }
   }
