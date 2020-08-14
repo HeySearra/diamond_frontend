@@ -64,7 +64,7 @@
       <el-row>
         <div class="doc_info">
           <div class="info_item">
-            <div class="info_key">key：</div>
+            <div class="info_key">key：{{file_name}}</div>
             <div class="info_value">valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue</div>
             <div class="clear_both"></div>
           </div>
@@ -101,6 +101,10 @@ export default {
         type:String,
         default: 'none'
       },
+      file_name:{
+        type:String,
+        default: '',
+      }
   },
 
   mounted() {
@@ -143,13 +147,13 @@ export default {
       this.tid = tid;
       let url = '/team/info?tid=' + tid;
       var that = this;
-      $.ajax({ 
+      $.ajax({
           type:'get',
           url: url,
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           processData: false,
-          contentType: false, 
-          success:function (res){ 
+          contentType: false,
+          success:function (res){
               if(that.console_debug){
                   console.log(url +  '：' + res.status);
               }
@@ -171,7 +175,7 @@ export default {
                       default:
                           that.alert_msg.error('发生了未知错误');
                   }
-                  
+
               }
           },
           error:function(res){
@@ -180,13 +184,13 @@ export default {
       });
 
       let url2 = '/team/identity?tid=' + tid;
-      $.ajax({ 
+      $.ajax({
           type:'get',
           url: url2,
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           processData: false,
-          contentType: false, 
-          success:function (res){ 
+          contentType: false,
+          success:function (res){
               if(that.console_debug){
                   console.log(url2 +  '：' + res.status);
               }
@@ -213,7 +217,7 @@ export default {
                       default:
                           that.alert_msg.error('发生了未知错误');
                   }
-                  
+
               }
           },
           error:function(res){
@@ -226,14 +230,14 @@ export default {
       var that = this;
       this.alert_box.confirm_msg('警告', '确定退出团队 ' + that.team_name + ' 吗？', function(){
         let url = '/team/quit'
-        $.ajax({ 
+        $.ajax({
             type:'post',
             url: url,
             headers: {'X-CSRFToken': that.getCookie('csrftoken')},
             data: JSON.stringify({tid:that.tid}),
             processData: false,
-            contentType: false, 
-            success:function (res){ 
+            contentType: false,
+            success:function (res){
                 if(that.console_debug){
                     console.log(url +  '：' + res.status);
                 }
@@ -253,7 +257,7 @@ export default {
                         default:
                             that.alert_msg.error('发生了未知错误');
                     }
-                    
+
                 }
             },
             error:function(res){
@@ -267,14 +271,14 @@ export default {
       var that = this;
       this.alert_box.confirm_msg('警告', '确定解散团队 ' + that.team_name + ' 吗？', function(){
         let url = '/team/delete'
-        $.ajax({ 
+        $.ajax({
             type:'post',
             url: url,
             headers: {'X-CSRFToken': that.getCookie('csrftoken')},
             data: JSON.stringify({tid:that.tid}),
             processData: false,
-            contentType: false, 
-            success:function (res){ 
+            contentType: false,
+            success:function (res){
                 if(that.console_debug){
                     console.log(url +  '：' + res.status);
                 }
@@ -294,7 +298,7 @@ export default {
                         default:
                             that.alert_msg.error('发生了未知错误');
                     }
-                    
+
                 }
             },
             error:function(res){
