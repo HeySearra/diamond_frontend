@@ -29,7 +29,7 @@
     <el-footer></el-footer>
     </el-container>
     <file-info-dialog ref="team_info_dialog" @refresh="refresh"></file-info-dialog>
-    <new-dialog ref="new_dialog" @refresh="refresh"></new-dialog>
+    <new-dialog ref="new_dialog" @refresh="refresh" :desktop_alert="true"></new-dialog>
   </div>
 </template>
 

@@ -51,7 +51,7 @@ export default {
                         console.log("(get)/workbench/recent"+ " : " +res.status);
                     }
                     if(res.status == 0){
-                        for(let i; i < res.list.length; i++){
+                        for(let i=0; i < res.list.length; i++){
                             that.list[0].content.push({
                                 type: 'file',
                                 id: res.list[i].id,
