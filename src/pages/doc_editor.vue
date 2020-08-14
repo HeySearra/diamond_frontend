@@ -14,7 +14,6 @@
       <el-col class="editor-container" style="border: solid 2px;" :span="18">
         <!-- Editor Container -->
         <div id="editor">
-          <p>This is the initial editor content.</p>
         </div>
       </el-col>
       <el-col :span="6" id="comment-sidebar" style="border: solid 2px;"><br></el-col>
@@ -86,11 +85,11 @@ class CommentsAdapter {
       addComment(data) {
         console.log('Comment added', data);
         /*let msg = {
-          'did': pageData.did,
-          'uid': pageData.userId,
-          'threadId': data.threadId,
-          'commentId': data.commentId,
-          'content': data.content
+          did: pageData.did,
+          uid: pageData.userId,
+          threadId: data.threadId,
+          commentId: data.commentId,
+          content: data.content
         };
         $.ajax({
           type: 'post',
@@ -136,11 +135,11 @@ class CommentsAdapter {
       updateComment(data) {
         console.log('Comment updated', data);
         /*let msg = {
-          'did': pageData.did,
-          'uid': pageData.userId,
-          'threadId': data.threadId,
-          'commentId': data.commentId,
-          'content': data.content
+          did: pageData.did,
+          uid: pageData.userId,
+          threadId: data.threadId,
+          commentId: data.commentId,
+          content: data.content
         };
         $.ajax({
           type: 'post',
@@ -182,10 +181,10 @@ class CommentsAdapter {
       removeComment(data) {
         console.log('Comment removed', data);
         /*let msg = {
-          'did': pageData.did,
-          'uid': pageData.userId,
-          'threadId': data.threadId,
-          'commentId': data.commentId,
+          did: pageData.did,
+          uid: pageData.userId,
+          threadId: data.threadId,
+          commentId: data.commentId,
         };
         $.ajax({
           type: 'post',
@@ -253,8 +252,8 @@ class CommentsAdapter {
 
       getCommentsOfThread(threadId) {
         let msg = {
-          'did': pageData.did,
-          'threadId': threadId
+          did: pageData.did,
+          threadId: threadId
         };
         $.ajax({
           type: 'get',
@@ -312,8 +311,8 @@ export default {
       }
     ];
 
-    //this.getDocAuth();
-    //this.getInitialDocContent();
+    // this.getDocAuth();
+    this.getInitialDocContent();
     this.initCKEditor();
   },
 
@@ -452,7 +451,7 @@ export default {
       var that = this;
       const did = this.$route.params.did;
       let msg = {
-        'did': did
+        did: did
       };
       $.ajax({
         type: 'get',
@@ -491,7 +490,7 @@ export default {
               default:
                 that.alert_msg.error('未知错误');
             }
-            that.router.push({path:'/workbench/recent_view'});
+            //that.$router.push({path:'/workbench/recent_view'});
           }
         },
         error: function () {
@@ -502,10 +501,13 @@ export default {
     getInitialDocContent() {
       //通过路由获取文章id
       var that = this;
-      const did = this.$route.params.did;
-      let msg = {
-        'did': did
+      var did = this.$route.params.did;
+      console.log(did);
+      var msg = {
+        did: did,
       };
+      console.log(msg);
+      console.log(JSON.stringify(msg));
       $.ajax({
         type: 'get',
         url: '/doc/all',
@@ -521,6 +523,7 @@ export default {
           if (res.status === 0) {
             //res.name
             pageData.initialData = res.content;
+            console.log(res.content);
           } else {
             switch (res.status) {
               case 1:
@@ -536,7 +539,7 @@ export default {
                 that.alert_msg.error('未知错误');
             }
             //跳转到首页
-            that.router.push({path:'/workbench/recent_view'});
+            // that.$router.push({path:'/workbench/recent_view'});
           }
         },
         error: function () {
@@ -544,17 +547,17 @@ export default {
         }
       })
     },
-    updateDocContent(content) {
+    updateDocContent1(content) {
       //console.log( window.editor.getData() );
       console.log(content);
     },
-    updateDocContent1(content) {
+    updateDocContent(content) {
       var that = this;
       const did = this.$route.params.did;
       let msg = {
-        'did': did,
-        'content': content,
-        'name': ''
+        did: did,
+        content: content,
+        name: ''
       };
       $.ajax({
         type: 'post',
@@ -568,28 +571,29 @@ export default {
             console.log("(post)/doc/edit" + " : " + res.status);
           }
           if (res.status === 0) {
+            that.alert_msg.success('保存成功');
             //提示成功
           } else {
             switch (res.status) {
               case 1:
-                that.alert_box.msg('编辑失败', '键值错误');
+                that.alert_msg.error('编辑失败: 键值错误');
                 break;
               case 2:
-                that.alert_box.msg('编辑失败', '您的权限不足或还没有登录');
+                that.alert_msg.error('编辑失败: 您的权限不足或还没有登录');
                 break;
               case 3:
-                that.alert_box.msg('编辑失败', '您的标题不合法');
+                that.alert_msg.error('编辑失败: 您的标题不合法');
                 break;
               case 4:
-                that.alert_box.msg('编辑失败', '您的内容不合法');
+                that.alert_msg.error('编辑失败: 您的内容不合法');
                 break;
               case 5:
-                that.alert_box.msg('编辑失败', '同目录下存在同名文件');
+                that.alert_msg.error('编辑失败: 同目录下存在同名文件');
                 break;
               default:
-                that.alert_msg.error('未知错误');
+                that.alert_msg.error('编辑失败: 未知错误');
             }
-            //that.router.push({path:'/workbench/recent'});
+            //that.$router.push({path:'/workbench/recent'});
           }
         },
         error: function () {
@@ -604,8 +608,8 @@ export default {
     var that = this;
     const did = this.$route.params.did;
     let msg = {
-      'name': '',
-      'content': content,
+      name: '',
+      content: content,
     };
     $.ajax({
       type: 'post',
@@ -653,7 +657,7 @@ export default {
     var that = this;
     const did = this.$route.params.did;
     let msg = {
-      'did': did
+      did: did
     };
     $.ajax({
       type: 'get',
@@ -685,7 +689,7 @@ export default {
           }
         }
         //跳转到首页
-        that.router.push({path:'/workbench/recent'});
+        //that.$router.push({path:'/workbench/recent'});
       },
       error: function () {
         that.alert_msg.error('连接失败');
@@ -730,9 +734,9 @@ export default {
     var that = this;
     const did = this.$route.params.did;
     let msg = {
-      'id': did,
-      'type': 'doc',
-      'is_stared': is_stared
+      id: did,
+      type: 'doc',
+      is_stared: is_stared
     };
     $.ajax({
       type:'post',
@@ -774,8 +778,8 @@ export default {
     var that = this;
     const did = this.$route.params.did;
     let msg = {
-      'id': did,
-      'type': 'doc',
+      id: did,
+      type: 'doc',
     };
     $.ajax({
       type:'get',
@@ -816,7 +820,7 @@ export default {
     var that = this;
     const did = this.$route.params.did;
     let msg = {
-      'id': did,
+      id: did,
     };
     $.ajax({
       type:'get',
