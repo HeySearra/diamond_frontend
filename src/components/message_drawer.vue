@@ -12,7 +12,7 @@
         </div>
         <el-divider></el-divider>
         <div v-infinite-scroll="load" class="message_area" style="overflow-x:hidden;overflow-y:auto;border:solid 1px;height:calc(100vh - 50px)">
-            <message-item v-for="item in list" :key="item.mid" ref="message_item" @confirm_to_join="deal_team_invite"></message-item>
+            <component v-for="item in list" :key="item.mid" :mid="item.mid" ref="message_item" @confirm_to_join="deal_team_invite" :is="'message-item'"></component>
             <p v-if="is_loading" class="not_found">加载中 <i class="el-icon-loading"></i></p>
             <p v-if="is_final&&list.length==0" class="not_found">你没有收到任何消息</p>
         </div>
@@ -52,23 +52,25 @@ export default {
                 type:'get',
                 url:"/msg/list?page=" + that.page + "&each=" + that.each,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                processData: false,
-                contentType: false,
+                async: false,
                 success:function (res){
                     if(that.console_debug){
                         console.log("(get)/msg/list/"+ " : " +res.status);
                     }
                     if(res.status == 0){
-                        let item = that.$refs.message_item;
                         that.amount = res.amount;
-                        that.list.concat(res.list);
+                        let len = that.list.length;
+                        for(let i = 0; i < res.list.length; i++){
+                            that.list.push(res.list[i]);
+                        }
                         if(that.list.length >= res.amount){
                             that.is_final = true;
                         }
+                        let item = that.$refs.message_item;
                         if(item){
                             setTimeout(() => {
                                 if(item instanceof Array){
-                                    for(let i = 0; i<item.length; i++){
+                                    for(let i = len; i<item.length; i++){
                                         item[i].init();
                                     }
                                 }
@@ -103,7 +105,7 @@ export default {
             this.apply_for_info();
         },
 
-        load(){
+        load(){this
             if(this.is_final){
                 return;
             }
