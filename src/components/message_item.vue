@@ -114,13 +114,13 @@ export default {
 
         click_to_read(){
             this.mark_read();
-            if(type == 'join'){
+            if(this.type == 'join' && this.is_process == false){
                 this.confirm_to_join();
             }
-            else if(type == 'admin' || type == 'accept'){
+            else if(this.type == 'admin' || type == 'accept'){
                 this.jump_to_team();
             }
-            else if(type == 'doc'){
+            else if(this.type == 'doc'){
                 this.jump_to_doc();
             }
         },
