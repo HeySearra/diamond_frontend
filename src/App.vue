@@ -10,7 +10,7 @@
     </el-header>
     <router-view/>
     <el-backtop></el-backtop>
-    <message-drawer ref="message_drawer" @deal_team_invite="deal_team_invite"></message-drawer>
+    <message-drawer ref="message_drawer" @deal-team-invite="deal_team_invite"></message-drawer>
     <edit-user-info-dialog ref="edit_user_info_dialog" @apply_for_info='apply_for_info'></edit-user-info-dialog>
     <change-password-dialog ref="change_password_dialog"></change-password-dialog>
     <chatting-dialog ref="chatting_dialog"></chatting-dialog>

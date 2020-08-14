@@ -25,7 +25,7 @@ export default {
         return {
             title:'团队邀请',
             team_name: 'team_name',
-            tid:'',
+            mid:'',
             dia_vis:false
         }
     },
@@ -54,9 +54,9 @@ export default {
                         console.log("(post)/team/invitation/confirm"+ " : " +res.status);
                     }
                     if(res.status == 0){
-                        this.dia_vis = false;
+                        that.dia_vis = false;
                         that.alert_box.msg('已成功加入团队！');
-                        that.$router.push({path: '/team/' + this.tid + "/file/desktop"});
+                        that.$router.push({path: '/team/' + res.tid + "/file/desktop"});
                     }
                     else{
                         if(if_accept){
@@ -97,8 +97,6 @@ export default {
 @import url("../assets/dialog_style.css");
 
 .item_area{
-    border:solid 1px;
-    height:400px;
     overflow-y: auto;
 }
 

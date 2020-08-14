@@ -233,7 +233,7 @@
               if(res.status == 0){
                 that.alert_msg.success('登出成功');
                 that.login_manager.clear();
-                that.$router.push({path: '/login' + this.id});
+                that.$router.push({path: '/login'});
                 // that.$router.go(0); //刷新
               }
               else{

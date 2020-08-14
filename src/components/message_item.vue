@@ -1,5 +1,5 @@
 <template>
-    <div class="message-item" @dbclick="click_to_read" @click="mark_read">
+    <div class="message-item" @dblclick="click_to_read" @click="mark_read">
         <div style="height:10px;"></div>
         <div class="item">
             <div class="profile">
@@ -105,7 +105,7 @@ export default {
             let data = {
                 mid: this.id,
             }
-            this.$emit('confirm_to_join', data);
+            this.$emit('confirm-to-join', data);
         },
         jump_to_team(){
             this.$router.push({path: '/team/' + this.id + "/file/desktop"});
