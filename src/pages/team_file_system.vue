@@ -10,11 +10,13 @@
                 ref="file_system_component"
                 :is="view_type=='block'?'file-system-block':'file-system-list'"
                 :fid="fid"
+                :addable="true"
                 @change_view="change_view"
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
-                @copy_item="copy_item">
+                @copy_item="copy_item"
+                @add_item="add_item">
             </component>
           </div>
           <div style="height:50px"></div>
@@ -23,8 +25,6 @@
       <el-aside>
         <sidebar context="team" 
             ref="sidebar"
-            @create_new_file="create_new_file" 
-            @create_new_fold="create_new_fold"
             @edit_admin="edit_admin"
             @manage_member="manage_member"
             @edit_team_info="edit_team_info"></sidebar>
@@ -135,16 +135,12 @@ export default {
         this.$route.push({path:'/'});
     },
 
-    open_info(title, content){
-        this.$refs.file_info_dialog.open_info(title, content);
+    open_info(title, content, type){
+        this.$refs.file_info_dialog.open_info(title, content, type);
     },
 
-    create_new_file(){
-        this.$refs.new_dialog.open('file', this.fid);
-    },
-
-    create_new_fold(){
-        this.$refs.new_dialog.open('fold', this.fid);
+    add_item(type, fid){
+        this.$refs.new_dialog.open(type, fid);
     },
 
     edit_admin(){
@@ -170,6 +166,7 @@ export default {
     copy_item(id, type, name){
         this.$refs.choose_path_dialog.open(this.fid, type, id, name, 'copy');
     },
+    
   }
 }
 </script>

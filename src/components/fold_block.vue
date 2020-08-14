@@ -305,7 +305,7 @@ export default {
                             key:'路径',
                             value:path
                         });
-                        that.$emit('open_info', that.name, content);
+                        that.$emit('open_info', that.name, content, 'fold');
                     }
                     else{
                         switch(res.status){
@@ -604,7 +604,7 @@ export default {
 }
 
 .fold_block:hover .more_menu, .more_menu_focus{
-    opacity: 1 !important;
+    opacity: .7 !important;
 }
 
 .more_menu{

@@ -1,6 +1,6 @@
 <template>
     <div class="team_display_block">
-        <h1>{{title}}</h1>
+        <h1 class="can_not_choose">{{title}} <span class="el-icon-circle-plus-outline add_button" v-if="addable!='none'" @click="add_item"></span></h1>
         <el-divider></el-divider>
         <div class="team_area">
             <div class="item" 
@@ -40,6 +40,10 @@ export default {
                     },
                 ]
             }
+        },
+        addable:{
+            type:String,
+            default:'none'
         }
     },
     data() {
@@ -61,8 +65,12 @@ export default {
             this.$emit("apply_for_info");
         },
 
-        open_info(title, content){
-            this.$emit('open_info', title, content);
+        open_info(title, content, type){
+            this.$emit('open_info', title, content, type);
+        },
+
+        add_item(){
+            this.$emit('add_item');
         }
     }
 
@@ -74,9 +82,10 @@ export default {
 @import url("../assets/dialog_style.css");
 
 h1{
-    font-size: 30px !important;
+    font-size: 23px !important;
     text-indent: 25px;
-    margin-bottom:5px !important;;
+    margin-bottom:-6px !important;
+    color:hsl(0, 0%, 39%);
 }
 
 .team_area{
@@ -84,8 +93,21 @@ h1{
 }
 
 .item{
-    margin: 6px 15px;
+    margin: 3px;
     float:left;
+}
+
+.add_button{
+    cursor: pointer;
+    display:inline-block;
+    font-size:21px !important;
+    margin-left:-10px;
+    opacity:.5;
+    transition: all 0.1s linear;
+}
+
+h1:hover .add_button{
+    opacity: 1;
 }
 
 @media (max-width: 1200px){

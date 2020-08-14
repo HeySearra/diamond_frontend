@@ -4,7 +4,6 @@
     <el-container class="mid">
       <el-container>
         <el-main>
-          <h1 style="text-indent:1.5em">回收站</h1>
           <div style="padding: 0 40px 0 30px;">
               <div style="height:20px"></div>
             <component
@@ -140,8 +139,8 @@ export default {
         }, 0);
     },
 
-    open_info(title, content){
-        this.$refs.file_info_dialog.open_info(title, content);
+    open_info(title, content, type){
+        this.$refs.file_info_dialog.open_info(title, content, type);
     },
 
     create_new_file(){

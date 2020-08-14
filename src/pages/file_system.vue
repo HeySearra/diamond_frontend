@@ -11,19 +11,21 @@
                 :is="view_type=='block'?'file-system-block':'file-system-list'"
                 :fid="fid"
                 :is_in_desktop="is_desktop"
+                :addable="true"
                 @change_view="change_view"
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
                 @copy_item="copy_item"
-                @refresh="refresh">
+                @refresh="refresh"
+                @add_item="add_item">
             </component>
           </div>
           <div style="height:50px"></div>
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar :active="sidebar_active" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
+        <sidebar :active="sidebar_active"></sidebar>
       </el-aside>
     </el-container>
     <el-footer></el-footer>
@@ -138,16 +140,12 @@ export default {
         this.$router.push({path:'/'});
     },
 
-    open_info(title, content){
-        this.$refs.file_info_dialog.open_info(title, content);
+    open_info(title, content, type){
+        this.$refs.file_info_dialog.open_info(title, content, type);
     },
 
-    create_new_file(){
-        this.$refs.new_dialog.open('file', this.fid);
-    },
-
-    create_new_fold(){
-        this.$refs.new_dialog.open('fold', this.fid);
+    add_item(type, fid){
+        this.$refs.new_dialog.open(type, fid);
     },
 
     move_item(id, type, name){

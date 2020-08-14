@@ -124,8 +124,8 @@ export default {
             }, 0);
         },
 
-        open_info(title, content){
-            this.$emit('open_info', title, content);
+        open_info(title, content, type){
+            this.$emit('open_info', title, content, type);
         }
     }
 }

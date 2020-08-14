@@ -58,7 +58,7 @@ export default {
   }
 
   body{
-    background-color: #f6f6f6;
+    background-color: hsl(0, 0%, 99%);
     width:100vw !important;
     overflow-x: hidden;
   }

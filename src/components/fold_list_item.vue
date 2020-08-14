@@ -331,7 +331,7 @@ export default {
                             key:'路径',
                             value:path
                         });
-                        that.$emit('open_info', that.name, content);
+                        that.$emit('open_info', that.name, content, 'fold');
                     }
                     else{
                         switch(res.status){
@@ -627,7 +627,7 @@ export default {
 }
 
 .fold_list_item:hover .more_menu, .more_menu_focus{
-    opacity: 1 !important;
+    opacity: .7 !important;
 }
 
 .more_menu{
@@ -670,6 +670,7 @@ export default {
     height:50px;
     top:0;
     right:39px;
+    color:#999
 }
 
 .info_area div{
