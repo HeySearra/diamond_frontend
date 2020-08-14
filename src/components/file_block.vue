@@ -122,44 +122,46 @@ export default {
         },
 
         click_to_delete_forever(){
-            var that = this;
-            var msg = {
-                id: that.did,
-                type: 'doc',
-            };
-            let url = '/fs/recycle/delete'
-            $.ajax({ 
-                type:'post',
-                url: url,
-                headers: {'X-CSRFToken': that.getCookie('csrftoken')},
-                data: JSON.stringify(msg),
-                processData: false,
-                contentType: false, 
-                success:function (res){ 
-                    if(that.console_debug){
-                        console.log(url +  '：' + res.status);
-                    }
-                    if(res.status == 0){
-                        that.alert_box.msg('提示', '恢复成功');
-                        that.$emit('refresh');
-                    }
-                    else{
-                        switch(res.status){
-                            case 2:
-                                that.alert_msg.error('权限不足');
-                                break;
-                            case 3:
-                                that.alert_msg.error('找不到该内容');
-                                break;
-                            default:
-                                that.alert_msg.error('发生了未知错误');
+            this.alert_box.confirm_msg('警告', '确定彻底删除文件 ' + that.team_name + ' 吗？', function(){
+                var that = this;
+                var msg = {
+                    id: that.did,
+                    type: 'doc',
+                };
+                let url = '/fs/recycle/delete'
+                $.ajax({ 
+                    type:'post',
+                    url: url,
+                    headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+                    data: JSON.stringify(msg),
+                    processData: false,
+                    contentType: false, 
+                    success:function (res){ 
+                        if(that.console_debug){
+                            console.log(url +  '：' + res.status);
                         }
-                        
+                        if(res.status == 0){
+                            that.alert_box.msg('提示', '删除成功');
+                            that.$emit('refresh');
+                        }
+                        else{
+                            switch(res.status){
+                                case 2:
+                                    that.alert_msg.error('权限不足');
+                                    break;
+                                case 3:
+                                    that.alert_msg.error('找不到该内容');
+                                    break;
+                                default:
+                                    that.alert_msg.error('发生了未知错误');
+                            }
+                            
+                        }
+                    },
+                    error:function(res){
+                        that.alert_msg.error('网络连接失败');
                     }
-                },
-                error:function(res){
-                    that.alert_msg.error('网络连接失败');
-                }
+                });
             });
         },
 
@@ -302,7 +304,7 @@ export default {
                     that.alert_msg.error('网络连接失败');
                 }
             });
-        }
+        },
 
         open_info(){
             let url = '/fs/doc/info?did=' + this.did;
