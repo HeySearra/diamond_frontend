@@ -168,36 +168,89 @@ export default {
         },
 
         move(){
-            let url = '/fs/father?id=' + fid + '&type=fold';
+            let url = '/fs/move';
             var that = this;
             $.ajax({
-                type:'get',
+                type:'psot',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify({id:this.id, type:this.type, pfid:this.fid}),
                 async:false, 
                 success:function (res){
                     if(that.console_debug){
                         console.log(url+ " : " +res.status);
                     }
                     if(res.status == 0){
-                        that.pfid = res.pfid;
-                        that.is_root = false;
-                        result = true;
+                        that.alert_msg.success('移动成功');
+                        that.$emit('refresh');
+                        that.dia_vis = false;
                     }
                     else{
-                        if(res.status == 4){
-                            that.is_root = true;
-                            result = true;
-                        }
-                        else{
-                            that.alert_msg.error('加载消息失败，请重试');
-                            result = false;
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            case 3:
+                                that.alert_msg.warning('该目录下已经有同名的文件或文件夹');
+                                break;
+                            case 4:
+                                that.alert_msg.normal('该'+(that.type=='file'?'文件':'文件夹')+'已经在目录中');
+                                that.dia_vis = false;
+                                break;
+                            case 5:
+                                that.alert_msg.error('找不到内容');
+                                break;
+                            default:
+                                that.alert_msg.error('发生未知错误');
                         }
                     }
                 },
                 error:function(){
                     that.alert_msg.error('连接失败');
-                    result = false;
+                }
+            });
+        },
+
+        copy(){
+            let url = '/fs/copy';
+            var that = this;
+            $.ajax({
+                type:'psot',
+                url: url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify({id:this.id, type:this.type, pfid:this.fid}),
+                async:false, 
+                success:function (res){
+                    if(that.console_debug){
+                        console.log(url+ " : " +res.status);
+                    }
+                    if(res.status == 0){
+                        that.alert_msg.success('复制成功');
+                        that.$emit('refresh');
+                        that.dia_vis = false;
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            case 3:
+                                that.alert_msg.warning('该目录下已经有同名的文件或文件夹');
+                                break;
+                            case 4:
+                                that.alert_msg.normal('该'+(that.type=='file'?'文件':'文件夹')+'已经在目录中');
+                                that.dia_vis = false;
+                                break;
+                            case 5:
+                                that.alert_msg.error('找不到内容');
+                                break;
+                            default:
+                                that.alert_msg.error('发生未知错误');
+                        }
+                    }
+                },
+                error:function(){
+                    that.alert_msg.error('连接失败');
                 }
             });
         }
