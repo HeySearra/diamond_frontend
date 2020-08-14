@@ -1,6 +1,6 @@
 <template>
     <div class="file_system_block">
-        <div class="clear_both divide_type"></div>
+        <div class="clear_both"></div>
         <div class="path" v-if="type=='self'&&path.length">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item v-for="item in path" :key="item.fid">
@@ -257,19 +257,27 @@ export default {
 }
 
 .icon_part{
-    height:30px;
-    width:80px;
+    height:40px;
+    width:60px;
     position: absolute;
     top:27px;
-    right:10px;
-    border:solid 1px;
+    right:23px;
+    /* border:solid 1px; */
     text-align: center;
+    border-radius: 5px;
+    transition:all 0.1s linear;
+    cursor:pointer
+}
+
+.icon_part:hover{
+    background-color: hsla(0, 0%, 0%, 0.05);
+    color: hsl(0, 0%, 43%);
 }
 
 .icon_part .icon_button{
     display:inline-block;
-    height:30px;
-    line-height:30px;
+    height:40px;
+    line-height:40px;
     padding: 0 5px;
     cursor:pointer
 }

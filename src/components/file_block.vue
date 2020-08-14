@@ -1,9 +1,9 @@
 <template>
-    <div class="can_not_choose file_block">
+    <div class="can_not_choose file_block" :class="focus?'file_block_focus':''">
         <div class="click_area" :class="focus?'click_area_focus':''"></div>
         <div class="big_icon">
             <div>
-                <span class="icon iconfont">&#xe644;</span>
+                <span class="icon iconfont">&#xe645;</span>
             </div>
         </div>
         <div class="link_icon" v-if="is_link">
@@ -533,23 +533,29 @@ export default {
 
 .file_block{
     position: relative;
-    cursor:pointer;
-    border: solid 1px;
-    width:150px;
-    height:145px;
+    border: solid 2px rgba(0, 0, 0, 0);
+    width:130px;
+    height:125px;
     padding: 15px;
     overflow: hidden;
+    border-radius: 5px;
+    cursor:pointer;
+}
+
+.file_block:hover, .file_block_focus{
+    border: solid 2px rgba(0, 0, 0, 0.1);
 }
 
 .click_area{
     width: 100%;
     height:100%;
-    background-color: hsla(0, 0%, 0%, 0.06);
+    background-color: hsla(0, 0%, 0%, 0.02);
     position: absolute;
     top:0;
     left:0;
     z-index:2;
     opacity: 0;
+    transition: all 0.1s linear;
 }
 
 .file_block:hover .click_area, .click_area_focus{
@@ -558,45 +564,49 @@ export default {
 
 .big_icon{
     position: absolute;
-    top:23px;
-    left:15px;
+    top:20px;
+    left: 5px;
     text-align: center;
     width:150px;
-    color:hsl(219, 15%, 23%);
+    color:hsl(198, 10%, 69%);
 }
 
 .big_icon .icon{
-    font-size:75px;
+    font-size:65px;
 }
 
 .link_icon{
     position: absolute;
-    top:65px;
-    left:100px;
-    color:hsl(202, 38%, 39%);
+    top:60px;
+    left:90px;
+    color:#586378;
     font-weight: bold;
-    border: solid 1px;
-    width:45px;
-    height:45px;
-    line-height:45px;
+    border: solid 2px #586378;
+    width:35px;
+    height:35px;
+    line-height:35px;
     text-align: center;
     border-radius: 50%;
-    background-color: #fafafa;
+    background-color: hsl(0, 0%, 98%, 0.78);
 }
 
-.link_icon .icon, .starred_icon .icon{
-    font-size:36px;
+.link_icon .icon{
+    font-size:25px;
+}
+
+.starred_icon .icon{
+    font-size:27px;
 }
 
 .starred_icon{
     position: absolute;
     top:65px;
-    left:100px;
+    left:90px;
     color:hsl(51, 100%, 50%);
     font-weight: bold;
-    width:45px;
-    height:45px;
-    line-height:45px;
+    width:35px;
+    height:35px;
+    line-height:35px;
     text-align: center;
 }
 
@@ -610,7 +620,13 @@ export default {
     right:10px;
     font-size:15px;
     opacity: 0;
-    z-index:3
+    z-index:3;
+    cursor:pointer;
+    transition: all 0.1s linear;
+}
+
+.more_menu span{
+    color:hsl(198, 25%, 35%)
 }
 
 .more_menu>>>.el-icon-s-tools{
@@ -620,8 +636,8 @@ export default {
 .name{
     position: absolute;
     width:130px;
-    top:105px;
-    left:25px;
+    top:93px;
+    left:13px;
     text-align: center;
     margin-top:10px;
     word-break: break-all;

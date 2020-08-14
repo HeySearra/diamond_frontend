@@ -3,7 +3,7 @@
         <div class="click_area" :class="focus?'click_area_focus':''"></div>
         <div class="big_icon">
             <div>
-                <span class="icon iconfont">&#xe644;</span>
+                <span class="icon iconfont">&#xe645;</span>
             </div>
         </div>
         <div class="link_icon" v-if="is_link">
@@ -512,20 +512,23 @@ export default {
 .file_list_item{
     position: relative;
     cursor:pointer;
-    border: solid 1px;
+    /* border: solid 1px; */
+    border-bottom: solid 1px rgba(0, 0, 0, 0.1);
     height:50px;
     overflow: hidden;
+    color:#343434;
 }
 
 .click_area{
     width: 100%;
     height:100%;
-    background-color: hsla(0, 0%, 0%, 0.06);
+    background-color: hsla(0, 0%, 0%, 0.03);
     position: absolute;
     top:0;
     left:0;
     z-index:2;
     opacity: 0;
+    transition: all 0.1s linear;
 }
 
 .file_list_item:hover .click_area, .click_area_focus{
@@ -539,7 +542,7 @@ export default {
     text-align: center;
     line-height:50px;
     width:fit-content;
-    color:hsl(219, 15%, 23%);
+    color:hsl(198, 10%, 69%);
 }
 
 .big_icon .icon{
@@ -558,17 +561,21 @@ export default {
     line-height:15px;
     text-align: center;
     border-radius: 50%;
-    background-color: #fafafa;
+    background-color: hsl(0, 0%, 98%, 0.78);
 }
 
-.link_icon .icon, .starred_icon .icon{
+.link_icon .icon{
     font-size:12px;
+}
+
+.starred_icon .icon{
+    font-size:15px;
 }
 
 .starred_icon{
     position: absolute;
     top:27px;
-    left:40px;
+    left:39px;
     color:hsl(51, 100%, 50%);
     font-weight: bold;
     width:18px;
@@ -589,6 +596,10 @@ export default {
     font-size:15px;
     opacity: 0;
     z-index:3
+}
+
+.more_menu span{
+    color:hsl(198, 25%, 35%)
 }
 
 .more_menu>>>.el-icon-s-tools{

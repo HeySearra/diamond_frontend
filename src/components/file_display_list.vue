@@ -1,6 +1,6 @@
 <template>
     <div class="file_display_block">
-        <h1>{{title}}</h1>
+        <h1 class="can_not_choose">{{title}}</h1>
         <el-divider></el-divider>
         <div class="file_area">
             <div class="can_not_choose list_head">
@@ -184,9 +184,10 @@ export default {
 @import url("../assets/dialog_style.css");
 
 h1{
-    font-size: 30px !important;
+    font-size: 23px !important;
     text-indent: 25px;
-    margin-bottom:5px !important;;
+    margin-bottom:-6px !important;
+    color:hsl(0, 0%, 39%);
 }
 
 .file_area{
@@ -195,9 +196,10 @@ h1{
 
 .list_head{
     position: relative;
-    border: solid 1px;
+    border-bottom: solid 1px rgba(0, 0, 0, 0.1);
     height:50px;
     overflow: hidden;
+    color:#343434;
 }
 
 .info_area{
