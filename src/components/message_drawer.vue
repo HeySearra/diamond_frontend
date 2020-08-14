@@ -59,7 +59,7 @@ export default {
                         let item = that.$refs.message_item;
                         that.list.concat(res.list);
                         if(item){
-                            for(let i=0; i<item.length; i++){
+                            for(let i = 0; i<item.length; i++){
                                 item[i].init();
                             }
                         }
@@ -82,6 +82,7 @@ export default {
         open() {
             this.list = [];
             this.is_loading = true;
+            this.drawer = true;
             this.page = 0;
             this.apply_for_info();
         },

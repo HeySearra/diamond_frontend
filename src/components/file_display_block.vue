@@ -98,10 +98,13 @@ export default {
             var that = this;
             setTimeout(function(){
                 let item = that.$refs.file_component;
-                if(item){
+                if(item instanceof Array){
                     for(let i=0; i<item.length; i++){
                         item[i].init();
                     }
+                }
+                else{
+                    item.init();
                 }
             }, 0);
         },
