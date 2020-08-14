@@ -233,7 +233,8 @@
               if(res.status == 0){
                 that.alert_msg.success('登出成功');
                 that.login_manager.clear();
-                that.$router.go(0); //刷新
+                this.$router.push({path: '/login'});
+                // that.$router.go(0); //刷新
               }
               else{
                 that.alert_msg.error('登出失败，请重试');
