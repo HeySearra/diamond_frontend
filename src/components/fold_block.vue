@@ -14,7 +14,7 @@
         </div>
         <div class="name">{{name}}</div>
         <div class="more_menu" :class="focus?'more_menu_focus':''">
-            <el-dropdown trigger="click" 
+            <el-dropdown trigger="click"
                 @visible-change="vis_change"
                 @command="click_dropdown_item">
                 <span class="el-dropdown-link">
@@ -77,7 +77,7 @@ export default {
     },
 
     mounted(){
-        
+
     },
 
     methods:{
@@ -94,13 +94,13 @@ export default {
         apply_for_parent(){
             let url = '/fs/father?id=' + this.fid + '&type=fold';
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'get',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -136,14 +136,14 @@ export default {
                     type: 'fold',
                 };
                 let url = '/fs/recycle/delete'
-                $.ajax({ 
+                $.ajax({
                     type:'post',
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify(msg),
                     processData: false,
-                    contentType: false, 
-                    success:function (res){ 
+                    contentType: false,
+                    success:function (res){
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
@@ -162,7 +162,7 @@ export default {
                                 default:
                                     that.alert_msg.error('发生了未知错误');
                             }
-                            
+
                         }
                     },
                     error:function(res){
@@ -179,14 +179,14 @@ export default {
                 type: 'fold',
             };
             let url = '/fs/recycle/recover'
-            $.ajax({ 
+            $.ajax({
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                 data: JSON.stringify(msg),
                 processData: false,
-                contentType: false, 
-                success:function (res){ 
+                contentType: false,
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -205,7 +205,7 @@ export default {
                             default:
                                 that.alert_msg.error('发生了未知错误');
                         }
-                        
+
                     }
                 },
                 error:function(res){
@@ -259,13 +259,13 @@ export default {
         open_info(){
             let url = '/fs/fold/info?fid=' + this.fid;
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'get',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -305,7 +305,7 @@ export default {
                     that.alert_msg.error('网络连接失败');
                 }
             });
-            
+
         },
 
         open_fold(fid){
@@ -316,14 +316,14 @@ export default {
             let url = '/fs/link/new';
             let json_data = {id:this.fid, type:'doc'};
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(json_data),
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -355,14 +355,14 @@ export default {
             let url = '/fs/delete_link';
             let json_data = {id:this.fid, type:'fold'};
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(json_data),
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -390,14 +390,14 @@ export default {
             let url = '/fs/star';
             let json_data = {id:this.fid, type:'fold', is_starred:!this.is_starred};
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(json_data),
                 processData: false,
                 contentType: false,
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -427,14 +427,14 @@ export default {
             that.alert_box.confirm_msg('提示', '确定删除 ' + that.name + ' ？', function(){
                 let url = '/fs/delete';
                 let json_data = {id:that.fid, type:'fold'};
-                $.ajax({ 
+                $.ajax({
                     type:'post',
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify(json_data),
                     processData: false,
                     contentType: false,
-                    success:function (res){ 
+                    success:function (res){
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
@@ -465,14 +465,14 @@ export default {
             that.alert_box.confirm_msg('提示', '确定将 ' + that.name + ' 转为团队文件夹吗？', function(){
                 let url = '/team/new_from_fold';
                 let json_data = {id:that.fid};
-                $.ajax({ 
+                $.ajax({
                     type:'post',
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify(json_data),
                     processData: false,
                     contentType: false,
-                    success:function (res){ 
+                    success:function (res){
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
@@ -498,7 +498,6 @@ export default {
             })
         }
     }
-
 }
 </script>
 
