@@ -25,22 +25,27 @@ export default {
         return {
             title:'团队邀请',
             team_name: 'team_name',
-            tid:'',
+            mid:'',
             dia_vis:false
         }
     },
 
     methods:{
         open(data){
-            this.tid = data.tid;
-            this.team_name = data.team_name;
+            this.mid = data.mid;
             this.dia_vis = true;
+        },
+
+        getCookie (name) {
+            var value = '; ' + document.cookie
+            var parts = value.split('; ' + name + '=')
+            if (parts.length === 2) return parts.pop().split(';').shift()
         },
 
         click_to_accept(if_accept){
             var that = this;
             var msg = {
-                tid: that.tid,
+                mid: that.mid,
                 result: if_accept,
             };
             $.ajax({
@@ -55,9 +60,9 @@ export default {
                         console.log("(post)/team/invitation/confirm"+ " : " +res.status);
                     }
                     if(res.status == 0){
-                        this.dia_vis = false;
+                        that.dia_vis = false;
                         that.alert_box.msg('已成功加入团队！');
-                        that.$router.push({path: '/team/' + this.tid + "/file/desktop"});
+                        that.$router.push({path: '/team/' + res.tid + "/file/desktop"});
                     }
                     else{
                         if(if_accept){
@@ -98,8 +103,6 @@ export default {
 @import url("../assets/dialog_style.css");
 
 .item_area{
-    border:solid 1px;
-    height:400px;
     overflow-y: auto;
 }
 

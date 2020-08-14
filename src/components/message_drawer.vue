@@ -12,7 +12,7 @@
         </div>
         <el-divider></el-divider>
         <div v-infinite-scroll="load" class="message_area" style="overflow-x:hidden;overflow-y:auto;border:solid 1px;height:calc(100vh - 50px)">
-            <component v-for="item in list" :key="item.mid" :mid="item.mid" ref="message_item" @confirm_to_join="deal_team_invite" :is="'message-item'"></component>
+            <component v-for="item in list" :key="item.mid" :mid="item.mid" ref="message_item" @confirm-to-join="deal_team_invite" :is="'message-item'"></component>
             <p v-if="is_loading" class="not_found">加载中 <i class="el-icon-loading"></i></p>
             <p v-if="is_final&&list.length==0" class="not_found">你没有收到任何消息</p>
         </div>
@@ -69,13 +69,15 @@ export default {
                         if(that.list.length){
                             setTimeout(() => {
                                 let item = that.$refs.message_item;
-                                if(item instanceof Array){
-                                    for(let i = len; i<item.length; i++){
-                                        item[i].init();
+                                if(item){
+                                    if(item instanceof Array){
+                                        for(let i = len; i<item.length; i++){
+                                            item[i].init();
+                                        }
                                     }
-                                }
-                                else{
-                                    item.init();
+                                    else{
+                                        item.init();
+                                    }
                                 }
                             }, 0);
                             
@@ -105,7 +107,7 @@ export default {
             this.apply_for_info();
         },
 
-        load(){this
+        load(){
             if(this.is_final){
                 return;
             }
@@ -147,7 +149,7 @@ export default {
         },
 
         deal_team_invite(data){
-            this.$emit("deal_team_invite", data);
+            this.$emit("deal-team-invite", data);
         }
     }
 };

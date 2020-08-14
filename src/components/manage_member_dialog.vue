@@ -223,7 +223,7 @@ export default {
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                data: {key:that.search_input},
+                data: JSON.stringify({key:that.search_input}),
                 processData: false,
                 contentType: false,
                 success:function (res){ 

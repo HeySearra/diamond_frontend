@@ -68,7 +68,7 @@
               </el-dropdown-menu>
               </el-dropdown>
         </div>
-      <div class="header_icon" @click="click_open_drawer" v-if="is_login">
+      <div class="header_icon" @click="$emit('open-drawer')" v-if="is_login">
         <el-badge class="item" :value="message_count" :max="99" :hidden="message_count<=0">
           <span class="icon iconfont">&#xe60b;</span>
         </el-badge>
@@ -132,7 +132,6 @@
         //   }
         // }
         this.apply_for_message();
-        this.apply_for_magic_word();
         this.get_info();
       },
 
@@ -234,7 +233,8 @@
               if(res.status == 0){
                 that.alert_msg.success('登出成功');
                 that.login_manager.clear();
-                that.$router.go(0); //刷新
+                that.$router.push({path: '/login'});
+                // that.$router.go(0); //刷新
               }
               else{
                 that.alert_msg.error('登出失败，请重试');
@@ -261,26 +261,8 @@
         }
       },
 
-      click_open_drawer(){
-        this.$emit('open_drawer');
-      },
-
       set_search_word(keyword){
         this.search = keyword;
-      },
-
-      apply_for_magic_word(){
-        var that = this;
-        $.ajax({
-            type:'get',
-            url:'/hell/words',
-            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-            processData: false,
-            contentType: false,
-            success:function (res){
-              that.magic_word = res.words;
-            }
-        });
       }
     }
   }
