@@ -1,5 +1,5 @@
 <template>
-    <div class="message-item" @click="mark_read">
+    <div class="message-item" @dbclick="click_to_read" @click="mark_read">
         <div style="height:10px;"></div>
         <div class="item">
             <div class="profile">
@@ -8,9 +8,7 @@
             </div>
             <div class="content">
                 <h4 class="title">
-                    <div class="message-head" @click="type=='doc'? 'jump_to_doc':type=='join'?'comfirm_to_join':type=='accept'?'jump_to_team':''">{{title}}</div>
-                    <div class="message-head" v-if="type=='join'" @click="confirm_join">{{team_name}}</div>
-                    <div class="message-head" v-if="type=='admin' || type=='remove'" @click="type=='admin'? 'to_team':''">{{team_name}}</div>
+                    <div class="message-head">{{title}}</div>
                 </h4>
                 <div class='comment' v-if="type=='doc'">{{comment}}</div>
             </div>
@@ -34,7 +32,7 @@ export default {
         return {
             type: 'doc',   //join accept out doc
             title: '', //消息标题
-            comment: '', //消息内容
+            content: '', //消息内容
             id: '',
             name: 'team_name',
             loading: true,
@@ -66,15 +64,16 @@ export default {
                 success:function (res){
                     if(that.console_debug)console.log("(get)/msg/info"+ " : " +res.status);
                     if(res.status == 0){
-                        that.type = res.type;
                         that.is_read = res.is_read;
+                        that.is_process = res.is_process;
                         that.is_dnd = res.is_dnd;
                         that.title = res.title;
-                        that.name = res.name;
                         that.portrait = res.portrait;
+                        that.type = res.type;
                         that.id = res.id;
+                        that.content = res.contest;
                         if(that.type == 'doc'){
-                            that.comment = res.content;
+                            that.content = res.content;
                             that.uid = res.uid;
                             that.uname = res.uname;
                         }
@@ -112,12 +111,26 @@ export default {
         jump_to_team(){
             this.$router.push({path: '/team/' + this.id + "/file/desktop"});
         },
+
+        click_to_read(){
+            this.mark_read();
+            if(type == 'join'){
+                this.confirm_to_join();
+            }
+            else if(type == 'admin' || type == 'accept'){
+                this.jump_to_team();
+            }
+            else if(type == 'doc'){
+                this.jump_to_doc();
+            }
+        },
+
         mark_read(){
             var that = this;
             let msg = {mid: that.mid};
             $.ajax({
                 type:'post',
-                url: "/msg/ar" + that.mid,
+                url: "/msg/ar",
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(msg),
                 processData: false,
