@@ -57,9 +57,11 @@
       </el-row>
       <el-divider></el-divider>
     </el-row>
-    <el-row class="doc_info" v-if="context=='doc'">
+    <el-row class="doc_info" v-if="context==='doc'">
       <el-row>
-        <el-col :span="16" class="file_name">{{file_name}}</el-col>
+        <div id="file_name">
+          {{file_name}}
+        </div>
       </el-row>
       <el-row>
         <div class="doc_info">
@@ -101,6 +103,10 @@ export default {
         type:String,
         default: 'none'
       },
+      file_name:{
+        type:String,
+        default: '',
+      }
   },
 
   mounted() {
@@ -143,13 +149,13 @@ export default {
       this.tid = tid;
       let url = '/team/info?tid=' + tid;
       var that = this;
-      $.ajax({ 
+      $.ajax({
           type:'get',
           url: url,
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           processData: false,
-          contentType: false, 
-          success:function (res){ 
+          contentType: false,
+          success:function (res){
               if(that.console_debug){
                   console.log(url +  '：' + res.status);
               }
@@ -171,7 +177,7 @@ export default {
                       default:
                           that.alert_msg.error('发生了未知错误');
                   }
-                  
+
               }
           },
           error:function(res){
@@ -180,13 +186,13 @@ export default {
       });
 
       let url2 = '/team/identity?tid=' + tid;
-      $.ajax({ 
+      $.ajax({
           type:'get',
           url: url2,
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           processData: false,
-          contentType: false, 
-          success:function (res){ 
+          contentType: false,
+          success:function (res){
               if(that.console_debug){
                   console.log(url2 +  '：' + res.status);
               }
@@ -213,7 +219,7 @@ export default {
                       default:
                           that.alert_msg.error('发生了未知错误');
                   }
-                  
+
               }
           },
           error:function(res){
@@ -226,14 +232,14 @@ export default {
       var that = this;
       this.alert_box.confirm_msg('警告', '确定退出团队 ' + that.team_name + ' 吗？', function(){
         let url = '/team/quit'
-        $.ajax({ 
+        $.ajax({
             type:'post',
             url: url,
             headers: {'X-CSRFToken': that.getCookie('csrftoken')},
             data: JSON.stringify({tid:that.tid}),
             processData: false,
-            contentType: false, 
-            success:function (res){ 
+            contentType: false,
+            success:function (res){
                 if(that.console_debug){
                     console.log(url +  '：' + res.status);
                 }
@@ -253,7 +259,7 @@ export default {
                         default:
                             that.alert_msg.error('发生了未知错误');
                     }
-                    
+
                 }
             },
             error:function(res){
@@ -267,14 +273,14 @@ export default {
       var that = this;
       this.alert_box.confirm_msg('警告', '确定解散团队 ' + that.team_name + ' 吗？', function(){
         let url = '/team/delete'
-        $.ajax({ 
+        $.ajax({
             type:'post',
             url: url,
             headers: {'X-CSRFToken': that.getCookie('csrftoken')},
             data: JSON.stringify({tid:that.tid}),
             processData: false,
-            contentType: false, 
-            success:function (res){ 
+            contentType: false,
+            success:function (res){
                 if(that.console_debug){
                     console.log(url +  '：' + res.status);
                 }
@@ -294,7 +300,7 @@ export default {
                         default:
                             that.alert_msg.error('发生了未知错误');
                     }
-                    
+
                 }
             },
             error:function(res){
@@ -302,9 +308,15 @@ export default {
             }
         });
       });
+    },
+
+    edit_file_name() {
+      console.log('edit', value);
+      this.file_name = value;
     }
   }
 }
+
 </script>
 
 <style scoped>
@@ -429,13 +441,18 @@ export default {
   width: 100%;
 }
 
-.file_name{
+#file_name{
   font-weight: bold;
   font-size:17px;
   margin: 0 6px;
   width:auto;
   line-height:27px;
   word-break: break-all;
+  text-align: center;
+  border: none !important;
+  background-color: rgba(0,0,0,0) !important;
+  display: flex;
+  justify-content: center;
 }
 
 .doc_info{

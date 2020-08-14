@@ -1,7 +1,10 @@
 <template>
   <el-main>
     <el-aside>
-      <sidebar context="doc"></sidebar>
+      <sidebar
+        context="doc"
+        :file_name="file_name"
+      ></sidebar>
     </el-aside>
     <el-row style="z-index: 999">
       <!-- Toolbar Container -->
@@ -11,12 +14,12 @@
       <!--el-col :span="5">
         <sidebar></sidebar>
       </el-col-->
-      <el-col class="editor-container" style="border: solid 2px;" :span="18">
+      <el-col class="editor-container" :span="18">
         <!-- Editor Container -->
         <div id="editor">
         </div>
       </el-col>
-      <el-col :span="6" id="comment-sidebar" style="border: solid 2px;"><br></el-col>
+      <el-col :span="6" id="comment-sidebar"><br></el-col>
     </el-row>
   </el-main>
 </template>
@@ -314,11 +317,13 @@ export default {
     // this.getDocAuth();
     this.getInitialDocContent();
     this.initCKEditor();
+    console.log(this.file_name);
   },
 
   data() {
     return {
       Editor: null,//editor instance
+      file_name: '',
     }
   },
 
@@ -521,9 +526,10 @@ export default {
             console.log("(get)/doc/all" + " : " + res.status);
           }
           if (res.status === 0) {
-            //res.name
+            that.file_name = res.name;
             pageData.initialData = res.content;
             console.log(res.content);
+            console.log(res.name);
           } else {
             switch (res.status) {
               case 1:
@@ -557,7 +563,7 @@ export default {
       let msg = {
         did: did,
         content: content,
-        name: ''
+        name: that.file_name,
       };
       $.ajax({
         type: 'post',
@@ -608,7 +614,7 @@ export default {
     var that = this;
     const did = this.$route.params.did;
     let msg = {
-      name: '',
+      name: that.file_name,
       content: content,
     };
     $.ajax({
@@ -882,9 +888,8 @@ export default {
 
 .el-main {
   background-color: rgba(0, 0, 0, 0);
-  border: solid 2px;
   overflow: inherit;
-  margin-top: 60px;
+  margin-top: 62px;
 }
 
 .el-aside::-webkit-scrollbar {
