@@ -2,7 +2,7 @@
   <div id="app">
     <el-header>
       <navbar 
-        @open_drawer="open_drawer"
+        @open-drawer="open_drawer"
         @edit_user_info="edit_user_info"
         @change_password="change_password"
         @chatting="chatting"
@@ -10,7 +10,7 @@
     </el-header>
     <router-view/>
     <el-backtop></el-backtop>
-    <message-drawer ref="message_drawer" @deal_team_invite="deal_team_invite" @open-drawer="open_drawer"></message-drawer>
+    <message-drawer ref="message_drawer" @deal_team_invite="deal_team_invite"></message-drawer>
     <edit-user-info-dialog ref="edit_user_info_dialog" @apply_for_info='apply_for_info'></edit-user-info-dialog>
     <change-password-dialog ref="change_password_dialog"></change-password-dialog>
     <chatting-dialog ref="chatting_dialog"></chatting-dialog>

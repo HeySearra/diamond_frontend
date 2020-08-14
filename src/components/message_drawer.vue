@@ -69,13 +69,15 @@ export default {
                         if(that.list.length){
                             setTimeout(() => {
                                 let item = that.$refs.message_item;
-                                if(item instanceof Array){
-                                    for(let i = len; i<item.length; i++){
-                                        item[i].init();
+                                if(item){
+                                    if(item instanceof Array){
+                                        for(let i = len; i<item.length; i++){
+                                            item[i].init();
+                                        }
                                     }
-                                }
-                                else{
-                                    item.init();
+                                    else{
+                                        item.init();
+                                    }
                                 }
                             }, 0);
                             
@@ -105,7 +107,7 @@ export default {
             this.apply_for_info();
         },
 
-        load(){this
+        load(){
             if(this.is_final){
                 return;
             }
