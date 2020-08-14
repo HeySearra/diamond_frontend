@@ -27,7 +27,7 @@ export default {
         name:'',
         type:'',
         fid:'',
-        desktop_alert:true
+        desktop_alert:''
     }
   },
   methods:{

@@ -72,7 +72,6 @@ export default {
             $.ajax({ 
                 type:'get',
                 url:'/doc/lock?did=' + that.did,
-                data: JSON.stringify(json_data),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
@@ -107,7 +106,6 @@ export default {
             $.ajax({ 
                 type:'get',
                 url:'/doc/share?did=' + that.did + '&auth=write',
-                data: JSON.stringify(json_data),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
@@ -142,7 +140,6 @@ export default {
             $.ajax({ 
                 type:'get',
                 url:'/doc/share?did=' + that.did + '&auth=comment',
-                data: JSON.stringify(json_data),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
@@ -177,7 +174,6 @@ export default {
             $.ajax({ 
                 type:'get',
                 url:'/doc/share?did=' + that.did + '&auth=read',
-                data: JSON.stringify(json_data),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 

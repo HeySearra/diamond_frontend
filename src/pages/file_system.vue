@@ -30,7 +30,7 @@
     </el-container>
     <new-dialog @refresh="refresh" ref="new_dialog"></new-dialog>
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
-    <choose-path-dialog @refresh="refresh" ref="manage_member_dialog"></choose-path-dialog>
+    <choose-path-dialog @refresh="refresh" ref="choose_path_dialog"></choose-path-dialog>
     <share-dialog ref="share_dialog"></share-dialog>
   </div>
 </template>

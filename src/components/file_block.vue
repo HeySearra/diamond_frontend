@@ -302,7 +302,7 @@ export default {
                     that.alert_msg.error('网络连接失败');
                 }
             });
-        }
+        },
 
         open_info(){
             let url = '/fs/doc/info?did=' + this.did;

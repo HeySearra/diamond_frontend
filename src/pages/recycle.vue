@@ -141,11 +141,11 @@ export default {
     },
 
     create_new_file(){
-        this.$refs.new_dialog.open('file', this.fid);
+        this.$refs.new_dialog.open('file', this.fid, true);
     },
 
     create_new_fold(){
-        this.$refs.new_dialog.open('fold', this.fid);
+        this.$refs.new_dialog.open('fold', this.fid, true);
     }
   }
 }

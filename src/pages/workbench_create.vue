@@ -81,7 +81,6 @@ export default {
                             })
                         }
                         that.$refs.file_system_item.init();
-                        alert(that.list[0])
                     }
                     else{
                         that.page--;
