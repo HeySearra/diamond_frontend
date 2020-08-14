@@ -30,11 +30,11 @@
                     <el-dropdown-item command="share" v-if="(context=='file_system'||context=='team')&&!is_link">分享</el-dropdown-item>
                     <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
                     <el-dropdown-item command="remove_link" class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
-                    <el-dropdown-item v-if="context=='recycle'" @click="click_to_recover">恢复</el-dropdown-item>
-                    <el-dropdown-item class="red_text" v-if="context=='recycle'" @click="click_to_delete_forever">彻底删除</el-dropdown-item>
+                    <el-dropdown-item command="recover" v-if="context=='recycle'" @click="click_to_recover">恢复</el-dropdown-item>
+                    <el-dropdown-item command="delete_forever" class="red_text" v-if="context=='recycle'" @click="click_to_delete_forever">彻底删除</el-dropdown-item>
                     <el-dropdown-item v-if="false">导出</el-dropdown-item>
                     <el-dropdown-item command="delete" class="red_text" v-if="(context=='file_system'||context=='team')&&!is_link">删除</el-dropdown-item>
-                    <el-dropdown-item command="open_info" v-if="!is_link">文档信息</el-dropdown-item>
+                    <el-dropdown-item command="open_info" v-if="!is_link&&context!='recycle'">文档信息</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -122,8 +122,8 @@ export default {
         },
 
         click_to_delete_forever(){
-            this.alert_box.confirm_msg('警告', '确定彻底删除文件 ' + that.team_name + ' 吗？', function(){
-                var that = this;
+            var that = this;
+            this.alert_box.confirm_msg('警告', '确定彻底删除文件 ' + that.name + ' 吗？', function(){
                 var msg = {
                     id: that.did,
                     type: 'doc',
@@ -239,6 +239,12 @@ export default {
                     break;
                 case 'delete':
                     this.delete();
+                    break;
+                case 'recover':
+                    this.click_to_recover();
+                    break;
+                case 'delete_forever':
+                    this.click_to_delete_forever();
                     break;
             }
         },

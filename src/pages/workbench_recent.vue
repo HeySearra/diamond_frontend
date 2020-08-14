@@ -8,7 +8,7 @@
             :out_list="list"
             @change_view="change_view"
             @open_info="open_info"
-            ref="file_system_item">
+            ref="file_system_component">
         </component>
     </div>
 </template>
@@ -58,10 +58,10 @@ export default {
                                 is_link: false,
                                 is_starred: res.list[i].is_starred,
                                 name: res.list[i].name,
-                                view_time: res.list[i].dt,
+                                view_time: that.datetime_format(res.list[i].dt, res.cur_dt),
                             })
                         }
-                        that.$refs.file_system_item.init();
+                        that.$refs.file_system_component.init();
                     }
                     else{
                         that.alert_msg.error('获取文件列表失败', '请重试');
@@ -82,6 +82,10 @@ export default {
         change_view(){
             this.view_type = this.view_type=='block' ? 'list' : 'block';
             this.view_type_manager.set(this.view_type);
+            var that = this;
+            setTimeout(function(){
+            that.$refs.file_system_component.init();
+            }, 0);
         },
 
         open_info(title, content){

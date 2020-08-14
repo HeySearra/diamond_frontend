@@ -130,10 +130,14 @@ export default {
     refresh(){
       this.apply_for_info();
     },
-    
+
     change_view(){
         this.view_type = this.view_type=='block' ? 'list' : 'block';
         this.view_type_manager.set(this.view_type);
+        var that = this;
+        setTimeout(function(){
+          that.$refs.file_system_component.init();
+        }, 0);
     },
 
     open_info(title, content){

@@ -14,7 +14,7 @@
         </div>
         <div class="name">{{name}}</div>
         <div class="info_area">
-            <div v-if="context=='recycle'">{{delete_timer}}</div>
+            <div v-if="context=='recycle'">{{delete_time}}</div>
             <div v-if="context=='recycle'">{{rest_time}}天</div>
             <div v-if="context!='recycle'">{{creator}}</div>
             <div v-if="context!='recycle'">{{recent_edit_time}}</div>
@@ -41,7 +41,7 @@
                     <el-dropdown-item class="red_text" v-if="context=='recycle'" @click="click_to_delete_forever">彻底删除</el-dropdown-item>
                     <el-dropdown-item v-if="false">导出</el-dropdown-item>
                     <el-dropdown-item command="delete" class="red_text" v-if="(context=='file_system'||context=='team')&&!is_link">删除</el-dropdown-item>
-                    <el-dropdown-item command="open_info" v-if="!is_link">文件夹信息</el-dropdown-item>
+                    <el-dropdown-item command="open_info" v-if="!is_link&&context!='recycle'">文件夹信息</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>

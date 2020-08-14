@@ -11,10 +11,10 @@
                         <div style="height:5px"></div>
                         <div style="padding:0 25px">
                             <div class="member_small_icon item" v-for="item in all_list" :key="item.uid" @click="function(){remove_member(item.uid, item.name)}">
-                                <el-tooltip effect="dark" :content="item.name" placement="top">
+                                <!-- <el-tooltip effect="dark" :content="item.name" placement="top"> -->
                                     <el-avatar class="close_icon"><span class="icon iconfont">&#xe79b;</span></el-avatar>
                                     <el-avatar class="user_port" :src="item.src"></el-avatar>
-                                </el-tooltip>
+                                <!-- </el-tooltip> -->
                             </div>
                         </div>
                     </el-tab-pane>
@@ -310,11 +310,11 @@ export default {
     font-size:18px;
 }
 
-.member_icon:hover .close_icon{
+.member_small_icon:hover .close_icon{
     display: block;
 }
 
-.member_icon:hover .user_port{
+.member_small_icon:hover .user_port{
     display: none;
 }
 

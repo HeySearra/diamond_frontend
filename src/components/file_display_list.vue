@@ -5,10 +5,12 @@
         <div class="file_area">
             <div class="can_not_choose list_head">
                 <div class="info_area">
-                    <div v-if="type=='recent'">浏览时间</div>
-                    <div v-if="type!='recent'">创建者</div>
-                    <div v-if="type!='recent'">最近编辑时间</div>
-                    <div v-if="type!='recent'" class="min_hide">创建时间</div>
+                    <div v-if="type=='recent'&&context!='recycle'">浏览时间</div>
+                    <div v-if="type!='recent'&&context!='recycle'">创建者</div>
+                    <div v-if="type!='recent'&&context!='recycle'">最近编辑时间</div>
+                    <div v-if="type!='recent'&&context!='recycle'" class="min_hide">创建时间</div>
+                    <div v-if="context=='recycle'">删除时间</div>
+                    <div v-if="context=='recycle'">剩余保留天数</div>
                 </div>
             </div>
             <div class="file_item"
@@ -34,6 +36,8 @@
                     :is_starred="item.is_starred"
                     :type="type"
                     :is_in_desktop="is_in_desktop"
+                    :delete_time="item.delete_time"
+                    :rest_time="item.rest_time"
                     @open_info="open_info"
                     @move_item="move_item"
                     @share_item="share_item"

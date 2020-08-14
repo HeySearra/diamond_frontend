@@ -22,11 +22,11 @@
 
 .dialog_style .info_list .info_title{
     float:left;
-    width:6em;
+    width:8em;
     text-align: right;
 }
 
 .dialog_style .info_list .info_content{
     float:right;
-    width: calc(100% - 6em - 5px);
+    width: calc(100% - 8em - 5px);
 }
