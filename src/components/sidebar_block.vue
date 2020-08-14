@@ -55,7 +55,7 @@
         <el-row><el-button type="danger" @click="quit_team" v-if="is_member||is_admin">退 出 团 队</el-button></el-row>
         <el-row><el-button type="danger" @click="delete_team" v-if="is_creator">解 散 团 队</el-button></el-row>
       </el-row>
-      <div style="height:20px;"></div>
+      <el-divider></el-divider>
     </el-row>
     <el-row class="doc_info" v-if="context=='doc'">
       <el-row>

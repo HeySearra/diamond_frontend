@@ -16,7 +16,8 @@
                 @move_item="move_item"
                 @share_item="share_item"
                 @copy_item="copy_item"
-                @add_item="add_item">
+                @add_item="add_item"
+                @refresh="refresh">
             </component>
           </div>
           <div style="height:50px"></div>
@@ -129,6 +130,10 @@ export default {
     change_view(){
         this.view_type = this.view_type=='block' ? 'list' : 'block';
         this.view_type_manager.set(this.view_type);
+        var that = this;
+        setTimeout(function(){
+          that.$refs.file_system_component.init();
+        }, 0);
     },
 
     error(){

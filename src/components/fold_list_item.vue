@@ -565,7 +565,7 @@ export default {
 .click_area{
     width: 100%;
     height:100%;
-    background-color: hsla(0, 0%, 0%, 0.03);
+    background-color: hsla(0, 0%, 0%, 0.05);
     position: absolute;
     top:0;
     left:0;

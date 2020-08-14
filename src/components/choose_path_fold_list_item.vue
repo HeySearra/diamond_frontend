@@ -1,8 +1,8 @@
 <template>
-    <div class="choose_path_fold_list_item">
+    <div class="choose_path_fold_list_item can_not_choose" @click="click">
         <div class="big_icon">
             <div>
-                <span class="icon iconfont">&#xe7ed;</span>
+                <span class="icon iconfont">&#xe622;</span>
             </div>
         </div>
         <div class="link_icon" v-if="is_link">
@@ -11,16 +11,16 @@
         <div class="starred_icon" v-if="is_starred">
             <span class="icon iconfont">&#xe7b2;</span>
         </div>
-        <div class="name">{{name}}</div>
+        <div class="name" :style="gray?'color:#aaa':''">{{name}}</div>
     </div>
 </template>
 
 <script>
 export default {
     props: {
-        fid: {
+        id: {
             type:String,
-            default: 'fid'
+            default: 'id'
         },
         name: {
             type:String,
@@ -34,6 +34,10 @@ export default {
             type:Boolean,
             default:false
         },
+        gray:{
+            type:Boolean,
+            default:false
+        }
     },
 
     data() {
@@ -44,7 +48,7 @@ export default {
 
     methods:{
         click(){
-            this.$emit('open_fold', this.fid);
+            this.$emit('open', this.id);
         }
     }
 
@@ -56,14 +60,15 @@ export default {
 @import url("../assets/diadoc_icon.css");
 
 .choose_path_fold_list_item{
-    border:solid 1px;
+    border-bottom: solid 1px rgba(0, 0, 0, 0.1);
     height: 50px;
     position: relative;
     cursor:pointer;
+    transition: all 0.1s linear;
 }
 
 .choose_path_fold_list_item:hover{
-    background-color: #ccc;
+    background-color: hsla(0, 0%, 0%, 0.05);
 }
 
 .big_icon{
@@ -73,7 +78,7 @@ export default {
     text-align: center;
     line-height:50px;
     width:fit-content;
-    color:hsl(219, 15%, 23%);
+    color:hsl(198, 56%, 56%);
 }
 
 .big_icon .icon{
@@ -82,8 +87,8 @@ export default {
 
 .link_icon{
     position: absolute;
-    top:23px;
-    left:36px;
+    top:25px;
+    left:40px;
     color:hsl(202, 38%, 39%);
     font-weight: bold;
     border: solid 1px;
@@ -92,17 +97,21 @@ export default {
     line-height:17px;
     text-align: center;
     border-radius: 50%;
-    background-color: #fafafa;
+    background-color: hsl(0, 0%, 98%, 0.78);
 }
 
-.link_icon .icon, .starred_icon .icon{
+.link_icon .icon{
     font-size:12px;
+}
+
+.starred_icon .icon{
+    font-size:13px;
 }
 
 .starred_icon{
     position: absolute;
     top:27px;
-    left:40px;
+    left:42px;
     color:hsl(51, 100%, 50%);
     font-weight: bold;
     width:18px;
@@ -117,7 +126,7 @@ export default {
     line-height:50px;
     height:50px;
     top:0;
-    left:69px;
+    left:75px;
     word-break: break-all;
     display: -webkit-box;
     -webkit-box-orient: vertical;
