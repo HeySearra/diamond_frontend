@@ -112,6 +112,7 @@ export default {
                         switch(res.status){
                             case 2:
                             case 3:
+                            case 4:
                                 that.pfid = '';
                                 break;
                             default:
