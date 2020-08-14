@@ -1,9 +1,9 @@
 <template>
     <div class="can_not_choose fold_list_item">
-        <div class="click_area" :class="focus?'click_area_focus':''" @click="function(){open_fold(fid)}"></div>
+        <div class="click_area" :class="focus?'click_area_focus':''" @click="click"></div>
         <div class="big_icon">
             <div>
-                <span class="icon iconfont">&#xe7ed;</span>
+                <span class="icon iconfont">&#xe622;</span>
             </div>
         </div>
         <div class="link_icon" v-if="is_link">
@@ -104,7 +104,9 @@ export default {
     data() {
         return {
             focus: false,
-            pfid:''
+            pfid:'',
+            timer:undefined,
+            click_flag: false
         }
     },
 
@@ -121,6 +123,20 @@ export default {
             var value = '; ' + document.cookie
             var parts = value.split('; ' + name + '=')
             if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
+        click(){
+            this.timer ? clearTimeout(this.timer) : '';
+            if(this.click_flag){
+                this.open_fold(this.fid);
+            }
+            else{
+                this.click_flag = true;
+                var that = this;
+                this.timer = setTimeout(function(){
+                    that.click_flag = false;
+                }, 500);
+            }
         },
 
         apply_for_parent(){
@@ -315,7 +331,7 @@ export default {
                             key:'路径',
                             value:path
                         });
-                        that.$emit('open_info', that.name, content);
+                        that.$emit('open_info', that.name, content, 'fold');
                     }
                     else{
                         switch(res.status){
@@ -334,7 +350,9 @@ export default {
         },
 
         open_fold(fid){
-            this.$router.push({name:'file_system', params:{id:fid}});
+            if(this.context != 'recycle'){
+                this.$router.push({name:'file_system', params:{id:fid}});
+            }
         },
 
         create_link(){
@@ -489,7 +507,7 @@ export default {
             var that = this;
             that.alert_box.confirm_msg('提示', '确定将 ' + that.name + ' 转为团队文件夹吗？', function(){
                 let url = '/team/new_from_fold';
-                let json_data = {id:that.fid};
+                let json_data = {fid:that.fid};
                 $.ajax({ 
                     type:'post',
                     url: url,
@@ -536,20 +554,23 @@ export default {
 .fold_list_item{
     position: relative;
     cursor:pointer;
-    border: solid 1px;
+    /* border: solid 1px; */
+    border-bottom: solid 1px rgba(0, 0, 0, 0.1);
     height:50px;
     overflow: hidden;
+    color:#343434;
 }
 
 .click_area{
     width: 100%;
     height:100%;
-    background-color: hsla(0, 0%, 0%, 0.06);
+    background-color: hsla(0, 0%, 0%, 0.03);
     position: absolute;
     top:0;
     left:0;
     z-index:2;
     opacity: 0;
+    transition: all 0.1s linear;
 }
 
 .fold_list_item:hover .click_area, .click_area_focus{
@@ -563,7 +584,7 @@ export default {
     text-align: center;
     line-height:50px;
     width:fit-content;
-    color:hsl(219, 15%, 23%);
+    color:hsl(198, 56%, 56%);
 }
 
 .big_icon .icon{
@@ -573,7 +594,7 @@ export default {
 .link_icon{
     position: absolute;
     top:23px;
-    left:36px;
+    left:43px;
     color:hsl(202, 38%, 39%);
     font-weight: bold;
     border: solid 1px;
@@ -582,17 +603,21 @@ export default {
     line-height:15px;
     text-align: center;
     border-radius: 50%;
-    background-color: #fafafa;
+    background-color: hsl(0, 0%, 98%, 0.78);
 }
 
-.link_icon .icon, .starred_icon .icon{
+.link_icon .icon{
     font-size:12px;
+}
+
+.starred_icon .icon{
+    font-size:15px;
 }
 
 .starred_icon{
     position: absolute;
     top:27px;
-    left:40px;
+    left:41px;
     color:hsl(51, 100%, 50%);
     font-weight: bold;
     width:18px;
@@ -602,7 +627,7 @@ export default {
 }
 
 .fold_list_item:hover .more_menu, .more_menu_focus{
-    opacity: 1 !important;
+    opacity: .7 !important;
 }
 
 .more_menu{
@@ -612,7 +637,12 @@ export default {
     right:18px;
     font-size:15px;
     opacity: 0;
-    z-index:3
+    z-index:3;
+    transition: all 0.1s linear;
+}
+
+.more_menu span{
+    color:hsl(198, 25%, 35%)
 }
 
 .more_menu>>>.el-icon-s-tools{
@@ -625,7 +655,7 @@ export default {
     line-height:50px;
     height:50px;
     top:0;
-    left:69px;
+    left:75px;
     word-break: break-all;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -640,6 +670,7 @@ export default {
     height:50px;
     top:0;
     right:39px;
+    color:#999
 }
 
 .info_area div{

@@ -1,9 +1,9 @@
 <template>
-    <div class="can_not_choose fold_block">
-        <div class="click_area" :class="focus?'click_area_focus':''" @click="function(){open_fold(fid)}"></div>
+    <div class="can_not_choose fold_block" :class="focus?'fold_block_focus':''">
+        <div class="click_area" :class="focus?'click_area_focus':''" @click="click"></div>
         <div class="big_icon">
             <div>
-                <span class="icon iconfont">&#xe7ed;</span>
+                <span class="icon iconfont">&#xe622;</span>
             </div>
         </div>
         <div class="link_icon" v-if="is_link">
@@ -25,7 +25,7 @@
                     <el-dropdown-item v-if="false">权限管理</el-dropdown-item>
                     <el-dropdown-item command="parent" v-if="(is_link||context=='workbench')&&pfid!=''">打开所在文件夹</el-dropdown-item>
                     <el-dropdown-item command="team" v-if="is_in_desktop">转化为团队文件夹</el-dropdown-item>
-                    <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link&&!is_in_desk">创建快捷方式到桌面</el-dropdown-item>
+                    <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link&&!is_in_desktop">创建快捷方式到桌面</el-dropdown-item>
                     <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                     <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link&&false">复制</el-dropdown-item>
                     <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
@@ -72,7 +72,9 @@ export default {
     data() {
         return {
             focus: false,
-            pfid:''
+            pfid:'',
+            timer:undefined,
+            click_flag: false
         }
     },
 
@@ -89,6 +91,20 @@ export default {
             var value = '; ' + document.cookie
             var parts = value.split('; ' + name + '=')
             if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+
+        click(){
+            this.timer ? clearTimeout(this.timer) : '';
+            if(this.click_flag){
+                this.open_fold(this.fid);
+            }
+            else{
+                this.click_flag = true;
+                var that = this;
+                this.timer = setTimeout(function(){
+                    that.click_flag = false;
+                }, 500);
+            }
         },
 
         apply_for_parent(){
@@ -269,7 +285,7 @@ export default {
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
-                    if(res.status == 0){
+                    if(res.status === 0){
                         var content = [];
                         content.push({
                             key:'文件夹名称',
@@ -289,7 +305,7 @@ export default {
                             key:'路径',
                             value:path
                         });
-                        that.$emit('open_info', that.name, content);
+                        that.$emit('open_info', that.name, content, 'fold');
                     }
                     else{
                         switch(res.status){
@@ -309,7 +325,9 @@ export default {
         },
 
         open_fold(fid){
-            this.$router.push({name:'file_system', params:{id:fid}});
+            if(this.context !== 'recycle'){
+                this.$router.push({name:'file_system', params:{id:fid}});
+            }
         },
 
         create_link(){
@@ -327,7 +345,7 @@ export default {
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
-                    if(res.status == 0){
+                    if(res.status === 0){
                         that.alert_box.msg('提示', '成功创建快捷方式', function(){
                             that.$router.push({name:'file_system', params:{id:'desktop'}});
                         });
@@ -438,7 +456,7 @@ export default {
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
-                        if(res.status == 0){
+                        if(res.status === 0){
                             that.alert_msg.success('已删除 ' + that.name);
                             that.$emit('refresh');
                         }
@@ -464,7 +482,7 @@ export default {
             var that = this;
             that.alert_box.confirm_msg('提示', '确定将 ' + that.name + ' 转为团队文件夹吗？', function(){
                 let url = '/team/new_from_fold';
-                let json_data = {id:that.fid};
+                let json_data = {fid:that.fid};
                 $.ajax({
                     type:'post',
                     url: url,
@@ -507,23 +525,29 @@ export default {
 
 .fold_block{
     position: relative;
-    cursor:pointer;
-    border: solid 1px;
-    width:150px;
-    height:145px;
+    border: solid 2px rgba(0, 0, 0, 0);
+    width:130px;
+    height:125px;
     padding: 15px;
     overflow: hidden;
+    border-radius: 5px;
+    cursor:pointer;
+}
+
+.fold_block:hover, .fold_block_focus{
+    border: solid 2px rgba(0, 0, 0, 0.1);
 }
 
 .click_area{
     width: 100%;
     height:100%;
-    background-color: hsla(0, 0%, 0%, 0.06);
+    background-color: hsla(0, 0%, 0%, 0.02);
     position: absolute;
     top:0;
     left:0;
     z-index:2;
     opacity: 0;
+    transition: all 0.1s linear;
 }
 
 .fold_block:hover .click_area, .click_area_focus{
@@ -533,49 +557,53 @@ export default {
 .big_icon{
     position: absolute;
     top:23px;
-    left:15px;
+    left: 5px;
     text-align: center;
     width:150px;
-    color:hsl(219, 15%, 23%);
+    color:hsl(198, 56%, 56%);
 }
 
 .big_icon .icon{
-    font-size:75px;
+    font-size:65px;
 }
 
 .link_icon{
     position: absolute;
-    top:65px;
-    left:100px;
-    color:hsl(202, 38%, 39%);
+    top:60px;
+    left:90px;
+    color:#586378;
     font-weight: bold;
-    border: solid 1px;
-    width:45px;
-    height:45px;
-    line-height:45px;
+    border: solid 2px #586378;
+    width:35px;
+    height:35px;
+    line-height:35px;
     text-align: center;
     border-radius: 50%;
-    background-color: #fafafa;
+    background-color: hsl(0, 0%, 98%, 0.78);
 }
 
-.link_icon .icon, .starred_icon .icon{
-    font-size:36px;
+.link_icon .icon{
+    font-size:25px;
+}
+
+.starred_icon .icon{
+    font-size:27px;
 }
 
 .starred_icon{
     position: absolute;
     top:65px;
-    left:100px;
+    left:96px;
     color:hsl(51, 100%, 50%);
     font-weight: bold;
-    width:45px;
-    height:45px;
-    line-height:45px;
+    width:35px;
+    height:35px;
+    line-height:35px;
     text-align: center;
 }
 
 .fold_block:hover .more_menu, .more_menu_focus{
-    opacity: 1 !important;
+    opacity: .7 !important;
 }
 
 .more_menu{
@@ -584,7 +612,13 @@ export default {
     right:10px;
     font-size:15px;
     opacity: 0;
-    z-index:3
+    z-index:3;
+    cursor:pointer;
+    transition: all 0.1s linear;
+}
+
+.more_menu span{
+    color:hsl(198, 25%, 35%)
 }
 
 .more_menu>>>.el-icon-s-tools{
@@ -594,8 +628,8 @@ export default {
 .name{
     position: absolute;
     width:130px;
-    top:105px;
-    left:25px;
+    top:90px;
+    left:13px;
     text-align: center;
     margin-top:10px;
     word-break: break-all;

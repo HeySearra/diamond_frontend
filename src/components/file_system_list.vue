@@ -1,6 +1,6 @@
 <template>
     <div class="file_system_list">
-        <div class="clear_both divide_type"></div>
+        <div class="clear_both"></div>
         <div class="path" v-if="type=='self'&&path.length">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item v-for="item in path" :key="item.fid">
@@ -15,6 +15,7 @@
                 :title="item.title" 
                 :list="item.content" 
                 :drage="drage" 
+                :add_type="item.add_type"
                 :context="context" 
                 :type="type"
                 :is_in_desktop="is_in_desktop"
@@ -22,7 +23,8 @@
                 @move_item="move_item"
                 @share_item="share_item"
                 @copy_item="copy_item"
-                @refresh="refresh"></file-display-list>
+                @refresh="refresh"
+                @add_item="add_item"></file-display-list>
             <div class="clear_both divide_type"></div>
         </div>
         <div class="icon_part can_not_choose" @click="change_view">
@@ -73,6 +75,10 @@ export default {
                     }
                 ]
             }
+        },
+        addable:{
+            type:Boolean,
+            default:false
         }
     },
     data() {
@@ -156,15 +162,17 @@ export default {
                                 });
                             }
                         }
-                        if(fold.length){
+                        if(that.addable==true||fold.length){
                             that.list.push({
                                 title: '文件夹',
+                                add_type: 'fold',
                                 content: fold,
                             });
                         }
-                        if(file.length){
+                        if(that.addable==true||file.length){
                             that.list.push({
                                 title: '文件',
+                                add_type: 'file',
                                 content: file,
                             });
                         }
@@ -207,9 +215,8 @@ export default {
             }
         },
 
-
-        open_info(name, content){
-            this.$emit('open_info', name, content);
+        open_info(name, content, type){
+            this.$emit('open_info', name, content, type);
         },
 
         change_view(){
@@ -227,6 +234,10 @@ export default {
         copy_item(id, type, name){
             this.$emit('copy_item', id, type, name);
         },
+
+        add_item(type){
+            this.$emit('add_item', type, this.fid);
+        }
     }
 
 }
@@ -262,21 +273,28 @@ export default {
 }
 
 .icon_part{
-    height:30px;
-    width:80px;
+    height:40px;
+    width:60px;
     position: absolute;
     top:27px;
-    right:10px;
-    border:solid 1px;
+    right:23px;
+    /* border:solid 1px; */
     text-align: center;
+    border-radius: 5px;
+    transition:all 0.1s linear;
+    cursor:pointer
+}
+
+.icon_part:hover{
+    background-color: hsla(0, 0%, 0%, 0.05);
+    color: hsl(0, 0%, 43%);
 }
 
 .icon_part .icon_button{
     display:inline-block;
-    height:30px;
-    line-height:30px;
+    height:40px;
+    line-height:40px;
     padding: 0 5px;
-    cursor:pointer
 }
 
 .icon_part .icon_button .icon{

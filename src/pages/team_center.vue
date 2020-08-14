@@ -5,10 +5,13 @@
       <el-container>
         <el-main>
           <div style="padding: 0 40px 0 30px;">
+            <div style="height:30px"></div>
             <team-display-block title="我创建的团队" 
               :is_creator="true" 
               @open_info="open_info"
               :list="my_list"
+              addable="team"
+              @add_item="add_item"
               :apply_for_info="apply_for_info"
             ></team-display-block>
             <div class="clear_both"></div>
@@ -23,7 +26,7 @@
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar active="team_center" context="team_center" @create_new_team="open_create_new_team_dialog"></sidebar>
+        <sidebar active="team_center" context="team_center"></sidebar>
       </el-aside>
     </el-container>
     <el-footer></el-footer>
@@ -110,13 +113,13 @@ export default {
       }
     },
 
-    open_create_new_team_dialog(){
+    add_item(){
         this.$refs.new_dialog.open('team');
     },
 
-    open_info(title, content){
-        this.$refs.team_info_dialog.open_info(title, content);
-    }
+    open_info(title, content, type){
+        this.$refs.team_info_dialog.open_info(title, content, type);
+    },
   }
 }
 </script>

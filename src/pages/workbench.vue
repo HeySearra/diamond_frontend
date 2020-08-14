@@ -61,8 +61,8 @@ export default {
       }
     },
 
-    open_info(title, content){
-        this.$refs.file_info_dialog.open_info(title, content);
+    open_info(title, content, type){
+        this.$refs.file_info_dialog.open_info(title, content, type);
     },
 
     create_new_file(){

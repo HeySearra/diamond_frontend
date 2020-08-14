@@ -1,24 +1,15 @@
 <template>
   <div class="sidebar_menu sidebar_block">
-    <div style="height:20px;"></div>
-    <el-row class="user_info">
-      <el-col :span="8" class="avatar">
-        <el-avatar :src="user_src"></el-avatar>
-      </el-col>
-      <el-col :span="16" class="username">{{user_name}}</el-col>
-    </el-row>
-    <el-divider v-if="context!='doc'"></el-divider>
-    <el-row class="new_buttons" v-if="context!='doc'">
-      <div class="button_container">
-        <el-row><el-button type="primary" v-if="context!='team_center'" @click="$emit('create_new_file')">新 建 文 档</el-button></el-row>
-        <el-row><el-button type="primary" v-if="context!='team_center'" @click="$emit('create_new_fold')">新 建 文 件 夹</el-button></el-row>
-        <el-row><el-button type="primary" v-if="context=='team_center'" @click="$emit('create_new_team')">新 建 团 队</el-button></el-row>
-      </div>
+    <div style="height:35px;"></div>
+    <el-row>
+      <div class="avatar"><el-avatar :src="user_src"></el-avatar></div>
+      <div class="clear_both"></div>
+      <div :span="16" class="username can_not_choose">{{user_name}}</div>
     </el-row>
     <el-divider></el-divider>
     <el-row class="team_info" v-if="context=='team'">
       <el-row>
-        <el-col :span="8" class="avatar">
+        <el-col :span="8" class="team_avatar">
           <el-avatar :src="team_src"></el-avatar>
         </el-col>
         <el-col :span="16" class="teamname" style="line-height:40px">{{team_name}}</el-col>
@@ -320,23 +311,18 @@ export default {
 @import url("../assets/common.css");
 
 .sidebar_menu {
-  background-color: #fefefe;
   font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif !important;
-  border: solid 1px;
   margin:0 !important;
 
-}
-
-.user_info{
-  border: solid 1px;
-  height: 60px;
-  display: flex;
-  align-items: center;
 }
 
 .team_info{
   height: fit-content;
   align-items: center;
+}
+
+.team_avatar{
+  text-indent: 30px;
 }
 
 .team_intro{
@@ -376,17 +362,26 @@ export default {
 }
 
 .avatar{
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display:block;
+  margin:0 auto;
+  text-align: center;
+}
+
+.avatar .el-avatar{
+  width:83px;
+  height:83px;
 }
 
 .username{
-  display: flex;
-  align-items: center;
+  font-weight: bold;
+  padding: 10px 15px;
+  margin-top:15px;
+  text-align: center;
+  font-size: 21px;
+  word-break: break-all;
 }
 
-.username, .teamname{
+.teamname{
   font-weight: bold;
   margin-left:-10px;
 }
@@ -401,7 +396,6 @@ export default {
 }
 
 .function_buttons{
-  border: solid 2px;
   height: 50px;
   line-height:50px;
   display: flex;
@@ -409,7 +403,8 @@ export default {
   justify-content: center;
   letter-spacing: 3px;
   text-indent: 3px;
-  cursor:pointer
+  cursor:pointer;
+  transition: all 0.1s linear;
 }
 
 .function_buttons a{
@@ -420,8 +415,12 @@ export default {
   color: #333;
 }
 
-.function_buttons:hover, .function_buttons_active{
-  background-color: #ccc;
+.function_buttons:hover{
+  background-color: hsl(0, 0%, 87%);
+}
+
+.function_buttons_active{
+  background-color: hsl(0, 0%, 80%) !important;
 }
 
 .el-button{
