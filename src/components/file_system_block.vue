@@ -22,7 +22,7 @@
                 @move_item="move_item"
                 @share_item="share_item"
                 @copy_item="copy_item"
-                 @refresh="refresh"></file-display-block>
+                @refresh="refresh"></file-display-block>
             <div class="clear_both divide_type"></div>
         </div>
         <div class="icon_part can_not_choose" @click="change_view">
