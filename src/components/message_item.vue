@@ -27,7 +27,7 @@ export default {
     props: {
         mid:{
             type:String,
-            default:'mid',
+            default:'',
         },
     },
     data () {
@@ -47,11 +47,11 @@ export default {
             time: '',
         }
     },
-    mounted(){
-        //this.init();
-    },
     methods:{
         init(){
+            if(this.mid == ''){
+                return;
+            }
             this.apply_for_info();
         },
         apply_for_info(){
@@ -86,13 +86,18 @@ export default {
                         that.loading = false;
                     }
                     else{
-                        
+                        that.alert_msg.error('获取消息内容失败');
                     }
                 },
                 error:function(){
                     that.alert_msg.error('连接失败');
                 }
             });
+        },
+        getCookie (name) {
+            var value = '; ' + document.cookie
+            var parts = value.split('; ' + name + '=')
+            if (parts.length === 2) return parts.pop().split(';').shift()
         },
         jump_to_doc(){
             this.$router.push({path: '/doc/' + this.id}); //待定
