@@ -14,6 +14,7 @@
         <div v-infinite-scroll="load" class="message_area" style="overflow-x:hidden;overflow-y:auto;border:solid 1px;height:calc(100vh - 50px)">
             <message-item v-for="item in list" :key="item.mid" ref="message_item" @confirm_to_join="deal_team_invite"></message-item>
             <p v-if="is_loading" class="not_found">加载中 <i class="el-icon-loading"></i></p>
+            <p v-if="is_final&&list.length==0" class="not_found">你没有收到任何消息</p>
         </div>
 
     </el-drawer>
@@ -25,9 +26,11 @@ export default {
         return {
             drawer: false,
             page: 0,
-            each: 10,
+            each: 15,
+            amount: 0,
             list: [],
-            is_loading:false
+            is_loading:false,
+            is_final: false,
         }
     },
     props: {
@@ -57,38 +60,57 @@ export default {
                     }
                     if(res.status == 0){
                         let item = that.$refs.message_item;
+                        that.amount = res.amount;
                         that.list.concat(res.list);
-                        if(item){
-                            for(let i=0; i<item.length; i++){
-                                item[i].init();
-                            }
+                        if(that.list.length >= res.amount){
+                            that.is_final = true;
                         }
-                        that.drawer = true;
-                        that.is_loading = false;
+                        if(item){
+                            setTimeout(() => {
+                                if(item instanceof Array){
+                                    for(let i = 0; i<item.length; i++){
+                                        item[i].init();
+                                    }
+                                }
+                                else{
+                                    item.init();
+                                }
+                            }, 0);
+                            
+                        }
                     }
                     else{
                         that.page--;
                         that.alert_msg.error('加载消息失败，请重试');
-                        that.is_loading = false
+                        that.is_final = true;
+                        that.drawer = false;
                     }
                 },
                 error:function(){
                     that.page--;
                     that.alert_msg.error('连接失败');
-                    that.is_loading = false
+                    that.is_final = true;
+                    that.drawer = false;
                 }
             });
         },
         open() {
             this.list = [];
-            this.is_loading = true;
+            this.is_loading = false;
+            this.is_final = false;
+            this.drawer = true;
             this.page = 0;
             this.apply_for_info();
         },
 
         load(){
-            this.is_loading = true;
-            this.apply_for_info();
+            if(this.is_final){
+                return;
+            }
+            var that = this;
+            setTimeout(function(){
+                that.apply_for_info();
+            })
         },
 
         mark_all_read(){
@@ -110,6 +132,7 @@ export default {
                                 item[i].init();
                             }, 0);
                         }
+                        that.alert_msg.success('已全部标记为已读');
                     }
                     else{
                         that.alert_msg.error('获取消息失败，请重试');

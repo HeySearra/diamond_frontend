@@ -91,7 +91,7 @@ Vue.component('change-password-dialog', change_password_dialog);
 Vue.component('chatting-bubble', chatting_bubble);
 Vue.component('chatting-room', chatting_room);
 Vue.component('chatting-dialog', chatting_dialog);
-Vue.component('team_invite_dialog', team_invite_dialog);
+Vue.component('team-invite-dialog', team_invite_dialog);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
