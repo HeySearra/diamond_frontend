@@ -58,12 +58,16 @@ export default {
                     if(res.status == 0){
                         let item = that.$refs.message_item;
                         that.list.concat(res.list);
-                        if(item){
-                            for(let i = 0; i<item.length; i++){
-                                item[i].init();
+                        if(item && item instanceof Array){
+                            if(item instanceof Array){
+                                for(let i = 0; i<item.length; i++){
+                                    item[i].init();
+                                }
+                            }
+                            else{
+                                item.init();
                             }
                         }
-                        that.drawer = true;
                         that.is_loading = false;
                     }
                     else{
@@ -80,6 +84,7 @@ export default {
             });
         },
         open() {
+            console.log("43tgji5jgithjt");
             this.list = [];
             this.is_loading = true;
             this.drawer = true;
@@ -89,7 +94,7 @@ export default {
 
         load(){
             this.is_loading = true;
-            this.apply_for_info();
+            //this.apply_for_info();
         },
 
         mark_all_read(){
