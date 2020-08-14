@@ -1,7 +1,7 @@
 .dialog_style h3{
     position: absolute;
-    top:0;
-    left:23px;
+    top:5px;
+    left:35px;
     font-size:21px;
     width:calc(100% - 69px);
     display: -webkit-box;

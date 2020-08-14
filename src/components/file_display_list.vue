@@ -1,6 +1,6 @@
 <template>
     <div class="file_display_block">
-        <h1 class="can_not_choose">{{title}}</h1>
+        <h1 class="can_not_choose">{{title}} <span class="el-icon-circle-plus-outline add_button" v-if="add_type!='none'" @click="add_item"></span></h1>
         <el-divider></el-divider>
         <div class="file_area">
             <div class="can_not_choose list_head">
@@ -109,6 +109,10 @@ export default {
         drage:{
             type: Boolean,
             default:true
+        },
+        add_type:{
+            type:String,
+            default:'none'
         }
     },
     data() {
@@ -141,8 +145,8 @@ export default {
             this.$emit('refresh');
         },
 
-        open_info(title, content){
-            this.$emit('open_info', title, content);
+        open_info(title, content, type){
+            this.$emit('open_info', title, content, type);
         },
 
         allow_drop(e, item){
@@ -174,6 +178,10 @@ export default {
         copy_item(id, type, name){
             this.$emit('copy_item', id, type, name);
         },
+
+        add_item(){
+            this.$emit('add_item', this.add_type);
+        }
     }
 
 }
@@ -209,6 +217,7 @@ h1{
     height:50px;
     top:0;
     right:39px;
+    color:#999
 }
 
 .info_area div{
@@ -221,6 +230,19 @@ h1{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1; /* 行数 */
     overflow: hidden;
+}
+
+.add_button{
+    cursor: pointer;
+    display:inline-block;
+    font-size:21px !important;
+    margin-left:-10px;
+    opacity:.5;
+    transition: all 0.1s linear;
+}
+
+h1:hover .add_button{
+    opacity: 1;
 }
 
 @media (max-width: 1500px){

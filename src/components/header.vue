@@ -4,7 +4,7 @@
       :default-active="''+active_index"
       class="el-menu-demo"
       mode="horizontal"
-      background-color="#fff"
+      background-color="#f6f6f6"
       text-color="#333"
       active-text-color="#efb7b6">
       <h1><a class="logo_a" @click="$router.push({path:'/'});"></a></h1>
@@ -68,12 +68,12 @@
               </el-dropdown-menu>
               </el-dropdown>
         </div>
-      <div class="header_icon" @click="click_open_drawer" v-if="is_login&&false">
+      <div class="header_icon" @click="click_open_drawer" v-if="is_login">
         <el-badge class="item" :value="message_count" :max="99" :hidden="message_count<=0">
           <span class="icon iconfont">&#xe60b;</span>
         </el-badge>
       </div>
-      <div class="header_icon" @click="$emit('chatting')" v-if="is_login&&false">
+      <div class="header_icon" @click="$emit('chatting')" v-if="is_login">
         <el-badge class="item" :is-dot="have_chat">
           <span class="icon iconfont">&#xe7fe;</span>
         </el-badge>

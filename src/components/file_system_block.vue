@@ -14,6 +14,7 @@
                 ref="display_component"
                 :title="item.title" 
                 :list="item.content" 
+                :add_type="item.add_type"
                 :drage="drage" 
                 :context="context" 
                 :type="type" 
@@ -22,7 +23,8 @@
                 @move_item="move_item"
                 @share_item="share_item"
                 @copy_item="copy_item"
-                @refresh="refresh"></file-display-block>
+                @refresh="refresh"
+                @add_item="add_item"></file-display-block>
             <div class="clear_both divide_type"></div>
         </div>
         <div class="icon_part can_not_choose" @click="change_view">
@@ -73,6 +75,10 @@ export default {
             type:Boolean,
             default: false,
         },
+        addable:{
+            type:Boolean,
+            default: false
+        }
     },
     data() {
         return {
@@ -150,15 +156,17 @@ export default {
                                 });
                             }
                         }
-                        if(fold.length){
+                        if(fold.length||that.addable==true){
                             that.list.push({
                                 title: '文件夹',
+                                add_type: 'fold',
                                 content: fold,
                             });
                         }
-                        if(file.length){
+                        if(file.length||that.addable==true){
                             that.list.push({
                                 title: '文件',
+                                add_type: 'file',
                                 content: file,
                             });
                         }
@@ -201,8 +209,8 @@ export default {
             }
         },
 
-        open_info(name, content){
-            this.$emit('open_info', name, content);
+        open_info(name, content, type){
+            this.$emit('open_info', name, content, type);
         },
 
         change_view(){
@@ -220,6 +228,10 @@ export default {
         copy_item(id, type, name){
             this.$emit('copy_item', id, type, name);
         },
+
+        add_item(type){
+            this.$emit('add_item', type, this.fid);
+        }
     }
 
 }

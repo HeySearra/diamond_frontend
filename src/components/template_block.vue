@@ -152,7 +152,7 @@ export default {
 }
 
 .template_block:hover .more_menu, .more_menu_focus{
-    opacity: 1 !important;
+    opacity: .7 !important;
 }
 
 .preview_img{

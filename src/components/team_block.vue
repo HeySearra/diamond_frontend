@@ -1,5 +1,5 @@
 <template>
-    <div class="can_not_choose team_block">
+    <div class="can_not_choose team_block" :class="focus?'team_block_focus':''">
         <div class="click_area" :class="focus?'click_area_focus':''" @click="open"></div>
         <div class="big_icon">
             <div>
@@ -62,7 +62,6 @@ export default {
             var parts = value.split('; ' + name + '=')
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
-
 
         vis_change(value){
             this.focus = value;
@@ -196,7 +195,7 @@ export default {
                             key:'文件数',
                             value:res.doc_num
                         });
-                        that.$emit('open_info', that.tname, content);
+                        that.$emit('open_info', that.tname, content, 'team');
                     }
                     else{
                         switch(res.status){
@@ -260,23 +259,29 @@ export default {
 
 .team_block{
     position: relative;
-    cursor:pointer;
-    border: solid 1px;
-    width:150px;
-    height:145px;
+    border: solid 2px rgba(0, 0, 0, 0);
+    width:130px;
+    height:125px;
     padding: 15px;
     overflow: hidden;
+    border-radius: 5px;
+    cursor:pointer;
+}
+
+.team_block:hover, .team_block_focus{
+    border: solid 2px rgba(0, 0, 0, 0.1);
 }
 
 .click_area{
     width: 100%;
     height:100%;
-    background-color: hsla(0, 0%, 0%, 0.06);
+    background-color: hsla(0, 0%, 0%, 0.02);
     position: absolute;
     top:0;
     left:0;
     z-index:2;
     opacity: 0;
+    transition: all 0.1s linear;
 }
 
 .team_block:hover .click_area, .click_area_focus{
@@ -285,11 +290,11 @@ export default {
 
 .big_icon{
     position: absolute;
-    top:23px;
-    left:15px;
+    top:15px;
+    left: 5px;
     text-align: center;
     width:150px;
-    color:hsl(219, 15%, 23%);
+    color:hsl(198, 15%, 56%);
 }
 
 .big_icon .icon{
@@ -297,7 +302,7 @@ export default {
 }
 
 .team_block:hover .more_menu, .more_menu_focus{
-    opacity: 1 !important;
+    opacity: .7 !important;
 }
 
 .more_menu{
@@ -306,7 +311,13 @@ export default {
     right:10px;
     font-size:15px;
     opacity: 0;
-    z-index:3
+    z-index:3;
+    cursor:pointer;
+    transition: all 0.1s linear;
+}
+
+.more_menu span{
+    color:hsl(198, 25%, 35%)
 }
 
 .more_menu>>>.el-icon-s-tools{
@@ -316,8 +327,8 @@ export default {
 .name{
     position: absolute;
     width:130px;
-    top:105px;
-    left:25px;
+    top:93px;
+    left:13px;
     text-align: center;
     margin-top:10px;
     word-break: break-all;

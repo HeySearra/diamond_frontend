@@ -331,7 +331,7 @@ export default {
                             key:'路径',
                             value:path
                         });
-                        that.$emit('open_info', that.name, content);
+                        that.$emit('open_info', that.name, content, 'file');
                     }
                     else{
                         switch(res.status){
@@ -585,7 +585,7 @@ export default {
 }
 
 .file_list_item:hover .more_menu, .more_menu_focus{
-    opacity: 1 !important;
+    opacity: .7 !important;
 }
 
 .more_menu{
@@ -612,7 +612,7 @@ export default {
     line-height:50px;
     height:50px;
     top:0;
-    left:69px;
+    left:75px;
     word-break: break-all;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -627,6 +627,7 @@ export default {
     height:50px;
     top:0;
     right:39px;
+    color:#999
 }
 
 .info_area div{

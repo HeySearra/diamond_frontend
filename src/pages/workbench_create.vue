@@ -1,15 +1,14 @@
 <template>
     <div class="workbench_create">
         <component 
-            ref="file_system_component"
+            ref="file_system_item"
             :is="view_type=='block'?'file-system-block':'file-system-list'"
             type="from_out"
             context="workbench"
             :drage="false"
             :out_list="list"
             @change_view="change_view"
-            @open_info="open_info"
-            @ref="file_system_component">
+            @open_info="open_info">
         </component>
     </div>
 </template>
@@ -55,8 +54,8 @@ export default {
             }, 0);
         },
 
-        open_info(title, content){
-            this.$emit('open_info', title, content);
+        open_info(title, content, type){
+            this.$emit('open_info', title, content, type);
         },
 
         get_my_create_list(){
@@ -84,7 +83,7 @@ export default {
                                 creator: res.list[i].cname,
                             })
                         }
-                        that.$refs.file_system_component.init();
+                        that.$refs.file_system_item.init();
                     }
                     else{
                         that.page--;

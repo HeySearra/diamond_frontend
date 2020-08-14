@@ -8,7 +8,7 @@
     width:100vw;
     z-index: 2000;
     -webkit-box-shadow: 0 1px 3px #eee;
-    box-shadow: 0 1px 3px rgba(26,26,26,.1) !important;
+    box-shadow: 0 1px 3px hsla(0, 0%, 0%, 0.15) !important;
 }
 
 .el-footer{
@@ -26,18 +26,18 @@
 
 .el-aside {
     color: #333;
-    border:1px solid;
     position:fixed;
     left:0;
     height: calc(100vh - 62px);
+    border-right:solid 2px hsl(0, 0%, 90%);
+    background-color: #f6f6f6;
 }
 
 .el-main {
     color: #333;
-    width: calc(100% - 300px);
-    border:solid 1px;
+    width: calc(100% - 320px);
     position: fixed;
-    left:300px;
+    left:320px;
     height: calc(100vh - 62px);
     overflow-y: overlay;
     overflow-x: hidden;
