@@ -5,6 +5,7 @@
       class="el-menu-demo"
       mode="horizontal"
       background-color="#f6f6f6"
+      :class="opa?'opa':''"
       text-color="#333"
       active-text-color="#efb7b6">
       <h1><a class="logo_a" @click="$router.push({path:'/'});"></a></h1>
@@ -53,7 +54,7 @@
         </el-tooltip>
       </div>
       <div class="user">
-          <span class="el-dropdown-link" @click="to_login" v-if="!is_login">
+          <span class="el-dropdown-link" @click="to_login" v-if="!is_login&&!opa">
               <el-avatar>登录</el-avatar>
           </span>
           <el-dropdown @click.native="dialogVisible = true" @command="click_dropdown" v-if="is_login">
@@ -108,8 +109,9 @@
         is_login:false,
         photo_src:'',
         online_icon_list:[],
-        message_count:11,
-        have_chat:true
+        message_count:0,
+        have_chat:true,
+        opa:false
       };
     },
     methods: {
@@ -120,17 +122,23 @@
       },
       
       init(){
+        if(this.$route.name=='login'||this.$route.name=='register'||this.$route.name=='forget'||this.$route.name=='forget_set'){
+          this.opa = true;
+        }
+        else{
+          this.opa = false;
+        }
         if(this.login_manager.get()){
           this.is_login = true;
           this.photo_src = this.login_manager.get_por();
           this.name = this.login_manager.get_name();
         }
-        // else{
-        //   let route_name = this.$router.history.current.name;
-        //   if(route_name!='login' && route_name!='register' && route_name!='forget' && route_name!='forget_set'){
-        //     this.$router.push({name:'login'});
-        //   }
-        // }
+        else{
+          let route_name = this.$router.history.current.name;
+          if(route_name!='login' && route_name!='register' && route_name!='forget' && route_name!='forget_set'){
+            this.$router.push({name:'login'});
+          }
+        }
         this.apply_for_magic_word();
         this.apply_for_message();
         this.get_info();
@@ -146,10 +154,10 @@
           processData: false,
           contentType: false,
           success:function (res){
-            if(that.debug){
+            if(that.console_debug){
               console.log(url + '：' + res.status);
             }
-            if(res.status){
+            if(res.status == 0){
               that.message_count = res.count;
             }
             else{
@@ -350,9 +358,9 @@ h1 a:hover{
 }
 
 .header_icon{
+  font-weight: normal;
   float:right;
-  border: solid 1px;
-  margin: 15px 0;
+  margin: 15px 3px;
   height: 30px;
   width:30px;
   margin-left:20px;
@@ -433,7 +441,6 @@ h1 a:hover{
 }
 
 .online_icon{
-  border:solid 1px;
   float:left;
   margin: 10px 35px 10px 50px;
   height:40px;
@@ -470,5 +477,9 @@ h1 a:hover{
   width:30px;
   float:left;
   margin: 6px 10px 0 -3px;
+}
+
+.opa{
+  background-color: rgba(255, 255, 255, 0.69) !important;
 }
 </style>

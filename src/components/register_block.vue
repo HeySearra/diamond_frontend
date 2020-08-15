@@ -115,11 +115,8 @@ export default {
                                 console.log("(post)/register/submit"+ " : " +res.status);
                             }
                             if(res.status == 0){
-                                function _ok(that){
-                                    var from = that.$route.query.from;
-                                    that.$router.push({path:from?from:'/workbench/recent_view'});
-                                }
-                                that.alert_box.msg('提示', '注册成功', _ok(that));
+                                that.$router.push({name:'workbench'});
+                                that.alert_msg.success('注册成功');
                             }
                             else{
                                 switch(res.status){

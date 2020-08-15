@@ -6,20 +6,24 @@
             width="700px">
             <h3>{{title}}</h3>
             <div class="content">
+                <div style="height:20px;"></div>
                 <div class="member_part">
                     <div class="item" v-for="item in no_admin_list" :key="item.uid" @click="function(){add_admin(item.uid)}">
                         <el-tooltip effect="dark" :content="item.name" placement="top">
                             <div class="member_icon"
                                 draggable="true"
-                                @dragover.prevent>
+                                @drag="start_drag($event, item)">
                                 <el-avatar :src="item.src"></el-avatar>
                             </div>
                         </el-tooltip>
                     </div>
                     <div class="clear_both"></div>
                 </div>
-                <div style="height:20px"></div>
-                <div class="admin_part">
+                <div style="height:39px"></div>
+                <div class="admin_part"
+                    @dragover.prevent
+                    @drop="face_drop($event, item)">
+                    <div class="not_found" v-if="!admin_list.length">拖动用户到此处添加管理员</div>
                     <user-list-item 
                         v-for="item in admin_list" 
                         :key="item.uid"
@@ -27,7 +31,7 @@
                         :name="item.name"
                         :account="item.acc"
                         :src="item.src"
-                        @click="remove_admin(function(){item.uid})">
+                        @remove_admin="remove_admin">
                     </user-list-item>
                 </div>
             </div>
@@ -49,6 +53,7 @@ export default {
             no_admin_list: [],
             admin_list: [],
             creator_uid: '',
+            drag_uid:''
         }
     },
 
@@ -89,10 +94,10 @@ export default {
                         });
                         for(let i=0; i<res.norm.length; i++){
                             that.no_admin_list.push({
-                                uid:res.norm[i].cuid,
-                                name:res.norm[i].cname,
-                                src:res.norm[i].csrc,
-                                acc:res.norm[i].cacc,
+                                uid:res.norm[i].uid,
+                                name:res.norm[i].name,
+                                src:res.norm[i].src,
+                                acc:res.norm[i].acc,
                             });
                         }
                         this.admin_list = res.admin;
@@ -139,6 +144,7 @@ export default {
             for(let i=0; i<this.admin_list.length; i++){
                 al.push(this.admin_list[i]);
             }
+            this.no_admin_list = nl;
             this.admin_list = al;
         },
 
@@ -181,6 +187,7 @@ export default {
                     }
                     if(res.status == 0){
                         that.alert_msg.success('已修改管理员');
+                        that.$emit('refresh_team_info');
                         that.dia_vis = false;
                     }
                     else{
@@ -203,7 +210,15 @@ export default {
                     that.alert_msg.error('网络连接失败');
                 }
             });
-        }
+        },
+
+        face_drop(e, item){
+            this.add_admin(this.drag_uid);
+        },
+
+        start_drag(e, item){
+            this.drag_uid = item.uid;
+        },
     }
 
 }
@@ -214,7 +229,11 @@ export default {
 @import url("../assets/dialog_style.css");
 
 .member_part{
-    border:solid 1px;
+    border:solid 1px hsl(0, 0%, 75%);
+    background-color: hsl(0, 0%, 98%);
+    border-radius: 5px;
+    padding:10px;
+    margin:0 20px;
 }
 
 .member_icon{
@@ -224,16 +243,16 @@ export default {
 }
 
 .member_icon .el-avatar{
-    border:solid 1px #000;
-
+    border:solid 1px hsla(0, 0%, 75%, 0.3);
 }
 
 .admin_part{
-    border:solid 1px #000;
+    border:solid 1px hsl(0, 0%, 75%);
+    border-radius: 5px;
     height: 300px;
     width:80%;
     margin: 0 auto;
-    overflow: overlay;
+    overflow-y: overlay;
 }
 @media (max-width: 1200px){
     

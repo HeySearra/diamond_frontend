@@ -35,7 +35,10 @@ export default {
     },
     methods:{
         init(){
-             this.is_loading = true;
+            if(!this.login_manager.get()){
+                return;
+            }
+            this.is_loading = true;
             this.$emit('active_change');
             this.view_type = this.view_type_manager.get();
             this.get_recent_file_list();

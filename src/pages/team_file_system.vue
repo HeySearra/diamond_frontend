@@ -38,10 +38,10 @@
     </el-container>
     <new-dialog ref="new_dialog" @refresh="refresh"></new-dialog>
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
-    <admin-edit-dialog ref="admin_edit_dialog"></admin-edit-dialog>
+    <admin-edit-dialog @refresh_team_info="refresh_team_info_force" ref="admin_edit_dialog"></admin-edit-dialog>
     <manage-member-dialog ref="manage_member_dialog"></manage-member-dialog>
     <choose-path-dialog ref="choose_path_dialog"></choose-path-dialog>
-    <edit-team-info-dialog ref="edit_team_info_dialog" @refresh="refresh_team_info"></edit-team-info-dialog>
+    <edit-team-info-dialog ref="edit_team_info_dialog" @refresh="refresh_team_info_force"></edit-team-info-dialog>
     <share-dialog ref="share_dialog" context="team"></share-dialog>
   </div>
 </template>
@@ -99,6 +99,10 @@ export default {
 
     refresh(){
       this.$refs.file_system_component.init();
+    },
+
+    refresh_team_info_force(){
+      this.$refs.sidebar.init_team_info(this.tid, true);
     },
 
     refresh_team_info(){

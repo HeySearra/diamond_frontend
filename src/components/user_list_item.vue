@@ -1,25 +1,27 @@
 <template>
-    <div class="user_list_item">
-        <div style="height:56px;">
-            <div style="display: inline-block;margin:8px 20px;float:left">
-                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-            </div>
-            <div style="display: inline-block;float:left;width:150px">
-                <div class="content">
-                    {{name}}
+    <transition name="el-zoom-in-top">
+        <div v-show="show" class="user_list_item can_not_choose" :class="show?'hover_color':''">
+            <div style="height:56px;">
+                <div style="display: inline-block;margin:8px 20px;float:left">
+                    <el-avatar :src="src"></el-avatar>
+                </div>
+                <div style="display: inline-block;float:left;width:150px">
+                    <div class="content">
+                        {{name}}
+                    </div>
+                </div>
+                <div style="display: inline-block;float:left;width:200px;color:#aaa">
+                    <div class="content">
+                        {{account}}
+                    </div>
+                </div>
+                <div style="position:absolute; right:36px" class="cancel_icon" v-if="type=='admin'" @click="remove_admin">
+                    <span class="icon iconfont">&#xe79b;</span>
                 </div>
             </div>
-            <div style="display: inline-block;float:left;width:200px">
-                <div class="content">
-                    {{account}}
-                </div>
-            </div>
-            <div style="position:absolute; right:36px" class="cancel_icon" v-if="type=='admin'">
-                <span class="icon iconfont">&#xe79b;</span>
-            </div>
+            <el-divider></el-divider>
         </div>
-        <el-divider></el-divider>
-    </div>
+    </transition>
 </template>
 
 <script>
@@ -49,12 +51,23 @@ export default {
 
     data() {
         return {
-            dia_vis:true
+            dia_vis:true,
+            show:false
         }
     },
 
+    mounted(){
+        this.show = true;
+    },
+
     methods:{
-        
+        remove_admin(){
+            this.show = false;
+            var that = this;
+            setTimeout(function(){
+                that.$emit('remove_admin', that.uid);
+            }, 100);    
+        }
     }
 
 }
@@ -70,10 +83,11 @@ export default {
     line-height:56px;
     cursor:pointer;
     position: relative;
+    transition:all 0.1s linear;
 }
 
-.user_list_item:hover{
-    background-color: #ccc;
+.hover_color:hover{
+    background-color: #eee;
 }
 
 .content{
@@ -94,6 +108,12 @@ export default {
 
 .cancel_icon{
     opacity: 0;
+    color:#999;
+    transition:all 0.1s linear;
+}
+
+.cancel_icon span{
+    font-size: 21px;
 }
 
 .user_list_item:hover .cancel_icon{

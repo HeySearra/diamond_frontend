@@ -198,6 +198,6 @@ export default {
     }
 
     .message_box>>>.el-drawer__open .el-drawer.rtl{
-        width:430px !important;
+        /* width:430px !important; */
     }
 </style>

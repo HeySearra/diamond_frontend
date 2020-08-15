@@ -3,6 +3,7 @@
         <h1 class="can_not_choose">{{title}} <span class="el-icon-circle-plus-outline add_button" v-if="addable!='none'" @click="add_item"></span></h1>
         <el-divider></el-divider>
         <div class="team_area">
+            <div v-if="!list.length" class="not_found">{{not_found_text[random]}}</div>
             <div class="item" 
                 v-for="item in list" 
                 :key="item.tid">
@@ -48,12 +49,13 @@ export default {
     },
     data() {
         return {
-
+            random:-1,
+            not_found_text:['这里啥玩意也没有', '这里什么也没有', '空空如也', '这里好凄凉', '难道？这里什么也没有', '这里没有任何的团队', '这里啥都没', '什么团队也没有~', '这里没团队，别看了', '啊，这里没团队啊']
         }
     },
 
     mounted(){
-        // this.init();
+        this.random = parseInt(Math.random()*100%this.not_found_text.length);
     },
 
     methods:{

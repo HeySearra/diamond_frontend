@@ -37,6 +37,7 @@
               <el-avatar :src="item.src"></el-avatar>
             </el-tooltip>
           </div>
+          <div class="clear_both"></div>
         </div>
         <div class="clear_both"></div>
         <h4 v-if="member_list.length">成员</h4>
@@ -47,6 +48,7 @@
               <el-avatar :src="item.src"></el-avatar>
             </el-tooltip>
           </div>
+          <div class="clear_both"></div>
         </div>
         <div class="clear_both"></div>
         <el-row><el-button type="primary" plain @click="$emit('edit_team_info', tid)">修 改 团 队 信 息</el-button></el-row>
@@ -138,6 +140,36 @@ export default {
     init() {
       this.user_name = this.login_manager.get_name();
       this.user_src = this.login_manager.get_por();
+      this.init_user_info();
+    },
+
+    init_user_info(){
+      let url = '/user_info';
+      var that = this;
+      $.ajax({ 
+          type:'get',
+          url: url,
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false,
+          success:function (res){
+              if(that.console_debug){
+                  console.log(url +  '：' + res.status);
+              }
+              if(res.status == 0){
+                  that.user_name = res.name;
+                  that.user_src = res.portrait;
+              }
+              else{
+                that.user_name = that.login_manager.get_name();
+                that.user_src = that.login_manager.get_por();
+              }
+          },
+          error:function(res){
+             that.user_name = that.login_manager.get_name();
+            that.user_src = that.login_manager.get_por();
+          }
+      });
     },
 
     getCookie (name) {
@@ -213,7 +245,7 @@ export default {
                   }
                   setTimeout(function(){
                     that.is_loading = false;
-                  }, 300);
+                  }, 100);
               }
               else{
                   switch(res.status){

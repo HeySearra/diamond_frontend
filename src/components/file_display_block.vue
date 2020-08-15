@@ -7,6 +7,10 @@
             <div class="file_item" 
                 v-for="item in list" 
                 :key="item.id"
+                :draggable="drage&&!item.is_link"
+                @drag="start_drag($event, item)"
+                @drop="face_drop($event, item)"
+                @dragover="allow_drop($event, item)"
                 >
                 <component 
                     ref="file_component"
@@ -169,7 +173,7 @@ export default {
 h1{
     font-size: 23px !important;
     text-indent: 25px;
-    margin-bottom:0 !important;
+    margin-bottom:-6px !important;
     color:hsl(0, 0%, 39%);
 }
 

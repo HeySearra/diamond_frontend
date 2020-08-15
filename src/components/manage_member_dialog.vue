@@ -95,29 +95,29 @@ export default {
             });
             for(let i=0; i<res.admin.length; i++){
                 this.all_list.push({
-                    uid:res.admin[i].cuid,
-                    src:res.admin[i].csrc,
-                    name:res.admin[i].cname,
+                    uid:res.admin[i].uid,
+                    src:res.admin[i].src,
+                    name:res.admin[i].name,
                     account:res.admin[i].acc
                 });
                 this.admin_list.push({
-                    uid:res.admin[i].cuid,
-                    src:res.admin[i].csrc,
-                    name:res.admin[i].cname,
+                    uid:res.admin[i].uid,
+                    src:res.admin[i].src,
+                    name:res.admin[i].name,
                     account:res.admin[i].acc
                 });
             }
             for(let i=0; i<res.norm.length; i++){
                 this.all_list.push({
-                    uid:res.norm[i].cuid,
-                    src:res.norm[i].csrc,
-                    name:res.norm[i].cname,
+                    uid:res.norm[i].uid,
+                    src:res.norm[i].src,
+                    name:res.norm[i].name,
                     account:res.norm[i].acc
                 });
                 this.member_list.push({
-                    uid:res.norm[i].cuid,
-                    src:res.norm[i].csrc,
-                    name:res.norm[i].cname,
+                    uid:res.norm[i].uid,
+                    src:res.norm[i].src,
+                    name:res.norm[i].name,
                     account:res.norm[i].acc
                 });
             }
@@ -224,7 +224,8 @@ export default {
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify({key:that.search_input}),
-                async:false, 
+                processData: false,
+                contentType: false,
                 success:function (res){ 
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);

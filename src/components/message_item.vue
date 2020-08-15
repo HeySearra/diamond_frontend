@@ -10,7 +10,7 @@
                 <h4 class="title">
                     <div class="message-head">{{title}}</div>
                 </h4>
-                <div class='comment' v-if="type=='doc'">{{comment}}</div>
+                <div class='comment' v-if="type=='doc'">{{content}}</div>
             </div>
         </div>
         <div class="not-read" v-if="!is_read"></div>
@@ -71,7 +71,7 @@ export default {
                         that.portrait = res.portrait;
                         that.type = res.type;
                         that.id = res.id;
-                        that.content = res.contest;
+                        that.content = res.content;
                         if(that.type == 'doc'){
                             that.content = res.content;
                             that.uid = res.uid;
@@ -201,6 +201,5 @@ export default {
     font-size: 14px;
     word-break:break-all;
     width:320px;
-
 }
 </style>

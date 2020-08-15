@@ -11,8 +11,8 @@ export const login_manager = {
         }
     },
     get: function(){
-        if(localStorage.getItem('state') && localStorage.getItem('uid')){
-            return localStorage.getItem('uid');
+        if(localStorage.getItem('state')){
+            return true;
         }
         else{
             return false;

@@ -34,8 +34,4 @@ export default {
   background-position: center;
 }
 
-.nav>>>.el-menu{
-  background-color: rgba(255, 255, 255, 0.87) !important;
-}
-
 </style>
