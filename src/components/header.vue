@@ -154,6 +154,9 @@
       },
 
       apply_for_message(){
+        if(!this.login_manager.get()){
+          return;
+        }
         let url = '/msg/unread_count';
         var that = this;
         $.ajax({

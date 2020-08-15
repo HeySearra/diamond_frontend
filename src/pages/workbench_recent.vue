@@ -36,7 +36,7 @@ export default {
     methods:{
         init(){
             if(!this.login_manager.get()){
-                return;
+                this.$router.push({name:'login'});
             }
             this.is_loading = true;
             this.$emit('active_change');

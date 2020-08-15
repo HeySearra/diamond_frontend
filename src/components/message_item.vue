@@ -3,11 +3,11 @@
         <div style="height:10px;"></div>
         <div class="item">
             <div class="profile can_not_choose">
-                <span v-if="type=='accept'" class="icon iconfont" style="color:hsl(118, 45%, 50%)">&#xe664;</span>
-                <span v-if="type=='reject'" class="icon iconfont" style="color:#DA7676">&#xe635;</span>
+                <span v-if="type=='accept'" class="icon iconfont" style="color:hsl(202, 56%, 50%)">&#xe664;</span>
+                <span v-if="type=='reject'" class="icon iconfont" style="color:hsl(1, 69%, 73%)">&#xe69e;</span>
                 <span v-if="type=='join'" class="icon iconfont" style="color:hsl(202, 56%, 50%);">&#xe6cb;</span>
-                <span v-if="type=='out'" class="icon iconfont" style="color:hsl(19, 66%, 63%)">&#xe62f;</span>
-                <span v-if="type=='doc'" class="icon iconfont" style="color:hsl(118, 45%, 50%)">&#xe7ff;</span>
+                <span v-if="type=='out'" class="icon iconfont" style="color:hsl(198, 10%, 69%)">&#xe62f;</span>
+                <span v-if="type=='doc'" class="icon iconfont" style="color:hsl(202, 56%, 50%)">&#xe7ff;</span>
                 <span v-if="false" class="icon iconfont">&#xe622;</span>
                 <el-avatar v-if="portrait!=''" :src="portrait" style="vertical-align: middle;"></el-avatar>
             </div>
@@ -16,6 +16,8 @@
                     <div class="message-head">{{title}}</div>
                 </h4>
                 <div class='comment' v-if="content.length">{{content}}</div>
+                <div style="height:10px;"></div>
+                <div class='comment can_not_choose' v-if="sub_content.length" style="color:#aaa">{{sub_content}}</div>
             </div>
         </div>
         <div class="not-read" v-if="!is_read"></div>
@@ -38,6 +40,7 @@ export default {
             type: 'doc',   //join accept out doc
             title: '', //消息标题
             content: '', //消息内容
+            sub_content:'',
             id: '',
             loading: true,
             is_read: false,
@@ -76,6 +79,7 @@ export default {
                         that.type = res.type;
                         that.id = res.id;
                         that.content = res.content;
+                        that.sub_content = res.result_content;
                         if(that.type == 'doc'){
                             that.content = res.content;
                             that.uid = res.uid;
@@ -198,9 +202,10 @@ export default {
 }
 
 .profile span{
-    font-size: 35px;
+    font-size: 25px;
     color:#777;
-    margin-left:15px;
+    line-height: 34px;
+    margin-left:20px;
 }
 
 .title{
@@ -216,7 +221,7 @@ export default {
 .not-read{
     width:100%;
     height:100%;
-    background-color: rgb(77, 176, 221);
+    background-color: hsl(199, 68%, 69%);
     position: absolute;
     top:0;
     left:0;
@@ -228,6 +233,6 @@ export default {
     font-size: 14px;
     word-break:break-all;
     margin-left:25px;
-    width:320px;
+    width: calc(100% - 70px);
 }
 </style>
