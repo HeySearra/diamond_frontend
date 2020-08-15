@@ -23,7 +23,9 @@
                 <div class="admin_part"
                     @dragover.prevent
                     @drop="face_drop($event, item)">
-                    <div class="not_found" v-if="!admin_list.length">拖动用户到此处添加管理员</div>
+                    <transition name="el-fade-in-linear">
+                        <div class="not_found" v-show="!admin_list.length">拖动用户到此处添加管理员</div>
+                    </transition>
                     <user-list-item 
                         v-for="item in admin_list" 
                         :key="item.uid"
@@ -100,7 +102,7 @@ export default {
                                 acc:res.norm[i].acc,
                             });
                         }
-                        this.admin_list = res.admin;
+                        that.admin_list = res.admin;
                         that.dia_vis = true;
                     }
                     else{
@@ -253,6 +255,11 @@ export default {
     width:80%;
     margin: 0 auto;
     overflow-y: overlay;
+}
+
+.not_found{
+    position: absolute;
+    width:496px;
 }
 @media (max-width: 1200px){
     

@@ -1,9 +1,10 @@
 <template>
-    <div class="message-item" @dblclick="click_to_read" @click="mark_read">
+    <div class="message-item can_not_choose" @dblclick="click_to_read" @click="mark_read">
         <div style="height:10px;"></div>
         <div class="item">
-            <div class="profile">
-                <span v-if="portrait==''" class="icon iconfont">&#xe622;</span>
+            <div class="profile can_not_choose">
+                <span v-if="type=='join'||type=='accept'||type=='admin'||type=='out'" class="icon iconfont">&#xe6cb;</span>
+                <span v-if="false" class="icon iconfont">&#xe622;</span>
                 <el-avatar v-if="portrait!=''" :src="portrait" style="vertical-align: middle;"></el-avatar>
             </div>
             <div class="content">
@@ -139,6 +140,7 @@ export default {
                     }
                     if(res.status == 0){
                         that.is_read = true;
+                        that.$emit('refresh_count');
                     }
                     else{
                         that.alert_msg.error('标记已读失败', '请重试');
@@ -158,26 +160,35 @@ export default {
     padding: 0;
     cursor:pointer;
     width:100%;
+    transition: all 0.1s linear;
 }
 
 .message-item:hover{
-    background-color: #ccc;
+    background-color: #eee;
 }
 
 .el-divider{
     margin: 0;
 }
+
 .item{
     display:flex;
     flex-direction: row;
     flex-wrap: nowrap;
 }
+
 .profile{
     justify-content: flex-start;
     position: relative;
     padding: 10px;
     width: 40px;
     margin: 0;
+}
+
+.profile span{
+    font-size: 35px;
+    color:#777;
+    margin-left:2px;
 }
 
 .title{
@@ -187,7 +198,9 @@ export default {
     -webkit-line-clamp: 1; /* 行数 */
     overflow: hidden;
     width:330px;
+    color:#333;
 }
+
 .not-read{
     width:100%;
     height:100%;
@@ -197,6 +210,7 @@ export default {
     left:0;
     opacity: 0.2;
 }
+
 .comment{
     font-size: 14px;
     word-break:break-all;

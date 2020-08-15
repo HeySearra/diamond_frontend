@@ -10,7 +10,7 @@
                     <el-tab-pane label="团内成员" name="1">
                         <div style="height:5px"></div>
                         <div style="padding:0 25px">
-                            <div class="member_small_icon item" v-for="item in all_list" :key="item.uid" @click="function(){remove_member(item.uid, item.name)}">
+                            <div class="member_small_icon item can_not_choose" v-for="item in all_list" :key="item.uid" @click="function(){remove_member(item.uid, item.name)}">
                                 <!-- <el-tooltip effect="dark" :content="item.name" placement="top"> -->
                                     <el-avatar class="close_icon"><span class="icon iconfont">&#xe79b;</span></el-avatar>
                                     <el-avatar class="user_port" :src="item.src"></el-avatar>

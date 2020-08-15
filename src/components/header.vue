@@ -144,6 +144,10 @@
         this.get_info();
       },
 
+      refresh_message_count(){
+        this.apply_for_message();
+      },
+
       apply_for_message(){
         let url = '/msg/unread_count';
         var that = this;
