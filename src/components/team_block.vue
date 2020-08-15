@@ -17,8 +17,8 @@
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="in">进入</el-dropdown-item>
                     <el-dropdown-item command="team_info">团队信息</el-dropdown-item>
-                    <el-dropdown-item v-if="!is_creator" class="red_text" @click="quit_team">退出团队</el-dropdown-item>
-                    <el-dropdown-item v-if="is_creator" class="red_text" @click="delete_team">解散团队</el-dropdown-item>
+                    <el-dropdown-item v-if="!is_creator" class="red_text" command="quit_team">退出团队</el-dropdown-item>
+                    <el-dropdown-item v-if="is_creator" class="red_text" command="delete_team">解散团队</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -91,6 +91,12 @@ export default {
                 case 'in':
                     this.open();
                     break;
+                case 'delete_team':
+                    this.delete_team();
+                    break;
+                case 'quit_team':
+                    this.quit_team();
+                    break;
             }
         },
         quit_team(){
@@ -131,6 +137,7 @@ export default {
                 });
             });
         },
+
         delete_team(){
             var that = this;
             this.alert_box.confirm_msg('警告', '确定解散团队 ' + that.team_name + ' 吗？', function(){
