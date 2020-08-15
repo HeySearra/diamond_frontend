@@ -62,6 +62,7 @@ export default {
                     if(res.status == 0){
                         that.alert_msg.success('已' + (if_accept?'成功':'拒绝') +'加入团队！');
                         if_accept ? that.$router.push({path: '/team/' + res.tid + "/file/desktop"}) : '';
+                        if_accept ? that.$emit('close_msg') : that.$emit('refresh_msg');
                         that.dia_vis = false;
                     }
                     else{

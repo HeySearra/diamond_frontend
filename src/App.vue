@@ -14,7 +14,7 @@
     <edit-user-info-dialog ref="edit_user_info_dialog" @refresh_user_info="refresh_user_info"></edit-user-info-dialog>
     <change-password-dialog ref="change_password_dialog"></change-password-dialog>
     <chatting-dialog ref="chatting_dialog"></chatting-dialog>
-    <team-invite-dialog ref="team_invite_dialog"></team-invite-dialog>
+    <team-invite-dialog @close_msg="close_msg" @refresh_msg="refresh_msg" ref="team_invite_dialog"></team-invite-dialog>
   </div>
 </template>
 
@@ -49,6 +49,12 @@ export default {
     },
     refresh_message_count(){
       this.$refs.header.refresh_message_count();
+    },
+    close_msg(){
+      this.$refs.message_drawer.close();
+    },
+    refresh_msg(){
+      this.$refs.message_drawer.refresh();
     }
   },
 }
