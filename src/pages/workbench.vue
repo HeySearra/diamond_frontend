@@ -16,7 +16,7 @@
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar active="workbench" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
+        <sidebar ref="sidebar" active="workbench" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
       </el-aside>
     </el-container>
     <el-footer></el-footer>
@@ -39,6 +39,10 @@ export default {
   methods:{
     init(){
 
+    },
+
+    refresh_user_info(){
+      this.$refs.sidebar.refresh_user_info();
     },
 
     handleSelect(key, keypath){

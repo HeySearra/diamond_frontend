@@ -172,6 +172,10 @@ export default {
       });
     },
 
+    refresh_user_info(){
+      this.init_user_info();
+    },
+
     getCookie (name) {
         var value = '; ' + document.cookie
         var parts = value.split('; ' + name + '=')
