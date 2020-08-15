@@ -22,7 +22,7 @@
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar active="recycle" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
+        <sidebar ref="sidebar" active="recycle" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
       </el-aside>
     </el-container>
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
@@ -73,6 +73,10 @@ export default {
         var value = '; ' + document.cookie
         var parts = value.split('; ' + name + '=')
         if (parts.length === 2) return parts.pop().split(';').shift()
+    },
+
+    refresh_user_info(){
+      this.$refs.sidebar.refresh_user_info();
     },
 
     apply_for_info(){

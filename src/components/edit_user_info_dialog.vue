@@ -162,7 +162,7 @@ export default {
                         console.log('/info：' + res.status);
                     }
                     if(res.status == 0){
-                        that.$emit('head_refresh');
+                        that.$emit('refresh_user_info');
                         // that.$emit('apply_for_info');
                         that.alert_msg.success('修改信息成功！');
                         that.close();

@@ -2,6 +2,7 @@
   <el-main>
     <el-aside>
       <sidebar
+        ref="sidebar"
         context="doc"
         :file_name="file_name"
       ></sidebar>
@@ -153,6 +154,10 @@ class CommentsAdapter {
         var value = '; ' + document.cookie
         var parts = value.split('; ' + name + '=')
         if (parts.length === 2) return parts.pop().split(';').shift()
+      },
+
+      refresh_user_info(){
+        this.$refs.sidebar.refresh_user_info();
       },
 
       addComment(data) {

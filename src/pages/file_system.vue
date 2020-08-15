@@ -27,7 +27,7 @@
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar :active="(sidebar_active=='desktop'||is_desktop)?'desktop':''"></sidebar>
+        <sidebar ref="sidebar" :active="(sidebar_active=='desktop'||is_desktop)?'desktop':''"></sidebar>
       </el-aside>
     </el-container>
     <el-footer></el-footer>
@@ -82,6 +82,10 @@ export default {
       var value = '; ' + document.cookie
       var parts = value.split('; ' + name + '=')
       if (parts.length === 2) return parts.pop().split(';').shift()
+    },
+
+    refresh_user_info(){
+      this.$refs.sidebar.refresh_user_info();
     },
 
     refresh(){
