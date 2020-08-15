@@ -166,6 +166,7 @@ export default {
 }
 </script>
 <style scoped>
+@import url("../assets/diadoc_icon.css");
 .message-item{
     position: relative;
     padding: 0;

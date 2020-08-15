@@ -4,7 +4,7 @@
             class="dialog_style"
             :visible.sync="dia_vis"
             width="600px">
-            <h3>来自 {{team_name}} 的{{title}}</h3>
+            <h3 style="margin-left:-6px;line-height:30px;"><span class="icon iconfont can_not_choose" style="color:hsl(202, 56%, 50%);font-size:30px;margin-right:10px;">&#xe6cb;</span>来自 {{team_name}} 的{{title}}</h3>
             <div class="content">
                 <div style="height:10px"></div>
                 <div class="item_area">
@@ -33,8 +33,8 @@ export default {
     methods:{
         open(data){
             this.mid = data.mid;
-            this.dia_vis = true;
             this.team_name = data.team_name;
+            this.dia_vis = true;
         },
 
         getCookie (name) {
@@ -66,26 +66,17 @@ export default {
                         that.dia_vis = false;
                     }
                     else{
-                        if(if_accept){
-                            switch(res.status){
-                                case 2:
-                                    that.alert_msg.error('用户未登录或没有权限');
-                                    break;
-                                case 3:
-                                    that.alert_msg.normal('您已在团队中');
-                                    break;
-                                default:
-                                    that.alert_msg.error('出错啦');
-                            }
-                        }
-                        else{
-                            switch(res.status){
-                                case 2:
-                                    that.alert_msg.error('用户未登录或没有权限');
-                                    break;
-                                default:
-                                    that.alert_msg.error('出错啦');
-                            }
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('用户未登录或没有权限');
+                                break;
+                            case 3:
+                                that.alert_msg.normal('您已在团队中');
+                                that.dia_vis = false;
+                                that.$emit('refresh_msg');
+                                break;
+                            default:
+                                that.alert_msg.error('出错啦');
                         }
                     }
                 },
@@ -102,6 +93,7 @@ export default {
 <style scoped>
 @import url("../assets/common.css");
 @import url("../assets/dialog_style.css");
+@import url("../assets/diadoc_icon.css");
 
 .item_area{
     overflow-y: auto;

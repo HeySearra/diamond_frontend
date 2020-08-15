@@ -183,9 +183,8 @@ export default {
             var that = this;
             this.alert_box.confirm_msg('警告', '确定将 ' + name + ' 移出团队吗？', function(){
                 let url = '/team/remove';
-                var that = this;
                 $.ajax({ 
-                    type:'get',
+                    type:'post',
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify({tid:that.tid, uid:uid}),
@@ -216,7 +215,6 @@ export default {
                         }
                     },
                     error:function(res){
-                        result = {};
                         that.alert_msg.error('网络连接失败');
                     }
                 });

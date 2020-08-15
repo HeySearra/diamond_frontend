@@ -115,7 +115,7 @@ Vue.config.productionTip = false;
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$host = 'http://localhost:8000'
 
-Ripple.color = 'rgba(0, 0, 0, 0.10)'
+Ripple.color = 'rgba(0, 0, 0, 0.07)'
 
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */

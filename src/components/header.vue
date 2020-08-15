@@ -111,7 +111,8 @@
         online_icon_list:[],
         message_count:0,
         have_chat:false,
-        opa:false
+        opa:false,
+        timer:undefined
       };
     },
     methods: {
@@ -140,7 +141,11 @@
           }
         }
         this.apply_for_magic_word();
-        this.apply_for_message();
+        this.timer ? clearInterval(this.timer) : '';
+        var that = this;
+        this.timer = setInterval(function(){
+          that.apply_for_message();
+        }, 1000*5);
         this.get_info();
       },
 
