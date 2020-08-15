@@ -180,12 +180,12 @@ export default {
                 return;
             }
 
-            var that = this;
+            var that_out = this;
             this.alert_box.confirm_msg('警告', '确定将 ' + name + ' 移出团队吗？', function(){
                 let url = '/team/remove';
-                var that = this;
+                var that = that_out;
                 $.ajax({ 
-                    type:'get',
+                    type:'post',
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify({tid:that.tid, uid:uid}),
