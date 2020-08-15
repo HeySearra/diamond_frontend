@@ -69,12 +69,12 @@
               </el-dropdown-menu>
               </el-dropdown>
         </div>
-      <div class="header_icon" @click="$emit('open-drawer')" v-if="is_login">
+      <div class="header_icon can_not_choose" @click="$emit('open-drawer')" v-if="is_login">
         <el-badge class="item" :value="message_count" :max="99" :hidden="message_count<=0">
           <span class="icon iconfont">&#xe60b;</span>
         </el-badge>
       </div>
-      <div class="header_icon" @click="$emit('chatting')" v-if="is_login">
+      <div class="header_icon can_not_choose" @click="$emit('chatting')" v-if="is_login">
         <el-badge class="item" :is-dot="have_chat">
           <span class="icon iconfont">&#xe7fe;</span>
         </el-badge>
@@ -110,7 +110,7 @@
         photo_src:'',
         online_icon_list:[],
         message_count:0,
-        have_chat:true,
+        have_chat:false,
         opa:false
       };
     },
