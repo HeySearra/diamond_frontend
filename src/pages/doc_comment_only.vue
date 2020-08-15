@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <el-aside>
-      <sidebar></sidebar>
+      <sidebar ref="sidebar"></sidebar>
     </el-aside>
     <el-row style="z-index: 999">
       <!-- Toolbar Container -->
@@ -134,6 +134,10 @@ export default {
 
     apply_for_info() {
       //向后台请求一些内容
+    },
+
+    refresh_user_info(){
+      this.$refs.sidebar.refresh_user_info();
     },
 
     initCKEditor() {

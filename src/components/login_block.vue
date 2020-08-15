@@ -92,7 +92,7 @@ export default {
                             if(res.status == 0){
                                 let from = that.$route.query.from;
                                 that.$router.push({path:from?from:'/workbench/recent_view'});
-                                that.alert_msg.success('登陆成功');
+                                that.alert_msg.success('登录成功');
                                 that.login_manager.set(true);
                             }
                             else{

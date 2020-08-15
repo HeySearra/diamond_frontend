@@ -2,6 +2,7 @@
   <el-main>
     <el-aside>
       <sidebar
+        ref="sidebar"
         context="doc"
         :file_name="file_name"
       ></sidebar>
@@ -149,10 +150,14 @@ class CommentsAdapter {
     // Set the adapter on the `CommentsRepository#adapter` property.
     commentsRepositoryPlugin.adapter = {
 
-      getCookie(name) {
+      getCookie (name) {
         var value = '; ' + document.cookie
         var parts = value.split('; ' + name + '=')
         if (parts.length === 2) return parts.pop().split(';').shift()
+      },
+
+      refresh_user_info(){
+        this.$refs.sidebar.refresh_user_info();
       },
 
       addComment(data) {
@@ -365,6 +370,7 @@ class CommentsAdapter {
 
 export default {
   mounted() {
+    this.init();
     pageData.did = this.$route.params.did;
     pageData.users = [
       {
@@ -391,11 +397,18 @@ export default {
     return {
       Editor: null,//editor instance
       file_name: '',
+      did:''
     }
   },
 
   methods: {
     init() {
+      this.did = this.$route.params.did;
+      this.apply_for_info();
+    },
+
+    apply_for_info() {
+      this.$refs.sidebar.init_doc_info(this.did);
     },
 
     getCookie(name) {
@@ -906,11 +919,6 @@ export default {
 
 <style scoped>
 @import url("../assets/common.css");
-
-p {
-  margin-top: 0.3em !important;
-  margin-bottom: 0.3em !important;
-}
 
 .ck-editor__editable {
   border: 1px solid #ccc !important;

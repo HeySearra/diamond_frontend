@@ -1,13 +1,12 @@
 <template>
     <el-drawer
     title="消息中心"
-    width="100"
     :visible.sync="drawer"
     :with-header="false"
     class="message_box">
         <div class="el-drawer__header" style="height:50px;padding:5px 20px 0;line-height:50px;margin:0">
             <div class="el-drawer__title can_not_choose">消息中心</div>
-            <div class="mark-read can_not_choose" @click="mark_all_read">全部已读</div>
+            <div class="mark-read can_not_choose" @click="mark_all_read" v-ripple>标记全部已读</div>
             <!-- <div class="close-icon"><span v-if="type!='comment'" class="icon iconfont">&#xe79b;</span></div> -->
         </div>
         <el-divider></el-divider>
@@ -106,6 +105,7 @@ export default {
                 }
             });
         },
+
         open() {
             this.list = [];
             this.is_loading = false;
@@ -140,7 +140,9 @@ export default {
                         let item = that.$refs.message_item;
                         if(item){
                             setTimeout(function(){
-                                item[i].init();
+                                for(let i=0; i<item.length; i++){
+                                    item[i].init();
+                                }
                             }, 0);
                         }
                         that.alert_msg.success('已全部标记为已读');
@@ -162,6 +164,14 @@ export default {
 
         refresh_count(){
             this.$emit('refresh_message_count');
+        },
+
+        refresh(){
+            this.open();
+        },
+
+        close(){
+            this.drawer = false;
         }
     }
 };
@@ -193,9 +203,8 @@ export default {
     } */
     .mark-read{
         font-size: 90%;
-        border: 2px;
         float: right;
-        margin: 0 15px;
+        padding: 0 15px;
         cursor: pointer;
     }
     .mark-read:hover{

@@ -69,12 +69,12 @@
               </el-dropdown-menu>
               </el-dropdown>
         </div>
-      <div class="header_icon" @click="$emit('open-drawer')" v-if="is_login">
+      <div class="header_icon can_not_choose" @click="$emit('open-drawer')" v-if="is_login">
         <el-badge class="item" :value="message_count" :max="99" :hidden="message_count<=0">
           <span class="icon iconfont">&#xe60b;</span>
         </el-badge>
       </div>
-      <div class="header_icon" @click="$emit('chatting')" v-if="is_login">
+      <div class="header_icon can_not_choose" @click="$emit('chatting')" v-if="is_login">
         <el-badge class="item" :is-dot="have_chat">
           <span class="icon iconfont">&#xe7fe;</span>
         </el-badge>
@@ -110,8 +110,9 @@
         photo_src:'',
         online_icon_list:[],
         message_count:0,
-        have_chat:true,
-        opa:false
+        have_chat:false,
+        opa:false,
+        timer:undefined
       };
     },
     methods: {
@@ -140,7 +141,11 @@
           }
         }
         this.apply_for_magic_word();
-        this.apply_for_message();
+        this.timer ? clearInterval(this.timer) : '';
+        var that = this;
+        this.timer = setInterval(function(){
+          that.apply_for_message();
+        }, 1000*5);
         this.get_info();
       },
 

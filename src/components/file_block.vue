@@ -9,7 +9,7 @@
         <div class="link_icon" v-if="is_link">
             <span class="icon iconfont">&#xe60c;</span>
         </div>
-        <div class="starred_icon" v-if="is_starred">
+        <div class="starred_icon" v-if="is_starred&&!is_link">
             <span class="icon iconfont">&#xe7b2;</span>
         </div>
         <div class="name">{{name}}</div>
@@ -27,6 +27,7 @@
                     <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link&&!is_in_desktop">创建快捷方式到桌面</el-dropdown-item>
                     <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                     <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link">复制</el-dropdown-item>
+                    <el-dropdown-item command="rename" v-if="(context=='file_system'||context=='team')&&!is_link">重命名</el-dropdown-item>
                     <el-dropdown-item command="share" v-if="(context=='file_system'||context=='team')&&!is_link">分享</el-dropdown-item>
                     <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
                     <el-dropdown-item command="remove_link" class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
@@ -271,6 +272,9 @@ export default {
                 case 'delete_forever':
                     this.click_to_delete_forever();
                     break;
+                case 'rename':
+                    this.rename();
+                    break;
             }
         },
 
@@ -434,7 +438,7 @@ export default {
                                 that.alert_msg.error('权限不足');
                                 break;
                             case 3:
-                                that.alert_msg.error('快捷方式已存在');
+                                that.alert_msg.normal('快捷方式已存在');
                                 break;
                             case 4:
                                 that.alert_msg.error('找不到文件');
@@ -560,6 +564,10 @@ export default {
                     }
                 });
             })
+        },
+
+        rename(){
+            this.$emit('rename', this.did, 'file', this.name);
         }
     }
 

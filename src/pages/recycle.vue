@@ -22,7 +22,7 @@
         </el-main>
       </el-container>
       <el-aside>
-        <sidebar active="recycle" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
+        <sidebar ref="sidebar" active="recycle" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
       </el-aside>
     </el-container>
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
@@ -75,6 +75,10 @@ export default {
         if (parts.length === 2) return parts.pop().split(';').shift()
     },
 
+    refresh_user_info(){
+      this.$refs.sidebar.refresh_user_info();
+    },
+
     apply_for_info(){
       let url = '/fs/recycle/elem';
       var that = this;
@@ -98,7 +102,7 @@ export default {
                   item.is_link = false;
                   item.is_starred = false;
                   item.name = res.list[i].name;
-                  item.delete_time = res.list[i].delete_dt;
+                  item.delete_time = that.datetime_format(res.list[i].delete_dt, res.cur_dt);
                   item.rest_time = res.list[i].is_dia ? '永久' : parseInt((new Date((new Date(res.cur_dt).getTime()+30*24*60*60*1000))-new Date(res.list[i].delete_dt))/1000/60/60/24);
                   res.list[i].type=='doc' ? file.push(item) : fold.push(item);
                 }

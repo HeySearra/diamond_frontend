@@ -91,6 +91,10 @@ export default {
         }, 0);
     },
 
+    refresh_user_info(){
+      this.$refs.sidebar.refresh_user_info();
+    },
+
     getCookie (name) {
       var value = '; ' + document.cookie
       var parts = value.split('; ' + name + '=')

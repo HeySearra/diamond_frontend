@@ -76,13 +76,14 @@ export default {
                     if(res.status == 0){
                         for(let i=0; i < res.list.length; i++){
                             that.list[0].content.push({
-                                type: res.list[i].type,
+                                type: res.list[i].type=="doc"?"file":"fold",
                                 id: res.list[i].id,
                                 is_link: false,
                                 is_starred: res.list[i].is_starred,
                                 name: res.list[i].name,
                                 create_time: that.datetime_format(res.list[i].dt, res.cur_dt),
                                 creator: res.list[i].cname,
+                                recent_edit_time: res.list[i].edit_dt,
                             })
                         }
                         that.$refs.file_system_item.init();

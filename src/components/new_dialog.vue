@@ -3,6 +3,7 @@
         <el-dialog
             class="dialog_style"
             :visible.sync="dia_vis"
+            :close-on-click-modal="false"
             width="500px">
             <h3>{{title}}</h3>
             <div class="content">
@@ -27,13 +28,16 @@ export default {
         name:'',
         type:'',
         fid:'',
-        desktop_alert:''
+        desktop_alert:'',
+        is_rename:false,
+        id:''
     }
   },
   methods:{
     open(type, fid, desktop_alert){
         this.type = type;
         this.fid = fid;
+        this.is_rename = false;
         this.desktop_alert = desktop_alert ? true : false;
         switch(type){
             case 'file':
@@ -53,6 +57,23 @@ export default {
         this.dia_vis = true;
     },
 
+    open_for_rename(id, type, name){
+        this.is_rename = true;
+        this.type = type;
+        this.id = id;
+        this.title = '重命名 ' + name;
+        switch(type){
+            case 'file':
+                this.placeholder = '请输入文件的新名称';
+                break;
+            case 'fold':
+                this.placeholder = '请输入文件夹的新名称';
+                break;
+        }
+        this.name = name;
+        this.dia_vis = true;
+    },
+
     getCookie (name) {
         var value = '; ' + document.cookie
         var parts = value.split('; ' + name + '=')
@@ -60,24 +81,77 @@ export default {
     },
 
     click_confirm(){
-        switch(this.type){
-            case 'file':
-                this.create_new_item('doc');
-                break;
-            case 'fold':
-                this.create_new_item('fold');
-                break;
-            case 'team':
-                this.create_new_team();
-                break;
+        if(this.is_rename){
+            this.rename();
         }
+        else{
+            switch(this.type){
+                case 'file':
+                    this.create_new_item('doc');
+                    break;
+                case 'fold':
+                    this.create_new_item('fold');
+                    break;
+                case 'team':
+                    this.create_new_team();
+                    break;
+            }
+        }
+    },
+
+    rename(){
+        let url = '/fs/rename';
+
+        if(this.name.trim() == ''){
+            this.alert_msg.warning('请输入'+(this.type=='file'?'文件':'文件夹')+'名称');
+            return;
+        }
+
+        let json_data = {name:this.name, id:this.id, type:this.type=='file'?'doc':'fold'};
+        var that = this;
+        $.ajax({ 
+            type:'post',
+            url: url,
+            data: JSON.stringify(json_data),
+            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+            async:false, 
+            success:function (res){ 
+                if(that.console_debug){
+                    console.log(url +  '：' + res.status);
+                }
+                if(res.status == 0){
+                    that.alert_msg.success('重命名成功');
+                    that.$emit('refresh');
+                    that.dia_vis = false;
+                }
+                else{
+                    switch(res.status){
+                        case 2:
+                            that.alert_msg.error('权限不足');
+                            break;
+                        case 3:
+                            that.alert_msg.error('该目录下已存在同名文件或文件夹');
+                            break;
+                        case 4:
+                            that.alert_msg.error((that.type=='file'?'文件':'文件夹')+'名称非法');
+                            break;
+                        default:
+                            that.alert_msg.error('发生了未知错误');
+                    }
+                    
+                }
+            },
+            error:function(res){
+                that.alert_msg.error('网络连接失败');
+            }
+        });
     },
 
     create_new_item(type){
         let url = '/fs/new';
 
         if(this.name.trim() == ''){
-            this.alert_msg.warning('请输入'+(this.type=='file'?'文件':'文件夹')+'名称');
+            this.alert_msg.warning('请输入'+(type=='file'?'文件':'文件夹')+'名称');
             return;
         }
 

@@ -3,6 +3,7 @@
         <el-dialog
             class="dialog_style"
             :visible.sync="dia_vis"
+            :close-on-click-modal="false"
             width="600px"
             height="500px">
             <h3>{{title}}</h3>

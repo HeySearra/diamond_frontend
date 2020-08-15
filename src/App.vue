@@ -8,13 +8,13 @@
         @chatting="chatting"
         ref="header"></navbar>
     </el-header>
-    <router-view/>
+    <router-view ref="rw"/>
     <el-backtop></el-backtop>
     <message-drawer ref="message_drawer" @deal-team-invite="deal_team_invite" @refresh_message_count="refresh_message_count"></message-drawer>
-    <edit-user-info-dialog ref="edit_user_info_dialog" @apply_for_info='apply_for_info'></edit-user-info-dialog>
+    <edit-user-info-dialog ref="edit_user_info_dialog" @refresh_user_info="refresh_user_info"></edit-user-info-dialog>
     <change-password-dialog ref="change_password_dialog"></change-password-dialog>
     <chatting-dialog ref="chatting_dialog"></chatting-dialog>
-    <team-invite-dialog ref="team_invite_dialog"></team-invite-dialog>
+    <team-invite-dialog @close_msg="close_msg" @refresh_msg="refresh_msg" ref="team_invite_dialog"></team-invite-dialog>
   </div>
 </template>
 
@@ -40,14 +40,21 @@ export default {
     chatting(){
       this.$refs.chatting_dialog.open();
     },
-    apply_for_info(){
-      this.$refs.header.apply_for_info();
+    refresh_user_info(){
+      this.$refs.header.init();
+      this.$refs.rw.refresh_user_info();
     },
     deal_team_invite(data){
       this.$refs.team_invite_dialog.open(data);
     },
     refresh_message_count(){
       this.$refs.header.refresh_message_count();
+    },
+    close_msg(){
+      this.$refs.message_drawer.close();
+    },
+    refresh_msg(){
+      this.$refs.message_drawer.refresh();
     }
   },
 }

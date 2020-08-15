@@ -66,7 +66,6 @@ export default {
                     $.ajax({
                         type:'get',
                         url:"/user/forget/send_email?acc="+that.form.account,
-                        data: JSON.stringify(msg),
                         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                         processData: false,
                         contentType: false,
@@ -80,13 +79,13 @@ export default {
                             else{
                                 switch(res.status){
                                     case 2:
-                                        that.alert_box.msg('验证邮件发送失败', '帐号不合法，请检查您输入的信息');
+                                        that.alert_msg.error('账号不合法，请检查您输入的信息');
                                         break;
                                     case 3:
-                                        that.alert_box.msg('验证邮件发送失败', '帐号不存在');
+                                        that.alert_msg.error('账号不存在');
                                         break;
                                     default:
-                                        that.alert_box.msg('验证邮件发送失败', '请检查您输入的信息并重试')
+                                        that.alert_msg.error('请检查您输入的信息并重试')
                                 }
                             }
                         },

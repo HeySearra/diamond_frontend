@@ -3,7 +3,11 @@
         <div style="height:10px;"></div>
         <div class="item">
             <div class="profile can_not_choose">
-                <span v-if="type=='join'||type=='accept'||type=='admin'||type=='out'" class="icon iconfont">&#xe6cb;</span>
+                <span v-if="type=='accept'" class="icon iconfont" style="color:hsl(118, 45%, 50%)">&#xe664;</span>
+                <span v-if="type=='reject'" class="icon iconfont" style="color:#DA7676">&#xe635;</span>
+                <span v-if="type=='join'" class="icon iconfont" style="color:hsl(202, 56%, 50%);">&#xe6cb;</span>
+                <span v-if="type=='out'" class="icon iconfont" style="color:hsl(19, 66%, 63%)">&#xe62f;</span>
+                <span v-if="type=='doc'" class="icon iconfont" style="color:hsl(118, 45%, 50%)">&#xe7ff;</span>
                 <span v-if="false" class="icon iconfont">&#xe622;</span>
                 <el-avatar v-if="portrait!=''" :src="portrait" style="vertical-align: middle;"></el-avatar>
             </div>
@@ -11,7 +15,7 @@
                 <h4 class="title">
                     <div class="message-head">{{title}}</div>
                 </h4>
-                <div class='comment' v-if="type=='doc'">{{content}}</div>
+                <div class='comment' v-if="content.length">{{content}}</div>
             </div>
         </div>
         <div class="not-read" v-if="!is_read"></div>
@@ -35,13 +39,12 @@ export default {
             title: '', //消息标题
             content: '', //消息内容
             id: '',
-            name: 'team_name',
             loading: true,
             is_read: false,
             is_process: false,
             is_dnd: false,
             uid: 'uid',     //发表评论的人的id
-            uname: 'uname',
+            team_name: 'team_name',
             portrait: '',
             time: '',
         }
@@ -76,7 +79,9 @@ export default {
                         if(that.type == 'doc'){
                             that.content = res.content;
                             that.uid = res.uid;
-                            that.uname = res.uname;
+                        }
+                        if(that.type == 'join'){
+                            that.team_name = res.name;
                         }
                         // var cur_dt = new Date(res.cur_dt);
                         // var dt = new Date(res.dt);
@@ -105,6 +110,7 @@ export default {
         confirm_to_join(){
             let data = {
                 mid: this.mid,
+                team_name: this.team_name,
             }
             this.$emit('confirm-to-join', data);
         },
@@ -114,8 +120,13 @@ export default {
 
         click_to_read(){
             this.mark_read();
-            if(this.type == 'join' && this.is_process == false){
-                this.confirm_to_join();
+            if(this.type == 'join'){
+                if(this.is_process){
+                    this.alert_msg.normal("您已处理过该消息");
+                }
+                else{
+                    this.confirm_to_join();
+                }
             }
             else if(this.type == 'admin' || type == 'accept'){
                 this.jump_to_team();
@@ -155,6 +166,7 @@ export default {
 }
 </script>
 <style scoped>
+@import url("../assets/diadoc_icon.css");
 .message-item{
     position: relative;
     padding: 0;
@@ -188,11 +200,11 @@ export default {
 .profile span{
     font-size: 35px;
     color:#777;
-    margin-left:2px;
+    margin-left:15px;
 }
 
 .title{
-    margin:15px 0;
+    margin:15px 0 15px 25px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1; /* 行数 */
@@ -209,11 +221,13 @@ export default {
     top:0;
     left:0;
     opacity: 0.2;
+    color:hsl(19, 66%, 60%);
 }
 
 .comment{
     font-size: 14px;
     word-break:break-all;
+    margin-left:25px;
     width:320px;
 }
 </style>
