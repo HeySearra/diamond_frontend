@@ -19,6 +19,8 @@ export default {
     data () {
         return {
             view_type:'list',
+            page: 0,
+            each: 15,
             list: [
                 {
                     title:'共享文件',
@@ -67,6 +69,7 @@ export default {
             this.is_loading = true;
             this.$emit('active_change');
             this.view_type = this.view_type_manager.get();
+            this.get_share_item_list();
         },
         
         getCookie (name) {
@@ -86,7 +89,48 @@ export default {
 
         open_info(title, content, type){
             this.$emit('open_info', title, content, type);
-        }
+        },
+
+        get_share_item_list(){
+            var that = this;
+            this.page++;
+            $.ajax({
+                type:'get',
+                url:"/workbench/share?page=" + that.page + "&each=" + that.each,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){
+                    if(that.console_debug){
+                        console.log("(get)/workbench/share"+ " : " +res.status);
+                    }
+                    if(res.status == 0){
+                        for(let i=0; i < res.list.length; i++){
+                            that.list[0].content.push({
+                                type: res.list[i].type=="doc"?"file":"fold",
+                                id: res.list[i].id,
+                                is_link: false,
+                                is_starred: true,
+                                name: res.list[i].name,
+                                create_time: res.list[i].create_dt,
+                                creator: res.list[i].cname,
+                                recent_edit_time: res.list[i].edit_dt,
+                            })
+                        }
+                        that.$refs.file_system_component.init();
+                        that.is_loading = false;
+                    }
+                    else{
+                        that.page--;
+                        that.alert_msg.error('获取文件列表失败', '请重试');
+                    }
+                },
+                error:function(){
+                    that.page--;
+                    that.alert_msg.error('连接失败');
+                }
+            });
+        },
     }
 }
 </script>

@@ -120,8 +120,13 @@ export default {
 
         click_to_read(){
             this.mark_read();
-            if(this.type == 'join' && this.is_process == false){
-                this.confirm_to_join();
+            if(this.type == 'join'){
+                if(this.is_process){
+                    this.alert_msg.normal("您已处理过该消息");
+                }
+                else{
+                    this.confirm_to_join();
+                }
             }
             else if(this.type == 'admin' || type == 'accept'){
                 this.jump_to_team();
