@@ -1,6 +1,8 @@
 <template>
     <div class="file_system_block" id="file_system_block">
         <div class="clear_both"></div>
+        <div style="height:6vh;" v-if="!list.length&&!is_loading"></div>
+        <div v-if="!list.length&&!is_loading" class="not_found">{{not_found_text[random]}}</div>
         <div class="go_button can_not_choose" v-if="type=='self'&&path.length">
             <div @click="go_left" :class="opa?'opa':''"><span class="el-icon-arrow-left"></span></div>
             <div @click="go_right" :class="opa?'opa':''"><span class="el-icon-arrow-right"></span></div>
@@ -34,7 +36,7 @@
             <div class="clear_both divide_type"></div>
         </div>
         <div class="clear_both" style="height:50px"></div>
-        <div class="icon_part can_not_choose" @click="change_view">
+        <div class="icon_part can_not_choose" :class="opa?'opa':''" @click="change_view" v-if="list.length">
             <div class="icon_button"><span class="icon iconfont">&#xe7e4;</span></div>
         </div>
     </div>
@@ -95,7 +97,10 @@ export default {
             draging:{
                 type:'',
                 id:''
-            }
+            },
+            random:0,
+            is_loading:true,
+            not_found_text:['这里啥玩意也没有', '这里什么也没有', '空空如也', '这里好凄凉', '难道？这里什么也没有', '什么东东都没有', '这里啥都没', '什么也没有~', '这里没东西，别看了', '啊，这里没东西啊']
         }
     },
 
@@ -106,9 +111,11 @@ export default {
     methods:{
         init(){
             this.init_scroll();
+            this.random = parseInt(Math.random()*100%this.not_found_text.length);
             if(this.type == 'from_out' || this.type == 'recent'){
                 this.list = this.out_list;
                 var that = this;
+                this.is_loading = false;
                 setTimeout(function(){
                     let item = that.$refs.display_component;
                     if(item){
@@ -212,6 +219,7 @@ export default {
                                 }
                             }
                         }, 0);
+                        that.is_loading = false;
                         that.$emit('out_loading');
                     }
                     else{
@@ -349,7 +357,7 @@ export default {
     position: fixed;
     left:438px;
     width: calc(83% - 350px);
-    transition:all 0.2s linear;
+    transition:background-color 0.2s linear;
     z-index:3;
 }
 
@@ -367,19 +375,29 @@ export default {
     border:2px solid hsl(0, 0%, 93%);
     border-radius: 3px;
     cursor:pointer;
-    color:#999;
+    color:#555;
     font-weight: bold;
     transition:all 0.2s linear;
 }
 
 .opa{
-    opacity: .5;
+    opacity: .3;
+    color:#ccc;
+}
+
+.opa a{
+    color:#ccc !important;
 }
 
 .path:hover, .go_button div:hover{
-    background-color: hsla(0, 0%, 93%, .78);
+    background-color: hsla(0, 0%, 93%, .96);
     border:2px solid hsl(0, 0%, 87%);
+    color:#999;
     opacity: 1;
+}
+
+.path:hover a, .go_button div:hover a{
+    color:#555 !important;
 }
 
 .el-breadcrumb__inner a, .el-breadcrumb__inner.is-link{
@@ -405,9 +423,10 @@ export default {
 
 .icon_part{
     height:40px;
+    height:40px;
     width:60px;
-    position: absolute;
-    top:50px;
+    position: fixed;
+    top:78px;
     right:25px;
     /* border:solid 1px; */
     text-align: center;
@@ -417,6 +436,7 @@ export default {
 }
 
 .icon_part:hover{
+    opacity: 1;
     background-color: hsla(0, 0%, 0%, 0.05);
     color: hsl(0, 0%, 43%);
 }

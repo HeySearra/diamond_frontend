@@ -75,9 +75,8 @@ export default {
             if(res.status == 0){
               that.my_list = res.my_team;
               that.other_list = res.join_team;
-              setTimeout(function(){
-                that.is_loading = false;
-              }, 200);
+              that.is_loading = false;
+
             }
             else{
                 switch(res.status){

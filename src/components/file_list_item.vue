@@ -38,8 +38,8 @@
                     <el-dropdown-item command="share" v-if="(context=='file_system'||context=='team')&&!is_link">分享</el-dropdown-item>
                     <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
                     <el-dropdown-item command="remove_link" class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
-                    <el-dropdown-item v-if="context=='recycle'" @click="click_to_recover">恢复</el-dropdown-item>
-                    <el-dropdown-item class="red_text" v-if="context=='recycle'" @click="click_to_delete_forever">彻底删除</el-dropdown-item>
+                    <el-dropdown-item command="recover" v-if="context=='recycle'" @click="click_to_recover">恢复</el-dropdown-item>
+                    <el-dropdown-item command="delete_forever" class="red_text" v-if="context=='recycle'" @click="click_to_delete_forever">彻底删除</el-dropdown-item>
                     <el-dropdown-item v-if="false">导出</el-dropdown-item>
                     <el-dropdown-item command="delete" class="red_text" v-if="(context=='file_system'||context=='team')&&!is_link">删除</el-dropdown-item>
                     <el-dropdown-item command="open_info" v-if="!is_link&&context!='recycle'">文档信息</el-dropdown-item>
@@ -145,7 +145,7 @@ export default {
         },
 
         apply_for_parent(){
-            if(this.context == 'recycle'){
+            if(this.context!='workbench'&&!this.is_link){
                 return;
             }
             let url = '/fs/father?id=' + this.did + '&type=doc';
@@ -186,25 +186,25 @@ export default {
         },
 
         click_to_delete_forever(){
-            this.alert_box.confirm_msg('警告', '确定彻底删除文件 ' + that.team_name + ' 吗？', function(){
-                var that = this;
+            var that = this;
+            this.alert_box.confirm_msg('警告', '确定彻底删除文件夹 ' + that.name + ' 吗？', function(){
                 var msg = {
                     id: that.did,
-                    type: 'doc',
+                    type: 'file',
                 };
                 let url = '/fs/recycle/delete'
-                $.ajax({ 
+                $.ajax({
                     type:'post',
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify(msg),
                     async:false, 
-                    success:function (res){ 
+                    success:function (res){
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
                         if(res.status == 0){
-                            that.alert_box.msg('提示', '删除成功');
+                            that.alert_msg.success('已彻底删除 ' + that.name);
                             that.$emit('refresh');
                         }
                         else{
@@ -218,7 +218,7 @@ export default {
                                 default:
                                     that.alert_msg.error('发生了未知错误');
                             }
-                            
+
                         }
                     },
                     error:function(res){
@@ -232,21 +232,21 @@ export default {
             var that = this;
             var msg = {
                 id: that.did,
-                type: 'doc',
+                type: 'file',
             };
             let url = '/fs/recycle/recover'
-            $.ajax({ 
+            $.ajax({
                 type:'post',
                 url: url,
                 headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                 data: JSON.stringify(msg),
                 async:false, 
-                success:function (res){ 
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.alert_box.msg('提示', '恢复成功');
+                        that.alert_msg.success('已成功恢复 ' + that.name);
                         that.$emit('refresh');
                     }
                     else{
@@ -260,7 +260,7 @@ export default {
                             default:
                                 that.alert_msg.error('发生了未知错误');
                         }
-                        
+
                     }
                 },
                 error:function(res){
@@ -300,6 +300,12 @@ export default {
                     break;
                 case 'open':
                     this.open_fold(this.fid);
+                    break;
+                case 'recover':
+                    this.click_to_recover();
+                    break;
+                case 'delete_forever':
+                    this.click_to_delete_forever();
                     break;
             }
         },

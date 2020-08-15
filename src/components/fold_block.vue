@@ -108,7 +108,7 @@ export default {
         },
 
         apply_for_parent(){
-            if(this.context == 'recycle'){
+            if(this.context!='workbench'&&!this.is_link){
                 return;
             }
             let url = '/fs/father?id=' + this.fid + '&type=fold';
@@ -167,7 +167,7 @@ export default {
                             console.log(url +  '：' + res.status);
                         }
                         if(res.status == 0){
-                            that.alert_box.msg('提示', '删除成功');
+                            that.alert_msg.success('已彻底删除 ' + that.name);
                             that.$emit('refresh');
                         }
                         else{
@@ -209,7 +209,7 @@ export default {
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.alert_box.msg('提示', '恢复成功');
+                        that.alert_msg.success('已成功恢复 ' + that.name);
                         that.$emit('refresh');
                     }
                     else{

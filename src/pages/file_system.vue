@@ -168,10 +168,7 @@ export default {
     },
 
     out_loading(){
-      var that = this;
-      setTimeout(function(){
-        that.is_loading = false;
-      }, 200);
+      this.is_loading = false;
     }
   }
 }

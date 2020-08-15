@@ -44,7 +44,8 @@ export default {
             fid:'',
             pfid:'',
             fold_list:[],
-            button_text:''
+            button_text:'',
+            stop_flag:false
         }
     },
 
@@ -63,7 +64,7 @@ export default {
             if(!this.open_fold(fid)){
                 return;
             }
-
+            this.stop_flag = false;
             this.dia_vis = true;
         },
 
@@ -147,6 +148,9 @@ export default {
         },
 
         change_path(fid){
+            if(this.stop_flag){
+                return;
+            }
             let last_root = this.is_root;
             if(!this.judge_root(fid)){
                 return;
@@ -159,6 +163,9 @@ export default {
         },
 
         confirm(){
+            if(this.stop_flag){
+                return;
+            }
             if(this.op_type == 'move'){
                 this.move();
             }
@@ -199,6 +206,26 @@ export default {
                                 break;
                             case 5:
                                 that.alert_msg.error('找不到内容');
+                                break;
+                            case 6:
+                                that.stop_flag = true;
+                                that.alert_msg.normal('你好');
+                                setTimeout(function(){
+                                    that.alert_msg.normal('请问你上过B站吗？')
+                                }, 1000);
+                                setTimeout(function(){
+                                    that.alert_msg.normal('听说过禁止套娃的弹幕吗？')
+                                }, 3000);
+                                setTimeout(function(){
+                                    that.alert_msg.normal('你现在就在做这种事')
+                                }, 5000);
+                                setTimeout(function(){
+                                    that.alert_msg.normal('这种事对文件系统很不好的呢')
+                                }, 7000);
+                                setTimeout(function(){
+                                    that.alert_msg.warning('所以就此收手吧')
+                                    that.stop_flag = false;
+                                }, 9000);
                                 break;
                             default:
                                 that.alert_msg.error('发生未知错误');

@@ -129,7 +129,12 @@ h1:focus, a:focus{
 .not_found{
     text-align: center !important;
     color: #aaa;
-    line-height: 20px;
+    line-height: 100px;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+    cursor:default;
 }
 
 .pointer{

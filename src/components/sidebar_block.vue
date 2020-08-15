@@ -89,7 +89,7 @@
     <el-row class="function_buttons" :class="active=='desktop'?'function_buttons_active':''"><router-link :to="{path:'/file/'}">我的桌面</router-link></el-row>
     <el-row class="function_buttons" :class="active=='template'?'function_buttons_active':''"><router-link :to="{path:'/template'}">模版库</router-link></el-row>
     <el-row class="function_buttons" :class="active=='recycle'?'function_buttons_active':''"><router-link :to="{path:'/recycle'}">回收站</router-link></el-row>
-
+    <div style="height:50px"></div>
   </div>
 </template>
 <script>
