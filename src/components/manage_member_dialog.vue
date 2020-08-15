@@ -200,7 +200,7 @@ export default {
                                     that.alert_msg.error('找不到团队');
                                     break;
                                 case 4:
-                                    that.alert_msg.warning(name + ' 已不再团队中');
+                                    that.alert_msg.warning(name + ' 已不在团队中');
                                     that.init_info();
                                     break;
                                 default:
@@ -276,6 +276,9 @@ export default {
                                 break;
                             case 4:
                                 that.alert_msg.normal('Ta 已经在团队里啦');
+                                break;
+                            case 5:
+                                that.alert_msg.warning('系统不认识这个人');
                                 break;
                         }
                     }
