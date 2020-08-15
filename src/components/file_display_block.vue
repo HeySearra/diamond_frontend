@@ -129,6 +129,7 @@ export default {
         },
 
         allow_drop(e, item){
+            //console.log('item.type='+item.type+' drag_type='+this.draging_type+' drag_id='+item.id);
             if(item.type=='fold'&&(this.draging_type!='fold'||this.draging_id!=item.id)){
                 e.preventDefault();
             }
