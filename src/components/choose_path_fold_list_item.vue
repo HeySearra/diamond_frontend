@@ -8,7 +8,7 @@
         <div class="link_icon" v-if="is_link">
             <span class="icon iconfont">&#xe60c;</span>
         </div>
-        <div class="starred_icon" v-if="is_starred">
+        <div class="starred_icon" v-if="is_starred&&!is_link">
             <span class="icon iconfont">&#xe7b2;</span>
         </div>
         <div class="name" :style="gray?'color:#aaa':''">{{name}}</div>

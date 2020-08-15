@@ -9,7 +9,7 @@
         <div class="link_icon" v-if="is_link">
             <span class="icon iconfont">&#xe60c;</span>
         </div>
-        <div class="starred_icon" v-if="is_starred">
+        <div class="starred_icon" v-if="is_starred&&!is_link">
             <span class="icon iconfont">&#xe7b2;</span>
         </div>
         <div class="name">{{name}}</div>
@@ -24,7 +24,7 @@
                     <el-dropdown-item command="open" v-if="context!='recycle'">打开</el-dropdown-item>
                     <el-dropdown-item v-if="false">权限管理</el-dropdown-item>
                     <el-dropdown-item command="parent" v-if="(is_link||context=='workbench')&&pfid!=''">打开所在文件夹</el-dropdown-item>
-                    <el-dropdown-item command="team" v-if="is_in_desktop">转化为团队文件夹</el-dropdown-item>
+                    <el-dropdown-item command="team" v-if="is_in_desktop&&!is_link">转化为团队文件夹</el-dropdown-item>
                     <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link&&!is_in_desktop">创建快捷方式到桌面</el-dropdown-item>
                     <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                     <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link&&false">复制</el-dropdown-item>
@@ -358,10 +358,13 @@ export default {
                         switch(res.status){
                             case 2:
                                 that.alert_msg.error('权限不足');
+                                break;
                             case 3:
-                                that.alert_msg.error('快捷方式已存在');
+                                that.alert_msg.normal('快捷方式已存在');
+                                break;
                             case 4:
                                 that.alert_msg.error('找不到文件');
+                                break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
                         }
