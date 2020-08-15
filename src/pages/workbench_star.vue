@@ -95,6 +95,7 @@ export default {
                                 name: res.list[i].name,
                                 create_time: res.list[i].create_dt,
                                 creator: res.list[i].cname,
+                                recent_edit_time: res.list[i].edit_dt,
                             })
                         }
                         that.$refs.file_system_component.init();

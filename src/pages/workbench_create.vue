@@ -83,6 +83,7 @@ export default {
                                 name: res.list[i].name,
                                 create_time: that.datetime_format(res.list[i].dt, res.cur_dt),
                                 creator: res.list[i].cname,
+                                recent_edit_time: res.list[i].edit_dt,
                             })
                         }
                         that.$refs.file_system_item.init();
