@@ -8,6 +8,7 @@ import Element from 'element-ui'
 import echarts from 'echarts'
 import mavonEditor from 'mavon-editor'
 import CKEditor from '@ckeditor/ckeditor5-vue';
+import Ripple from 'vue-ripple-directive'
 import 'jquery'
 import './assets/icon_store/iconfont.css'
 import './assets/diadoc_icon/iconfont.css'
@@ -55,6 +56,7 @@ Vue.use(Element);
 Vue.use(echarts);
 Vue.use(mavonEditor);
 Vue.use(CKEditor);
+Vue.directive('ripple',Ripple)
 
 Vue.component('navbar', navbar);
 Vue.component('login', login);
@@ -112,6 +114,8 @@ Vue.prototype.magic_word = magic_word;
 Vue.config.productionTip = false;
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$host = 'http://localhost:8000'
+
+Ripple.color = 'rgba(0, 0, 0, 0.10)'
 
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */

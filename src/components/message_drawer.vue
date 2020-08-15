@@ -11,8 +11,16 @@
             <!-- <div class="close-icon"><span v-if="type!='comment'" class="icon iconfont">&#xe79b;</span></div> -->
         </div>
         <el-divider></el-divider>
-        <div v-infinite-scroll="load" class="message_area" style="overflow-x:hidden;overflow-y:auto;border:solid 1px;height:calc(100vh - 50px)">
-            <component v-for="item in list" :key="item.mid" :mid="item.mid" ref="message_item" @confirm-to-join="deal_team_invite" :is="'message-item'"></component>
+        <div v-infinite-scroll="load" class="message_area" style="overflow-x:hidden;overflow-y:auto;height:calc(100vh - 50px)">
+            <message-item 
+                v-for="item in list" 
+                :key="item.mid" 
+                :mid="item.mid" 
+                ref="message_item" 
+                @confirm-to-join="deal_team_invite" 
+                @refresh_count="refresh_count"
+                v-ripple>
+            </message-item>
             <p v-if="is_loading" class="not_found">加载中 <i class="el-icon-loading"></i></p>
             <p v-if="is_final&&list.length==0" class="not_found">你没有收到任何消息</p>
         </div>
@@ -136,6 +144,7 @@ export default {
                             }, 0);
                         }
                         that.alert_msg.success('已全部标记为已读');
+                        that.$emit('refresh_message_count');
                     }
                     else{
                         that.alert_msg.error('获取消息失败，请重试');
@@ -149,6 +158,10 @@ export default {
 
         deal_team_invite(data){
             this.$emit("deal-team-invite", data);
+        },
+
+        refresh_count(){
+            this.$emit('refresh_message_count');
         }
     }
 };
@@ -199,5 +212,9 @@ export default {
 
     .message_box>>>.el-drawer__open .el-drawer.rtl{
         /* width:430px !important; */
+    }
+
+    >>>.el-drawer:focus{
+        outline: none !important;
     }
 </style>

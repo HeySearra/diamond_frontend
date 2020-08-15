@@ -59,6 +59,76 @@ const pageData = {
                 </p>'
 };
 
+class MyUploadAdapter {
+
+  constructor(loader) {
+    // The file loader instance to use during the upload.
+    this.loader = loader;
+    this.xhr = null;
+  }
+
+  // Starts the upload process.
+  upload() {
+    return this.loader.file
+      .then(file => new Promise((resolve, reject) => {
+        this.uploadFile(file, resolve);
+      }));
+  }
+
+  getCookie (name) {
+    var value = '; ' + document.cookie
+    var parts = value.split('; ' + name + '=')
+    if (parts.length === 2) return parts.pop().split(';').shift()
+  }
+
+  uploadFile(file, resolve) {
+    console.log('uploading img');
+    console.log(file.type);
+    console.log(file);
+    // 上传文件
+    var form = new FormData();
+    form.append('img', file);
+    this.xhr = $.ajax({
+      url: "/uploadImg",
+      type: 'POST',
+      data: form,
+      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+      processData: false,
+      contentType: false,
+      success: function (respJson) {
+        console.log(respJson);
+        if (respJson.code === 0) {
+          resolve({
+            default: respJson.url
+          });
+        } else {
+          console.log('上传错误');
+        }
+      },
+      error: function (e) {
+        console.log('error uploading img');
+        console.log(e);
+      }
+    });
+  }
+
+  // Aborts the upload process.
+  abort() {
+    // Reject the promise returned from the upload() method.
+    if (this.xhr) {
+      this.xhr.abort();
+      console.log('abort uploading img');
+    }
+  }
+}
+
+function MyCustomUploadAdapterPlugin( editor ) {
+  editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
+    // Configure the URL to the upload script in your back-end here!
+    return new MyUploadAdapter( loader );
+  };
+}
+
 class CommentsAdapter {
   constructor(editor) {
     this.editor = editor;
@@ -347,12 +417,12 @@ export default {
       CKEditor.create(document.querySelector('#editor'), {
         language: 'zh-cn',
         initialData: pageData.initialData,
-        extraPlugins: [CommentsAdapter],
+        extraPlugins: [CommentsAdapter, MyCustomUploadAdapterPlugin],
         /*ckfinder: {
           uploadUrl: ''
           // Back-end processing upload logic returns json data, including uploaded (option true / false) and url two fields
         },*/
-        simpleUpload: {
+        /*simpleUpload: {
           // The URL that the images are uploaded to.
           uploadUrl: 'http://example.com',
 
@@ -364,7 +434,7 @@ export default {
             'X-CSRF-TOKEN': 'CSFR-Token',
             Authorization: 'Bearer <JSON Web Token>'
           }
-        },
+        },*/
         toolbar: {
           items: [
             'undo',

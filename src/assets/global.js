@@ -91,4 +91,4 @@ export const datetime_format = (t, ct) => {
     }
 }
 
-export var magic_word = [''];
+export var magic_word = ['哦', '呀', '啊', '嘤', '惹', '呢', '！', '哼', '~', '嗷', '嘻', '¿'];

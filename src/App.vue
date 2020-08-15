@@ -10,7 +10,7 @@
     </el-header>
     <router-view/>
     <el-backtop></el-backtop>
-    <message-drawer ref="message_drawer" @deal-team-invite="deal_team_invite"></message-drawer>
+    <message-drawer ref="message_drawer" @deal-team-invite="deal_team_invite" @refresh_message_count="refresh_message_count"></message-drawer>
     <edit-user-info-dialog ref="edit_user_info_dialog" @apply_for_info='apply_for_info'></edit-user-info-dialog>
     <change-password-dialog ref="change_password_dialog"></change-password-dialog>
     <chatting-dialog ref="chatting_dialog"></chatting-dialog>
@@ -24,7 +24,7 @@ export default {
   name: 'App',
   data(){
     return {
-      show_drawer: false,
+      show_drawer: true,
     }
   },
   methods:{
@@ -45,6 +45,9 @@ export default {
     },
     deal_team_invite(data){
       this.$refs.team_invite_dialog.open(data);
+    },
+    refresh_message_count(){
+      this.$refs.header.refresh_message_count();
     }
   },
 }
