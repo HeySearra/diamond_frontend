@@ -9,7 +9,7 @@
         <div class="link_icon" v-if="is_link">
             <span class="icon iconfont">&#xe60c;</span>
         </div>
-        <div class="starred_icon" v-if="is_starred">
+        <div class="starred_icon" v-if="is_starred&&!is_link">
             <span class="icon iconfont">&#xe7b2;</span>
         </div>
         <div class="name">{{name}}</div>
@@ -434,7 +434,7 @@ export default {
                                 that.alert_msg.error('权限不足');
                                 break;
                             case 3:
-                                that.alert_msg.error('快捷方式已存在');
+                                that.alert_msg.normal('快捷方式已存在');
                                 break;
                             case 4:
                                 that.alert_msg.error('找不到文件');
