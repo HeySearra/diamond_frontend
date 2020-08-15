@@ -374,6 +374,7 @@ class CommentsAdapter {
 
 export default {
   mounted() {
+    this.init();
     pageData.did = this.$route.params.did;
     pageData.users = [
       {
@@ -399,16 +400,18 @@ export default {
     return {
       Editor: null,//editor instance
       file_name: '',
+      did:''
     }
   },
 
   methods: {
     init() {
+      this.did = this.$route.params.did;
       this.apply_for_info();
     },
 
     apply_for_info() {
-      //向后台请求一些内容
+      this.$refs.sidebar.init_doc_info(this.did);
     },
 
     getCookie (name) {

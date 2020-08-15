@@ -1,6 +1,11 @@
 <template>
     <transition name="el-zoom-in-top">
-        <div v-show="show" class="user_list_item can_not_choose" :class="show?'hover_color':''">
+        <div 
+            v-show="show" 
+            class="user_list_item can_not_choose" 
+            :class="show?'hover_color':''" 
+            v-ripple
+            @click="click_account">
             <div style="height:56px;">
                 <div style="display: inline-block;margin:8px 20px;float:left">
                     <el-avatar :src="src"></el-avatar>
@@ -67,6 +72,10 @@ export default {
             setTimeout(function(){
                 that.$emit('remove_admin', that.uid);
             }, 100);    
+        },
+
+        click_account(){
+            this.$emit('click_account', this.account);
         }
     }
 
@@ -87,7 +96,7 @@ export default {
 }
 
 .hover_color:hover{
-    background-color: #eee;
+    background-color: #f6f6f6;
 }
 
 .content{

@@ -248,12 +248,17 @@ export default {
     border:solid 1px hsla(0, 0%, 75%, 0.3);
 }
 
+.member_icon .el-avatar:focus, .item:focus, .item div:focus{
+    outline: none;
+}
+
 .admin_part{
     border:solid 1px hsl(0, 0%, 75%);
     border-radius: 5px;
     height: 300px;
     width:80%;
     margin: 0 auto;
+    overflow-x:hidden;
     overflow-y: overlay;
 }
 
@@ -261,6 +266,7 @@ export default {
     position: absolute;
     width:496px;
 }
+
 @media (max-width: 1200px){
     
 }

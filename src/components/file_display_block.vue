@@ -29,7 +29,8 @@
                     @move_item="move_item"
                     @share_item="share_item"
                     @copy_item="copy_item"
-                    @refresh="refresh">
+                    @refresh="refresh"
+                    @rename="rename">
                 </component>
             </div>
         </div>
@@ -159,6 +160,10 @@ export default {
 
         add_item(){
             this.$emit('add_item', this.add_type);
+        },
+
+        rename(id, type, name){
+            this.$emit('rename', id, type, name);
         }
     }
 

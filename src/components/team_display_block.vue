@@ -13,7 +13,8 @@
                     :tname="item.name"
                     :name="item.name"
                     :refresh="refresh"
-                    @open_info="open_info">
+                    @open_info="open_info"
+                    @refresh="refresh">
                 </team-block>
             </div>
         </div>

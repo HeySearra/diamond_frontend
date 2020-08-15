@@ -28,6 +28,7 @@
                     <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link&&!is_in_desktop">创建快捷方式到桌面</el-dropdown-item>
                     <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                     <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link&&false">复制</el-dropdown-item>
+                    <el-dropdown-item command="rename" v-if="(context=='file_system'||context=='team')&&!is_link">重命名</el-dropdown-item>
                     <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
                     <el-dropdown-item command="remove_link" class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
                     <el-dropdown-item command="recover" v-if="context=='recycle'" @click="click_to_recover">恢复</el-dropdown-item>
@@ -266,6 +267,9 @@ export default {
                     break;
                 case 'delete_forever':
                     this.click_to_delete_forever();
+                    break;
+                case 'rename':
+                    this.rename();
                     break;
             }
         },
@@ -517,6 +521,10 @@ export default {
                     }
                 });
             })
+        },
+
+        rename(){
+            this.$emit('rename', this.fid, 'fold', this.name);
         }
     }
 }

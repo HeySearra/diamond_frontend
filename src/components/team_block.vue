@@ -99,6 +99,7 @@ export default {
                     break;
             }
         },
+
         quit_team(){
             var that = this;
             this.alert_box.confirm_msg('警告', '确定退出团队 ' + that.team_name + ' 吗？', function(){
@@ -140,7 +141,7 @@ export default {
 
         delete_team(){
             var that = this;
-            this.alert_box.confirm_msg('警告', '确定解散团队 ' + that.team_name + ' 吗？', function(){
+            this.alert_box.confirm_msg('警告', '确定解散团队 ' + that.tname + ' 吗？', function(){
                 let url = '/team/delete'
                 $.ajax({ 
                     type:'post',

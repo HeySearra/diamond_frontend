@@ -1,6 +1,8 @@
 <template>
-    <el-dialog   class="dialog_style"
-  :visible.sync="DialogVisible">
+    <el-dialog   
+        class="dialog_style"
+        :visible.sync="DialogVisible"
+        :close-on-click-modal="false">
         <div class="path" v-if="path.length">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item v-for="item in path" :key="item.id">{{item.name}}</el-breadcrumb-item>

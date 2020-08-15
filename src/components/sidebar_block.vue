@@ -67,19 +67,9 @@
       </el-row>
       <el-row>
         <div class="doc_info">
-          <div class="info_item">
-            <div class="info_key">key：</div>
-            <div class="info_value">valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue</div>
-            <div class="clear_both"></div>
-          </div>
-          <div class="info_item">
-            <div class="info_key">key：</div>
-            <div class="info_value">valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue</div>
-            <div class="clear_both"></div>
-          </div>
-          <div class="info_item">
-            <div class="info_key">key：</div>
-            <div class="info_value">valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue</div>
+          <div class="info_item" v-for="item in doc_info" :key="item.key">
+            <div class="info_key">{{item.key}}：</div>
+            <div class="info_value">{{item.value}}</div>
             <div class="clear_both"></div>
           </div>
         </div>
@@ -132,7 +122,9 @@ export default {
       tid:'',
       user_name:'',
       user_src:'',
-      is_loading:false
+      is_loading:false,
+      doc_info:[/*{key:'',value:''}*/],
+      did:'',
     }
   },
 
@@ -180,6 +172,62 @@ export default {
         var value = '; ' + document.cookie
         var parts = value.split('; ' + name + '=')
         if (parts.length === 2) return parts.pop().split(';').shift()
+    },
+
+    init_doc_info(did){
+      this.did = did;
+
+      let url = '/doc/info?did=' + did;
+      var that = this;
+      this.is_loading = true;
+       $.ajax({ 
+          type:'get',
+          url: url,
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false,
+          success:function (res){
+              if(that.console_debug){
+                  console.log(url +  '：' + res.status);
+              }
+              if(res.status == 0){
+                  that.doc_info = [];
+                  that.doc_info.push({
+                    key:'文档名',
+                    value:res.name
+                  });
+                  that.doc_info.push({
+                    key:'最近编辑时间',
+                    value:res.edit_dt
+                  });
+                  that.doc_info.push({
+                    key:'最近编辑用户',
+                    value:res.ename
+                  });
+                  that.doc_info.push({
+                    key:'创建时间',
+                    value:res.create_dt
+                  });
+                  that.doc_info.push({
+                    key:'创建者',
+                    value:res.cname
+                  });
+                  that.is_loading = false;
+              }
+              else{
+                  switch(res.status){
+                      case 2:
+                          that.alert_msg.error('权限不足');
+                          break;
+                      default:
+                          that.alert_msg.error('发生了未知错误');
+                  }
+              }
+          },
+          error:function(res){
+              that.alert_msg.error('网络连接失败');
+          }
+      });
     },
 
     init_team_info(tid, refresh){
@@ -497,26 +545,27 @@ export default {
 }
 
 .doc_info{
-  padding: 0 10px 5px;
+  padding: 0 10px;
+  margin-bottom:10px;
 }
 
 .doc_info .info_item{
   float:none;
   clear:both;
-  margin-top:10px;
+  margin-top:21px;
   font-size: 15px;
 }
 
 .info_key{
   float:left;
-  width:60px;
+  width:7em;
   text-align: right;
   word-break: break-all;
 }
 
 .info_value{
   float:right;
-  width:196px;
+  width:169px;
   word-break: break-all;
 }
 

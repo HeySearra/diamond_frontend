@@ -20,7 +20,8 @@
                 @refresh="refresh"
                 @add_item="add_item"
                 @in_loading="in_loading"
-                @out_loading="out_loading">
+                @out_loading="out_loading"
+                @rename="rename">
             </component>
           </div>
           <div style="height:50px"></div>
@@ -153,6 +154,10 @@ export default {
 
     add_item(type, fid){
         this.$refs.new_dialog.open(type, fid);
+    },
+
+    rename(type, id, name){
+        this.$refs.new_dialog.open_for_rename(type, id, name);
     },
 
     move_item(id, type, name){

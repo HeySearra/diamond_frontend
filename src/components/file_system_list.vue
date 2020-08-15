@@ -32,7 +32,8 @@
                 @share_item="share_item"
                 @copy_item="copy_item"
                 @refresh="refresh"
-                @add_item="add_item"></file-display-list>
+                @add_item="add_item"
+                @rename="rename"></file-display-list>
             <div class="clear_both divide_type"></div>
         </div>
         <div class="clear_both" style="height:50px"></div>
@@ -333,6 +334,10 @@ export default {
                     that.alert_msg.error('连接失败');
                 }
             });
+        },
+
+        rename(id, type, name){
+            this.$emit('rename', id, type, name);
         }
     }
 

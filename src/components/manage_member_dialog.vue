@@ -3,6 +3,7 @@
         <el-dialog
             class="dialog_style"
             :visible.sync="dia_vis"
+            :close-on-click-modal="false"
             width="700px">
             <h3>{{title}}</h3>
             <div class="content">
@@ -26,15 +27,20 @@
                                 <el-button type="primary" style="width:15%;float:right" @click="inviate">邀请</el-button>
                             </div>
                             <div style="height:35px"></div>
-                            <div class="user_part">
+                            <div class="user_part" v-loading="search_loading">
+                                <transition name="el-fade-in-linear">
+                                    <div class="not_found ac" v-show="!search_list.length">输入用户账号来搜索用户</div>
+                                </transition>
                                 <user-list-item 
                                     type="search" 
                                     v-for="item in search_list" 
+                                    :name="item.name"
                                     :key="item.uid" 
                                     :uid="item.uid"
                                     :account="item.acc"
                                     :src="item.portrait"
-                                    @click="function(){change_input(item.acc)}"></user-list-item>
+                                    @click_account="change_input"></user-list-item>
+                                <div class="not_found" v-if="search_list.length" style="line-height:69px">这已经是全部的搜索内容了</div>
                             </div>
                         </div>
                     </el-tab-pane>
@@ -54,11 +60,12 @@ export default {
             title:'团队成员管理',
             tid:'',
             dia_vis:false,
-            activeName:'1',
+            activeName:'2',
             search_input:'',
             creator_id:'',
             all_list:[],
-            search_list:[]
+            search_list:[],
+            search_loading:false
         }
     },
 
@@ -217,6 +224,7 @@ export default {
         },
 
         search_user(){
+            this.search_loading = true;
             let url = '/search_user';
             var that = this;
             $.ajax({ 
@@ -233,9 +241,10 @@ export default {
                     if(res.status == 0){
                         that.search_list = res.list;
                     }
+                    that.search_loading = false;
                 },
                 error:function(res){
-                    
+                    that.search_loading = false;
                 }
             });
         },
@@ -328,11 +337,18 @@ export default {
 }
 
 .user_part{
-    border:solid 1px #000;
-    height: 350px;
+    border:solid 1px hsl(0, 0%, 75%);
+    border-radius: 5px;
+    height: 300px;
     width:80%;
     margin: 0 auto;
-    overflow: overlay;
+    overflow-x:hidden;
+    overflow-y: overlay;
+}
+
+.ac{
+    position: absolute;
+    width:496px;
 }
 
 @media (max-width: 1200px){

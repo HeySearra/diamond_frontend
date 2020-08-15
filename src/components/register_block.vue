@@ -115,6 +115,7 @@ export default {
                                 console.log("(post)/register/submit"+ " : " +res.status);
                             }
                             if(res.status == 0){
+                                that.login_manager.set(true);
                                 that.$router.push({name:'workbench'});
                                 that.alert_msg.success('注册成功');
                             }
