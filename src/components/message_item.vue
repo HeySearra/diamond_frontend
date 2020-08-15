@@ -35,13 +35,12 @@ export default {
             title: '', //消息标题
             content: '', //消息内容
             id: '',
-            name: 'team_name',
             loading: true,
             is_read: false,
             is_process: false,
             is_dnd: false,
             uid: 'uid',     //发表评论的人的id
-            uname: 'uname',
+            team_name: 'team_name',
             portrait: '',
             time: '',
         }
@@ -76,7 +75,9 @@ export default {
                         if(that.type == 'doc'){
                             that.content = res.content;
                             that.uid = res.uid;
-                            that.uname = res.uname;
+                        }
+                        if(that.type == 'join'){
+                            that.team_name = res.name;
                         }
                         // var cur_dt = new Date(res.cur_dt);
                         // var dt = new Date(res.dt);
@@ -105,6 +106,7 @@ export default {
         confirm_to_join(){
             let data = {
                 mid: this.mid,
+                team_name: this.team_name,
             }
             this.$emit('confirm-to-join', data);
         },

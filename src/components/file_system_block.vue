@@ -23,7 +23,7 @@
                 :add_type="item.add_type"
                 :drage="drage" 
                 :context="context" 
-                :type="type" 
+                :type="item.type" 
                 :is_in_desktop="is_in_desktop"
                 @start_drop="start_drag"
                 @face_drop="end_drag"

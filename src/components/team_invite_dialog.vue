@@ -4,7 +4,7 @@
             class="dialog_style"
             :visible.sync="dia_vis"
             width="600px">
-            <h3>来自{{team_name}}的{{title}}</h3>
+            <h3>来自 {{team_name}} 的{{title}}</h3>
             <div class="content">
                 <div style="height:10px"></div>
                 <div class="item_area">
@@ -34,6 +34,7 @@ export default {
         open(data){
             this.mid = data.mid;
             this.dia_vis = true;
+            this.team_name = data.team_name;
         },
 
         getCookie (name) {
