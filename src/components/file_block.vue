@@ -1,6 +1,6 @@
 <template>
     <div class="can_not_choose file_block" :class="focus?'file_block_focus':''">
-        <div class="click_area" :class="focus?'click_area_focus':''"></div>
+        <div class="click_area" :class="focus?'click_area_focus':''" @click="click"></div>
         <div class="big_icon">
             <div>
                 <span class="icon iconfont">&#xe645;</span>
