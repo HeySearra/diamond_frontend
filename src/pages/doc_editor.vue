@@ -36,7 +36,7 @@ const pageData = {
   // Users data.
   users: [],
   // The ID of the current user.
-  userId: 'user-1',
+  userId: '',
   // Editor initial data(for testing).
   initialData:
     '<h2>\
@@ -75,7 +75,7 @@ class MyUploadAdapter {
       }));
   }
 
-  getCookie (name) {
+  getCookie(name) {
     var value = '; ' + document.cookie
     var parts = value.split('; ' + name + '=')
     if (parts.length === 2) return parts.pop().split(';').shift()
@@ -122,10 +122,10 @@ class MyUploadAdapter {
   }
 }
 
-function MyCustomUploadAdapterPlugin( editor ) {
-  editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
+function MyCustomUploadAdapterPlugin(editor) {
+  editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
     // Configure the URL to the upload script in your back-end here!
-    return new MyUploadAdapter( loader );
+    return new MyUploadAdapter(loader);
   };
 }
 
@@ -149,7 +149,7 @@ class CommentsAdapter {
     // Set the adapter on the `CommentsRepository#adapter` property.
     commentsRepositoryPlugin.adapter = {
 
-      getCookie (name) {
+      getCookie(name) {
         var value = '; ' + document.cookie
         var parts = value.split('; ' + name + '=')
         if (parts.length === 2) return parts.pop().split(';').shift()
@@ -157,7 +157,7 @@ class CommentsAdapter {
 
       addComment(data) {
         console.log('Comment added', data);
-        /*let msg = {
+        let msg = {
           did: pageData.did,
           uid: pageData.userId,
           threadId: data.threadId,
@@ -179,13 +179,13 @@ class CommentsAdapter {
             if (res.status !== 0) {
               switch (res.status) {
                 case 1:
-                  alert_box.msg('上传评论失败', '键值错误');
+                  alert_msg.error('上传评论失败: 键值错误');
                   break;
                 case 2:
-                  alert_box.msg('上传评论失败', '您的权限不足或还没有登录');
+                  alert_msg.error('上传评论失败: 您的权限不足或还没有登录');
                   break;
                 case 3:
-                  alert_box.msg('上传评论失败', '文档不存在');
+                  alert_msg.error('上传评论失败: 文档不存在');
                   break;
                 default:
                   alert_msg.error('未知错误');
@@ -195,7 +195,7 @@ class CommentsAdapter {
           error: function () {
             alert_msg.error('连接失败');
           }
-        });*/
+        });
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         // When the promise resolves with the comment data object, it
@@ -298,35 +298,10 @@ class CommentsAdapter {
 
       getCommentThread(data) {
         console.log('Getting comment thread', data);
-        console.log(new Date());
-        // data是thread的编号
-        // Write a request to your database here. The returned `Promise`
-        // should resolve with the comment thread data.
-        return Promise.resolve({
-          threadId: data.threadId,
-          //commmets: this.getCommentsOfThread(data.threadId),
-          comments: [
-            {
-              commentId: 'comment-1',
-              authorId: 'user-2',
-              content: '<p>Are we sure we want to use a made-up disorder name?</p>',
-              createdAt: new Date()
-            },
-            {
-              commentId: 'comment-2',
-              authorId: 'user-1',
-              content: '<p>We want to use a made-up disorder name.</p>',
-              createdAt: new Date()
-            }
-          ],
-          isFromAdapter: true
-        });
-      },
-
-      getCommentsOfThread(threadId) {
+        var thread_comments;
         let msg = {
           did: pageData.did,
-          threadId: threadId
+          threadId: data.threadId
         };
         $.ajax({
           type: 'get',
@@ -341,17 +316,24 @@ class CommentsAdapter {
               console.log("(get)/doc/comment/get_comments_of_thread" + " : " + res.status);
             }
             if (res.status === 0) {
-              return res.list;
+              console.log(res);
+              console.log(res.list);
+              for (var it of res.list) {
+                it.createdAt = new Date(it.createdAt);
+              }
+              console.log(res.list);
+              alert_msg.success('获取评论成功');
+              thread_comments = res.list;
             } else {
               switch (res.status) {
                 case 1:
-                  alert_box.msg('加载评论失败', '键值错误');
+                  alert_msg.error('加载评论失败: 键值错误');
                   break;
                 case 2:
-                  alert_box.msg('加载评论失败', '您的权限不足或还没有登录');
+                  alert_msg.error('加载评论失败: 您的权限不足或还没有登录');
                   break;
                 case 3:
-                  alert_box.msg('加载评论失败', '文档不存在');
+                  alert_msg.error('加载评论失败: 文档不存在');
                   break;
                 default:
                   alert_msg.error('未知错误');
@@ -362,6 +344,20 @@ class CommentsAdapter {
             alert_msg.error('连接失败');
           }
         });
+
+        console.log(thread_comments);
+        // data是thread的编号
+        // Write a request to your database here. The returned `Promise`
+        // should resolve with the comment thread data.
+        return Promise.resolve({
+          threadId: data.threadId,
+          comments: thread_comments,
+          isFromAdapter: true
+        });
+      },
+
+      getCommentsOfThread(threadId) {
+
       }
     };
   }
@@ -372,22 +368,23 @@ export default {
     pageData.did = this.$route.params.did;
     pageData.users = [
       {
-        id: 'user-1',
+        id: '1',
         name: 'Joe Doe',
         // Note that the avatar is optional.
         avatar: 'https://randomuser.me/api/portraits/thumb/men/26.jpg'
       },
       {
-        id: 'user-2',
+        id: '2',
         name: 'Ella Harper',
         avatar: 'https://randomuser.me/api/portraits/thumb/women/65.jpg'
       }
     ];
-
+    pageData.userId = 'user-1'
     // this.getDocAuth();
+    this.getCurrentUserId();
     this.getInitialDocContent();
     this.initCKEditor();
-    console.log(this.file_name);
+    // console.log(this.file_name);
   },
 
   data() {
@@ -399,42 +396,19 @@ export default {
 
   methods: {
     init() {
-      this.apply_for_info();
     },
 
-    apply_for_info() {
-      //向后台请求一些内容
-    },
-
-    getCookie (name) {
+    getCookie(name) {
       var value = '; ' + document.cookie
       var parts = value.split('; ' + name + '=')
       if (parts.length === 2) return parts.pop().split(';').shift()
     },
-
     initCKEditor() {
       var that = this;
       CKEditor.create(document.querySelector('#editor'), {
         language: 'zh-cn',
         initialData: pageData.initialData,
         extraPlugins: [CommentsAdapter, MyCustomUploadAdapterPlugin],
-        /*ckfinder: {
-          uploadUrl: ''
-          // Back-end processing upload logic returns json data, including uploaded (option true / false) and url two fields
-        },*/
-        /*simpleUpload: {
-          // The URL that the images are uploaded to.
-          uploadUrl: 'http://example.com',
-
-          // Enable the XMLHttpRequest.withCredentials property.
-          withCredentials: true,
-
-          // Headers sent along with the XMLHttpRequest to the upload server.
-          headers: {
-            'X-CSRF-TOKEN': 'CSFR-Token',
-            Authorization: 'Bearer <JSON Web Token>'
-          }
-        },*/
         toolbar: {
           items: [
             'undo',
@@ -623,10 +597,6 @@ export default {
         }
       })
     },
-    updateDocContent1(content) {
-      //console.log( window.editor.getData() );
-      console.log(content);
-    },
     updateDocContent(content) {
       var that = this;
       const did = this.$route.params.did;
@@ -676,261 +646,260 @@ export default {
           that.alert_msg.error('连接失败');
         }
       })
-    }
-  },
+    },
 
-  //将文档内容存储为模版
-  saveAsTemplate() {
-    var that = this;
-    const did = this.$route.params.did;
-    let msg = {
-      name: that.file_name,
-      content: content,
-    };
-    $.ajax({
-      type: 'post',
-      url: '/temp/new',
-      data: JSON.stringify(msg),
-      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-      processData: false,
-      contentType: false,
-      async: false,
-      success: function (res) {
-        if (that.console_debug) {
-          console.log("(post)/temp/new" + " : " + res.status);
-        }
-        if (res.status === 0) {
-          return res.tid;
-        } else {
-          switch (res.status) {
-            case 1:
-              that.alert_box.msg('保存模板失败', '键值错误');
-              break;
-            case 2:
-              that.alert_box.msg('保存模板失败', '您的权限不足或还没有登录');
-              break;
-            case 3:
-              that.alert_box.msg('保存模板失败', '您的模板名称不合法');
-              break;
-            /*case 4:
+    //将文档内容存储为模版
+    saveAsTemplate() {
+      var that = this;
+      const did = this.$route.params.did;
+      let msg = {
+        name: that.file_name,
+        content: content,
+      };
+      $.ajax({
+        type: 'post',
+        url: '/temp/new',
+        data: JSON.stringify(msg),
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        processData: false,
+        contentType: false,
+        async: false,
+        success: function (res) {
+          if (that.console_debug) {
+            console.log("(post)/temp/new" + " : " + res.status);
+          }
+          if (res.status === 0) {
+            return res.tid;
+          } else {
+            switch (res.status) {
+              case 1:
+                that.alert_box.msg('保存模板失败', '键值错误');
+                break;
+              case 2:
+                that.alert_box.msg('保存模板失败', '您的权限不足或还没有登录');
+                break;
+              case 3:
+                that.alert_box.msg('保存模板失败', '您的模板名称不合法');
+                break;
+              /*case 4:
               that.alert_box.msg('保存模板失败', '您的内容不合法');
               break;
             case 5:
               that.alert_box.msg('保存模板失败', '同目录下存在同名文件');
               break;*/
-            default:
-              that.alert_msg.error('未知错误');
+              default:
+                that.alert_msg.error('未知错误');
+            }
           }
+        },
+        error: function () {
+          that.alert_msg.error('连接失败');
         }
-      },
-      error: function () {
-        that.alert_msg.error('连接失败');
-      }
-    })
-  },
+      })
+    },
+    getAllCommentedUsers() {
+      var that = this;
+      const did = this.$route.params.did;
+      let msg = {
+        did: did
+      };
+      $.ajax({
+        type: 'get',
+        url: '/doc/comment/get_users',
+        data: JSON.stringify(msg),
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        processData: false,
+        contentType: false,
+        async: false,
+        success: function (res) {
+          if (that.console_debug) {
+            console.log("(get)/doc/comment/get_users" + " : " + res.status);
+          }
+          if (res.status === 0) {
+            pageData.users = res.list;
+          } else {
+            switch (res.status) {
+              case 1:
+                that.alert_box.msg('加载评论用户失败', '键值错误');
+                break;
+              case 2:
+                that.alert_box.msg('加载评论用户失败', '您的权限不足或还没有登录');
+                break;
+              case 3:
+                that.alert_box.msg('加载评论用户失败', '文档不存在');
+                break;
+              default:
+                that.alert_msg.error('未知错误');
+            }
+          }
+          //跳转到首页
+          //that.$router.push({path:'/workbench/recent'});
+        },
+        error: function () {
+          that.alert_msg.error('连接失败');
+        }
+      });
+    },
+    getCurrentUserId() {
+      var that = this;
+      $.ajax({
+        type: 'get',
+        url: '/user_info',
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        processData: false,
+        contentType: false,
+        async: false,
+        success: function (res) {
+          if (that.console_debug) {
+            console.log("(get)/user_info" + " : " + res.status);
+          }
+          if (res.status === 0) {
+            pageData.userId = res.uid;
+          } else {
+            switch (res.status) {
+              case 1:
+                that.alert_box.msg('加载用户信息失败', '键值错误');
+                break;
+              case 2:
+                that.alert_box.msg('加载用户信息失败', '您还没有登录');
+                break;
+              default:
+                that.alert_msg.error('未知错误');
+            }
+          }
+        },
+        error: function () {
+          that.alert_msg.error('连接失败');
+        }
+      });
+    },
 
-  getAllCommentedUsers() {
-    var that = this;
-    const did = this.$route.params.did;
-    let msg = {
-      did: did
-    };
-    $.ajax({
-      type: 'get',
-      url: '/doc/comment/get_users',
-      data: JSON.stringify(msg),
-      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-      processData: false,
-      contentType: false,
-      async: false,
-      success: function (res) {
-        if (that.console_debug) {
-          console.log("(get)/doc/comment/get_users" + " : " + res.status);
-        }
-        if (res.status === 0) {
-          pageData.users = res.list;
-        } else {
-          switch (res.status) {
-            case 1:
-              that.alert_box.msg('加载评论用户失败', '键值错误');
-              break;
-            case 2:
-              that.alert_box.msg('加载评论用户失败', '您的权限不足或还没有登录');
-              break;
-            case 3:
-              that.alert_box.msg('加载评论用户失败', '文档不存在');
-              break;
-            default:
-              that.alert_msg.error('未知错误');
+    //is_stared: true：请求收藏，false：请求取消收藏
+    starTheDoc(is_stared) {
+      var that = this;
+      const did = this.$route.params.did;
+      let msg = {
+        id: did,
+        type: 'doc',
+        is_stared: is_stared
+      };
+      $.ajax({
+        type: 'post',
+        url: '/fs/star',
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        data: JSON.stringify(msg),
+        processData: false,
+        contentType: false,
+        success: function (res) {
+          if (that.console_debug) {
+            console.log("(post)/fs/star" + " : " + res.status);
           }
-        }
-        //跳转到首页
-        //that.$router.push({path:'/workbench/recent'});
-      },
-      error: function () {
-        that.alert_msg.error('连接失败');
-      }
-    });
-  },
-  getCurrentUserId(){
-    var that = this;
-    $.ajax({
-      type:'get',
-      url:'/user_info',
-      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-      processData: false,
-      contentType: false,
-      async: false,
-      success:function (res){
-        if (that.console_debug) {
-          console.log("(get)/user_info" + " : " + res.status);
-        }
-        if (res.status === 0) {
-          pageData.userId = res.uid;
-        } else {
-          switch (res.status) {
-            case 1:
-              that.alert_box.msg('加载用户信息失败', '键值错误');
-              break;
-            case 2:
-              that.alert_box.msg('加载用户信息失败', '您还没有登录');
-              break;
-            default:
-              that.alert_msg.error('未知错误');
+          if (res.status === 0) {
+            //提示收藏成功/收藏图标变化
+          } else {
+            const op = is_stared ? '收藏' : '取消收藏';
+            switch (res.status) {
+              case 1:
+                that.alert_box.msg(op + '失败', '键值错误');
+                break;
+              case 2:
+                that.alert_box.msg(op + '失败', '您的权限不足或还没有登录');
+                break;
+              case 3:
+                that.alert_box.msg(op + '失败', '文档不存在');
+                break;
+              default:
+                that.alert_msg.error('未知错误');
+            }
           }
+        },
+        error: function () {
+          that.alert_msg.error('连接失败');
         }
-      },
-      error:function(){
-        that.alert_msg.error('连接失败');
-      }
-    });
-  },
-  //is_stared: true：请求收藏，false：请求取消收藏
-  starTheDoc(is_stared) {
-    var that = this;
-    const did = this.$route.params.did;
-    let msg = {
-      id: did,
-      type: 'doc',
-      is_stared: is_stared
-    };
-    $.ajax({
-      type:'post',
-      url:'/fs/star',
-      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-      data: JSON.stringify(msg),
-      processData: false,
-      contentType: false,
-      success:function (res){
-        if (that.console_debug) {
-          console.log("(post)/fs/star" + " : " + res.status);
-        }
-        if (res.status === 0) {
-          //提示收藏成功/收藏图标变化
-        } else {
-          const op = is_stared ? '收藏' : '取消收藏';
-          switch (res.status) {
-            case 1:
-              that.alert_box.msg(op + '失败', '键值错误');
-              break;
-            case 2:
-              that.alert_box.msg(op + '失败', '您的权限不足或还没有登录');
-              break;
-            case 3:
-              that.alert_box.msg(op + '失败', '文档不存在');
-              break;
-            default:
-              that.alert_msg.error('未知错误');
+      });
+    },
+    getStarStatus() {
+      var that = this;
+      const did = this.$route.params.did;
+      let msg = {
+        id: did,
+        type: 'doc',
+      };
+      $.ajax({
+        type: 'get',
+        url: '/fs/star_condition',
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        data: JSON.stringify(msg),
+        processData: false,
+        contentType: false,
+        async: false,
+        success: function (res) {
+          if (that.console_debug) {
+            console.log("(post)/fs/star_condition" + " : " + res.status);
           }
+          if (res.status === 0) {
+            return res.is_stared;
+          } else {
+            switch (res.status) {
+              case 1:
+                that.alert_box.msg('获取收藏状态失败', '键值错误');
+                break;
+              case 2:
+                that.alert_box.msg('获取收藏状态失败', '文档不存在');
+                break;
+              default:
+                that.alert_msg.error('未知错误');
+            }
+          }
+        },
+        error: function () {
+          that.alert_msg.error('连接失败');
         }
-      },
-      error:function(){
-        that.alert_msg.error('连接失败');
-      }
-    });
-  },
+      });
+    },
 
-  getStarStatus() {
-    var that = this;
-    const did = this.$route.params.did;
-    let msg = {
-      id: did,
-      type: 'doc',
-    };
-    $.ajax({
-      type:'get',
-      url:'/fs/star_condition',
-      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-      data: JSON.stringify(msg),
-      processData: false,
-      contentType: false,
-      async: false,
-      success:function (res){
-        if (that.console_debug) {
-          console.log("(post)/fs/star_condition" + " : " + res.status);
-        }
-        if (res.status === 0) {
-          return res.is_stared;
-        } else {
-          switch (res.status) {
-            case 1:
-              that.alert_box.msg('获取收藏状态失败', '键值错误');
-              break;
-            case 2:
-              that.alert_box.msg('获取收藏状态失败', '文档不存在');
-              break;
-            default:
-              that.alert_msg.error('未知错误');
+    //多人实时同步编辑不好实现
+    //此函数可以用来获取当前正在浏览这篇文章的用户
+    getCurrentEditingUser() {
+      var that = this;
+      const did = this.$route.params.did;
+      let msg = {
+        id: did,
+      };
+      $.ajax({
+        type: 'get',
+        url: '/doc/online',
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        data: JSON.stringify(msg),
+        processData: false,
+        contentType: false,
+        success: function (res) {
+          if (that.console_debug) {
+            console.log("(get)/doc/online" + " : " + res.status);
           }
-        }
-      },
-      error:function(){
-        that.alert_msg.error('连接失败');
-      }
-    });
-  },
-
-  //多人实时同步编辑不好实现
-  //此函数可以用来获取当前正在浏览这篇文章的用户
-  getCurrentEditingUser(){
-    var that = this;
-    const did = this.$route.params.did;
-    let msg = {
-      id: did,
-    };
-    $.ajax({
-      type:'get',
-      url:'/doc/online',
-      headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-      data: JSON.stringify(msg),
-      processData: false,
-      contentType: false,
-      success:function (res){
-        if (that.console_debug) {
-          console.log("(get)/doc/online" + " : " + res.status);
-        }
-        if (res.status === 0) {
-          return res.list;
-        } else {
-          switch (res.status) {
-            case 1:
-              that.alert_box.msg('获取正在编辑用户失败', '键值错误');
-              break;
-            case 2:
-              that.alert_box.msg('获取正在编辑用户失败', '您的权限不足或还没有登录');
-              break;
-            case 3:
-              that.alert_box.msg('获取正在编辑用户失败', '文档不存在');
-              break;
-            default:
-              that.alert_msg.error('未知错误');
+          if (res.status === 0) {
+            return res.list;
+          } else {
+            switch (res.status) {
+              case 1:
+                that.alert_box.msg('获取正在编辑用户失败', '键值错误');
+                break;
+              case 2:
+                that.alert_box.msg('获取正在编辑用户失败', '您的权限不足或还没有登录');
+                break;
+              case 3:
+                that.alert_box.msg('获取正在编辑用户失败', '文档不存在');
+                break;
+              default:
+                that.alert_msg.error('未知错误');
+            }
           }
+        },
+        error: function () {
+          that.alert_msg.error('连接失败');
         }
-      },
-      error:function(){
-        that.alert_msg.error('连接失败');
-      }
-    });
+      });
+    },
   },
 }
 </script>
@@ -938,9 +907,19 @@ export default {
 <style scoped>
 @import url("../assets/common.css");
 
+p {
+  margin-top: 0.3em !important;
+  margin-bottom: 0.3em !important;
+}
+
 .ck-editor__editable {
   border: 1px solid #ccc !important;
   background-color: #ffffff;
+}
+
+.ck-editor__editable p {
+  margin-block-start: 0.5em !important;
+  margin-block-end: 0.5em !important;
 }
 
 .editor-container {
