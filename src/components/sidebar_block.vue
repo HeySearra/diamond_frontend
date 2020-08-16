@@ -76,6 +76,7 @@
       </el-row>
       <div style="height:20px;"></div>
     </el-row>
+    <div style="height:30px;"></div>
     <el-row class="function_buttons" :class="active=='workbench'?'function_buttons_active':''"><router-link :to="{path:'/workbench/'}">工作台</router-link></el-row>
     <el-row class="function_buttons" :class="active=='team_center'?'function_buttons_active':''"><router-link :to="{path:'/team/'}">我的团队</router-link></el-row>
     <el-row class="function_buttons" :class="active=='desktop'?'function_buttons_active':''"><router-link :to="{path:'/file/'}">我的桌面</router-link></el-row>
@@ -197,21 +198,22 @@ export default {
                     value:res.name
                   });
                   that.doc_info.push({
-                    key:'最近编辑时间',
-                    value:res.edit_dt
-                  });
-                  that.doc_info.push({
-                    key:'最近编辑用户',
-                    value:res.ename
+                    key:'创建者',
+                    value:res.cname
                   });
                   that.doc_info.push({
                     key:'创建时间',
                     value:res.create_dt
                   });
                   that.doc_info.push({
-                    key:'创建者',
-                    value:res.cname
+                    key:'最近编辑用户',
+                    value:res.ename
                   });
+                  that.doc_info.push({
+                    key:'最近编辑时间',
+                    value:res.edit_dt
+                  });
+                  
                   that.is_loading = false;
               }
               else{
@@ -508,6 +510,7 @@ export default {
   letter-spacing: 3px;
   text-indent: 3px;
   cursor:pointer;
+  border-bottom: solid 1px #dedede;
   transition: all 0.1s linear;
 }
 

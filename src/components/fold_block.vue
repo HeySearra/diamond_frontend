@@ -1,45 +1,47 @@
 <template>
-    <div class="can_not_choose fold_block" :class="focus?'fold_block_focus':''">
-        <div class="click_area" :class="focus?'click_area_focus':''" @click="click"></div>
-        <div class="big_icon">
-            <div>
-                <span class="icon iconfont">&#xe622;</span>
+    <transition name="el-zoom-in-center">
+        <div class="can_not_choose fold_block" :class="focus?'fold_block_focus':''" v-show="show">
+            <div class="click_area" :class="focus?'click_area_focus':''" @click="click"></div>
+            <div class="big_icon">
+                <div>
+                    <span class="icon iconfont">&#xe622;</span>
+                </div>
+            </div>
+            <div class="link_icon" v-if="is_link">
+                <span class="icon iconfont">&#xe60c;</span>
+            </div>
+            <div class="starred_icon" v-if="is_starred&&!is_link">
+                <span class="icon iconfont">&#xe7b2;</span>
+            </div>
+            <div class="name">{{name}}</div>
+            <div class="more_menu" :class="focus?'more_menu_focus':''">
+                <el-dropdown trigger="click"
+                    @visible-change="vis_change"
+                    @command="click_dropdown_item">
+                    <span class="el-dropdown-link">
+                        <i class="el-icon-s-tools"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item command="open" v-if="context!='recycle'">打开</el-dropdown-item>
+                        <el-dropdown-item v-if="false">权限管理</el-dropdown-item>
+                        <el-dropdown-item command="parent" v-if="(is_link||context=='workbench')&&pfid!=''">打开所在文件夹</el-dropdown-item>
+                        <el-dropdown-item command="team" v-if="is_in_desktop&&!is_link">转化为团队文件夹</el-dropdown-item>
+                        <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link&&!is_in_desktop">创建快捷方式到桌面</el-dropdown-item>
+                        <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
+                        <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link&&false">复制</el-dropdown-item>
+                        <el-dropdown-item command="rename" v-if="(context=='file_system'||context=='team')&&!is_link">重命名</el-dropdown-item>
+                        <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
+                        <el-dropdown-item command="remove_link" class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
+                        <el-dropdown-item command="recover" v-if="context=='recycle'" @click="click_to_recover">恢复</el-dropdown-item>
+                        <el-dropdown-item command="delete_forever" class="red_text" v-if="context=='recycle'" @click="click_to_delete_forever">彻底删除</el-dropdown-item>
+                        <el-dropdown-item v-if="false">导出</el-dropdown-item>
+                        <el-dropdown-item command="delete" class="red_text" v-if="(context=='file_system'||context=='team')&&!is_link">删除</el-dropdown-item>
+                        <el-dropdown-item command="open_info" v-if="!is_link&&context!='recycle'">文件夹信息</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
             </div>
         </div>
-        <div class="link_icon" v-if="is_link">
-            <span class="icon iconfont">&#xe60c;</span>
-        </div>
-        <div class="starred_icon" v-if="is_starred&&!is_link">
-            <span class="icon iconfont">&#xe7b2;</span>
-        </div>
-        <div class="name">{{name}}</div>
-        <div class="more_menu" :class="focus?'more_menu_focus':''">
-            <el-dropdown trigger="click"
-                @visible-change="vis_change"
-                @command="click_dropdown_item">
-                <span class="el-dropdown-link">
-                    <i class="el-icon-s-tools"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="open" v-if="context!='recycle'">打开</el-dropdown-item>
-                    <el-dropdown-item v-if="false">权限管理</el-dropdown-item>
-                    <el-dropdown-item command="parent" v-if="(is_link||context=='workbench')&&pfid!=''">打开所在文件夹</el-dropdown-item>
-                    <el-dropdown-item command="team" v-if="is_in_desktop&&!is_link">转化为团队文件夹</el-dropdown-item>
-                    <el-dropdown-item command="create_link" v-if="(context=='file_system'||context=='team')&&!is_link&&!is_in_desktop">创建快捷方式到桌面</el-dropdown-item>
-                    <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
-                    <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link&&false">复制</el-dropdown-item>
-                    <el-dropdown-item command="rename" v-if="(context=='file_system'||context=='team')&&!is_link">重命名</el-dropdown-item>
-                    <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
-                    <el-dropdown-item command="remove_link" class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
-                    <el-dropdown-item command="recover" v-if="context=='recycle'" @click="click_to_recover">恢复</el-dropdown-item>
-                    <el-dropdown-item command="delete_forever" class="red_text" v-if="context=='recycle'" @click="click_to_delete_forever">彻底删除</el-dropdown-item>
-                    <el-dropdown-item v-if="false">导出</el-dropdown-item>
-                    <el-dropdown-item command="delete" class="red_text" v-if="(context=='file_system'||context=='team')&&!is_link">删除</el-dropdown-item>
-                    <el-dropdown-item command="open_info" v-if="!is_link&&context!='recycle'">文件夹信息</el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
-        </div>
-    </div>
+    </transition>
 </template>
 
 <script>
@@ -75,7 +77,8 @@ export default {
             focus: false,
             pfid:'',
             timer:undefined,
-            click_flag: false
+            click_flag: false,
+            show:true
         }
     },
 
@@ -168,8 +171,11 @@ export default {
                             console.log(url +  '：' + res.status);
                         }
                         if(res.status == 0){
-                            that.alert_msg.success('已彻底删除 ' + that.name);
-                            that.$emit('refresh');
+                            that.show = false;
+                            setTimeout(function(){
+                                that.alert_msg.success('已彻底删除 ' + that.name);
+                                that.$emit('refresh');
+                            }, 100);
                         }
                         else{
                             switch(res.status){
@@ -210,8 +216,11 @@ export default {
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.alert_msg.success('已成功恢复 ' + that.name);
-                        that.$emit('refresh');
+                        that.show = false;
+                        setTimeout(function(){
+                            that.alert_msg.success('已成功恢复 ' + that.name);
+                            that.$emit('refresh');
+                        }, 100);
                     }
                     else{
                         switch(res.status){
@@ -220,6 +229,9 @@ export default {
                                 break;
                             case 3:
                                 that.alert_msg.error('找不到该内容');
+                                break;
+                            case 4:
+                                that.alert_box.msg('恢复失败', '恢复后 ' + that.name + ' 会与它所在文件夹的某个文件或文件夹重名，请更改文件或文件夹的名称后再恢复。');
                                 break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
@@ -395,7 +407,10 @@ export default {
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.$emit('refresh');
+                        that.show = false;
+                        setTimeout(function(){
+                            that.$emit('refresh');
+                        }, 100);
                     }
                     else{
                         switch(res.status){
@@ -465,8 +480,11 @@ export default {
                             console.log(url +  '：' + res.status);
                         }
                         if(res.status === 0){
-                            that.alert_msg.success('已删除 ' + that.name);
-                            that.$emit('refresh');
+                            that.show = false;
+                            setTimeout(function(){
+                                that.alert_msg.success('已删除 ' + that.name);
+                                that.$emit('refresh');
+                            }, 100);
                         }
                         else{
                             switch(res.status){
@@ -502,8 +520,11 @@ export default {
                             console.log(url +  '：' + res.status);
                         }
                         if(res.status == 0){
-                            that.alert_msg.success('已转化为团队文件夹');
-                            that.$router.push({name:'team_center'});
+                            that.show = false;
+                            setTimeout(function(){
+                                that.alert_msg.success('已转化为团队文件夹');
+                                that.$router.push({name:'team_center'});
+                            }, 100);
                         }
                         else{
                             switch(res.status){

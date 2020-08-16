@@ -9,7 +9,7 @@
       text-color="#333"
       active-text-color="#efb7b6">
       <h1><a class="logo_a" @click="$router.push({path:'/'});"></a></h1>
-      <div class="online_icon" v-if="is_login">
+      <div class="online_icon" v-if="is_login&&show_por">
         <el-avatar>
           <el-dropdown>
             <span class="el-dropdown-link">
@@ -20,36 +20,10 @@
                 <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
                 <span>这是一个人</span>
               </el-dropdown-item>
-              <el-dropdown-item>
-                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-                <span>这是一个人</span>
-              </el-dropdown-item>
-              <el-dropdown-item>
-                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-                <span>这是一个人</span>
-              </el-dropdown-item>
-              <el-dropdown-item>
-                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-                <span>这是一个人</span>
-              </el-dropdown-item>
-              <el-dropdown-item>
-                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-                <span>这是一个人</span>
-              </el-dropdown-item>
-              <el-dropdown-item>
-                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-                <span>这是一个人</span>
-              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-avatar>
         <el-tooltip class="item" effect="dark" content="lkw" placement="top-start">
-          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="wlt" placement="top-start">
-          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="lrq" placement="top-start">
           <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
         </el-tooltip>
       </div>
@@ -112,7 +86,7 @@
         message_count:0,
         have_chat:false,
         opa:false,
-        timer:undefined
+        show_por:false
       };
     },
     methods: {
@@ -123,6 +97,7 @@
       },
       
       init(){
+        this.show_por = false;
         if(this.$route.name=='login'||this.$route.name=='register'||this.$route.name=='forget'||this.$route.name=='forget_set'){
           this.opa = true;
         }
@@ -141,11 +116,6 @@
           }
         }
         this.apply_for_magic_word();
-        this.timer ? clearInterval(this.timer) : '';
-        var that = this;
-        this.timer = setInterval(function(){
-          that.apply_for_message();
-        }, 1000*5);
         this.get_info();
       },
 
@@ -462,7 +432,7 @@ h1 a:hover{
 .online_icon>>>.el-avatar{
   float:right;
   margin-left:11px;
-  border:solid 1px #000;
+  /* border:solid 1px #000; */
   cursor:pointer;
   height:36px;
   width:36px;

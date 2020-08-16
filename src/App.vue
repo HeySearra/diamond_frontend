@@ -27,6 +27,12 @@ export default {
       show_drawer: true,
     }
   },
+  mounted(){
+    var that = this;
+    setInterval(function(){
+      that.$refs.header.refresh_message_count();
+    }, 1000*3);
+  },
   methods:{
     open_drawer(){
       this.$refs.message_drawer.open();

@@ -1,29 +1,31 @@
 <template>
-    <div class="can_not_choose team_block" :class="focus?'team_block_focus':''">
-        <div class="click_area" :class="focus?'click_area_focus':''" @click="click"></div>
-        <div class="big_icon">
-            <div>
-                <span class="icon iconfont">&#xe6cb;</span>
+    <transition name="el-zoom-in-center">
+        <div class="can_not_choose team_block" :class="focus?'team_block_focus':''" v-show="show">
+            <div class="click_area" :class="focus?'click_area_focus':''" @click="click"></div>
+            <div class="big_icon">
+                <div>
+                    <span class="icon iconfont">&#xe6cb;</span>
+                </div>
             </div>
+            <div class="name">{{tname}}</div>
+            <div class="more_menu" :class="focus?'more_menu_focus':''">
+                <el-dropdown trigger="click" 
+                    @visible-change="vis_change"
+                    @command="click_dropdown_item">
+                    <span class="el-dropdown-link">
+                        <i class="el-icon-s-tools"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item command="in">进入</el-dropdown-item>
+                        <el-dropdown-item command="team_info">团队信息</el-dropdown-item>
+                        <el-dropdown-item v-if="!is_creator" class="red_text" command="quit_team">退出团队</el-dropdown-item>
+                        <el-dropdown-item v-if="is_creator" class="red_text" command="delete_team">解散团队</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </div>
+            <div ></div>
         </div>
-        <div class="name">{{tname}}</div>
-        <div class="more_menu" :class="focus?'more_menu_focus':''">
-            <el-dropdown trigger="click" 
-                @visible-change="vis_change"
-                @command="click_dropdown_item">
-                <span class="el-dropdown-link">
-                    <i class="el-icon-s-tools"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="in">进入</el-dropdown-item>
-                    <el-dropdown-item command="team_info">团队信息</el-dropdown-item>
-                    <el-dropdown-item v-if="!is_creator" class="red_text" command="quit_team">退出团队</el-dropdown-item>
-                    <el-dropdown-item v-if="is_creator" class="red_text" command="delete_team">解散团队</el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
-        </div>
-        <div ></div>
-    </div>
+    </transition>
 </template>
 
 <script>
@@ -47,6 +49,7 @@ export default {
     data() {
         return {
             focus: false,
+            show: true
         }
     },
 
@@ -115,8 +118,11 @@ export default {
                             console.log(url +  '：' + res.status);
                         }
                         if(res.status == 0){
-                            that.alert_msg.success('成功退出团队');
-                            that.$emit('refresh');
+                            that.show = false;
+                            setTimeout(function(){
+                                that.alert_msg.success('成功退出团队');
+                                that.$emit('refresh');
+                            }, 100);
                         }
                         else{
                             switch(res.status){
@@ -154,8 +160,11 @@ export default {
                             console.log(url +  '：' + res.status);
                         }
                         if(res.status == 0){
-                            that.alert_msg.success('成功解散团队');
-                            that.$emit('refresh');
+                            that.show = false;
+                            setTimeout(function(){
+                                that.alert_msg.success('成功解散团队');
+                                that.$emit('refresh');
+                            }, 100);
                         }
                         else{
                             switch(res.status){

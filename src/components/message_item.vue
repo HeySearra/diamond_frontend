@@ -187,6 +187,10 @@ export default {
     margin: 0;
 }
 
+.message-head{
+    font-size: 18px;;
+}
+
 .item{
     display:flex;
     flex-direction: row;

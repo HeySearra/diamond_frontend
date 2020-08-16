@@ -102,7 +102,8 @@ export default {
             },
             is_loading:true,
             random:0,
-            not_found_text:['这里啥玩意也没有', '这里什么也没有', '空空如也', '这里好凄凉', '难道？这里什么也没有', '什么东东都没有', '这里啥都没', '什么也没有~', '这里没东西，别看了', '啊，这里没东西啊']
+            not_found_text:['这里啥玩意也没有', '这里什么也没有', '空空如也', '这里好凄凉', '难道？这里什么也没有', '什么东东都没有', '这里啥都没', '什么也没有~', '这里没东西，别看了', '啊，这里没东西啊'],
+            stop_flag: false
         }
     },
 
@@ -254,7 +255,7 @@ export default {
                 this.apply_for_info(no_loading);
             }
             else if(this.type == 'from_out'){
-                this.list = out_list;
+                this.$emit('refresh');
             }
         },
 
@@ -325,6 +326,29 @@ export default {
                             case 5:
                                 that.alert_msg.error('找不到内容');
                                 break;
+                            case 6:
+                                if(that.stop_flag){
+                                    return;
+                                }
+                                that.stop_flag = true;
+                                that.alert_msg.normal('你好');
+                                setTimeout(function(){
+                                    that.alert_msg.normal('请问你上过B站吗？')
+                                }, 1000);
+                                setTimeout(function(){
+                                    that.alert_msg.normal('听说过禁止套娃的弹幕吗？')
+                                }, 3000);
+                                setTimeout(function(){
+                                    that.alert_msg.normal('你现在就在做这种事')
+                                }, 5000);
+                                setTimeout(function(){
+                                    that.alert_msg.normal('这种事对文件系统很不好的呢')
+                                }, 7000);
+                                setTimeout(function(){
+                                    that.alert_msg.warning('所以就此收手吧')
+                                    that.stop_flag = false;
+                                }, 9000);
+                                break;
                             default:
                                 that.alert_msg.error('发生未知错误');
                         }
@@ -349,6 +373,7 @@ export default {
 @import url("../assets/dialog_style.css");
 .file_system_list{
     position: relative;
+    min-width:700px;
 }
 
 .divide_type{

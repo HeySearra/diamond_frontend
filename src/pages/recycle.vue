@@ -98,7 +98,7 @@ export default {
                 for(let i=0; i<res.list.length; i++){
                   let item = new Object();
                   item.id = res.list[i].id;
-                  item.type = res.list[i].type;
+                  item.type = res.list[i].type=='doc' ? 'file' : 'fold';
                   item.is_link = false;
                   item.is_starred = false;
                   item.name = res.list[i].name;

@@ -80,7 +80,6 @@ export default {
               that.my_list = res.my_team;
               that.other_list = res.join_team;
               that.is_loading = false;
-
             }
             else{
                 switch(res.status){
