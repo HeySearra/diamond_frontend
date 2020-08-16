@@ -354,7 +354,7 @@ export default {
         // },
 
         open_doc() {
-          this.$router.push({path: '/doc/' + this.did});
+          this.$router.push({name:'doc', params:{did:this.did}});;
         },
 
         open_info(){

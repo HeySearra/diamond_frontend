@@ -67,6 +67,9 @@
       </el-row>
       <el-row>
         <div class="doc_info">
+          <div class="doc_icon can_not_choose">
+              <span class="icon iconfont">&#xe645;</span>
+          </div>
           <div class="info_item" v-for="item in doc_info" :key="item.key">
             <div class="info_key">{{item.key}}：</div>
             <div class="info_value">{{item.value}}</div>
@@ -579,6 +582,18 @@ export default {
 .item{
   float:left;
   margin:6px;
+}
+
+.doc_icon{
+  position: absolute;
+  text-align: center;
+  width: 96%;
+  z-index: -1;
+}
+
+.doc_icon span{
+    font-size: 200px;
+    color: hsl(0, 0%, 90%);
 }
 
 </style>

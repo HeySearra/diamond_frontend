@@ -9,7 +9,8 @@
               <div>
                 <template-display-block
                   v-bind:list="my_list"
-                  context="user">
+                  context="user"
+                  @create_doc_from_template="create_doc_from_template">
                 </template-display-block>
                 <div class="clear_both divide_type"></div>
                 <!--template-display-block
@@ -24,7 +25,8 @@
                   <template-display-block
                     context="official"
                     :title="item.title"
-                    :list="item.temps">
+                    :list="item.temps"
+                    @create_doc_from_template="create_doc_from_template">
                   </template-display-block>
                   <div class="clear_both divide_type"></div>
                 </div>
@@ -39,7 +41,14 @@
       </el-container>
       <el-footer></el-footer>
     </el-container>
-    <new-dialog ref="new_dialog"></new-dialog>
+    <new-dialog 
+      ref="new_dialog"
+      @create_doc_from_template="create_doc_from_template">
+    </new-dialog>
+    <choose-path-dialog-for-template 
+      ref="choose_path_dialog_for_template"
+      @create_file_from_template_choose_name="create_file_from_template_choose_name">
+    </choose-path-dialog-for-template>
   </div>
 </template>
 
@@ -128,6 +137,14 @@ export default {
           that.alert_msg.error('连接失败');
         }
       });
+    },
+
+    create_doc_from_template(tid, type, name){
+      this.$refs.choose_path_dialog_for_template.open(tid, type, name);
+    },
+
+    create_file_from_template_choose_name(fid, tid, type, name){
+      this.$refs.new_dialog.open_for_template(fid, tid, type, name);
     },
   }
 }

@@ -11,7 +11,7 @@
                 <el-input ref="input" v-model="name" :placeholder="placeholder" maxLength="60" @keyup.enter.native="click_confirm()"></el-input>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dia_vis = false">取 消</el-button>
+                <el-button @click="close">取 消</el-button>
                 <el-button type="primary" @click="click_confirm">确 定</el-button>
             </span>
         </el-dialog>
@@ -30,7 +30,8 @@ export default {
         fid:'',
         desktop_alert:'',
         is_rename:false,
-        id:''
+        id:'',
+        template_type:''
     }
   },
   methods:{
@@ -82,6 +83,22 @@ export default {
         }, 0);
     },
 
+    open_for_template(fid, tid, type, name){
+        this.is_rename = false;
+        this.type = 'template';
+        this.template_type = type;
+        this.id = tid;
+        this.fid = fid;
+        this.title = '新文件的名称为';
+        this.placeholder = '请输入新文件的名称';
+        this.name = name;
+        this.dia_vis = true;
+        var that = this;
+        setTimeout(function(){
+            that.$refs.input.focus();
+        }, 0);
+    },
+
     getCookie (name) {
         var value = '; ' + document.cookie
         var parts = value.split('; ' + name + '=')
@@ -102,6 +119,9 @@ export default {
                     break;
                 case 'team':
                     this.create_new_team();
+                    break;
+                case 'template':
+                    this.create_from_template();
                     break;
             }
         }
@@ -256,6 +276,68 @@ export default {
                 that.alert_msg.error('网络连接失败');
             }
         });
+    },
+
+    create_from_template(){
+        var that = this;
+        let msg = {
+          'tid': this.id,
+          'name': this.name,
+          'pfid': this.fid,
+          'type': this.template_type,
+        };
+        $.ajax({
+          type:'post',
+          url:'/temp/new_doc',
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          data: JSON.stringify(msg),
+          async: false,
+          success:function (res){
+            if (that.console_debug) {
+              console.log("(post)/temp/new_doc" + " : " + res.status);
+            }
+            if (res.status === 0) {
+                that.alert_msg.success('创建成功');
+                that.$router.push({name:'doc', params:{did:res.did}});
+            } else {
+              switch (res.status) {
+                case 1:
+                  that.alert_msg.error('创建失败', '键错误');
+                  break;
+                case 2:
+                  that.alert_msg.error('权限不足');
+                  break;
+                case 3:
+                  that.alert_msg.error('父文件夹不存在');
+                  break;
+                case 4:
+                  that.alert_msg.error('新建文件将会与目录中的的文件或文件夹重名');
+                  break;
+                case 5:
+                  that.alert_msg.error('文件名非法');
+                  break;
+                default:
+                  that.alert_msg.error('发生未知错误');
+              }
+            }
+          },
+          error:function(){
+            that.alert_msg.error('连接失败');
+          }
+        });
+    },
+
+    close(){
+        if(this.type == 'template'){
+            this.$emit('create_doc_from_template', this.id, this.template_type, this.name);
+            var that = this;
+            setTimeout(function(){
+                    that.dia_vis = false;
+            }, 10);
+        }
+        else{
+            this.dia_vis = false;
+        }
     }
   }
 }

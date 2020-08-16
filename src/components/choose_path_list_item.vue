@@ -1,8 +1,17 @@
 <template>
-    <div class="choose_path_fold_list_item can_not_choose" @click="click">
+    <div class="choose_path_list_item can_not_choose" @click="click">
         <div class="big_icon">
             <div>
-                <span class="icon iconfont">&#xe622;</span>
+                <span class="icon iconfont fold" v-if="type=='fold'">&#xe622;</span>
+            </div>
+            <div>
+                <span class="icon iconfont fold" v-if="type=='fold_root'">&#xe635;</span>
+            </div>
+            <div>
+                <span class="icon iconfont team" v-if="type=='team'">&#xe6cb;</span>
+            </div>
+            <div>
+                <span class="icon iconfont file" v-if="type=='file'">&#xe645;</span>
             </div>
         </div>
         <div class="link_icon" v-if="is_link">
@@ -37,6 +46,10 @@ export default {
         gray:{
             type:Boolean,
             default:false
+        },
+        type:{
+            type:String,
+            default:'fold'
         }
     },
 
@@ -48,7 +61,12 @@ export default {
 
     methods:{
         click(){
-            this.$emit('open', this.id);
+            if(this.type == 'file'){
+                return;
+            }
+            else{
+                this.$emit('open', this.id);
+            }
         }
     }
 
@@ -59,7 +77,7 @@ export default {
 @import url("../assets/common.css");
 @import url("../assets/diadoc_icon.css");
 
-.choose_path_fold_list_item{
+.choose_path_list_item{
     border-bottom: solid 1px rgba(0, 0, 0, 0.1);
     height: 50px;
     position: relative;
@@ -67,7 +85,7 @@ export default {
     transition: all 0.1s linear;
 }
 
-.choose_path_fold_list_item:hover{
+.choose_path_list_item:hover{
     background-color: hsla(0, 0%, 0%, 0.05);
 }
 
@@ -78,11 +96,21 @@ export default {
     text-align: center;
     line-height:50px;
     width:fit-content;
-    color:hsl(198, 56%, 56%);
 }
 
-.big_icon .icon{
+.file{
+    color:hsl(198, 10%, 69%);
     font-size:27px;
+}
+
+.fold{
+    color:hsl(198, 56%, 56%);
+    font-size:27px;
+}
+
+.team{
+    color:hsl(198, 15%, 56%);
+    font-size:30px;
 }
 
 .link_icon{

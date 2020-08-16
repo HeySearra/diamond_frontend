@@ -712,31 +712,31 @@ export default {
             console.log("(post)/temp/new" + " : " + res.status);
           }
           if (res.status === 0) {
-            alert_msg.success('保存模板成功');
+            that.alert_msg.success('保存模板成功');
           } else {
             switch (res.status) {
-              case 1:
-                that.alert_box.msg('保存模板失败', '键值错误');
-                break;
+              // case 1:
+              //   that.alert_box.msg('保存模板失败', '键值错误');
+              //   break;
               case 2:
-                that.alert_box.msg('保存模板失败', '您的权限不足或还没有登录');
+                that.alert_msg.error('保存模板失败', '您的权限不足或还没有登录');
                 break;
               case 3:
-                that.alert_box.msg('保存模板失败', '您的模板重名');
+                that.alert_msg.error('您的模板之间的名字不得相同');
                 break;
               case 4:
-                that.alert_box.msg('保存模板失败', '您的模板名称非法');
+                that.alert_msg.error('模板名称非法');
                 break;
               /*case 5:
                 that.alert_box.msg('保存模板失败', '同目录下存在同名文件');
                 break;*/
               default:
-                that.alert_msg.error('未知错误');
+                that.alert_msg.error('发生未知错误');
             }
           }
         },
         error: function () {
-          that.alert_msg.error('连接失败');
+          that.alert_msg.error('网络连接失败');
         }
       })
     },
@@ -984,7 +984,7 @@ export default {
   overflow: overlay;
   background-color: #fff;
   border-right:solid 2px hsl(0, 0%, 90%);
-  padding:45px 0 50px;
+  padding:45px 0 30px;
   min-width:800px;
 }
 
@@ -997,8 +997,8 @@ export default {
   border:unset !important;
   color:hsl(0, 0%, 23%) !important;
   border-bottom:solid 1px #dedede !important;
-  min-height:600px;
-  margin:0 6% 69px
+  min-height:900px;
+  margin:0 6% 0;
 }
 
 .editor_title{
@@ -1070,7 +1070,7 @@ export default {
 
 .editor_bottom{
   text-align: center;
-  margin-top:-60px;
+  margin-top:-15px;
   opacity: 0.3;
 }
 

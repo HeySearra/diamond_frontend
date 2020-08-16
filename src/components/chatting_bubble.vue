@@ -18,7 +18,7 @@
             },
             src:{
                 type:String,
-                default:'/' // 'my', 'other'
+                default:'' // 'my', 'other'
             },
             text:{
                 type:String,

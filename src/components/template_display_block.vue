@@ -12,7 +12,8 @@
                 :tid="item.tid"
                 :src="item.src"
                 :context="context"
-                :type="item.type">
+                :type="item.type"
+                @create_doc_from_template="create_doc_from_template">
             </template-block>
         </div>
     </div>
@@ -63,7 +64,9 @@ export default {
             this.dia_vis = true;
         },
 
-
+        create_doc_from_template(tid, type, name){
+            this.$emit('create_doc_from_template', tid, type, name);
+        }
     }
 
 }

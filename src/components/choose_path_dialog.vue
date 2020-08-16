@@ -3,14 +3,13 @@
         <el-dialog
             class="dialog_style"
             :visible.sync="dia_vis"
-            :close-on-click-modal="false"
             width="600px">
             <h3>{{title}}</h3>
             <div class="content">
                 <div style="height:10px"></div>
                 <div class="item_area" id="item_list">
-                    <choose-path-fold-list-item v-if="!is_root" name="（返回上层目录）" :id="pfid" type="fold" @open="change_path" gray></choose-path-fold-list-item>
-                    <choose-path-fold-list-item
+                    <choose-path-list-item v-if="!is_root" name="（返回上层目录）" :id="pfid" type="fold" @open="change_path" gray></choose-path-list-item>
+                    <choose-path-list-item
                         v-for="item in fold_list"
                         :key="item.id"
                         :is_starred="item.is_starred"
@@ -19,7 +18,7 @@
                         :id="item.id"
                         :type="item.type"
                         @open="change_path">
-                    </choose-path-fold-list-item>
+                    </choose-path-list-item>
                     <div style="height:30px"></div>
                 </div>
             </div>
@@ -45,7 +44,8 @@ export default {
             pfid:'',
             fold_list:[],
             button_text:'',
-            stop_flag:false
+            stop_flag:false,
+            tid:''
         }
     },
 
