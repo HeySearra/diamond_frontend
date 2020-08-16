@@ -10,10 +10,10 @@
                 <div style="padding-right:30px">
                     <el-form ref="form" :model="form" label-width="80px">
                         <el-form-item label="旧密码">
-                            <el-input v-model="form.old_pwd" placeholder="请输入旧密码" maxlength="16" show-password></el-input>
+                            <el-input v-model="form.old_pwd" placeholder="请输入旧密码" maxlength="16" show-password @keyup.enter.native="$refs.new_pas.focus()"></el-input>
                         </el-form-item>
                         <el-form-item label="新密码">
-                            <el-input v-model="form.new_pwd" placeholder="请输入新密码" maxlength="16" show-password></el-input>
+                            <el-input v-model="form.new_pwd" placeholder="请输入新密码" maxlength="16" show-password ref="new_pas" @keyup.enter.native="click_confirm()"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>

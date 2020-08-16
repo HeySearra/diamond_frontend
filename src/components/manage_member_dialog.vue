@@ -23,7 +23,7 @@
                         <div>
                             <div style="height:30px"></div>
                             <div class="search_input">
-                                <el-input v-model="search_input" style="width:83%" placeholder="搜索用户账号" maxlength="70" @input="search_user"></el-input>
+                                <el-input v-model="search_input" style="width:83%" placeholder="搜索用户账号" maxlength="70" @input="search_user" @keyup.enter.native="inviate()"></el-input>
                                 <el-button type="primary" style="width:15%;float:right" @click="inviate">邀请</el-button>
                             </div>
                             <div style="height:35px"></div>

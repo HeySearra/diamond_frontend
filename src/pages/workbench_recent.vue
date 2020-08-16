@@ -71,7 +71,13 @@ export default {
                         that.is_loading = false;
                     }
                     else{
-                        that.alert_msg.error('获取文件列表失败', '请重试');
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.warning('您还未登录，请先登录账号');
+                                break;
+                            default:
+                                that.alert_msg.error('获取文件列表失败');       
+                        }
                     }
                 },
                 error:function(){
