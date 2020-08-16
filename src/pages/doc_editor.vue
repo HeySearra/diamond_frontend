@@ -16,7 +16,7 @@
               <span class="icon iconfont">&#xe82a;</span>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="保存为模板" placement="bottom">
-              <span class="icon iconfont">&#xe672;</span>
+              <span class="icon iconfont" @click="saveAsTemplate">&#xe672;</span>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="取消收藏" placement="bottom">
               <span class="icon iconfont" v-if="!is_starred">&#xe65c;</span>
@@ -691,10 +691,10 @@ export default {
     //将文档内容存储为模版
     saveAsTemplate() {
       var that = this;
-
+      alert('hello')
       let msg = {
         name: that.file_name,
-        content: content,
+        content: window.editor.getData(),
       };
       $.ajax({
         type: 'post',
