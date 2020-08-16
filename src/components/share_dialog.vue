@@ -22,9 +22,9 @@
                 <div style="height:50px;"></div>
                 <div class="can_not_choose" style="width:fit-content; margin:0 auto">
                     <el-radio-group v-model="share_type" @change="change_share_type">
-                        <el-radio-button :label="1" :disabled="read_link_disabled">文档阅读分享</el-radio-button>
-                        <el-radio-button :label="2" :disabled="comment_link_disabled">文档评论分享</el-radio-button>
-                        <el-radio-button :label="3" :disabled="write_link_disabled">文档编辑分享</el-radio-button>
+                        <el-radio-button :label="1" :disabled="read_link_vis">文档阅读分享</el-radio-button>
+                        <el-radio-button :label="2" :disabled="comment_link_vis">文档评论分享</el-radio-button>
+                        <el-radio-button :label="3" :disabled="write_link_vis">文档编辑分享</el-radio-button>
                     </el-radio-group>
                 </div>
                 <div style="height:30px;"></div>
@@ -60,9 +60,9 @@ export default {
             write_url:'',
             comment_url:'',
             read_url:'',
-            read_link_disabled: true,
-            comment_link_disabled: true,
-            write_link_disabled: true,
+            read_link_vis: true,
+            comment_link_vis: true,
+            write_link_vis: true,
         }
     },
 
@@ -71,7 +71,9 @@ export default {
             this.did = did;
             this.title = '分享 ' + name;
             var flag = false;
-            
+            this.read_link_vis = true;
+            this.comment_link_vis = true;
+            this.write_link_vis = true;
             this.url = '';
             var that = this;
             $.ajax({ 
@@ -120,13 +122,13 @@ export default {
                     }
                     if(res.status == 0){
                         that.write_url = that.$host + '/doc/add_write?dk=' + res.key;
-                        that.url = that.write_url;
                         flag = true;
+                        that.write_link_vis = false;
                     }
                     else{
                         switch(res.status){
                             case 2:
-                                that.write_link_disabled = false;
+                                that.write_link_vis = true;
                                 flag = true;
                                 break;
                             default:
@@ -158,11 +160,12 @@ export default {
                     if(res.status == 0){
                         that.comment_url = that.$host + '/doc/add_comment?dk=' + res.key;
                         flag = true;
+                        that.comment_link_vis = false;
                     }
                     else{
                         switch(res.status){
                             case 2:
-                                that.comment_link_disabled = false;
+                                that.comment_link_vis = true;
                                 flag = true;
                                 break;
                             default:
@@ -195,11 +198,12 @@ export default {
                         that.read_url = that.$host + '/doc/add_read?dk=' + res.key;
                         that.url = that.read_url;
                         flag = true;
+                        that.read_link_vis = false;
                     }
                     else{
                         switch(res.status){
                             case 2:
-                                that.read_link_disabled = false;
+                                that.read_link_vis = true;
                                 flag = true;
                                 break;
                             default:
