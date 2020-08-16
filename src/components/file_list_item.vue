@@ -399,7 +399,7 @@ export default {
         },
 
         open_doc() {
-            this.$router.push({path: '/document/' + this.did});
+            this.$router.push({path: '/doc/' + this.did});
         },
 
         create_link(){
