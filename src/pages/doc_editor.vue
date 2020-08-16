@@ -7,23 +7,30 @@
         :file_name="file_name"
       ></sidebar>
     </el-aside>
-    <el-row style="z-index: 999">
-      <!-- Toolbar Container -->
-      <div id="toolbar-container"></div>
-    </el-row>
-    <el-row>
-      <!--el-col :span="5">
-        <sidebar></sidebar>
-      </el-col-->
-      <el-col class="editor-container" :span="18">
-        <!-- Editor Container -->
-        <input class="editor_title" v-model="file_name" maxlength="60"/>
-        <div id="editor">
-          
-        </div>
-      </el-col>
-      <el-col :span="6" id="comment-sidebar"><br></el-col>
-    </el-row>
+    <div v-loading="is_loading">
+      <el-row style="z-index: 999">
+        <!-- Toolbar Container -->
+        <div id="toolbar-container" style="min-height:38.67px"></div>
+      </el-row>
+      <el-row>
+        <!--el-col :span="5">
+          <sidebar></sidebar>
+        </el-col-->
+        <el-col class="editor-container" :span="18">
+          <!-- Editor Container -->
+          <input class="editor_title" v-model="file_name" maxlength="60"/>
+          <div id="editor">
+            
+          </div>
+        </el-col>
+        <el-col :span="6" id="comment-sidebar"><br></el-col>
+      </el-row>
+    </div>
+    <el-progress 
+        :percentage="loading_percentage" 
+        class="loading_bar" 
+        :show-text="false">
+    </el-progress>
   </el-main>
 </template>
 
@@ -380,10 +387,13 @@ export default {
     ];
     pageData.userId = 'user-1'
     // this.getDocAuth();
-    this.getCurrentUserId();
-    this.getAllCommentedUsers();
-    this.getInitialDocContent();
-    this.initCKEditor();
+    var that = this;
+    this.loading_percentage = 0;
+    $('.loading_bar').removeClass('loading_bar_done');
+    setTimeout(function(){
+      that.loading_percentage = 30;
+      that.getCurrentUserId();
+    }, 0);
     // console.log(this.file_name);
   },
 
@@ -392,6 +402,9 @@ export default {
       Editor: null,//editor instance
       file_name: '',
       did:'',
+      article:[],
+      loading_percentage:0,
+      is_loading: true
     }
   },
 
@@ -502,6 +515,8 @@ export default {
       }).catch(error => {
         console.error(error);
       });
+      that.loading_percentage = 100;
+      that.loading_done();
     },
     getDocAuth() {
       var that = this;
@@ -516,7 +531,7 @@ export default {
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         processData: false,
         contentType: false,
-        async: false,
+        // async: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(get)/doc/auth" + " : " + res.status);
@@ -532,6 +547,7 @@ export default {
               default:
                 break;
             }
+            
           } else {
             switch (res.status) {
               case 1:
@@ -571,7 +587,7 @@ export default {
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         processData: false,
         contentType: false,
-        async: false,
+        // async: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(get)/doc/all" + " : " + res.status);
@@ -579,6 +595,10 @@ export default {
           if (res.status === 0) {
             that.file_name = res.name;
             pageData.initialData = res.content;
+            that.loading_percentage = 85;
+            setTimeout(function(){
+              that.initCKEditor();
+            }, 100);
             console.log(res.content);
             console.log(res.name);
           } else {
@@ -718,13 +738,17 @@ export default {
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         processData: false,
         contentType: false,
-        async: false,
+        // async: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(get)/doc/comment/get_users" + " : " + res.status);
           }
           if (res.status === 0) {
             pageData.users = res.list;
+            that.loading_percentage = 60;
+            setTimeout(function(){
+              that.getInitialDocContent();
+            }, 100);
             console.log(pageData.users);
           } else {
             switch (res.status) {
@@ -757,13 +781,16 @@ export default {
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         processData: false,
         contentType: false,
-        async: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(get)/user_info" + " : " + res.status);
           }
           if (res.status === 0) {
             pageData.userId = res.uid;
+            that.loading_percentage = 40;
+            setTimeout(function(){
+              that.getAllCommentedUsers();
+            }, 100);
           } else {
             switch (res.status) {
               case 1:
@@ -804,6 +831,7 @@ export default {
             console.log("(post)/fs/star" + " : " + res.status);
           }
           if (res.status === 0) {
+            
             //提示收藏成功/收藏图标变化
           } else {
             const op = is_stared ? '收藏' : '取消收藏';
@@ -834,6 +862,7 @@ export default {
         id: did,
         type: 'doc',
       };
+      var is_starred = false;
       $.ajax({
         type: 'get',
         url: '/fs/star_condition',
@@ -847,7 +876,8 @@ export default {
             console.log("(post)/fs/star_condition" + " : " + res.status);
           }
           if (res.status === 0) {
-            return res.is_stared;
+            
+            is_starred = res.is_starred;;
           } else {
             switch (res.status) {
               case 1:
@@ -865,6 +895,7 @@ export default {
           that.alert_msg.error('连接失败');
         }
       });
+      return is_starred;
     },
 
     //多人实时同步编辑不好实现
@@ -875,6 +906,7 @@ export default {
       let msg = {
         id: did,
       };
+      var list = [];
       $.ajax({
         type: 'get',
         url: '/doc/online',
@@ -887,7 +919,8 @@ export default {
             console.log("(get)/doc/online" + " : " + res.status);
           }
           if (res.status === 0) {
-            return res.list;
+            
+            list = res.list;
           } else {
             switch (res.status) {
               case 1:
@@ -908,7 +941,18 @@ export default {
           that.alert_msg.error('连接失败');
         }
       });
+      return list;
     },
+
+    loading_done(){
+      var that = this;
+      setTimeout(function(){
+        that.is_loading = false;
+        setTimeout(function(){
+          $('.loading_bar').addClass('loading_bar_done');
+        }, 360);
+      }, 560);
+    }
   },
 }
 </script>
@@ -929,6 +973,7 @@ export default {
 >>>.ck.ck-toolbar{
   border:unset;
   border-bottom:solid 1px #ccc;
+  min-width:830px;
 }
 
 .editor-container {
@@ -937,6 +982,7 @@ export default {
   background-color: #fff;
   border-right:solid 2px hsl(0, 0%, 90%);
   padding:45px 0 50px;
+  min-width:800px;
 }
 
 #editor {
@@ -992,6 +1038,24 @@ export default {
 .el-aside {
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
+}
+
+.loading_bar{
+    position: fixed;
+    top:60px; /* 头部导航栏的高度 */
+    left:-6px; /* 为了掩饰圆角，但其实可以设置成方角的 */
+    width:calc(100vw + 8px);
+    transition: 0.1s opacity linear;
+    height:3px;
+    z-index:2001
+}
+
+.loading_bar_done{
+    opacity: 0;
+}
+
+>>>.el-progress-bar__inner{
+  background-color: hsl(219, 9%, 78%)
 }
 
 </style>
