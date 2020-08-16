@@ -22,9 +22,9 @@
                 <div style="height:50px;"></div>
                 <div class="can_not_choose" style="width:fit-content; margin:0 auto">
                     <el-radio-group v-model="share_type" @change="change_share_type">
-                        <el-radio-button :label="1">文档阅读分享</el-radio-button>
-                        <el-radio-button :label="2">文档评论分享</el-radio-button>
-                        <el-radio-button :label="3">文档编辑分享</el-radio-button>
+                        <el-radio-button :label="1" :disabled="read_link_disabled">文档阅读分享</el-radio-button>
+                        <el-radio-button :label="2" :disabled="comment_link_disabled">文档评论分享</el-radio-button>
+                        <el-radio-button :label="3" :disabled="write_link_disabled">文档编辑分享</el-radio-button>
                     </el-radio-group>
                 </div>
                 <div style="height:30px;"></div>
@@ -59,7 +59,10 @@ export default {
             share_type:1,
             write_url:'',
             comment_url:'',
-            read_url:''
+            read_url:'',
+            read_link_disabled: false,
+            comment_link_disabled: false,
+            write_link_disabled: false,
         }
     },
 
@@ -107,7 +110,7 @@ export default {
             flag = false;
             $.ajax({ 
                 type:'post',
-                url:'/fs/share?',
+                url:'/fs/share',
                 data: JSON.stringify({did: that.did, auth: 'write'}),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
@@ -123,7 +126,8 @@ export default {
                     else{
                         switch(res.status){
                             case 2:
-                                that.alert_msg.error('权限不足');
+                                that.write_link_disabled = true;
+                                flag = true;
                                 break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
@@ -158,7 +162,8 @@ export default {
                     else{
                         switch(res.status){
                             case 2:
-                                that.alert_msg.error('文档不存在');
+                                that.comment_link_disabled = true;
+                                flag = true;
                                 break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
@@ -194,7 +199,8 @@ export default {
                     else{
                         switch(res.status){
                             case 2:
-                                that.alert_msg.error('文档不存在');
+                                that.read_link_disabled = true;
+                                flag = true;
                                 break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
