@@ -14,12 +14,12 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input placeholder="请输入密码" v-model="form.password" show-password ref="pas" @keyup.enter.native="submit('form')" maxLength="20">
+                    <el-input placeholder="请输入密码" v-model="form.password" show-password ref="pas" maxLength="20" @keyup.enter.native="$refs.ver_code.focus()">
                         <i slot="prefix" class="el-input__icon iconfont icon-lock-fill"></i>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="ver_code">
-                    <el-input v-model="form.ver_code" placeholder="请输入验证码" ref="ver_code" maxLength="6" style="width:56%">
+                    <el-input v-model="form.ver_code" placeholder="请输入验证码" ref="ver_code" maxLength="6" style="width:56%" @keyup.enter.native="submit('form')">
                         <i slot="prefix" class="el-input__icon el-icon-magic-stick"></i>
                     </el-input>
                     <el-button :disabled="ver_code_disabled" style="width:40%; height:40px; float:right; letter-spacing:0; padding:0; text-indent:0; text-align:center" @click="get_ver_code">{{ver_code_disabled ? '重发 ('+ rest_time + ' s)' : '获取验证码'}}</el-button>

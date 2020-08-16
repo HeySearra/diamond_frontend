@@ -2,6 +2,7 @@
     <div class="template_display_block">
         <h1>{{title}}</h1>
         <el-divider></el-divider>
+        <div class="not_found" v-if="context=='my'&&!list.length">你还没有模板{{magic}}&nbsp;&nbsp;&nbsp;快从文档新建一个模板吧</div>
         <div class="template_area">
             <template-block
                 class="template_item"
@@ -42,7 +43,7 @@ export default {
     },
     data() {
         return {
-
+            magic:''
         }
     },
 
@@ -52,7 +53,8 @@ export default {
 
     methods:{
         init(){
-
+            let random = parseInt(Math.random()*10000);
+            this.magic = this.magic_word[random%this.magic_word.length];
         },
 
         open_info(id, name, type){
@@ -71,9 +73,10 @@ export default {
 @import url("../assets/dialog_style.css");
 
 h1{
-    font-size: 30px !important;
+    font-size: 23px !important;
     text-indent: 25px;
-    margin-bottom:5px !important;;
+    margin-bottom:-6px !important;
+    color:hsl(0, 0%, 39%);
 }
 
 .template_area{

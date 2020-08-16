@@ -8,7 +8,7 @@
             <h3>{{title}}</h3>
             <div class="content">
                 <div style="height:20px"></div>
-                <el-input v-model="name" :placeholder="placeholder" maxLength="60"></el-input>
+                <el-input ref="input" v-model="name" :placeholder="placeholder" maxLength="60" @keyup.enter.native="click_confirm()"></el-input>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dia_vis = false">取 消</el-button>
@@ -55,6 +55,10 @@ export default {
         }
         this.name = '';
         this.dia_vis = true;
+        var that = this;
+        setTimeout(function(){
+            that.$refs.input.focus();
+        }, 0);
     },
 
     open_for_rename(id, type, name){
@@ -72,6 +76,10 @@ export default {
         }
         this.name = name;
         this.dia_vis = true;
+        var that = this;
+        setTimeout(function(){
+            that.$refs.input.focus();
+        }, 0);
     },
 
     getCookie (name) {

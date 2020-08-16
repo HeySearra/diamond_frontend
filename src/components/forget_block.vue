@@ -4,7 +4,7 @@
             <h2><figure></figure></h2>
             <el-form :model="form" :rules="rules" ref="form" label-width="0">
                 <el-form-item prop="account">
-                    <el-input v-model="form.account" placeholder="请输入账号的邮箱" @keyup.enter.native="$refs.pas.focus()" maxLength="50">
+                    <el-input v-model="form.account" placeholder="请输入账号的邮箱" @keyup.enter.native="submit('form')" maxLength="50">
                         <i slot="prefix" class="el-input__icon el-icon-message"></i>
                     </el-input>
                 </el-form-item>

@@ -21,7 +21,7 @@
                             </el-upload>
                         </el-form-item>
                         <el-form-item label="昵称">
-                            <el-input v-model="form.name" clearable placeholder="请输入昵称" maxlength="64"></el-input>
+                            <el-input v-model="form.name" clearable placeholder="请输入昵称" maxlength="64" @keyup.enter.native="submit()"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>

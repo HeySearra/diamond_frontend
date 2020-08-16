@@ -21,7 +21,7 @@
                             </el-upload>
                         </el-form-item>
                         <el-form-item label="团队名称">
-                            <el-input v-model="form.name" clearable placeholder="请输入团队名称" maxlength="64"></el-input>
+                            <el-input ref="name" v-model="form.name" clearable placeholder="请输入团队名称" maxlength="64" @keyup.enter.native="$refs.intro.focus()"></el-input>
                         </el-form-item>
                         <el-form-item label="团队介绍">
                             <el-input
@@ -31,6 +31,8 @@
                                 v-model="form.intro"
                                 resize="none"
                                 maxlength="300"
+                                ref="intro"
+                                @keyup.enter.native="submit()"
                                 show-word-limit>
                             </el-input>
                         </el-form-item>
