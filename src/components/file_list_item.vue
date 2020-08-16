@@ -37,7 +37,7 @@
                         <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                         <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link">复制</el-dropdown-item>
                         <el-dropdown-item command="rename" v-if="(context=='file_system'||context=='team')&&!is_link">重命名</el-dropdown-item>
-                        <el-dropdown-item command="share" v-if="(context=='file_system'||context=='team')&&!is_link">分享</el-dropdown-item>
+                        <el-dropdown-item command="share" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">分享</el-dropdown-item>
                         <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
                         <el-dropdown-item command="remove_link" class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
                         <el-dropdown-item command="recover" v-if="context=='recycle'" @click="click_to_recover">恢复</el-dropdown-item>

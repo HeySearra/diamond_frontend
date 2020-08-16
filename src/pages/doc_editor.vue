@@ -20,15 +20,15 @@
           <!-- Editor Container -->
           <input class="editor_title" v-model="file_name" maxlength="60"/>
           <div id="editor">
-            
+
           </div>
         </el-col>
         <el-col :span="6" id="comment-sidebar"><br></el-col>
       </el-row>
     </div>
-    <el-progress 
-        :percentage="loading_percentage" 
-        class="loading_bar" 
+    <el-progress
+        :percentage="loading_percentage"
+        class="loading_bar"
         :show-text="false">
     </el-progress>
   </el-main>
@@ -173,7 +173,7 @@ class CommentsAdapter {
         console.log('Comment added', data);
         let msg = {
           did: pageData.did,
-          uid: pageData.userId,
+          // uid: pageData.userId,
           threadId: data.threadId,
           commentId: data.commentId,
           content: data.content,
@@ -223,7 +223,7 @@ class CommentsAdapter {
         console.log('Comment updated', data);
         let msg = {
           did: pageData.did,
-          uid: pageData.userId,
+          // uid: pageData.userId,
           threadId: data.threadId,
           commentId: data.commentId,
           content: data.content
@@ -269,7 +269,7 @@ class CommentsAdapter {
         console.log('Comment removed', data);
         let msg = {
           did: pageData.did,
-          uid: pageData.userId,
+          // uid: pageData.userId,
           threadId: data.threadId,
           commentId: data.commentId,
         };
@@ -319,11 +319,8 @@ class CommentsAdapter {
         };
         $.ajax({
           type: 'get',
-          url: '/doc/comment/get_comments_of_thread',
-          data: JSON.stringify(msg),
+          url: '/doc/comment/get_comments_of_thread?did=' + pageData.did + '&threadId=' + data.threadId,
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-          processData: false,
-          contentType: false,
           async: false,
           success: function (res) {
             if (console_debug) {
@@ -495,7 +492,7 @@ export default {
         },
         commentsOnly: pageData.commentsOnly,
         autosave: {
-          waitingTime: 5000,
+          // waitingTime: 5000,
           save(editor) {
             that.updateDocContent(editor.getData());
             //console.log(editor.model.document.getRootNames());
@@ -525,17 +522,13 @@ export default {
     },
     getDocAuth() {
       var that = this;
-      const did = this.$route.params.did;
       let msg = {
-        did: did
+        did: pageData.did
       };
       $.ajax({
         type: 'get',
-        url: '/doc/auth',
-        data: JSON.stringify(msg),
+        url: '/doc/auth?did=' + pageData.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        processData: false,
-        contentType: false,
         // async: false,
         success: function (res) {
           if (that.console_debug) {
@@ -552,7 +545,7 @@ export default {
               default:
                 break;
             }
-            
+
           } else {
             switch (res.status) {
               case 1:
@@ -578,20 +571,15 @@ export default {
     getInitialDocContent() {
       //通过路由获取文章id
       var that = this;
-      var did = this.$route.params.did;
-      console.log(did);
       var msg = {
-        did: did,
+        did: pageData.did,
       };
       console.log(msg);
       console.log(JSON.stringify(msg));
       $.ajax({
         type: 'get',
-        url: '/doc/all',
-        data: JSON.stringify(msg),
+        url: '/doc/all?did=' + pageData.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        processData: false,
-        contentType: false,
         // async: false,
         success: function (res) {
           if (that.console_debug) {
@@ -631,9 +619,8 @@ export default {
     },
     updateDocContent(content) {
       var that = this;
-      const did = this.$route.params.did;
       let msg = {
-        did: did,
+        did: pageData.did,
         content: content,
         name: that.file_name,
       };
@@ -683,7 +670,7 @@ export default {
     //将文档内容存储为模版
     saveAsTemplate() {
       var that = this;
-      const did = this.$route.params.did;
+
       let msg = {
         name: that.file_name,
         content: content,
@@ -732,17 +719,13 @@ export default {
     getAllCommentedUsers() {
       console.log('Getting all commented users');
       var that = this;
-      const did = this.$route.params.did;
       let msg = {
-        did: did
+        did: pageData.did
       };
       $.ajax({
         type: 'get',
-        url: '/doc/comment/get_users',
-        data: JSON.stringify(msg),
+        url: '/doc/comment/get_users?did=' + pageData.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        processData: false,
-        contentType: false,
         // async: false,
         success: function (res) {
           if (that.console_debug) {
@@ -818,9 +801,8 @@ export default {
     //is_stared: true：请求收藏，false：请求取消收藏
     starTheDoc(is_stared) {
       var that = this;
-      const did = this.$route.params.did;
       let msg = {
-        id: did,
+        id: pageData.did,
         type: 'doc',
         is_stared: is_stared
       };
@@ -836,7 +818,7 @@ export default {
             console.log("(post)/fs/star" + " : " + res.status);
           }
           if (res.status === 0) {
-            
+
             //提示收藏成功/收藏图标变化
           } else {
             const op = is_stared ? '收藏' : '取消收藏';
@@ -862,26 +844,22 @@ export default {
     },
     getStarStatus() {
       var that = this;
-      const did = this.$route.params.did;
       let msg = {
-        id: did,
+        id: pageData.did,
         type: 'doc',
       };
       var is_starred = false;
       $.ajax({
         type: 'get',
-        url: '/fs/star_condition',
+        url: '/fs/star_condition?id=' + pageData.did + "&type=doc",
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        data: JSON.stringify(msg),
-        processData: false,
-        contentType: false,
         async: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(post)/fs/star_condition" + " : " + res.status);
           }
           if (res.status === 0) {
-            
+
             is_starred = res.is_starred;;
           } else {
             switch (res.status) {
@@ -907,24 +885,20 @@ export default {
     //此函数可以用来获取当前正在浏览这篇文章的用户
     getCurrentEditingUser() {
       var that = this;
-      const did = this.$route.params.did;
       let msg = {
-        id: did,
+        id: pageData.did,
       };
       var list = [];
       $.ajax({
         type: 'get',
-        url: '/doc/online',
+        url: '/doc/online?id=' + pageData.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        data: JSON.stringify(msg),
-        processData: false,
-        contentType: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(get)/doc/online" + " : " + res.status);
           }
           if (res.status === 0) {
-            
+
             list = res.list;
           } else {
             switch (res.status) {
@@ -959,6 +933,12 @@ export default {
       }, 560);
     }
   },
+  /*beforeDestroy() {
+    //this.updateDocContent(window.editor.getData());
+  },
+  beforeRouteLeave() {
+    this.updateDocContent(window.editor.getData());
+  }*/
 }
 </script>
 
