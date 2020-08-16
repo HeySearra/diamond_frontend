@@ -10,7 +10,26 @@
     <div v-loading="is_loading">
       <el-row style="z-index: 999">
         <!-- Toolbar Container -->
-        <div id="toolbar-container" style="min-height:38.67px"></div>
+        <div class="new_toobar">
+          <div class="append_tools can_not_choose">
+            <el-tooltip class="item" effect="dark" content="保存" placement="bottom">
+              <span class="icon iconfont">&#xe82a;</span>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="保存为模板" placement="bottom">
+              <span class="icon iconfont">&#xe672;</span>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="取消收藏" placement="bottom">
+              <span class="icon iconfont" v-if="!is_starred">&#xe65c;</span>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
+              <span class="icon iconfont" v-if="is_starred">&#xe65e;</span>
+            </el-tooltip>
+          </div>
+          <div id="toolbar-container" style="min-height:38.67px;">
+            
+          </div>
+        </div>
+        
       </el-row>
       <el-row>
         <!--el-col :span="5">
@@ -402,7 +421,8 @@ export default {
       did:'',
       article:[],
       loading_percentage:0,
-      is_loading: true
+      is_loading: true,
+      is_starred: true
     }
   },
 
@@ -570,6 +590,8 @@ export default {
       });
     },
     getInitialDocContent() {
+      this.initCKEditor();
+      return;
       //通过路由获取文章id
       var that = this;
       var msg = {
@@ -958,7 +980,7 @@ export default {
 
 >>>.ck.ck-toolbar{
   border:unset;
-  border-bottom:solid 1px #ccc;
+  
   min-width:830px;
 }
 
@@ -1065,6 +1087,32 @@ export default {
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
+}
+
+.new_toobar{
+  border-bottom:solid 1px #ccc;
+}
+
+.append_tools{
+  position: absolute;
+  top: 4px;
+  left:9px;
+}
+
+.append_tools span{
+  font-size: 20px;
+  padding: 4px;
+  margin: 0;
+  display:inline-block;
+  border-radius: 2px;
+}
+
+.append_tools span:hover{
+  background-color: var(--ck-color-button-default-hover-background);
+}
+
+#toolbar-container{
+  margin-left:105px;
 }
 
 </style>
