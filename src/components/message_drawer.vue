@@ -6,7 +6,9 @@
     class="message_box">
         <div class="el-drawer__header" style="height:50px;padding:5px 20px 0;line-height:50px;margin:0">
             <div class="el-drawer__title can_not_choose">消息中心</div>
-            <div class="mark-read can_not_choose" @click="mark_all_read" v-ripple>标记全部已读</div>
+            <transition name="el-fade-in-linear">
+                <div class="mark-read can_not_choose" @click="mark_all_read" v-show="unread_count" v-ripple>标记全部已读</div>
+            </transition>
             <!-- <div class="close-icon"><span v-if="type!='comment'" class="icon iconfont">&#xe79b;</span></div> -->
         </div>
         <el-divider></el-divider>
@@ -20,7 +22,9 @@
                 @refresh_count="refresh_count"
                 v-ripple>
             </message-item>
-            <p v-if="is_loading" class="not_found">加载中 <i class="el-icon-loading"></i></p>
+            <transition name="el-fade-in-linear">
+                <p v-show="is_loading" class="not_found">加载中 <i class="el-icon-loading"></i></p>
+            </transition>
             <p v-if="is_final&&list.length==0" class="not_found">你没有收到任何消息</p>
         </div>
 
@@ -38,6 +42,7 @@ export default {
             list: [],
             is_loading:false,
             is_final: false,
+            unread_count:0
         }
     },
     props: {
@@ -54,6 +59,7 @@ export default {
 
         apply_for_info(){
             var that = this;
+            this.apply_for_message();
             that.page++;
             $.ajax({
                 type:'get',
@@ -67,9 +73,7 @@ export default {
                     if(res.status == 0){
                         that.amount = res.amount;
                         let len = that.list.length;
-                        for(let i = 0; i < res.list.length; i++){
-                            that.list.push(res.list[i]);
-                        }
+                        that.list.concat(res.list);
                         if(that.list.length >= res.amount){
                             that.is_final = true;
                         }
@@ -106,13 +110,39 @@ export default {
             });
         },
 
+        apply_for_message(){
+            let url = '/msg/unread_count';
+            var that = this;
+            $.ajax({
+                type:'get',
+                url:url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                processData: false,
+                contentType: false,
+                success:function (res){
+                    if(that.console_debug){
+                        console.log(url + '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        that.unread_count = res.count;
+                    }
+                    else{
+                        that.unread_count = 0;
+                    }
+                },
+                error:function(){
+                    that.unread_count = 0;
+                }
+            });
+        },
+
         open() {
             this.list = [];
             this.is_loading = false;
             this.is_final = false;
-            this.drawer = true;
             this.page = 0;
             this.apply_for_info();
+            this.drawer = true;
         },
 
         load(){
@@ -145,6 +175,8 @@ export default {
                                 }
                             }, 0);
                         }
+                        that.unread_count = 0;
+                        that.apply_for_message();
                         that.alert_msg.success('已全部标记为已读');
                         that.$emit('refresh_message_count');
                     }
