@@ -96,7 +96,7 @@ export default {
             this.page++;
             $.ajax({
                 type:'get',
-                url:"/workbench/share?page=" + that.page + "&each=" + that.each,
+                url:"/workbench/share",
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
