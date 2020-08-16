@@ -213,8 +213,9 @@ export default {
                     key:'最近编辑时间',
                     value:res.edit_dt
                   });
-                  
-                  that.is_loading = false;
+                  setTimeout(function(){
+                    that.is_loading = false;
+                  }, 180);
               }
               else{
                   switch(res.status){

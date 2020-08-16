@@ -43,7 +43,7 @@
         position: relative;
         width:750px;
         height:600px;
-        border:1px solid
+        /* border:1px solid #ccc; */
     }
 
     .user_list{
@@ -53,7 +53,8 @@
         height:100%;
         width:200px;
         overflow-y:auto;
-        border:1px solid
+        border:1px solid #ccc;
+        border-right:unset;
     }
 
     .chatting_area{
@@ -62,7 +63,7 @@
         left:200px;
         height:100%;
         width: calc(100% - 200px);
-        border:1px solid
+        border:1px solid #ccc;
     }
 
     .bubble_window{
@@ -77,20 +78,29 @@
 
     .input_area{
         position: absolute;
-        top:470px;
+        top:469px;
         left:0;
         height:calc(100% - 470px);
         width: 100%;
+        border-top:1px solid #ccc;
+        border-bottom:1px solid #ccc;
         overflow: hidden;
     }
 
     textarea{
-        font-size:17px;
+        font-size:16px;
         line-height:23px;
-        padding: 10px;
+        padding: 10px 20px;
         width:calc(100% - 20px);
         height:calc(100% - 20px);
         overflow-y:auto;
+        font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif !important;
+        color:#343434;
+        border:unset;
+    }
+
+    textarea:focus{
+        outline: none;
     }
 
     .button_area{
