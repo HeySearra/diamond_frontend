@@ -106,12 +106,12 @@ export default {
             flag = false;
             $.ajax({ 
                 type:'get',
-                url:'/doc/share?did=' + that.did + '&auth=write',
+                url:'/fs/share?did=' + that.did + '&auth=write',
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
-                        console.log('/doc/share?did=' + that.did + '&auth=write' +  '：' + res.status);
+                        console.log('/fs/share?did=' + that.did + '&auth=write' +  '：' + res.status);
                     }
                     if(res.status == 0){
                         that.write_url = '/doc/edit?dk=' + res.key;
@@ -140,12 +140,12 @@ export default {
             flag = false;
             $.ajax({ 
                 type:'get',
-                url:'/doc/share?did=' + that.did + '&auth=comment',
+                url:'/fs/share?did=' + that.did + '&auth=comment',
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
-                        console.log('/doc/share?did=' + that.did + '&auth=comment' +  '：' + res.status);
+                        console.log('/fs/share?did=' + that.did + '&auth=comment' +  '：' + res.status);
                     }
                     if(res.status == 0){
                         that.comment_url = '/doc/comment?dk=' + res.key;
@@ -174,12 +174,12 @@ export default {
             flag = false;
             $.ajax({ 
                 type:'get',
-                url:'/doc/share?did=' + that.did + '&auth=read',
+                url:'/fs/share?did=' + that.did + '&auth=read',
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
-                        console.log('/doc/share?did=' + that.did + '&auth=read' +  '：' + res.status);
+                        console.log('/fs/share?did=' + that.did + '&auth=read' +  '：' + res.status);
                     }
                     if(res.status == 0){
                         that.read_url = '/doc/read?dk=' + res.key;
