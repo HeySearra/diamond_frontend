@@ -167,7 +167,7 @@ class CommentsAdapter {
           uid: pageData.userId,
           threadId: data.threadId,
           commentId: data.commentId,
-          content: data.content
+          content: data.content,
         };
         $.ajax({
           type: 'post',
@@ -190,7 +190,7 @@ class CommentsAdapter {
                   alert_msg.error('上传评论失败: 您的权限不足或还没有登录');
                   break;
                 case 3:
-                  alert_msg.error('上传评论失败: 文档不存在');
+                  alert_msg.error('上传评论失败: 文档或评论不存在');
                   break;
                 default:
                   alert_msg.error('未知错误');
@@ -212,7 +212,7 @@ class CommentsAdapter {
 
       updateComment(data) {
         console.log('Comment updated', data);
-        /*let msg = {
+        let msg = {
           did: pageData.did,
           uid: pageData.userId,
           threadId: data.threadId,
@@ -234,13 +234,13 @@ class CommentsAdapter {
             if (res.status !== 0) {
               switch (res.status) {
                 case 1:
-                  alert_box.msg('上传评论失败', '键值错误');
+                  alert_msg.error('更新评论失败: 键值错误');
                   break;
                 case 2:
-                  alert_box.msg('上传评论失败', '您的权限不足或还没有登录');
+                  alert_msg.error('更新评论失败: 您的权限不足或还没有登录');
                   break;
                 case 3:
-                  alert_box.msg('上传评论失败', '文档不存在');
+                  alert_msg.error('更新评论失败: 文档或评论不存在');
                   break;
                 default:
                   alert_msg.error('未知错误');
@@ -250,7 +250,7 @@ class CommentsAdapter {
           error: function () {
             alert_msg.error('连接失败');
           }
-        });*/
+        });
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         return Promise.resolve();
@@ -258,7 +258,7 @@ class CommentsAdapter {
 
       removeComment(data) {
         console.log('Comment removed', data);
-        /*let msg = {
+        let msg = {
           did: pageData.did,
           uid: pageData.userId,
           threadId: data.threadId,
@@ -279,13 +279,13 @@ class CommentsAdapter {
             if (res.status !== 0) {
               switch (res.status) {
                 case 1:
-                  alert_box.msg('上传评论失败', '键值错误');
+                  alert_msg.error('删除评论失败: 键值错误');
                   break;
                 case 2:
-                  alert_box.msg('上传评论失败', '您的权限不足或还没有登录');
+                  alert_msg.error('删除评论失败: 您的权限不足或还没有登录');
                   break;
                 case 3:
-                  alert_box.msg('上传评论失败', '文档不存在');
+                  alert_msg.error('删除评论失败: 文档不存在');
                   break;
                 default:
                   alert_msg.error('未知错误');
@@ -295,7 +295,7 @@ class CommentsAdapter {
           error: function () {
             alert_msg.error('连接失败');
           }
-        });*/
+        });
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         return Promise.resolve();
@@ -321,13 +321,10 @@ class CommentsAdapter {
               console.log("(get)/doc/comment/get_comments_of_thread" + " : " + res.status);
             }
             if (res.status === 0) {
-              console.log(res);
-              console.log(res.list);
               for (var it of res.list) {
                 it.createdAt = new Date(it.createdAt);
               }
-              console.log(res.list);
-              alert_msg.success('获取评论成功');
+              //alert_msg.success('获取评论成功');
               thread_comments = res.list;
             } else {
               switch (res.status) {
@@ -338,7 +335,7 @@ class CommentsAdapter {
                   alert_msg.error('加载评论失败: 您的权限不足或还没有登录');
                   break;
                 case 3:
-                  alert_msg.error('加载评论失败: 文档不存在');
+                  alert_msg.error('加载评论失败: 文档或评论不存在');
                   break;
                 default:
                   alert_msg.error('未知错误');
@@ -349,8 +346,6 @@ class CommentsAdapter {
             alert_msg.error('连接失败');
           }
         });
-
-        console.log(thread_comments);
         // data是thread的编号
         // Write a request to your database here. The returned `Promise`
         // should resolve with the comment thread data.
@@ -360,10 +355,6 @@ class CommentsAdapter {
           isFromAdapter: true
         });
       },
-
-      getCommentsOfThread(threadId) {
-
-      }
     };
   }
 }
@@ -388,6 +379,7 @@ export default {
     pageData.userId = 'user-1'
     // this.getDocAuth();
     this.getCurrentUserId();
+    this.getAllCommentedUsers();
     this.getInitialDocContent();
     this.initCKEditor();
     // console.log(this.file_name);
@@ -483,7 +475,7 @@ export default {
         },
         commentsOnly: pageData.commentsOnly,
         autosave: {
-          //waitingTime: 5000,
+          waitingTime: 5000,
           save(editor) {
             that.updateDocContent(editor.getData());
             //console.log(editor.model.document.getRootNames());
@@ -711,6 +703,7 @@ export default {
       })
     },
     getAllCommentedUsers() {
+      console.log('Getting all commented users');
       var that = this;
       const did = this.$route.params.did;
       let msg = {
@@ -730,6 +723,7 @@ export default {
           }
           if (res.status === 0) {
             pageData.users = res.list;
+            console.log(pageData.users);
           } else {
             switch (res.status) {
               case 1:
