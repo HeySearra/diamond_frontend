@@ -936,7 +936,7 @@ export default {
   overflow: overlay;
   background-color: #fff;
   border-right:solid 2px hsl(0, 0%, 90%);
-  padding-top:45px;
+  padding:45px 0 50px;
 }
 
 #editor {
@@ -968,6 +968,7 @@ export default {
 #editor>>>p{
   margin: 10px 0;
   color:hsl(0, 0%, 23%) !important;
+  font-size:18px;
 }
 
 .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused{
