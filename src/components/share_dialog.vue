@@ -20,7 +20,7 @@
                     </el-switch>
                 </div>
                 <div style="height:50px;"></div>
-                <div style="width:fit-content; margin:0 auto">
+                <div class="can_not_choose" style="width:fit-content; margin:0 auto">
                     <el-radio-group v-model="share_type" @change="change_share_type">
                         <el-radio-button :label="1">文档阅读分享</el-radio-button>
                         <el-radio-button :label="2">文档评论分享</el-radio-button>
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dia_vis=false">确 定</el-button>
+                <el-button type="primary" @click="dia_vis=false">关 闭</el-button>
             </span>
         </el-dialog>
     </div>
@@ -54,7 +54,7 @@ export default {
             title:'分享',
             dia_vis:false,
             did:'',
-            url:'123',
+            url:'',
             sharable:true,
             share_type:1,
             write_url:'',
@@ -68,7 +68,8 @@ export default {
             this.did = did;
             this.title = '分享 ' + name;
             var flag = false;
-
+            
+            this.url = '';
             var that = this;
             $.ajax({ 
                 type:'get',
@@ -116,7 +117,6 @@ export default {
                     }
                     if(res.status == 0){
                         that.write_url = that.$host + '/doc/edit?dk=' + res.key;
-                        that.url = that.write_url;
                         flag = true;
                     }
                     else{
@@ -187,7 +187,9 @@ export default {
                     }
                     if(res.status == 0){
                         that.read_url = that.$host + '/doc/read?dk=' + res.key;
-                        that.url = that.read_url;
+                        if(that.sharable){
+                            that.url = that.write_url;
+                        }
                         flag = true;
                     }
                     else{
@@ -220,6 +222,9 @@ export default {
         },
 
         change_share_type(value){
+            if(!this.sharable){
+                return;
+            }
             switch(value){
                 case 1:
                     this.url = this.read_url;
@@ -253,6 +258,22 @@ export default {
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
+                        if(value){
+                            switch(that.share_type){
+                                case 1:
+                                    that.url = that.read_url;
+                                    break;
+                                case 2:
+                                    that.url = that.comment_url;
+                                    break;
+                                case 3:
+                                    that.url = that.write_url;
+                                    break;
+                            }
+                        }
+                        else{
+                            that.url = '';
+                        }
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
@@ -291,6 +312,11 @@ export default {
 .content .el-button{
     width:23%;
     float:right;
+}
+
+>>>.el-radio-group label{
+    outline:none !important;
+    box-shadow: unset !important;
 }
 
 @media (max-width: 1200px){
