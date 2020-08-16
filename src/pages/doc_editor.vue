@@ -19,7 +19,7 @@
         <!-- Editor Container -->
         <input class="editor_title" v-model="file_name" maxlength="60"/>
         <div id="editor">
-          
+
         </div>
       </el-col>
       <el-col :span="6" id="comment-sidebar"><br></el-col>
@@ -505,9 +505,9 @@ export default {
     },
     getDocAuth() {
       var that = this;
-      const did = this.$route.params.did;
+      // const did = this.$route.params.did;
       let msg = {
-        did: did
+        did: pageData.did
       };
       $.ajax({
         type: 'get',
@@ -557,10 +557,8 @@ export default {
     getInitialDocContent() {
       //通过路由获取文章id
       var that = this;
-      var did = this.$route.params.did;
-      console.log(did);
       var msg = {
-        did: did,
+        did: pageData.did,
       };
       console.log(msg);
       console.log(JSON.stringify(msg));
@@ -606,9 +604,8 @@ export default {
     },
     updateDocContent(content) {
       var that = this;
-      const did = this.$route.params.did;
       let msg = {
-        did: did,
+        did: pageData.did,
         content: content,
         name: that.file_name,
       };
@@ -658,7 +655,7 @@ export default {
     //将文档内容存储为模版
     saveAsTemplate() {
       var that = this;
-      const did = this.$route.params.did;
+
       let msg = {
         name: that.file_name,
         content: content,
@@ -707,9 +704,9 @@ export default {
     getAllCommentedUsers() {
       console.log('Getting all commented users');
       var that = this;
-      const did = this.$route.params.did;
+      // const did = this.$route.params.did;
       let msg = {
-        did: did
+        did: pageData.did
       };
       $.ajax({
         type: 'get',
@@ -786,9 +783,9 @@ export default {
     //is_stared: true：请求收藏，false：请求取消收藏
     starTheDoc(is_stared) {
       var that = this;
-      const did = this.$route.params.did;
+      // const did = this.$route.params.did;
       let msg = {
-        id: did,
+        id: pageData.did,
         type: 'doc',
         is_stared: is_stared
       };
@@ -829,9 +826,9 @@ export default {
     },
     getStarStatus() {
       var that = this;
-      const did = this.$route.params.did;
+      // const did = this.$route.params.did;
       let msg = {
-        id: did,
+        id: pageData.did,
         type: 'doc',
       };
       $.ajax({
@@ -871,9 +868,9 @@ export default {
     //此函数可以用来获取当前正在浏览这篇文章的用户
     getCurrentEditingUser() {
       var that = this;
-      const did = this.$route.params.did;
+      // const did = this.$route.params.did;
       let msg = {
-        id: did,
+        id: pageData.did,
       };
       $.ajax({
         type: 'get',
@@ -910,6 +907,12 @@ export default {
       });
     },
   },
+  /*beforeDestroy() {
+    //this.updateDocContent(window.editor.getData());
+  },
+  beforeRouteLeave() {
+    this.updateDocContent(window.editor.getData());
+  }*/
 }
 </script>
 

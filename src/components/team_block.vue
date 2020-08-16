@@ -9,7 +9,7 @@
             </div>
             <div class="name">{{tname}}</div>
             <div class="more_menu" :class="focus?'more_menu_focus':''">
-                <el-dropdown trigger="click" 
+                <el-dropdown trigger="click"
                     @visible-change="vis_change"
                     @command="click_dropdown_item">
                     <span class="el-dropdown-link">
@@ -107,13 +107,13 @@ export default {
             var that = this;
             this.alert_box.confirm_msg('警告', '确定退出团队 ' + that.team_name + ' 吗？', function(){
                 let url = '/team/quit'
-                $.ajax({ 
+                $.ajax({
                     type:'post',
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify({tid:that.tid}),
-                    async:false, 
-                    success:function (res){ 
+                    async:false,
+                    success:function (res){
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
@@ -135,7 +135,7 @@ export default {
                                 default:
                                     that.alert_msg.error('发生了未知错误');
                             }
-                            
+
                         }
                     },
                     error:function(res){
@@ -149,13 +149,13 @@ export default {
             var that = this;
             this.alert_box.confirm_msg('警告', '确定解散团队 ' + that.tname + ' 吗？', function(){
                 let url = '/team/delete'
-                $.ajax({ 
+                $.ajax({
                     type:'post',
                     url: url,
                     headers: {'X-CSRFToken': that.getCookie('csrftoken')},
                     data: JSON.stringify({tid:that.tid}),
-                    async:false, 
-                    success:function (res){ 
+                    async:false,
+                    success:function (res){
                         if(that.console_debug){
                             console.log(url +  '：' + res.status);
                         }
@@ -180,7 +180,7 @@ export default {
                                 default:
                                     that.alert_msg.error('发生了未知错误');
                             }
-                            
+
                         }
                     },
                     error:function(res){
@@ -195,12 +195,11 @@ export default {
         open_team_info(){
             let url = '/team/info?tid=' + this.tid;
             var that = this;
-            $.ajax({ 
-                type:'get',
+            $.ajax({
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async:false, 
-                success:function (res){ 
+                async:false,
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -239,7 +238,7 @@ export default {
                             default:
                                 that.alert_msg.error('发生了未知错误');
                         }
-                        
+
                     }
                 },
                 error:function(res){
@@ -251,12 +250,12 @@ export default {
         open(){
             let url = '/fs/team/root?tid=' + this.tid;
             var that = this;
-            $.ajax({ 
+            $.ajax({
                 type:'get',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async:false, 
-                success:function (res){ 
+                async:false,
+                success:function (res){
                     if(that.console_debug){
                         console.log(url +  '：' + res.status);
                     }
@@ -271,7 +270,7 @@ export default {
                             default:
                                 that.alert_msg.error('发生了未知错误');
                         }
-                        
+
                     }
                 },
                 error:function(res){
