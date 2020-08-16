@@ -590,8 +590,6 @@ export default {
       });
     },
     getInitialDocContent() {
-      this.initCKEditor();
-      return;
       //通过路由获取文章id
       var that = this;
       var msg = {
