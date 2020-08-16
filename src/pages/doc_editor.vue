@@ -22,6 +22,7 @@
           <div id="editor">
 
           </div>
+          <div class="editor_bottom"><span></span></div>
         </el-col>
         <el-col :span="6" id="comment-sidebar"><br></el-col>
       </el-row>
@@ -973,11 +974,14 @@ export default {
 #editor {
   /* height: 95%; */
   /* margin-top: 1%; */
-  padding: 1.5em 7.5em;
+  padding: 1.5em 2em;
   overflow:unset !important;
   height:fit-content !important;
   border:unset !important;
   color:hsl(0, 0%, 23%) !important;
+  border-bottom:solid 1px #dedede !important;
+  min-height:600px;
+  margin:0 6% 69px
 }
 
 .editor_title{
@@ -1045,6 +1049,22 @@ export default {
 
 .el-main>>>.el-loading-mask{
     height: calc(100vh - 56px) !important;
+}
+
+.editor_bottom{
+  text-align: center;
+  margin-top:-60px;
+  opacity: 0.3;
+}
+
+.editor_bottom span{
+  display: inline-block;
+  background: url('../assets/logo.png');
+  width:100px;
+  height:100px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 </style>
