@@ -17,7 +17,9 @@
       </el-col-->
       <el-col class="editor-container" :span="18">
         <!-- Editor Container -->
+        <input class="editor_title" v-model="file_name" maxlength="60"/>
         <div id="editor">
+          
         </div>
       </el-col>
       <el-col :span="6" id="comment-sidebar"><br></el-col>
@@ -389,7 +391,7 @@ export default {
     return {
       Editor: null,//editor instance
       file_name: '',
-      did:''
+      did:'',
     }
   },
 
@@ -924,13 +926,52 @@ export default {
   margin-block-end: 0.5em !important;
 }
 
+>>>.ck.ck-toolbar{
+  border:unset;
+  border-bottom:solid 1px #ccc;
+}
+
 .editor-container {
-  height: 90vh;
+  height: calc(100vh - 90px);;
+  overflow: overlay;
+  background-color: #fff;
+  border-right:solid 2px hsl(0, 0%, 90%);
+  padding-top:45px;
 }
 
 #editor {
-  height: 95%;
-  margin-top: 1%;
+  /* height: 95%; */
+  /* margin-top: 1%; */
+  padding: 1.5em 7.5em;
+  overflow:unset !important;
+  height:fit-content !important;
+  border:unset !important;
+  color:hsl(0, 0%, 23%) !important;
+}
+
+.editor_title{
+  border:unset;
+  font-size:30px;
+  font-weight: bold;
+  margin:1em auto 0;
+  width:83%;
+  padding:.6em .6em;
+  border-bottom: solid 1px #dedede;
+  display:block;
+  color:hsl(0, 0%, 23%);
+}
+
+.editor_title:focus{
+  outline: none;
+}
+
+#editor>>>p{
+  margin: 10px 0;
+  color:hsl(0, 0%, 23%) !important;
+}
+
+.ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused{
+  box-shadow: none;
 }
 
 #comment-sidebar {
