@@ -8,7 +8,8 @@
             :drage="false"
             :out_list="list"
             @change_view="change_view"
-            @open_info="open_info">
+            @open_info="open_info"
+            @share_item="share_item">
         </component>
     </div>
 </template>
@@ -99,6 +100,10 @@ export default {
                     that.alert_msg.error('连接失败');
                 }
             });
+        },
+        
+        share_item(did, name){
+            this.$emit("share_item", did, name);
         },
     }
 }

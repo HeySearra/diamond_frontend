@@ -8,6 +8,7 @@
             :out_list="list"
             @change_view="change_view"
             @open_info="open_info"
+            @share_item="share_item"
             ref="file_system_component">
         </component>
         <div style="height:50px"></div>
@@ -131,6 +132,9 @@ export default {
                     that.alert_msg.error('连接失败');
                 }
             });
+        },
+        share_item(did, name){
+            this.$emit("share_item", did, name);
         },
     }
 }

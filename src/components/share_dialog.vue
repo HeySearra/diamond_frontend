@@ -68,6 +68,7 @@ export default {
 
     methods:{
         open(did, name){
+            console.log("f4i43tujrgv");
             this.did = did;
             this.title = '分享 ' + name;
             var flag = false;
