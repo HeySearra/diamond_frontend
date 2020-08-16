@@ -50,6 +50,7 @@ export default {
     },
 
     methods:{
+        //起始文件夹，～目标文件类型，目标文件id，目标文件名
         open(fid, type, id, name, op_type){
             this.type = type;
             this.id = id;
@@ -82,7 +83,7 @@ export default {
                 type:'get',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async:false, 
+                async:false,
                 success:function (res){
                     if(that.console_debug){
                         console.log(url+ " : " +res.status);
@@ -119,7 +120,7 @@ export default {
                 type:'get',
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async:false, 
+                async:false,
                 success:function (res){
                     if(that.console_debug){
                         console.log(url+ " : " +res.status);
@@ -182,7 +183,7 @@ export default {
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify({id:this.id, type:this.type, pfid:this.fid}),
-                async:false, 
+                async:false,
                 success:function (res){
                     if(that.console_debug){
                         console.log(url+ " : " +res.status);
@@ -246,7 +247,7 @@ export default {
                 url: url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify({id:this.id, type:this.type, pfid:this.fid}),
-                async:false, 
+                async:false,
                 success:function (res){
                     if(that.console_debug){
                         console.log(url+ " : " +res.status);
@@ -300,6 +301,6 @@ export default {
 }
 
 @media (max-width: 1200px){
-    
+
 }
 </style>

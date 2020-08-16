@@ -8,7 +8,7 @@
                 class="template_item"
                 v-for="item in list"
                 :key="item.tid"
-                :name="item.name"
+                :name="item.title"
                 :tid="item.tid"
                 :src="item.src"
                 :context="context"
