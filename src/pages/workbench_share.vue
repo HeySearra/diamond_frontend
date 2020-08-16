@@ -1,6 +1,6 @@
 <template>
     <div class="workbench_share" v-loading="is_loading">
-        <component 
+        <component
             :is="view_type=='block'?'file-system-block':'file-system-list'"
             type="from_out"
             context="workbench"
@@ -71,13 +71,13 @@ export default {
             this.view_type = this.view_type_manager.get();
             this.get_share_item_list();
         },
-        
+
         getCookie (name) {
             var value = '; ' + document.cookie
             var parts = value.split('; ' + name + '=')
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
-        
+
         change_view(){
             this.view_type = this.view_type=='block' ? 'list' : 'block';
             this.view_type_manager.set(this.view_type);
@@ -115,6 +115,7 @@ export default {
                                 create_time: res.list[i].create_dt,
                                 creator: res.list[i].cname,
                                 recent_edit_time: res.list[i].edit_dt,
+                                view_time: res.list[i].view_dt,
                             })
                         }
                         that.$refs.file_system_component.init();
