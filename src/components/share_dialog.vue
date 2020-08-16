@@ -9,7 +9,7 @@
             <h3>{{title}}</h3>
             <div class="content">
                 <div style="height:20px;"></div>
-                <div style="padding:15px 30px;border:solid 1px">
+                <div style="padding:15px 30px;">
                     <span>允许分享该文档<span>（关闭后仅{{context=='normal'?'自己':'团队成员'}}可查看）</span>：</span>
                     <el-switch
                         style="float:right"
@@ -22,9 +22,9 @@
                 <div style="height:50px;"></div>
                 <div style="width:fit-content; margin:0 auto">
                     <el-radio-group v-model="share_type" @change="change_share_type">
-                        <el-radio-button label="文档阅读分享"></el-radio-button>
-                        <el-radio-button label="文档评论分享"></el-radio-button>
-                        <el-radio-button label="文档编辑分享"></el-radio-button>
+                        <el-radio-button :label="1">文档阅读分享</el-radio-button>
+                        <el-radio-button :label="2">文档评论分享</el-radio-button>
+                        <el-radio-button :label="3">文档编辑分享</el-radio-button>
                     </el-radio-group>
                 </div>
                 <div style="height:30px;"></div>
@@ -56,7 +56,7 @@ export default {
             did:'',
             url:'123',
             sharable:true,
-            share_type:'',
+            share_type:1,
             write_url:'',
             comment_url:'',
             read_url:''
@@ -105,8 +105,9 @@ export default {
 
             flag = false;
             $.ajax({ 
-                type:'get',
-                url:'/fs/share?did=' + that.did + '&auth=write',
+                type:'post',
+                url:'/fs/share?',
+                data: JSON.stringify({did: that.did, auth: 'write'}),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
@@ -114,13 +115,14 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=write' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.write_url = '/doc/edit?dk=' + res.key;
+                        that.write_url = that.$host + '/doc/edit?dk=' + res.key;
+                        that.url = that.write_url;
                         flag = true;
                     }
                     else{
                         switch(res.status){
                             case 2:
-                                that.alert_msg.error('文档不存在');
+                                that.alert_msg.error('权限不足');
                                 break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
@@ -139,8 +141,9 @@ export default {
 
             flag = false;
             $.ajax({ 
-                type:'get',
-                url:'/fs/share?did=' + that.did + '&auth=comment',
+                type:'post',
+                url:'/fs/share',
+                data: JSON.stringify({did: that.did, auth: 'comment'}),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
@@ -148,7 +151,7 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=comment' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.comment_url = '/doc/comment?dk=' + res.key;
+                        that.comment_url = that.$host + '/doc/comment?dk=' + res.key;
                         flag = true;
                     }
                     else{
@@ -173,8 +176,9 @@ export default {
 
             flag = false;
             $.ajax({ 
-                type:'get',
-                url:'/fs/share?did=' + that.did + '&auth=read',
+                type:'post',
+                url:'/fs/share',
+                data: JSON.stringify({did: that.did, auth: 'read'}),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
@@ -182,7 +186,8 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=read' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.read_url = '/doc/read?dk=' + res.key;
+                        that.read_url = that.$host + '/doc/read?dk=' + res.key;
+                        that.url = that.read_url;
                         flag = true;
                     }
                     else{
@@ -216,14 +221,13 @@ export default {
 
         change_share_type(value){
             switch(value){
-                case '文档阅读分享':
+                case 1:
                     this.url = this.read_url;
                     break;
-                case '文档评论分享':
+                case 2:
                     this.url = this.comment_url;
                     break;
-                
-                case '文档编辑分享':
+                case 3:
                     this.url = this.write_url;
                     break;
             }

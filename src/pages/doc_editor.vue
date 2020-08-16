@@ -407,6 +407,11 @@ export default {
 
   methods: {
     init() {
+      if(!this.login_manager.get()){
+        that.alert_msg.warning('您还未登录，请先登录账号');
+        this.$router.push({name:'login'});
+        return;
+      }
       this.did = this.$route.params.did;
       this.apply_for_info();
     },

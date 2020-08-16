@@ -3,7 +3,7 @@
         <h1 class="can_not_choose">{{title}} <span class="el-icon-circle-plus-outline add_button" v-if="add_type!='none'" @click="add_item"></span></h1>
         <el-divider></el-divider>
         <div class="file_area">
-            <div v-if="!list.length" class="not_found">{{not_found_text[random]}}</div>
+            <div v-if="!list.length&&random>=0" class="not_found">{{not_found_text[random]}}</div>
             <div class="can_not_choose list_head" v-if="list.length">
                 <div class="info_area">
                     <div v-if="type=='recent'&&context!='recycle'">浏览时间</div>

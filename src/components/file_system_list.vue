@@ -2,7 +2,7 @@
     <div class="file_system_list">
         <div class="clear_both"></div>
         <div style="height:6vh;" v-if="!list.length&&!is_loading"></div>
-        <div v-if="!list.length&&!is_loading" class="not_found">{{not_found_text[random]}}</div>
+        <div v-if="!list.length&&!is_loading&&random>=0" class="not_found">{{not_found_text[random]}}</div>
         <div class="go_button can_not_choose" v-if="type=='self'&&path.length">
             <div @click="go_left" :class="opa?'opa':''"><span class="el-icon-arrow-left"></span></div>
             <div @click="go_right" :class="opa?'opa':''"><span class="el-icon-arrow-right"></span></div>
@@ -101,7 +101,7 @@ export default {
                 id:''
             },
             is_loading:true,
-            random:0,
+            random:-1,
             not_found_text:['这里啥玩意也没有', '这里什么也没有', '空空如也', '这里好凄凉', '难道？这里什么也没有', '什么东东都没有', '这里啥都没', '什么也没有~', '这里没东西，别看了', '啊，这里没东西啊'],
             stop_flag: false
         }

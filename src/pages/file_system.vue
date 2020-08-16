@@ -61,6 +61,11 @@ export default {
   },
   methods:{
     init(){
+        if(!this.login_manager.get()){
+          that.alert_msg.warning('您还未登录，请先登录账号');
+          this.$router.push({name:'login'});
+          return;
+        }
         this.view_type = this.view_type_manager.get();
         this.fid = this.$route.params.id?this.$route.params.id:'desktop';
         this.sidebar_active = this.fid=='desktop' ? 'desktop' : '';
