@@ -1043,4 +1043,8 @@ export default {
   background-color: hsl(219, 9%, 78%)
 }
 
+.el-main>>>.el-loading-mask{
+    height: calc(100vh - 56px) !important;
+}
+
 </style>

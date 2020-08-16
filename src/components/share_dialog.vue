@@ -20,11 +20,11 @@
                     </el-switch>
                 </div>
                 <div style="height:50px;"></div>
-                <div style="width:fit-content; margin:0 auto">
+                <div class="can_not_choose" style="width:fit-content; margin:0 auto">
                     <el-radio-group v-model="share_type" @change="change_share_type">
-                        <el-radio-button :label="1">文档阅读分享</el-radio-button>
-                        <el-radio-button :label="2">文档评论分享</el-radio-button>
-                        <el-radio-button :label="3">文档编辑分享</el-radio-button>
+                        <el-radio-button :label="1" :disabled="read_link_disabled">文档阅读分享</el-radio-button>
+                        <el-radio-button :label="2" :disabled="comment_link_disabled">文档评论分享</el-radio-button>
+                        <el-radio-button :label="3" :disabled="write_link_disabled">文档编辑分享</el-radio-button>
                     </el-radio-group>
                 </div>
                 <div style="height:30px;"></div>
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dia_vis=false">确 定</el-button>
+                <el-button type="primary" @click="dia_vis=false">关 闭</el-button>
             </span>
         </el-dialog>
     </div>
@@ -54,12 +54,15 @@ export default {
             title:'分享',
             dia_vis:false,
             did:'',
-            url:'123',
+            url:'',
             sharable:true,
             share_type:1,
             write_url:'',
             comment_url:'',
-            read_url:''
+            read_url:'',
+            read_link_disabled: false,
+            comment_link_disabled: false,
+            write_link_disabled: false,
         }
     },
 
@@ -68,7 +71,8 @@ export default {
             this.did = did;
             this.title = '分享 ' + name;
             var flag = false;
-
+            
+            this.url = '';
             var that = this;
             $.ajax({ 
                 type:'get',
@@ -106,7 +110,7 @@ export default {
             flag = false;
             $.ajax({ 
                 type:'post',
-                url:'/fs/share?',
+                url:'/fs/share',
                 data: JSON.stringify({did: that.did, auth: 'write'}),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
@@ -115,14 +119,15 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=write' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.write_url = that.$host + '/doc/edit?dk=' + res.key;
+                        that.write_url = that.$host + '/doc/add_write?dk=' + res.key;
                         that.url = that.write_url;
                         flag = true;
                     }
                     else{
                         switch(res.status){
                             case 2:
-                                that.alert_msg.error('权限不足');
+                                that.write_link_disabled = true;
+                                flag = true;
                                 break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
@@ -151,13 +156,14 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=comment' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.comment_url = that.$host + '/doc/comment?dk=' + res.key;
+                        that.comment_url = that.$host + '/doc/add_comment?dk=' + res.key;
                         flag = true;
                     }
                     else{
                         switch(res.status){
                             case 2:
-                                that.alert_msg.error('文档不存在');
+                                that.comment_link_disabled = true;
+                                flag = true;
                                 break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
@@ -186,14 +192,15 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=read' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.read_url = that.$host + '/doc/read?dk=' + res.key;
+                        that.read_url = that.$host + '/doc/add_read?dk=' + res.key;
                         that.url = that.read_url;
                         flag = true;
                     }
                     else{
                         switch(res.status){
                             case 2:
-                                that.alert_msg.error('文档不存在');
+                                that.read_link_disabled = true;
+                                flag = true;
                                 break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
@@ -220,6 +227,9 @@ export default {
         },
 
         change_share_type(value){
+            if(!this.sharable){
+                return;
+            }
             switch(value){
                 case 1:
                     this.url = this.read_url;
@@ -253,6 +263,22 @@ export default {
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
+                        if(value){
+                            switch(that.share_type){
+                                case 1:
+                                    that.url = that.read_url;
+                                    break;
+                                case 2:
+                                    that.url = that.comment_url;
+                                    break;
+                                case 3:
+                                    that.url = that.write_url;
+                                    break;
+                            }
+                        }
+                        else{
+                            that.url = '';
+                        }
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
@@ -291,6 +317,11 @@ export default {
 .content .el-button{
     width:23%;
     float:right;
+}
+
+>>>.el-radio-group label{
+    outline:none !important;
+    box-shadow: unset !important;
 }
 
 @media (max-width: 1200px){
