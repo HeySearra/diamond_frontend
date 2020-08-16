@@ -13,12 +13,12 @@
         </div>
         <el-divider></el-divider>
         <div v-infinite-scroll="load" class="message_area" style="overflow-x:hidden;overflow-y:auto;height:calc(100vh - 50px)">
-            <message-item 
-                v-for="item in list" 
-                :key="item.mid" 
-                :mid="item.mid" 
-                ref="message_item" 
-                @confirm-to-join="deal_team_invite" 
+            <message-item
+                v-for="item in list"
+                :key="item.mid"
+                :mid="item.mid"
+                ref="message_item"
+                @confirm-to-join="deal_team_invite"
                 @refresh_count="refresh_count"
                 v-ripple>
             </message-item>
@@ -60,6 +60,9 @@ export default {
         apply_for_info(){
             var that = this;
             this.apply_for_message();
+            if(this.is_final){
+                return;
+            }
             that.page++;
             $.ajax({
                 type:'get',
@@ -73,7 +76,9 @@ export default {
                     if(res.status == 0){
                         that.amount = res.amount;
                         let len = that.list.length;
-                        that.list.concat(res.list);
+                        for(let i = 0; i < res.list.length; i++){
+                            that.list.push(res.list[i]);
+                        }
                         if(that.list.length >= res.amount){
                             that.is_final = true;
                         }
@@ -91,7 +96,7 @@ export default {
                                     }
                                 }
                             }, 0);
-                            
+
                         }
                     }
                     else{
@@ -117,8 +122,7 @@ export default {
                 type:'get',
                 url:url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                processData: false,
-                contentType: false,
+                async: false,
                 success:function (res){
                     if(that.console_debug){
                         console.log(url + '：' + res.status);
@@ -161,7 +165,7 @@ export default {
                 type:'post',
                 url:"/msg/ar_all",
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async:false, 
+                async:false,
                 success:function (res){
                     if(that.console_debug){
                         console.log("(get)/msg/ar_all"+ " : " +res.status);

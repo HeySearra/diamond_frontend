@@ -11,7 +11,7 @@
             <el-menu-item index="4"><router-link class="register_link" :to="{path:'/workbench/share_view'}">共享文件</router-link></el-menu-item>
         </el-menu>
           <div style="padding: 0 40px 0 30px;">
-            <router-view class="workbench_content" @active_change="active_change" @open_info="open_info"></router-view>
+            <router-view class="workbench_content" @active_change="active_change" @open_info="open_info" @share_item="share_item"></router-view>
           </div>
         </el-main>
       </el-container>
@@ -23,6 +23,7 @@
     </el-container>
     <new-dialog ref="new_dialog" :desktop_alert="true"></new-dialog>
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
+    <share-dialog ref="share_dialog"></share-dialog>
   </div>
 </template>
 
@@ -78,7 +79,11 @@ export default {
 
     create_new_fold(){
         this.$refs.new_dialog.open('fold', this.fid, true);
-    }
+    },
+
+    share_item(did, name){
+        this.$refs.share_dialog.open(did, name);
+    },
   }
 }
 </script>

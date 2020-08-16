@@ -8,6 +8,7 @@
             :out_list="list"
             @change_view="change_view"
             @open_info="open_info"
+            @share_item="share_item"
             ref="file_system_component">
         </component>
         <div style="height:50px"></div>
@@ -93,9 +94,9 @@ export default {
                                 is_link: false,
                                 is_starred: true,
                                 name: res.list[i].name,
-                                create_time: res.list[i].create_dt,
+                                create_time: that.datetime_format(res.list[i].create_dt, res.cur_dt),
                                 creator: res.list[i].cname,
-                                recent_edit_time: res.list[i].edit_dt,
+                                recent_edit_time: that.datetime_format(res.list[i].edit_dt, res.cur_dt),
                             })
                         }
                         that.$refs.file_system_component.init();
@@ -130,7 +131,11 @@ export default {
 
         open_info(title, content, type){
             this.$emit('open_info', title, content, type);
-        }
+        },
+        
+        share_item(did, name){
+            this.$emit("share_item", did, name);
+        },
     }
 }
 </script>

@@ -178,7 +178,7 @@ export default {
     init_doc_info(did){
       this.did = did;
 
-      let url = '/doc/info?did=' + did;
+      let url = '/document/info?did=' + did;
       var that = this;
       this.is_loading = true;
        $.ajax({ 

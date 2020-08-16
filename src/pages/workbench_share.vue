@@ -1,6 +1,6 @@
 <template>
     <div class="workbench_share" v-loading="is_loading">
-        <component 
+        <component
             :is="view_type=='block'?'file-system-block':'file-system-list'"
             type="from_out"
             context="workbench"
@@ -8,6 +8,7 @@
             :out_list="list"
             @change_view="change_view"
             @open_info="open_info"
+            @share_item="share_item"
             ref="file_system_component">
         </component>
         <div style="height:50px"></div>
@@ -71,13 +72,13 @@ export default {
             this.view_type = this.view_type_manager.get();
             this.get_share_item_list();
         },
-        
+
         getCookie (name) {
             var value = '; ' + document.cookie
             var parts = value.split('; ' + name + '=')
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
-        
+
         change_view(){
             this.view_type = this.view_type=='block' ? 'list' : 'block';
             this.view_type_manager.set(this.view_type);
@@ -96,7 +97,7 @@ export default {
             this.page++;
             $.ajax({
                 type:'get',
-                url:"/workbench/share?page=" + that.page + "&each=" + that.each,
+                url:"/workbench/share",
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
@@ -115,6 +116,7 @@ export default {
                                 create_time: res.list[i].create_dt,
                                 creator: res.list[i].cname,
                                 recent_edit_time: res.list[i].edit_dt,
+                                view_time: res.list[i].view_dt,
                             })
                         }
                         that.$refs.file_system_component.init();
@@ -130,6 +132,9 @@ export default {
                     that.alert_msg.error('连接失败');
                 }
             });
+        },
+        share_item(did, name){
+            this.$emit("share_item", did, name);
         },
     }
 }

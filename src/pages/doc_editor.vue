@@ -10,13 +10,26 @@
     <div v-loading="is_loading">
       <el-row style="z-index: 999">
         <!-- Toolbar Container -->
-        <el-col :span="1" style="min-height:38.67px">
-          <el-button style="height: 80% !important; width: 100% !important;"
-                     @click="saveAsTemplate">
-            <span class="iconfont" style="margin-right: 30px;">&#xe672;</span>
-          </el-button>
-        </el-col>
-        <el-col :span="23" id="toolbar-container" style="min-height:38.67px"></el-col>
+        <div class="new_toobar">
+          <div class="append_tools can_not_choose">
+            <el-tooltip class="item" effect="dark" content="保存" placement="bottom">
+              <span class="icon iconfont">&#xe82a;</span>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="保存为模板" placement="bottom">
+              <span class="icon iconfont" @click="saveAsTemplate">&#xe672;</span>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
+              <span class="icon iconfont" v-if="!is_starred">&#xe65c;</span>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="取消收藏" placement="bottom">
+              <span class="icon iconfont" v-if="is_starred">&#xe65e;</span>
+            </el-tooltip>
+          </div>
+          <div id="toolbar-container" style="min-height:38.67px;">
+
+          </div>
+        </div>
+
       </el-row>
       <el-row>
         <!--el-col :span="5">
@@ -28,6 +41,7 @@
           <div id="editor">
 
           </div>
+          <div class="editor_bottom"><span></span></div>
         </el-col>
         <el-col :span="6" id="comment-sidebar"><br></el-col>
       </el-row>
@@ -186,7 +200,7 @@ class CommentsAdapter {
         };
         $.ajax({
           type: 'post',
-          url: '/doc/comment/add',
+          url: '/document/comment/add',
           data: JSON.stringify(msg),
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           processData: false,
@@ -194,7 +208,7 @@ class CommentsAdapter {
           async: false,
           success: function (res) {
             if (console_debug) {
-              console.log("(post)/doc/comment/add" + " : " + res.status);
+              console.log("(post)/document/comment/add" + " : " + res.status);
             }
             if (res.status !== 0) {
               switch (res.status) {
@@ -236,7 +250,7 @@ class CommentsAdapter {
         };
         $.ajax({
           type: 'post',
-          url: '/doc/comment/update',
+          url: '/document/comment/update',
           data: JSON.stringify(msg),
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           processData: false,
@@ -244,7 +258,7 @@ class CommentsAdapter {
           async: false,
           success: function (res) {
             if (console_debug) {
-              console.log("(post)/doc/comment/update" + " : " + res.status);
+              console.log("(post)/document/comment/update" + " : " + res.status);
             }
             if (res.status !== 0) {
               switch (res.status) {
@@ -281,7 +295,7 @@ class CommentsAdapter {
         };
         $.ajax({
           type: 'post',
-          url: '/doc/comment/remove',
+          url: '/document/comment/remove',
           data: JSON.stringify(msg),
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           processData: false,
@@ -289,7 +303,7 @@ class CommentsAdapter {
           async: false,
           success: function (res) {
             if (console_debug) {
-              console.log("(post)/doc/comment/remove" + " : " + res.status);
+              console.log("(post)/document/comment/remove" + " : " + res.status);
             }
             if (res.status !== 0) {
               switch (res.status) {
@@ -325,12 +339,12 @@ class CommentsAdapter {
         };
         $.ajax({
           type: 'get',
-          url: '/doc/comment/get_comments_of_thread?did=' + pageData.did + '&threadId=' + data.threadId,
+          url: '/document/comment/get_comments_of_thread?did=' + pageData.did + '&threadId=' + data.threadId,
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           async: false,
           success: function (res) {
             if (console_debug) {
-              console.log("(get)/doc/comment/get_comments_of_thread" + " : " + res.status);
+              console.log("(get)/document/comment/get_comments_of_thread" + " : " + res.status);
             }
             if (res.status === 0) {
               for (var it of res.list) {
@@ -407,7 +421,9 @@ export default {
       did:'',
       article:[],
       loading_percentage:0,
-      is_loading: true
+      is_loading: true,
+      is_starred: false,
+      ver:0
     }
   },
 
@@ -419,6 +435,7 @@ export default {
         return;
       }
       this.did = this.$route.params.did;
+      this.getStarStatus();
       this.apply_for_info();
     },
 
@@ -533,12 +550,12 @@ export default {
       };
       $.ajax({
         type: 'get',
-        url: '/doc/auth?did=' + pageData.did,
+        url: '/document/auth?did=' + pageData.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         // async: false,
         success: function (res) {
           if (that.console_debug) {
-            console.log("(get)/doc/auth" + " : " + res.status);
+            console.log("(get)/document/auth" + " : " + res.status);
           }
           if (res.status === 0) {
             switch (res.auth) {
@@ -577,6 +594,7 @@ export default {
     getInitialDocContent() {
       //通过路由获取文章id
       var that = this;
+      this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
       var msg = {
         did: pageData.did,
       };
@@ -584,12 +602,12 @@ export default {
       console.log(JSON.stringify(msg));
       $.ajax({
         type: 'get',
-        url: '/doc/all?did=' + pageData.did,
+        url: '/document/all?did=' + pageData.did/* + '&ver=' + this.ver*/,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         // async: false,
         success: function (res) {
           if (that.console_debug) {
-            console.log("(get)/doc/all" + " : " + res.status);
+            console.log("(get)/document/all" + " : " + res.status);
           }
           if (res.status === 0) {
             that.file_name = res.name;
@@ -632,14 +650,14 @@ export default {
       };
       $.ajax({
         type: 'post',
-        url: '/doc/edit',
+        url: '/document/edit',
         data: JSON.stringify(msg),
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         processData: false,
         contentType: false,
         success: function (res) {
           if (that.console_debug) {
-            console.log("(post)/doc/edit" + " : " + res.status);
+            console.log("(post)/document/edit" + " : " + res.status);
           }
           if (res.status === 0) {
             that.alert_msg.success('保存成功');
@@ -730,12 +748,12 @@ export default {
       };
       $.ajax({
         type: 'get',
-        url: '/doc/comment/get_users?did=' + pageData.did,
+        url: '/document/comment/get_users?did=' + pageData.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         // async: false,
         success: function (res) {
           if (that.console_debug) {
-            console.log("(get)/doc/comment/get_users" + " : " + res.status);
+            console.log("(get)/document/comment/get_users" + " : " + res.status);
           }
           if (res.status === 0) {
             pageData.users = res.list;
@@ -850,23 +868,18 @@ export default {
     },
     getStarStatus() {
       var that = this;
-      let msg = {
-        id: pageData.did,
-        type: 'doc',
-      };
-      var is_starred = false;
       $.ajax({
         type: 'get',
         url: '/fs/star_condition?id=' + pageData.did + "&type=doc",
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        async: false,
+        processData: false,
+        contentType: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(post)/fs/star_condition" + " : " + res.status);
           }
           if (res.status === 0) {
-
-            is_starred = res.is_starred;;
+            that.is_starred = res.is_starred;;
           } else {
             switch (res.status) {
               case 1:
@@ -884,7 +897,6 @@ export default {
           that.alert_msg.error('连接失败');
         }
       });
-      return is_starred;
     },
 
     //多人实时同步编辑不好实现
@@ -897,11 +909,11 @@ export default {
       var list = [];
       $.ajax({
         type: 'get',
-        url: '/doc/online?id=' + pageData.did,
+        url: '/document/online?id=' + pageData.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         success: function (res) {
           if (that.console_debug) {
-            console.log("(get)/doc/online" + " : " + res.status);
+            console.log("(get)/document/online" + " : " + res.status);
           }
           if (res.status === 0) {
 
@@ -963,7 +975,7 @@ export default {
 
 >>>.ck.ck-toolbar{
   border:unset;
-  border-bottom:solid 1px #ccc;
+
   min-width:830px;
 }
 
@@ -979,11 +991,14 @@ export default {
 #editor {
   /* height: 95%; */
   /* margin-top: 1%; */
-  padding: 1.5em 7.5em;
+  padding: 1.5em 2em;
   overflow:unset !important;
   height:fit-content !important;
   border:unset !important;
   color:hsl(0, 0%, 23%) !important;
+  border-bottom:solid 1px #dedede !important;
+  min-height:600px;
+  margin:0 6% 69px
 }
 
 .editor_title{
@@ -1051,6 +1066,48 @@ export default {
 
 .el-main>>>.el-loading-mask{
     height: calc(100vh - 56px) !important;
+}
+
+.editor_bottom{
+  text-align: center;
+  margin-top:-60px;
+  opacity: 0.3;
+}
+
+.editor_bottom span{
+  display: inline-block;
+  background: url('../assets/logo.png');
+  width:100px;
+  height:100px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.new_toobar{
+  border-bottom:solid 1px #ccc;
+}
+
+.append_tools{
+  position: absolute;
+  top: 4px;
+  left:9px;
+}
+
+.append_tools span{
+  font-size: 20px;
+  padding: 4px;
+  margin: 0;
+  display:inline-block;
+  border-radius: 2px;
+}
+
+.append_tools span:hover{
+  background-color: var(--ck-color-button-default-hover-background);
+}
+
+#toolbar-container{
+  margin-left:105px;
 }
 
 </style>

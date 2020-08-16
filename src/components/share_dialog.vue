@@ -22,9 +22,9 @@
                 <div style="height:50px;"></div>
                 <div class="can_not_choose" style="width:fit-content; margin:0 auto">
                     <el-radio-group v-model="share_type" @change="change_share_type">
-                        <el-radio-button :label="1" :disabled="read_link_disabled">文档阅读分享</el-radio-button>
-                        <el-radio-button :label="2" :disabled="comment_link_disabled">文档评论分享</el-radio-button>
-                        <el-radio-button :label="3" :disabled="write_link_disabled">文档编辑分享</el-radio-button>
+                        <el-radio-button :label="1" :disabled="read_link_vis">文档阅读分享</el-radio-button>
+                        <el-radio-button :label="2" :disabled="comment_link_vis">文档评论分享</el-radio-button>
+                        <el-radio-button :label="3" :disabled="write_link_vis">文档编辑分享</el-radio-button>
                     </el-radio-group>
                 </div>
                 <div style="height:30px;"></div>
@@ -60,28 +60,31 @@ export default {
             write_url:'',
             comment_url:'',
             read_url:'',
-            read_link_disabled: false,
-            comment_link_disabled: false,
-            write_link_disabled: false,
+            read_link_vis: true,
+            comment_link_vis: true,
+            write_link_vis: true,
         }
     },
 
     methods:{
         open(did, name){
+            console.log("f4i43tujrgv");
             this.did = did;
             this.title = '分享 ' + name;
             var flag = false;
-            
+            this.read_link_vis = true;
+            this.comment_link_vis = true;
+            this.write_link_vis = true;
             this.url = '';
             var that = this;
             $.ajax({ 
                 type:'get',
-                url:'/doc/lock?did=' + that.did,
+                url:'/document/lock?did=' + that.did,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
-                        console.log('/doc/lock?did=' + that.did +  '：' + res.status);
+                        console.log('/document/lock?did=' + that.did +  '：' + res.status);
                     }
                     if(res.status == 0){
                         that.sharable = !res.is_locked;
@@ -119,14 +122,14 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=write' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.write_url = that.$host + '/doc/add_write?dk=' + res.key;
-                        that.url = that.write_url;
+                        that.write_url = that.$host + '/document/add_write?dk=' + res.key;
                         flag = true;
+                        that.write_link_vis = false;
                     }
                     else{
                         switch(res.status){
                             case 2:
-                                that.write_link_disabled = true;
+                                that.write_link_vis = true;
                                 flag = true;
                                 break;
                             default:
@@ -156,13 +159,14 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=comment' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.comment_url = that.$host + '/doc/add_comment?dk=' + res.key;
+                        that.comment_url = that.$host + '/document/add_comment?dk=' + res.key;
                         flag = true;
+                        that.comment_link_vis = false;
                     }
                     else{
                         switch(res.status){
                             case 2:
-                                that.comment_link_disabled = true;
+                                that.comment_link_vis = true;
                                 flag = true;
                                 break;
                             default:
@@ -192,14 +196,15 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=read' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.read_url = that.$host + '/doc/add_read?dk=' + res.key;
+                        that.read_url = that.$host + '/document/add_read?dk=' + res.key;
                         that.url = that.read_url;
                         flag = true;
+                        that.read_link_vis = false;
                     }
                     else{
                         switch(res.status){
                             case 2:
-                                that.read_link_disabled = true;
+                                that.read_link_vis = true;
                                 flag = true;
                                 break;
                             default:
@@ -252,7 +257,7 @@ export default {
         },
 
         change_switch(value){
-            let url = '/doc/lock';
+            let url = '/document/lock';
             let json_data = {did:this.did, is_locked:!value};
             var that = this;
             $.ajax({ 

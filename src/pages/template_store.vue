@@ -116,13 +116,7 @@ export default {
           }
           if (res.status === 0) {
             that.my_list = res.my_list;
-            for (item of that.my_list) {
-              item['type'] = 'user';
-            }
             that.official_list = res.official_list;
-            for (item of that.official_list) {
-              item['type'] = 'official';
-            }
           } else {
             switch (res.status) {
               default:

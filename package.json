@@ -25,6 +25,7 @@
     "jquery": "^3.5.1",
     "mavon-editor": "^2.9.0",
     "vue": "^2.5.2",
+    "vue-clipboard2": "^0.3.1",
     "vue-ripple-directive": "^2.0.1",
     "vue-router": "^3.0.1"
   },
