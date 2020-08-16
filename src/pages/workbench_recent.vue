@@ -31,6 +31,7 @@ export default {
         }
     },
     mounted(){
+        // this.$router.push({path:'/doc/1'});
         this.init();
     },
     methods:{
