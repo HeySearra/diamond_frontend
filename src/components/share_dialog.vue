@@ -115,7 +115,7 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=write' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.write_url = that.$host + '/doc/edit?dk=' + res.key;
+                        that.write_url = that.$host + '/doc/add_write?dk=' + res.key;
                         that.url = that.write_url;
                         flag = true;
                     }
@@ -151,7 +151,7 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=comment' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.comment_url = that.$host + '/doc/comment?dk=' + res.key;
+                        that.comment_url = that.$host + '/doc/add_comment?dk=' + res.key;
                         flag = true;
                     }
                     else{
@@ -186,7 +186,7 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=read' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.read_url = that.$host + '/doc/read?dk=' + res.key;
+                        that.read_url = that.$host + '/doc/add_read?dk=' + res.key;
                         that.url = that.read_url;
                         flag = true;
                     }
