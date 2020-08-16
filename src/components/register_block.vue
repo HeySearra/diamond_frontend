@@ -188,7 +188,7 @@ export default {
                 success:function (res){
                     if(that.console_debug)console.log("(post)/register/submit"+ " : " +res.status);
                     if(res.status == 0){
-                        that.alert_box.msg('提示', '验证码发送成功');
+                        that.alert_msg.success('验证码发送成功');
                         that.ver_code_disabled = true;
                         that.rest_time = 60;
                         that.rest_timer = setInterval(function(){

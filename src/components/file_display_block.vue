@@ -3,7 +3,7 @@
         <h1 class="can_not_choose">{{title}} <span class="el-icon-circle-plus-outline add_button" v-if="add_type!='none'" @click="add_item"></span></h1>
         <el-divider></el-divider>
         <div class="file_area">
-            <div v-if="!list.length" class="not_found">{{not_found_text[random]}}</div>
+            <div v-if="!list.length&&random>=0" class="not_found">{{not_found_text[random]}}</div>
             <div class="file_item" 
                 v-for="item in list" 
                 :key="item.id"
@@ -92,7 +92,7 @@ export default {
             dia_title:'team info',
             draging_type:'',
             draging_id:'',
-            random:0,
+            random:-1,
             not_found_text:['这里啥玩意也没有', '这里什么也没有', '空空如也', '这里好凄凉', '难道？这里什么也没有', '什么东东都没有', '这里啥都没', '什么也没有~', '这里没东西，别看了', '啊，这里没东西啊']
         }
     },

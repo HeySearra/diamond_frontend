@@ -3,7 +3,7 @@
         <h1 class="can_not_choose">{{title}} <span class="el-icon-circle-plus-outline add_button" v-if="addable!='none'" @click="add_item"></span></h1>
         <el-divider></el-divider>
         <div class="team_area">
-            <div v-if="!list.length" class="not_found">{{not_found_text[random]}}</div>
+            <div v-if="!list.length&&random>=0" class="not_found">{{not_found_text[random]}}</div>
             <div class="item" 
                 v-for="item in list" 
                 :key="item.tid">

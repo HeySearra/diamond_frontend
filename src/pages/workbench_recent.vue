@@ -35,9 +35,6 @@ export default {
     },
     methods:{
         init(){
-            if(!this.login_manager.get()){
-                this.$router.push({name:'login'});
-            }
             this.is_loading = true;
             this.$emit('active_change');
             this.view_type = this.view_type_manager.get();

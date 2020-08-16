@@ -147,7 +147,7 @@
             }
           },
           error:function(){
-            that.message_count = 0;
+            //that.message_count = 0;
           }
         });
       },
