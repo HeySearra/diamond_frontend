@@ -60,9 +60,9 @@ export default {
             write_url:'',
             comment_url:'',
             read_url:'',
-            read_link_disabled: false,
-            comment_link_disabled: false,
-            write_link_disabled: false,
+            read_link_disabled: true,
+            comment_link_disabled: true,
+            write_link_disabled: true,
         }
     },
 
@@ -126,7 +126,7 @@ export default {
                     else{
                         switch(res.status){
                             case 2:
-                                that.write_link_disabled = true;
+                                that.write_link_disabled = false;
                                 flag = true;
                                 break;
                             default:
@@ -162,7 +162,7 @@ export default {
                     else{
                         switch(res.status){
                             case 2:
-                                that.comment_link_disabled = true;
+                                that.comment_link_disabled = false;
                                 flag = true;
                                 break;
                             default:
@@ -199,7 +199,7 @@ export default {
                     else{
                         switch(res.status){
                             case 2:
-                                that.read_link_disabled = true;
+                                that.read_link_disabled = false;
                                 flag = true;
                                 break;
                             default:
