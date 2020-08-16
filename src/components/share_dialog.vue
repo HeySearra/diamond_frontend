@@ -116,12 +116,8 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=write' +  '：' + res.status);
                     }
                     if(res.status == 0){
-<<<<<<< HEAD
                         that.write_url = that.$host + '/doc/add_write?dk=' + res.key;
                         that.url = that.write_url;
-=======
-                        that.write_url = that.$host + '/doc/edit?dk=' + res.key;
->>>>>>> 0f118c68d2447cd8d0c9411ae02a4b03dc6e26d4
                         flag = true;
                     }
                     else{
@@ -191,15 +187,8 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=read' +  '：' + res.status);
                     }
                     if(res.status == 0){
-<<<<<<< HEAD
                         that.read_url = that.$host + '/doc/add_read?dk=' + res.key;
                         that.url = that.read_url;
-=======
-                        that.read_url = that.$host + '/doc/read?dk=' + res.key;
-                        if(that.sharable){
-                            that.url = that.write_url;
-                        }
->>>>>>> 0f118c68d2447cd8d0c9411ae02a4b03dc6e26d4
                         flag = true;
                     }
                     else{
