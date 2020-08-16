@@ -117,7 +117,6 @@ export default {
           if (res.status === 0) {
             that.my_list = res.my_list;
             that.official_list = res.official_list;
-            console.log(that.my_list);
           } else {
             switch (res.status) {
               default:

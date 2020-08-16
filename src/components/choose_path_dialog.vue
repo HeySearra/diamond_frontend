@@ -50,7 +50,6 @@ export default {
     },
 
     methods:{
-        //起始文件夹，～目标文件类型，目标文件id，目标文件名
         open(fid, type, id, name, op_type){
             this.type = type;
             this.id = id;
