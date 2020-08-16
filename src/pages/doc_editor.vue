@@ -36,6 +36,17 @@
 
 <script>
 import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
+import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
+import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
+import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
+import Image from '@ckeditor/ckeditor5-image/src/image';
+import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
+
+import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
+import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
+
+import imageIcon from '@ckeditor/ckeditor5-core/theme/icons/image.svg';
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn';
 import {alert_box, alert_msg, console_debug} from "../assets/global";
 
@@ -68,6 +79,39 @@ const pageData = {
                     and the language a person speaks is an essential element of daily life.\
                 </p>'
 };
+
+class CreateTemplate extends Plugin {
+  init() {
+    const editor = this.editor;
+
+    editor.ui.componentFactory.add( 'insertImage', locale => {
+      const view = new ButtonView( locale );
+
+      view.set( {
+        label: 'Insert image',
+        icon: imageIcon,
+        tooltip: true
+      } );
+
+      // Callback executed once the image is clicked.
+      view.on( 'execute', () => {
+        const imageUrl = prompt( 'Image URL' );
+
+        editor.model.change( writer => {
+          const imageElement = writer.createElement( 'image', {
+            src: imageUrl
+          } );
+
+          // Insert the image in the current selection location.
+          editor.model.insertContent( imageElement, editor.model.document.selection );
+        } );
+      } );
+
+      return view;
+    } );
+  }
+}
+
 
 class MyUploadAdapter {
 
@@ -173,7 +217,7 @@ class CommentsAdapter {
         console.log('Comment added', data);
         let msg = {
           did: pageData.did,
-          uid: pageData.userId,
+          // uid: pageData.userId,
           threadId: data.threadId,
           commentId: data.commentId,
           content: data.content,
@@ -223,7 +267,7 @@ class CommentsAdapter {
         console.log('Comment updated', data);
         let msg = {
           did: pageData.did,
-          uid: pageData.userId,
+          // uid: pageData.userId,
           threadId: data.threadId,
           commentId: data.commentId,
           content: data.content
@@ -269,7 +313,7 @@ class CommentsAdapter {
         console.log('Comment removed', data);
         let msg = {
           did: pageData.did,
-          uid: pageData.userId,
+          // uid: pageData.userId,
           threadId: data.threadId,
           commentId: data.commentId,
         };
@@ -492,7 +536,7 @@ export default {
         },
         commentsOnly: pageData.commentsOnly,
         autosave: {
-          waitingTime: 5000,
+          // waitingTime: 5000,
           save(editor) {
             that.updateDocContent(editor.getData());
             //console.log(editor.model.document.getRootNames());
