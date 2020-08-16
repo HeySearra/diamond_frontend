@@ -39,7 +39,7 @@
     @import url("../assets/common.css");
 
     .chatting_bubble{
-        border:solid 1px;
+        /* border:solid 1px; */
     }
 
     .chatting_bubble{
@@ -93,11 +93,11 @@
     .other{
         float:left;
         left:75px;
-        background: #eee;
-        color:#586378;
+        background: #ddd;
+        color:#333;
     }
 
     .other:before{
-        border-right: 24px solid #eee;
+        border-right: 24px solid #ddd;
     }
 </style>
