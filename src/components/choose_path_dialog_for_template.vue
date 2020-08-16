@@ -178,6 +178,11 @@ export default {
                                 that.list.push(res.list[i]);
                             }
                         }
+                        for(let i=0; i<res.list.length; i++){
+                            if(res.list[i].type == 'doc'){
+                                that.list.push(res.list[i]);
+                            }
+                        }
                         that.is_all_root = false;
                         that.fid = fid;
                         result = true;

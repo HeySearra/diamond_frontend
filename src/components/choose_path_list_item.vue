@@ -11,7 +11,7 @@
                 <span class="icon iconfont team" v-if="type=='team'">&#xe6cb;</span>
             </div>
             <div>
-                <span class="icon iconfont file" v-if="type=='file'">&#xe645;</span>
+                <span class="icon iconfont file" v-if="type=='file'||type=='doc'">&#xe645;</span>
             </div>
         </div>
         <div class="link_icon" v-if="is_link">
@@ -61,7 +61,7 @@ export default {
 
     methods:{
         click(){
-            if(this.type == 'file'){
+            if(this.type=='file' || this.type=='doc'){
                 return;
             }
             else{
@@ -100,7 +100,8 @@ export default {
 
 .file{
     color:hsl(198, 10%, 69%);
-    font-size:27px;
+    font-size:26px;
+    margin-left:2px;
 }
 
 .fold{

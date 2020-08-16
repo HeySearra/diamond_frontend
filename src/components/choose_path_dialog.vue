@@ -131,6 +131,11 @@ export default {
                                 that.fold_list.push(res.list[i]);
                             }
                         }
+                        for(let i=0; i<res.list.length; i++){
+                            if(res.list[i].type == 'doc'){
+                                that.fold_list.push(res.list[i]);
+                            }
+                        }
                         that.fid = fid;
                         result = true;
                     }
