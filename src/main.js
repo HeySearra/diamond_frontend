@@ -9,6 +9,7 @@ import echarts from 'echarts'
 import mavonEditor from 'mavon-editor'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import Ripple from 'vue-ripple-directive'
+import VueClipboard from 'vue-clipboard2'
 import 'jquery'
 import './assets/icon_store/iconfont.css'
 import './assets/diadoc_icon/iconfont.css'
@@ -56,7 +57,8 @@ Vue.use(Element);
 Vue.use(echarts);
 Vue.use(mavonEditor);
 Vue.use(CKEditor);
-Vue.directive('ripple',Ripple)
+Vue.directive('ripple',Ripple);
+Vue.use(VueClipboard);
 
 Vue.component('navbar', navbar);
 Vue.component('login', login);
