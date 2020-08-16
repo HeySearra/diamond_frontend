@@ -8,7 +8,7 @@
             fit="cover">
         </el-image>
         <div class="name">{{name}}</div>
-        <el-button class="use_button" type="primary" plain>使用</el-button>
+        <el-button class="use_button" type="primary" plain @click="createDocFromTemplate">使用</el-button>
         <div class="more_menu" :class="focus?'more_menu_focus':''" v-if="context=='my'">
             <el-dropdown trigger="click"
                 @visible-change="vis_change"
@@ -45,10 +45,15 @@ export default {
             type:String,
             default:'my'
         },
+        type: {
+            type:String,
+            default:''
+        },
     },
     data() {
         return {
             focus: false,
+            fid: 'desktop'
         }
     },
 
@@ -80,7 +85,8 @@ export default {
         deleteMyTemplate() {
           var that = this;
           let msg = {
-            'tid': this.tid
+            'tid': this.tid,
+
           };
           $.ajax({
             type:'post',
@@ -114,7 +120,85 @@ export default {
               that.alert_msg.error('连接失败');
             }
           });
-        }
+        },
+      createDocFromTemplate() {
+        this.get_desktop_id();
+        var that = this;
+        let msg = {
+          'tid': this.tid,
+          'name': this.name,
+          'pfid': this.fid,
+          'type': this.context,
+        };
+        $.ajax({
+          type:'post',
+          url:'/temp/new_doc',
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          data: JSON.stringify(msg),
+          async: false,
+          success:function (res){
+            if (that.console_debug) {
+              console.log("(post)/temp/new_doc" + " : " + res.status);
+            }
+            if (res.status === 0) {
+              that.$router.push({path:'/doc/' + res.did});
+            } else {
+              switch (res.status) {
+                case 1:
+                  that.alert_msg.error('创建失败', '键错误');
+                  break;
+                case 2:
+                  that.alert_msg.error('权限不足');
+                  break;
+                case 3:
+                  that.alert_msg.error('父文件夹不存在');
+                  break;
+                case 4:
+                  that.alert_msg.error('模版重名');
+                  break;
+                case 5:
+                  that.alert_msg.error('模板名称非法');
+                  break;
+                default:
+                  that.alert_msg.error('未知错误');
+              }
+            }
+          },
+          error:function(){
+            that.alert_msg.error('连接失败');
+          }
+        });
+      },
+      get_desktop_id() {
+        let url = '/fs/user/root';
+        var that = this;
+        $.ajax({
+          type: 'get',
+          url: url,
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          async: false,
+          success: function (res) {
+            if (that.console_debug) {
+              console.log(url + '：' + res.status);
+            }
+            if (res.status == 0) {
+              that.fid = res.fid;
+            } else {
+              switch (res.status) {
+                case 2:
+                  that.alert_msg.error('权限不足');
+                  break;
+                default:
+                  that.alert_msg.error('发生了未知错误');
+              }
+
+            }
+          },
+          error: function (res) {
+            that.alert_msg.error('网络连接失败');
+          }
+        });
+      }
     }
 
 }

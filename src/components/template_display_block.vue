@@ -11,7 +11,8 @@
                 :name="item.name"
                 :tid="item.tid"
                 :src="item.src"
-                :context="context">
+                :context="context"
+                :type="item.type">
             </template-block>
         </div>
     </div>

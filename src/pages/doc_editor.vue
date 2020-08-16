@@ -10,7 +10,13 @@
     <div v-loading="is_loading">
       <el-row style="z-index: 999">
         <!-- Toolbar Container -->
-        <div id="toolbar-container" style="min-height:38.67px"></div>
+        <el-col :span="1" style="min-height:38.67px">
+          <el-button style="height: 80% !important; width: 100% !important;"
+                     @click="saveAsTemplate">
+            <span class="iconfont" style="margin-right: 30px;">&#xe672;</span>
+          </el-button>
+        </el-col>
+        <el-col :span="23" id="toolbar-container" style="min-height:38.67px"></el-col>
       </el-row>
       <el-row>
         <!--el-col :span="5">
@@ -669,11 +675,11 @@ export default {
 
     //将文档内容存储为模版
     saveAsTemplate() {
+      console.log('saving as template');
       var that = this;
-
       let msg = {
         name: that.file_name,
-        content: content,
+        content: window.editor.getData(),
       };
       $.ajax({
         type: 'post',
@@ -682,13 +688,13 @@ export default {
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         processData: false,
         contentType: false,
-        async: false,
+        // async: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(post)/temp/new" + " : " + res.status);
           }
           if (res.status === 0) {
-            return res.tid;
+            alert_msg.success('保存模板成功');
           } else {
             switch (res.status) {
               case 1:
@@ -698,14 +704,14 @@ export default {
                 that.alert_box.msg('保存模板失败', '您的权限不足或还没有登录');
                 break;
               case 3:
-                that.alert_box.msg('保存模板失败', '您的模板名称不合法');
+                that.alert_box.msg('保存模板失败', '您的模板重名');
                 break;
-              /*case 4:
-              that.alert_box.msg('保存模板失败', '您的内容不合法');
-              break;
-            case 5:
-              that.alert_box.msg('保存模板失败', '同目录下存在同名文件');
-              break;*/
+              case 4:
+                that.alert_box.msg('保存模板失败', '您的模板名称非法');
+                break;
+              /*case 5:
+                that.alert_box.msg('保存模板失败', '同目录下存在同名文件');
+                break;*/
               default:
                 that.alert_msg.error('未知错误');
             }

@@ -7,7 +7,10 @@
             <div style="padding: 0 40px 0 30px;">
               <div style="height:20px"></div>
               <div>
-                <template-display-block v-bind:list="my_list"></template-display-block>
+                <template-display-block
+                  v-bind:list="my_list"
+                  context="user">
+                </template-display-block>
                 <div class="clear_both divide_type"></div>
                 <!--template-display-block
                     title="学习"
@@ -113,48 +116,15 @@ export default {
           }
           if (res.status === 0) {
             that.my_list = res.my_list;
-            that.official_list = res.official_list;
-          } else {
-            switch (res.status) {
-              default:
-                that.alert_msg.error('未知错误');
+            for (item of that.my_list) {
+              item['type'] = 'user';
             }
-          }
-        },
-        error:function(){
-          that.alert_msg.error('连接失败');
-        }
-      });
-    },
-
-    createDocFromTemplate() {
-      var that = this;
-      let msg = {
-        'tid': this.tid
-      };
-      $.ajax({
-        type:'post',
-        url:'/temp/new_doc',
-        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        data: JSON.stringify(msg),
-        async: false,
-        success:function (res){
-          if (that.console_debug) {
-            console.log("(post)/temp/new_doc" + " : " + res.status);
-          }
-          if (res.status === 0) {
-            that.router.push({path:'/doc/' + res.did});
+            that.official_list = res.official_list;
+            for (item of that.official_list) {
+              item['type'] = 'official';
+            }
           } else {
             switch (res.status) {
-              // case 1:
-              //    that.alert_msg.error('创建失败', '键错误');
-              //   break;
-              case 2:
-                 that.alert_msg.error('权限不足');
-                break;
-              case 3:
-                 that.alert_msg.error('模版不存在');
-                break;
               default:
                 that.alert_msg.error('未知错误');
             }
