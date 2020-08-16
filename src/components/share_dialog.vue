@@ -79,12 +79,12 @@ export default {
             var that = this;
             $.ajax({ 
                 type:'get',
-                url:'/doc/lock?did=' + that.did,
+                url:'/document/lock?did=' + that.did,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
-                        console.log('/doc/lock?did=' + that.did +  '：' + res.status);
+                        console.log('/document/lock?did=' + that.did +  '：' + res.status);
                     }
                     if(res.status == 0){
                         that.sharable = !res.is_locked;
@@ -122,7 +122,7 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=write' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.write_url = that.$host + '/doc/add_write?dk=' + res.key;
+                        that.write_url = that.$host + '/document/add_write?dk=' + res.key;
                         flag = true;
                         that.write_link_vis = false;
                     }
@@ -159,7 +159,7 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=comment' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.comment_url = that.$host + '/doc/add_comment?dk=' + res.key;
+                        that.comment_url = that.$host + '/document/add_comment?dk=' + res.key;
                         flag = true;
                         that.comment_link_vis = false;
                     }
@@ -196,7 +196,7 @@ export default {
                         console.log('/fs/share?did=' + that.did + '&auth=read' +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.read_url = that.$host + '/doc/add_read?dk=' + res.key;
+                        that.read_url = that.$host + '/document/add_read?dk=' + res.key;
                         that.url = that.read_url;
                         flag = true;
                         that.read_link_vis = false;
@@ -257,7 +257,7 @@ export default {
         },
 
         change_switch(value){
-            let url = '/doc/lock';
+            let url = '/document/lock';
             let json_data = {did:this.did, is_locked:!value};
             var that = this;
             $.ajax({ 

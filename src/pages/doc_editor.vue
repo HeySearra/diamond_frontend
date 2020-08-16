@@ -18,10 +18,10 @@
             <el-tooltip class="item" effect="dark" content="保存为模板" placement="bottom">
               <span class="icon iconfont" @click="saveAsTemplate">&#xe672;</span>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="取消收藏" placement="bottom">
+            <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
               <span class="icon iconfont" v-if="!is_starred">&#xe65c;</span>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
+            <el-tooltip class="item" effect="dark" content="取消收藏" placement="bottom">
               <span class="icon iconfont" v-if="is_starred">&#xe65e;</span>
             </el-tooltip>
           </div>
@@ -200,7 +200,7 @@ class CommentsAdapter {
         };
         $.ajax({
           type: 'post',
-          url: '/doc/comment/add',
+          url: '/document/comment/add',
           data: JSON.stringify(msg),
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           processData: false,
@@ -208,7 +208,7 @@ class CommentsAdapter {
           async: false,
           success: function (res) {
             if (console_debug) {
-              console.log("(post)/doc/comment/add" + " : " + res.status);
+              console.log("(post)/document/comment/add" + " : " + res.status);
             }
             if (res.status !== 0) {
               switch (res.status) {
@@ -250,7 +250,7 @@ class CommentsAdapter {
         };
         $.ajax({
           type: 'post',
-          url: '/doc/comment/update',
+          url: '/document/comment/update',
           data: JSON.stringify(msg),
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           processData: false,
@@ -258,7 +258,7 @@ class CommentsAdapter {
           async: false,
           success: function (res) {
             if (console_debug) {
-              console.log("(post)/doc/comment/update" + " : " + res.status);
+              console.log("(post)/document/comment/update" + " : " + res.status);
             }
             if (res.status !== 0) {
               switch (res.status) {
@@ -295,7 +295,7 @@ class CommentsAdapter {
         };
         $.ajax({
           type: 'post',
-          url: '/doc/comment/remove',
+          url: '/document/comment/remove',
           data: JSON.stringify(msg),
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           processData: false,
@@ -303,7 +303,7 @@ class CommentsAdapter {
           async: false,
           success: function (res) {
             if (console_debug) {
-              console.log("(post)/doc/comment/remove" + " : " + res.status);
+              console.log("(post)/document/comment/remove" + " : " + res.status);
             }
             if (res.status !== 0) {
               switch (res.status) {
@@ -339,12 +339,12 @@ class CommentsAdapter {
         };
         $.ajax({
           type: 'get',
-          url: '/doc/comment/get_comments_of_thread?did=' + pageData.did + '&threadId=' + data.threadId,
+          url: '/document/comment/get_comments_of_thread?did=' + pageData.did + '&threadId=' + data.threadId,
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           async: false,
           success: function (res) {
             if (console_debug) {
-              console.log("(get)/doc/comment/get_comments_of_thread" + " : " + res.status);
+              console.log("(get)/document/comment/get_comments_of_thread" + " : " + res.status);
             }
             if (res.status === 0) {
               for (var it of res.list) {
@@ -422,7 +422,8 @@ export default {
       article:[],
       loading_percentage:0,
       is_loading: true,
-      is_starred: true
+      is_starred: false,
+      ver:0
     }
   },
 
@@ -434,6 +435,7 @@ export default {
         return;
       }
       this.did = this.$route.params.did;
+      this.getStarStatus();
       this.apply_for_info();
     },
 
@@ -548,12 +550,12 @@ export default {
       };
       $.ajax({
         type: 'get',
-        url: '/doc/auth?did=' + pageData.did,
+        url: '/document/auth?did=' + pageData.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         // async: false,
         success: function (res) {
           if (that.console_debug) {
-            console.log("(get)/doc/auth" + " : " + res.status);
+            console.log("(get)/document/auth" + " : " + res.status);
           }
           if (res.status === 0) {
             switch (res.auth) {
@@ -592,6 +594,7 @@ export default {
     getInitialDocContent() {
       //通过路由获取文章id
       var that = this;
+      this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
       var msg = {
         did: pageData.did,
       };
@@ -599,12 +602,12 @@ export default {
       console.log(JSON.stringify(msg));
       $.ajax({
         type: 'get',
-        url: '/doc/all?did=' + pageData.did,
+        url: '/document/all?did=' + pageData.did/* + '&ver=' + this.ver*/,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         // async: false,
         success: function (res) {
           if (that.console_debug) {
-            console.log("(get)/doc/all" + " : " + res.status);
+            console.log("(get)/document/all" + " : " + res.status);
           }
           if (res.status === 0) {
             that.file_name = res.name;
@@ -647,14 +650,14 @@ export default {
       };
       $.ajax({
         type: 'post',
-        url: '/doc/edit',
+        url: '/document/edit',
         data: JSON.stringify(msg),
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         processData: false,
         contentType: false,
         success: function (res) {
           if (that.console_debug) {
-            console.log("(post)/doc/edit" + " : " + res.status);
+            console.log("(post)/document/edit" + " : " + res.status);
           }
           if (res.status === 0) {
             that.alert_msg.success('保存成功');
@@ -691,7 +694,6 @@ export default {
     //将文档内容存储为模版
     saveAsTemplate() {
       var that = this;
-      alert('hello')
       let msg = {
         name: that.file_name,
         content: window.editor.getData(),
@@ -745,12 +747,12 @@ export default {
       };
       $.ajax({
         type: 'get',
-        url: '/doc/comment/get_users?did=' + pageData.did,
+        url: '/document/comment/get_users?did=' + pageData.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         // async: false,
         success: function (res) {
           if (that.console_debug) {
-            console.log("(get)/doc/comment/get_users" + " : " + res.status);
+            console.log("(get)/document/comment/get_users" + " : " + res.status);
           }
           if (res.status === 0) {
             pageData.users = res.list;
@@ -865,23 +867,18 @@ export default {
     },
     getStarStatus() {
       var that = this;
-      let msg = {
-        id: pageData.did,
-        type: 'doc',
-      };
-      var is_starred = false;
       $.ajax({
         type: 'get',
         url: '/fs/star_condition?id=' + pageData.did + "&type=doc",
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        async: false,
+        processData: false,
+        contentType: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(post)/fs/star_condition" + " : " + res.status);
           }
           if (res.status === 0) {
-
-            is_starred = res.is_starred;;
+            that.is_starred = res.is_starred;;
           } else {
             switch (res.status) {
               case 1:
@@ -899,7 +896,6 @@ export default {
           that.alert_msg.error('连接失败');
         }
       });
-      return is_starred;
     },
 
     //多人实时同步编辑不好实现
@@ -912,11 +908,11 @@ export default {
       var list = [];
       $.ajax({
         type: 'get',
-        url: '/doc/online?id=' + pageData.did,
+        url: '/document/online?id=' + pageData.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         success: function (res) {
           if (that.console_debug) {
-            console.log("(get)/doc/online" + " : " + res.status);
+            console.log("(get)/document/online" + " : " + res.status);
           }
           if (res.status === 0) {
 

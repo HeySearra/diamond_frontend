@@ -143,7 +143,7 @@ export default {
             console.log("(post)/temp/new_doc" + " : " + res.status);
           }
           if (res.status === 0) {
-            that.router.push({path:'/doc/' + res.did});
+            that.router.push({path:'/document/' + res.did});
           } else {
             switch (res.status) {
               // case 1:

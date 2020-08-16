@@ -33,7 +33,7 @@ export default {
         }
     },
     mounted(){
-        // this.$router.push({path:'/doc/1'});
+        // this.$router.push({path:'/document/1'});
         this.init();
     },
     methods:{

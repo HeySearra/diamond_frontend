@@ -109,7 +109,7 @@ export default {
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
         jump_to_doc(){
-            this.$router.push({path: '/doc/' + this.id}); //待定
+            this.$router.push({path: '/document/' + this.id}); //待定
         },
         confirm_to_join(){
             let data = {
