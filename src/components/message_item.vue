@@ -109,13 +109,13 @@ export default {
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
         jump_to_doc(){
-            if(this.$route.name=='doc' && this.$route.did==this.did){
+            if(this.$route.name=='doc' && this.$route.did==this.id){
                 this.alert_msg.normal('你已经在这个文档中了');
-                this.$emit('close');
             }
             else{
                 this.$router.push({name:'doc', params:{did:this.id}}); //待定
             }
+            this.$emit('close');
         },
         confirm_to_join(){
             let data = {
@@ -125,7 +125,13 @@ export default {
             this.$emit('confirm-to-join', data);
         },
         jump_to_team(){
-            this.$router.push({path: '/team/' + this.id + "/file/desktop"});
+            if(this.$route.name=='team_file_system' && this.$route.params.tid==this.id){
+                this.alert_msg.normal('你已经在这个团队目录中了');
+            }
+            else{
+                this.$router.push({path: '/team/' + this.id + "/file/desktop"});
+            }
+            this.$emit('close');
         },
 
         click_to_read(){

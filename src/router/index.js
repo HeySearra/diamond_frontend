@@ -135,14 +135,6 @@ const router =  new Router({
       }
     },
     {
-      path: '/test',
-      name: 'test',
-      component: test,
-      meta:{
-        title:'test',
-      }
-    },
-    {
       path: '/file/:id',
       name: 'file_system',
       component: file_system,
