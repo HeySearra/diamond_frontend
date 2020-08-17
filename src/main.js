@@ -54,6 +54,8 @@ import chatting_dialog from './components/chatting_dialog';
 import team_invite_dialog from './components/team_invite_dialog';
 import choose_path_dialog_for_template from './components/choose_path_dialog_for_template';
 import chat_user_list_item from './components/chat_user_list_item';
+import search_display from './components/search_display';
+import search_item from './components/search_item';
 
 Vue.use(Element);
 Vue.use(echarts);
@@ -100,6 +102,8 @@ Vue.component('chatting-dialog', chatting_dialog);
 Vue.component('team-invite-dialog', team_invite_dialog);
 Vue.component('choose-path-dialog-for-template', choose_path_dialog_for_template);
 Vue.component('chat-user-list-item', chat_user_list_item);
+Vue.component('search-display', search_display);
+Vue.component('search-item', search_item);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
