@@ -17,9 +17,9 @@
             <div class="info_area">
                 <div v-if="context=='recycle'">{{delete_time}}</div>
                 <div v-if="context=='recycle'">{{rest_time}}天</div>
-                <div v-if="context!='recycle'">{{creator}}</div>
-                <div v-if="context!='recycle'">{{recent_edit_time}}</div>
-                <div v-if="context!='recycle'" class="min_hide">{{create_time}}</div>
+                <div v-if="context!='recycle'&&context!='recent'">{{creator}}</div>
+                <div v-if="context!='recycle'&&context!='recent'">{{recent_edit_time}}</div>
+                <div v-if="context!='recycle'&&context!='recent'" class="min_hide">{{create_time}}</div>
             </div>
             <div class="more_menu" :class="focus?'more_menu_focus':''">
                 <el-dropdown trigger="click" 

@@ -15,13 +15,21 @@
             </div>
             <div class="chatting_area" v-loading="is_loading">
                 <div class="bubble_window" id="bubble_window">
-                    <chatting-bubble
+                    <div
                         v-for="(item, index) in chatting_list"
                         :key="index"
-                        :type="item.is_mine?'my':'other'"
-                        :text="item.text">
-                    </chatting-bubble>
-                    <div class="bottom clear_both"></div>
+                        style="height:fit-content">
+                        <div class="chatting_time not_found">{{item.time}}</div>
+                        <chatting-bubble
+                            v-for="(iitem, iindex) in item.list"
+                            :key="iindex"
+                            :type="iitem.is_mine?'my':'other'"
+                            :text="iitem.text">
+                        </chatting-bubble>
+                        </div>
+                        <div class="bottom clear_both"></div>
+                    </div>
+                    
                 </div>
                 <div class="input_area">
                     <textarea style="resize:none" :disabled="uid==''" v-model="text" @keydown="keydown"></textarea>
@@ -178,7 +186,43 @@
                             console.log(url+ " : " +res.status);
                         }
                         if(res.status == 0){
-                            that.chatting_list = res.list;
+                            that.chatting_list = [];
+                            let start_dt;
+                            let last_dt;
+                            if(res.list.length){
+                                start_dt = new Date(res.list[0].dt);
+                                last_dt = new Date(res.list[0].dt);
+                            }
+                            else{
+                                return;
+                            }
+                            let list = [];
+                            for(let i=0; i<res.list.length; i++){
+                                if(new Date(res.list[i].dt) - last_dt > 1000*60*3){
+                                    var llist = [];
+                                    for(let i=0; i<list.length; i++){
+                                        llist.push(list[i]);
+                                    }
+                                    let content = {
+                                        time: that.datetime_format_for_chatting(start_dt, res.cur_dt),
+                                        list: llist
+                                    };
+                                    start_dt = new Date(res.list[i].dt);
+                                    list = [];
+                                    that.chatting_list.push(content);
+                                }
+                                last_dt = new Date(res.list[i].dt);
+                                list.push(res.list[i]);
+                            }
+                            var llist = [];
+                            for(let i=0; i<list.length; i++){
+                                llist.push(list[i]);
+                            }
+                            let content = {
+                                time: that.datetime_format_for_chatting(start_dt, res.cur_dt),
+                                list: llist
+                            };
+                            that.chatting_list.push(content);
                         }
                         else{
                             if(!refresh){
@@ -262,6 +306,27 @@
                     e.preventDefault()
                     this.send();
                 }
+            },
+
+            datetime_format_for_chatting(t, ct){
+                let dt = t;
+                let cdt = new Date(dt);
+                if(cdt - dt <= 24*60*60*1000){
+                    if(cdt.getDate() == dt.getDate()){
+                        return dt.getHours() + ':' + dt.getMinutes();
+                    }
+                    else{
+                        return (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + dt.getHours() + ':' + dt.getMinutes();
+                    }
+                }
+                else{
+                    if(cdt.getFullYear() == dt.getFullYear()){
+                        return (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + dt.getHours() + ':' + dt.getMinutes();
+                    }
+                    else{
+                        return dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + dt.getHours() + ':' + dt.getMinutes();
+                    }
+                }
             }
         }
 
@@ -303,9 +368,9 @@
         top:0;
         left:0;
         height:430px;
-        width: calc(100% - 27px);
+        width: calc(100% - 21px);
         overflow-y:overlay;
-        padding:20px 17px 20px 10px;
+        padding:20px 17px 20px 16px;
         /* scroll-behavior:smooth; */
     }
 
@@ -315,10 +380,10 @@
 
     .input_area{
         position: absolute;
-        top:469px;
-        left:0;
+        top:470px;
+        right:0;
         height:calc(100% - 470px);
-        width: 100%;
+        width: 549px;
         border-top:1px solid #ccc;
         border-bottom:1px solid #ccc;
         overflow: hidden;
@@ -358,5 +423,9 @@
 
     textarea:disabled{
         background-color: hsl(0, 0%, 97%) !important;
+    }
+
+    .chatting_time{
+        line-height: 36px !important;
     }
 </style>
