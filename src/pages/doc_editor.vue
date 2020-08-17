@@ -24,6 +24,9 @@
             <el-tooltip class="item" effect="dark" content="取消收藏" placement="bottom">
               <span class="icon iconfont" v-if="is_starred">&#xe65e;</span>
             </el-tooltip>
+            <!--el-tooltip class="item" effect="dark" content="历史记录" placement="bottom">
+              <span class="icon iconfont">&#xe7de;</span>
+            </el-tooltip-->
           </div>
           <div id="toolbar-container" style="min-height:38.67px;">
 
@@ -575,7 +578,7 @@ export default {
       // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
       $.ajax({
         type: 'get',
-        url: '/document/all?did=' + pageData.did/* + '&ver=' + this.ver*/,
+        url: '/document/all?did=' + pageData.did + '&ver=-1',
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         // async: false,
         success: function (res) {
@@ -586,11 +589,51 @@ export default {
             that.file_name = res.name;
             pageData.initialData = res.content;
             that.ver = res.ver;
-            // that.ver = res.ver;
             that.loading_percentage = 85;
             setTimeout(function(){
               that.initCKEditor();
             }, 100);
+          } else {
+            switch (res.status) {
+              case 1:
+                that.alert_box.msg('加载失败', '键值错误');
+                break;
+              case 2:
+                that.alert_box.msg('加载失败', '您的权限不足或还没有登录');
+                break;
+              case 3:
+                that.alert_box.msg('加载失败', '文档不存在');
+                break;
+              default:
+                that.alert_msg.error('未知错误');
+            }
+            //跳转到首页
+            // that.$router.push({path:'/workbench/recent_view'});
+          }
+        },
+        error: function () {
+          that.alert_msg.error('连接失败');
+        }
+      })
+    },
+    applyDocContent() {
+      var that = this;
+      // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
+      that.alert_msg.success('更新前版本号: ' + this.ver);
+      $.ajax({
+        type: 'get',
+        url: '/document/all?did=' + pageData.did + '&ver=' + this.ver,
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        // async: false,
+        success: function (res) {
+          if (that.console_debug) {
+            console.log("(get)/document/all" + " : " + res.status);
+          }
+          if (res.status === 0) {
+            that.file_name = res.name;
+            pageData.initialData = res.content;
+            that.ver = res.ver;
+            that.alert_msg.success('更新后版本号: ' + that.ver);
           } else {
             switch (res.status) {
               case 1:
@@ -620,7 +663,8 @@ export default {
         did: pageData.did,
         content: window.editor.getData(),
         name: that.file_name,
-        // ver: this.ver
+        ver: this.ver,
+        auth: 'write'
       };
       $.ajax({
         type: 'post',
@@ -634,7 +678,7 @@ export default {
             console.log("(post)/document/edit" + " : " + res.status);
           }
           if (res.status === 0) {
-            // this.ver = res.ver;
+            this.ver = res.ver;
             that.alert_msg.success('保存成功');
             //提示成功
           } else {
@@ -656,7 +700,7 @@ export default {
                 break;
               case 6:
                 that.alert_msg.warning('请手动合并文档');
-                /*************/
+                that.ver = res.ver;
                 let newPage = that.$router.resolve({
                   name: 'doc_merge',
                   query:{
@@ -667,8 +711,7 @@ export default {
                 break;
               case 7:
                 that.alert_msg.warning('系统已经自动合并文档');
-                /*************/
-                that.getInitialDocContent();
+                that.applyDocContent();
                 window.editor.setData(pageData.initialData);
                 break;
               default:
@@ -897,13 +940,13 @@ export default {
       });
     },
 
-    //is_stared: true：请求收藏，false：请求取消收藏
-    starTheDoc(is_stared) {
+    //is_starred: true：请求收藏，false：请求取消收藏
+    starTheDoc(is_starred) {
       var that = this;
       let msg = {
         id: pageData.did,
         type: 'doc',
-        is_stared: is_stared
+        is_starred: is_starred
       };
       $.ajax({
         type: 'post',
@@ -920,7 +963,7 @@ export default {
 
             //提示收藏成功/收藏图标变化
           } else {
-            const op = is_stared ? '收藏' : '取消收藏';
+            const op = is_starred ? '收藏' : '取消收藏';
             switch (res.status) {
               case 1:
                 that.alert_box.msg(op + '失败', '键值错误');
@@ -1181,6 +1224,7 @@ export default {
 
 #toolbar-container{
   margin-left:105px;
+  /*margin-left:140px;*/
 }
 
 >>>.ck-user__img {

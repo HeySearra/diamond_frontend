@@ -146,7 +146,7 @@ export default {
     init_user_info(){
       let url = '/user_info';
       var that = this;
-      $.ajax({ 
+      $.ajax({
           type:'get',
           url: url,
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
@@ -188,7 +188,7 @@ export default {
       let url = '/document/info?did=' + did;
       var that = this;
       this.is_loading = true;
-       $.ajax({ 
+       $.ajax({
           type:'get',
           url: url,
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
@@ -248,7 +248,7 @@ export default {
       let url = '/team/info?tid=' + tid;
       var that = this;
       this.is_loading = true;
-      $.ajax({ 
+      $.ajax({
           type:'get',
           url: url,
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
@@ -338,7 +338,7 @@ export default {
             url: url,
             headers: {'X-CSRFToken': that.getCookie('csrftoken')},
             data: JSON.stringify({tid:that.tid}),
-            async:false, 
+            async:false,
             success:function (res){
                 if(that.console_debug){
                     console.log(url +  '：' + res.status);
@@ -378,7 +378,7 @@ export default {
             url: url,
             headers: {'X-CSRFToken': that.getCookie('csrftoken')},
             data: JSON.stringify({tid:that.tid}),
-            async:false, 
+            async:false,
             success:function (res){
                 if(that.console_debug){
                     console.log(url +  '：' + res.status);
@@ -431,7 +431,7 @@ export default {
           url: url,
           headers: {'X-CSRFToken': that.getCookie('csrftoken')},
           data: JSON.stringify({uid:uid}),
-          async:false, 
+          async:false,
           success:function (res){
               if(that.console_debug){
                   console.log(url +  '：' + res.status);

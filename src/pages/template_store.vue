@@ -25,7 +25,7 @@
                 <div v-for="item in official_list" :key="item.tid">
                   <template-display-block
                     context="official"
-                    :name="item.title"
+                    :title="item.title"
                     :list="item.temps"
                     @refresh="refresh"
                     @create_doc_from_template="create_doc_from_template">
@@ -43,11 +43,11 @@
       </el-container>
       <el-footer></el-footer>
     </el-container>
-    <new-dialog 
+    <new-dialog
       ref="new_dialog"
       @create_doc_from_template="create_doc_from_template">
     </new-dialog>
-    <choose-path-dialog-for-template 
+    <choose-path-dialog-for-template
       ref="choose_path_dialog_for_template"
       @create_file_from_template_choose_name="create_file_from_template_choose_name">
     </choose-path-dialog-for-template>
