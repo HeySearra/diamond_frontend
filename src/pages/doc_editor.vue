@@ -1133,7 +1133,7 @@ export default {
       let msg = {
         id: pageData.did,
         type: 'doc',
-        is_starred: is_starred
+        is_starred: !is_starred
       };
       $.ajax({
         type: 'post',
@@ -1142,32 +1142,31 @@ export default {
         data: JSON.stringify(msg),
         processData: false,
         contentType: false,
+        async: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(post)/fs/star" + " : " + res.status);
           }
           if (res.status === 0) {
-
-            //提示收藏成功/收藏图标变化
+            var opp = is_starred ? '收藏' : '取消收藏';
+            that.is_starred = !that.is_starred;
+            that.alert_msg.success(opp + '成功');
           } else {
             const op = is_starred ? '收藏' : '取消收藏';
             switch (res.status) {
-              case 1:
-                that.alert_box.msg(op + '失败', '键值错误');
-                break;
               case 2:
-                that.alert_box.msg(op + '失败', '您的权限不足或还没有登录');
+                that.alert_msg.error('您的权限不足或还没有登录');
                 break;
               case 3:
-                that.alert_box.msg(op + '失败', '文档不存在');
+                that.alert_msg.error('找不到文档');
                 break;
               default:
-                that.alert_msg.error('未知错误');
+                that.alert_msg.error('发生未知错误');
             }
           }
         },
         error: function () {
-          that.alert_msg.error('连接失败');
+          that.alert_msg.error('网络连接失败');
         }
       });
     },

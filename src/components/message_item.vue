@@ -109,7 +109,13 @@ export default {
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
         jump_to_doc(){
-            this.$router.push({name:'doc', params:{did:this.id}}); //待定
+            if(this.$route.name=='doc' && this.$route.did==this.did){
+                this.alert_msg.normal('你已经在这个文档中了');
+                this.$emit('close');
+            }
+            else{
+                this.$router.push({name:'doc', params:{did:this.id}}); //待定
+            }
         },
         confirm_to_join(){
             let data = {

@@ -20,6 +20,7 @@
                 ref="message_item"
                 @confirm-to-join="deal_team_invite"
                 @refresh_count="refresh_count"
+                @close="close"
                 v-ripple>
             </message-item>
             <transition name="el-fade-in-linear">
