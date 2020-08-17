@@ -381,6 +381,10 @@ export default {
     // console.log(this.file_name);
   },
 
+  destroyed(){
+    this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
+  },
+
   data() {
     return {
       Editor: null,//editor instance
@@ -391,12 +395,19 @@ export default {
       is_loading: true,
       is_starred: false,
       ver:-1,
-      is_newest: true
+      is_newest: true,
+      applyVerCode_timer:undefined
     }
   },
 
   methods: {
     init() {
+      this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
+      this.is_newest = true;
+      var that = this;
+      this.applyVerCode_timer = setInterval(function(){
+        that.applyVerCode();
+      }, 1000*10);
       if(!this.login_manager.get()){
         that.alert_msg.warning('您还未登录，请先登录账号');
         this.$router.push({name:'login'});
@@ -567,6 +578,7 @@ export default {
           if (res.status === 0) {
             that.file_name = res.name;
             pageData.initialData = res.content;
+            that.ver = res.ver;
             // that.ver = res.ver;
             that.loading_percentage = 85;
             setTimeout(function(){
@@ -665,31 +677,44 @@ export default {
     },
 
     applyVerCode() {
+      if(!this.is_newest){
+        return;
+      }
       var that = this;
+      let url = '/document/ver_condition?did=' + pageData.did + '&ver=' + this.ver;
       $.ajax({
         type: 'get',
-        url: '/document/ver_condition?did=' + pageData.did + '&ver=' + this.ver,
+        url: url,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         // async: false,
         success: function (res) {
           if (that.console_debug) {
-            console.log("(get)/document/all" + " : " + res.status);
+            console.log(url + " : " + res.status);
           }
           if (res.status === 0) {
             that.is_newest = res.is_newest;
+            if(!res.is_newest){
+              clearInterval(that.applyVerCode_timer);
+              that.$notify({
+                title: '警告',
+                message: '检测到有其他用户提交了当前文档，你在提交的时候可能需要合并内容。',
+                type: 'warning',
+                duration: 9600
+              });
+            }
           } else {
             switch (res.status) {
-              case 1:
-                that.alert_msg.error('获取版本号失败: 键值错误');
-                break;
-              case 2:
-                that.alert_msg.error('获取版本号失败: 您的权限不足或还没有登录');
-                break;
-              case 3:
-                that.alert_msg.error('获取版本号失败: 文档不存在');
-                break;
-              default:
-                that.alert_msg.error('获取版本号失败: 未知错误');
+              // case 1:
+              //   that.alert_msg.error('获取版本号失败: 键值错误');
+              //   break;
+              // case 2:
+              //   that.alert_msg.error('获取版本号失败: 您的权限不足或还没有登录');
+              //   break;
+              // case 3:
+              //   that.alert_msg.error('获取版本号失败: 文档不存在');
+              //   break;
+              // default:
+              //   that.alert_msg.error('获取版本号失败: 未知错误');
             }
           }
         },
