@@ -99,7 +99,8 @@ export default {
                 console.log("(post)/temp/delete" + " : " + res.status);
               }
               if (res.status === 0) {
-                that.alert_box.msg('删除成功', '您的模版已删除');
+                that.alert_msg.success('删除成功');
+                that.$emit('refresh');
               } else {
                 switch (res.status) {
                   // case 1:

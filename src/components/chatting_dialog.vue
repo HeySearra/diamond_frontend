@@ -3,8 +3,10 @@
         <el-dialog
             class="dialog_style"
             :visible.sync="dia_vis"
-            width="fit-content">
-            <chatting-room></chatting-room>
+            :close-on-click-modal="false"
+            width="800px"
+            @close="close">
+            <chatting-room ref="chatting_room"></chatting-room>
         </el-dialog>
     </div>
 </template>
@@ -18,8 +20,21 @@ export default {
     },
 
     methods:{
-        open(){
+        open(uid){
+            this.init_info(uid);
+        },
+
+        init_info(uid){
             this.dia_vis = true;
+            var that = this;
+            setTimeout(function(){
+                that.$refs.chatting_room.open(uid);
+            }, 0);
+        },
+
+        close(){
+            this.$refs.chatting_room.close();
+            this.dia_vis = false;
         }
     }
 

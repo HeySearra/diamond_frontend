@@ -158,6 +158,10 @@ export default {
 
     create_new_fold(){
         this.$refs.new_dialog.open('fold', this.fid, true);
+    },
+
+    open_chatting_dialog(){
+      this.$emit('open_chatting_dialog');
     }
   }
 }

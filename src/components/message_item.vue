@@ -132,7 +132,7 @@ export default {
                     this.confirm_to_join();
                 }
             }
-            else if(this.type == 'admin' || type == 'accept'){
+            else if(this.type == 'admin' || this.type == 'accept'){
                 this.jump_to_team();
             }
             else if(this.type == 'doc'){

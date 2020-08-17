@@ -8,7 +8,9 @@
         @chatting="chatting"
         ref="header"></navbar>
     </el-header>
-    <router-view ref="rw"/>
+    <router-view 
+      ref="rw"
+      @open_chatting_dialog_with_uid="chatting_with_uid" />
     <el-backtop></el-backtop>
     <message-drawer ref="message_drawer" @deal-team-invite="deal_team_invite" @refresh_message_count="refresh_message_count"></message-drawer>
     <edit-user-info-dialog ref="edit_user_info_dialog" @refresh_user_info="refresh_user_info"></edit-user-info-dialog>
@@ -25,13 +27,18 @@ export default {
   data(){
     return {
       show_drawer: true,
+      timer:undefined
     }
   },
   mounted(){
     var that = this;
-    setInterval(function(){
-      that.$refs.header.refresh_message_count();
-    }, 1000*3);
+    this.timer ? clearInterval(this.timer) : '';
+    this.timer = setInterval(function(){
+      let item = that.$refs.header;
+      if(item){
+        item.refresh_message_count();
+      }
+    }, 1000*5);
   },
   methods:{
     open_drawer(){
@@ -46,6 +53,9 @@ export default {
     chatting(){
       this.$refs.chatting_dialog.open();
     },
+    chatting_with_uid(uid){
+      this.$refs.chatting_dialog.open(uid);
+    },
     refresh_user_info(){
       this.$refs.header.init();
       this.$refs.rw.refresh_user_info();
@@ -54,14 +64,14 @@ export default {
       this.$refs.team_invite_dialog.open(data);
     },
     refresh_message_count(){
-      this.$refs.header.refresh_message_count();
+      //this.$refs.header.refresh_message_count();
     },
     close_msg(){
       this.$refs.message_drawer.close();
     },
     refresh_msg(){
       this.$refs.message_drawer.refresh();
-    }
+    },
   },
 }
 </script>

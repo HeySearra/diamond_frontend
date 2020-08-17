@@ -84,6 +84,10 @@ export default {
     share_item(did, name){
         this.$refs.share_dialog.open(did, name);
     },
+
+    open_chatting_dialog(){
+      this.$emit('open_chatting_dialog');
+    }
   }
 }
 </script>

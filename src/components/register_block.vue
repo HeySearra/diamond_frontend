@@ -14,7 +14,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input placeholder="请输入密码" v-model="form.password" show-password ref="pas" maxLength="20" @keyup.enter.native="$refs.ver_code.focus()">
+                    <el-input placeholder="请输入密码" v-model="form.password" show-password ref="pas" maxLength="20" @keyup.enter.native="pas_to_ver">
                         <i slot="prefix" class="el-input__icon iconfont icon-lock-fill"></i>
                     </el-input>
                 </el-form-item>
@@ -209,6 +209,11 @@ export default {
                     that.alert_msg.error('连接失败');
                 }
             });
+        },
+
+        pas_to_ver(){
+            this.$refs.ver_code.focus();
+            this.get_ver_code();
         }
     },
 }

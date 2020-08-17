@@ -987,6 +987,10 @@ export default {
           $('.loading_bar').addClass('loading_bar_done');
         }, 360);
       }, 560);
+    },
+
+    open_chatting_dialog(){
+      this.$emit('open_chatting_dialog');
     }
   },
   /*beforeDestroy() {
