@@ -195,6 +195,10 @@
                 that.photo_src = ''
                 that.is_login = false;
                 that.login_manager.clear();
+                let route_name = that.$router.history.current.name;
+                if(route_name!='login' && route_name!='register' && route_name!='forget' && route_name!='forget_set'){
+                  that.$router.push({name:'login'});
+                }
               }
             },
             error:function(){

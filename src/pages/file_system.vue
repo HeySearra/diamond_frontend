@@ -62,7 +62,7 @@ export default {
   methods:{
     init(){
         if(!this.login_manager.get()){
-          that.alert_msg.warning('您还未登录，请先登录账号');
+          this.alert_msg.warning('您还未登录，请先登录账号');
           this.$router.push({name:'login'});
           return;
         }
@@ -126,7 +126,8 @@ export default {
               else{
                   switch(res.status){
                     case 2:
-                        that.alert_msg.error('权限不足');
+                        that.alert_msg.warning('您还未登录，请先登录账号');
+                        that.$router.push({path: '/login'});
                         break;
                     default:
                         that.alert_msg.error('发生了未知错误');

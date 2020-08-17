@@ -92,7 +92,7 @@ export default {
                                     that.$router.push({name:'login'});
                                 }
                                 that.alert_box.msg('提示', '密码已重置', _ok(that));
-                                that.login_manager.set(true, that.form.account, that.form.name, '');
+                                //that.login_manager.set(true, that.form.account, that.form.name, '');
                             }
                             else{
                                 switch(res.status){

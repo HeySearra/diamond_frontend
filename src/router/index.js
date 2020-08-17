@@ -34,7 +34,7 @@ const router =  new Router({
   routes: [
     {
       path: '/',
-      redirect:'/workbench',
+      redirect:'/file/desktop',
     },
     {
       path: '/login',
