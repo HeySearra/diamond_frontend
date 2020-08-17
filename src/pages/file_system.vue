@@ -183,6 +183,10 @@ export default {
 
     out_loading(){
       this.is_loading = false;
+    },
+
+    open_chatting_dialog(){
+      this.$emit('open_chatting_dialog');
     }
   }
 }

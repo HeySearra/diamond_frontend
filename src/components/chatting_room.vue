@@ -1,26 +1,30 @@
 <template>
     <div class="chatting_room">
-        <div class="user_list"></div>
+        <div class="user_list">
+            <chat-user-list-item
+                v-for="item in user_list"
+                :key="item.uid"
+                :uid="item.uid"
+                :name="item.name"
+                :src="item.src"
+                :content="item.last_message"
+                @click="choose_user">
+            </chat-user-list-item>
+        </div>
         <div class="chatting_area">
             <div class="bubble_window">
-                <chatting-bubble></chatting-bubble>
-                <chatting-bubble type="other"></chatting-bubble>
-                <chatting-bubble></chatting-bubble>
-                <chatting-bubble></chatting-bubble>
-                <chatting-bubble></chatting-bubble>
-                <chatting-bubble type="other"></chatting-bubble>
-                <chatting-bubble></chatting-bubble>
-                <chatting-bubble></chatting-bubble>
-                <chatting-bubble></chatting-bubble>
-                <chatting-bubble></chatting-bubble>
-                <chatting-bubble text="花，不是一种植物"></chatting-bubble>
-                <chatting-bubble type="other" text="气抖冷"></chatting-bubble>
+                <chatting-bubble
+                    v-for="(item, index) in chatting_list"
+                    :key="index"
+                    :type="item.is_mine?'my':'other'"
+                    :text="item.text">
+                </chatting-bubble>
             </div>
             <div class="input_area">
-                <textarea style="resize:none" v-model="text"></textarea>
+                <textarea style="resize:none" v-model="text" @keyup.enter.native="send()"></textarea>
             </div>
             <div class="button_area">
-                <el-button type="primary" plain :disabled="!text">发送</el-button>
+                <el-button type="primary" plain :disabled="!text" @click="send">发送</el-button>
             </div>
         </div>
     </div>
@@ -29,9 +33,137 @@
     export default {
         data() {
             return {
-                text:''
+                text:'',
+                user_list:[],
+                chatting_list:[],
+                uid:'',
+                other_src:'',
+                my_src:'',
+                timer:undefined
             }
         },
+
+        mounted(){
+            var that = this;
+            this.timer = setInterval(function(){
+                that.init();
+            }, 1000*5);
+        },
+
+        methods:{
+            init(refresh){
+                var result = false;
+                var that = this;
+                let url = '/chat/list';
+                $.ajax({
+                    type:'get',
+                    url: url,
+                    headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                    async:false, 
+                    success:function (res){
+                        if(that.console_debug){
+                            console.log(url+ " : " +res.status);
+                        }
+                        if(res.status == 0){
+                            that.user_list = res.list;
+                            result = true;
+                        }
+                        else{
+                            if(!refresh){
+                                that.alert_msg.error('请求内容失败');
+                            }
+                            result = false;
+                        }
+                    },
+                    error:function(){
+                        if(!refresh){
+                            that.alert_msg.error('网络连接失败');
+                        }
+                        result = false;
+                    }
+                });
+
+                if(this.uid != ''){
+                    this.choose_user(uid);
+                }
+                return result;
+            },
+
+            getCookie (name) {
+                var value = '; ' + document.cookie
+                var parts = value.split('; ' + name + '=')
+                if (parts.length === 2) return parts.pop().split(';').shift()
+            },
+
+            choose_user(uid){
+                this.$refs.chat_user_list.choose(uid);
+                this.init_chatting_bubble();
+            },
+
+            init_chatting_bubble(refresh){
+                var that = this;
+                let url = '/chat/content?uid=' + this.uid;
+                $.ajax({
+                    type:'get',
+                    url: url,
+                    headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                    async:false, 
+                    success:function (res){
+                        if(that.console_debug){
+                            console.log(url+ " : " +res.status);
+                        }
+                        if(res.status == 0){
+                            that.chatting_list = res.list;
+                        }
+                        else{
+                            if(!refresh){
+                                that.alert_msg.error('请求内容失败');
+                            }
+                        }
+                    },
+                    error:function(){
+                        if(!refresh){
+                            that.alert_msg.error('网络连接失败');
+                        }
+                    }
+                });
+            },
+
+            send(){
+                var that = this;
+                let url = '/chat/send';
+                let msg = {
+                    uid:this.uid,
+                    text:this.text
+                }
+                $.ajax({
+                    type:'get',
+                    url: url,
+                    headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                    data: JSON.stringify(msg),
+                    async:false, 
+                    success:function (res){
+                        if(that.console_debug){
+                            console.log(url+ " : " +res.status);
+                        }
+                        if(res.status == 0){
+                            that.text = '';
+                            that.init_chatting_bubble();
+                        }
+                        else{
+                            that.alert_msg.error('发送内容失败');
+                        }
+                    },
+                    error:function(){
+                        that.alert_msg.error('网络连接失败');
+                    }
+                });
+            },
+
+            close(){
+                clearInterval(this.timer);
+            }
+        }
 
     }
 </script>

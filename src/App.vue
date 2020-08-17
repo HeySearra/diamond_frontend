@@ -8,7 +8,9 @@
         @chatting="chatting"
         ref="header"></navbar>
     </el-header>
-    <router-view ref="rw"/>
+    <router-view 
+      ref="rw"
+      @open_chatting_dialog="chatting" />
     <el-backtop></el-backtop>
     <message-drawer ref="message_drawer" @deal-team-invite="deal_team_invite" @refresh_message_count="refresh_message_count"></message-drawer>
     <edit-user-info-dialog ref="edit_user_info_dialog" @refresh_user_info="refresh_user_info"></edit-user-info-dialog>
@@ -54,14 +56,14 @@ export default {
       this.$refs.team_invite_dialog.open(data);
     },
     refresh_message_count(){
-      this.$refs.header.refresh_message_count();
+      //this.$refs.header.refresh_message_count();
     },
     close_msg(){
       this.$refs.message_drawer.close();
     },
     refresh_msg(){
       this.$refs.message_drawer.refresh();
-    }
+    },
   },
 }
 </script>

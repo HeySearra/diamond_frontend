@@ -31,7 +31,8 @@
             ref="sidebar"
             @edit_admin="edit_admin"
             @manage_member="manage_member"
-            @edit_team_info="edit_team_info"></sidebar>
+            @edit_team_info="edit_team_info"
+            @open_chatting_dialog="open_chatting_dialog"></sidebar>
       </el-aside>
     </el-container>
     <el-footer></el-footer>
@@ -202,6 +203,10 @@ export default {
 
     out_loading(){
       this.is_loading = false;
+    },
+
+    open_chatting_dialog(){
+      this.$emit('open_chatting_dialog');
     }
   }
 }

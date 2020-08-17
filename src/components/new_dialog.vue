@@ -106,6 +106,9 @@ export default {
     },
 
     click_confirm(){
+        if(!this.dia_vis){
+            return;
+        }
         if(this.is_rename){
             this.rename();
         }
@@ -128,6 +131,9 @@ export default {
     },
 
     rename(){
+        if(!this.dia_vis){
+            return;
+        }
         let url = '/fs/rename';
 
         if(this.name.trim() == ''){
@@ -176,6 +182,9 @@ export default {
     },
 
     create_new_item(type){
+        if(!this.dia_vis){
+            return;
+        }
         let url = '/fs/new';
 
         if(this.name.trim() == ''){
@@ -235,6 +244,9 @@ export default {
     },
 
     create_new_team(){
+        if(!this.dia_vis){
+            return;
+        }
         let url = '/team/new';
 
         if(this.name.trim() == ''){
@@ -279,6 +291,9 @@ export default {
     },
 
     create_from_template(){
+        if(!this.dia_vis){
+            return;
+        }
         var that = this;
         let msg = {
           'tid': this.id,
@@ -328,6 +343,9 @@ export default {
     },
 
     close(){
+        if(!this.dia_vis){
+            return;
+        }
         if(this.type == 'template'){
             this.$emit('create_doc_from_template', this.id, this.template_type, this.name);
             var that = this;

@@ -24,7 +24,7 @@
                 <div v-for="item in official_list" :key="item.tid">
                   <template-display-block
                     context="official"
-                    :title="item.title"
+                    :name="item.title"
                     :list="item.temps"
                     @create_doc_from_template="create_doc_from_template">
                   </template-display-block>
@@ -146,6 +146,10 @@ export default {
     create_file_from_template_choose_name(fid, tid, type, name){
       this.$refs.new_dialog.open_for_template(fid, tid, type, name);
     },
+
+    open_chatting_dialog(){
+      this.$emit('open_chatting_dialog');
+    }
   }
 }
 </script>

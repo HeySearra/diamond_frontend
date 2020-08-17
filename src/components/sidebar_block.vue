@@ -21,7 +21,7 @@
         <h4>创建者</h4>
         <el-divider></el-divider>
         <div class="member_img">
-          <div class="item">
+          <div class="item" @click="build_chat(creator_id)">
             <el-tooltip effect="dark" :content="creator_name" placement="top-end">
             <el-avatar :src="creator_src"></el-avatar>
           </el-tooltip>
@@ -32,7 +32,7 @@
         <h4 v-if="admin_list.length">管理员</h4>
         <el-divider v-if="admin_list.length"></el-divider>
         <div v-if="admin_list.length" class="member_img">
-          <div class="item" v-for="item in admin_list" :key="item.uid">
+          <div class="item" v-for="item in admin_list" :key="item.uid" @click="build_chat(item.uid)">
             <el-tooltip effect="dark" :content="item.name" placement="top-end">
               <el-avatar :src="item.src"></el-avatar>
             </el-tooltip>
@@ -43,7 +43,7 @@
         <h4 v-if="member_list.length">成员</h4>
         <el-divider v-if="member_list.length"></el-divider>
         <div v-if="member_list.length" class="member_img">
-          <div class="item" v-for="item in member_list" :key="item.uid">
+          <div class="item" v-for="item in member_list" :key="item.uid" @click="build_chat(item.uid)">
             <el-tooltip effect="dark" :content="item.name" placement="top-end">
               <el-avatar :src="item.src"></el-avatar>
             </el-tooltip>
@@ -137,6 +137,10 @@ export default {
       this.user_name = this.login_manager.get_name();
       this.user_src = this.login_manager.get_por();
       this.init_user_info();
+    },
+
+    click(){
+      alert('')
     },
 
     init_user_info(){
@@ -411,6 +415,52 @@ export default {
     edit_file_name() {
       console.log('edit', value);
       this.file_name = value;
+    },
+
+    build_chat(uid){
+      if(uid == this.login_manager.get_uid()){
+        let random = parseInt(Math.random()*100000);
+        this.alert_msg.normal('你好寂寞' + this.magic_word[random%this.magic_word.length]);
+        return;
+      }
+      var flag = true;
+      let url = '/chat/build_chat';
+      var that = this;
+      $.ajax({
+          type:'post',
+          url: url,
+          headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+          data: JSON.stringify({uid:uid}),
+          async:false, 
+          success:function (res){
+              if(that.console_debug){
+                  console.log(url +  '：' + res.status);
+              }
+              if(res.status == 0){
+                  flag = true;
+              }
+              else{
+                  switch(res.status){
+                      case 2:
+                          that.alert_msg.error('权限不足');
+                          break;
+                      case 3:
+                          that.alert_msg.error('找不到用户');
+                          break;
+                      default:
+                          that.alert_msg.error('发生了未知错误');
+                  }
+                  flag = false;
+              }
+          },
+          error:function(res){
+              that.alert_msg.error('网络连接失败');
+              flag = false;
+          }
+      });
+      if(flag){
+        this.$emit('open_chatting_dialog');
+      }
     }
   }
 }

@@ -132,6 +132,10 @@ export default {
     open_info(title, content, type){
         this.$refs.team_info_dialog.open_info(title, content, type);
     },
+
+    open_chatting_dialog(){
+      this.$emit('open_chatting_dialog');
+    }
   }
 }
 </script>
