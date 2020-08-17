@@ -2,6 +2,7 @@
   <div id="app">
     <el-header>
       <navbar 
+        class="blur_div"
         @open-drawer="open_drawer"
         @edit_user_info="edit_user_info"
         @change_password="change_password"

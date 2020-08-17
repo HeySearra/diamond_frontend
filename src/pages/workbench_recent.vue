@@ -9,7 +9,8 @@
             @change_view="change_view"
             @open_info="open_info"
             @share_item="share_item"
-            ref="file_system_component">
+            ref="file_system_component"
+            >
         </component>
         <div style="height:50px"></div>
         <share-dialog ref="share_dialog"></share-dialog>

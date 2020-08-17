@@ -1,6 +1,7 @@
 <template>
     <transition name="el-zoom-in-top">
         <div class="chatting_room" v-show="show">
+            <div class="chatting_room_header can_not_choose">{{title}}<span class="el-icon-close close_icon" @click="close"></span></div>
             <div class="user_list">
                 <chat-user-list-item
                     ref="chat_user_list_item"
@@ -31,12 +32,16 @@
                     </div>
                     
                 </div>
-                <div class="input_area">
-                    <textarea style="resize:none" :disabled="uid==''" v-model="text" @keydown="keydown"></textarea>
-                </div>
-                <div class="button_area">
-                    <el-button type="primary" plain :disabled="!text" @click="send">发送</el-button>
-                </div>
+                <transition name="el-fade-in-linear">
+                    <div class="input_area">
+                        <textarea style="resize:none" :disabled="uid==''" v-model="text" @keydown="keydown"></textarea>
+                    </div>
+                </transition>
+                <transition name="el-fade-in-linear">
+                    <div class="button_area">
+                        <el-button type="primary" plain :disabled="!text" @click="send">发送</el-button>
+                    </div>
+                </transition>
             </div>
         </div>
     </transition>
@@ -54,7 +59,8 @@
                 timer:undefined,
                 is_loading:true,
                 is_bottom:true,
-                show: false
+                show: false,
+                title:''
             }
         },
 
@@ -65,6 +71,7 @@
             open(uid){
                 var that = this;
                 this.uid = '';
+                this.title = '';
                 this.chatting_list = [];
                 this.choose_user('');
                 clearInterval(this.timer);
@@ -142,12 +149,12 @@
                 if(this.uid != uid){
                     force_bottom = true;
                     if(uid == ''){
-                        this.$emit('change_title', '');
+                        this.title = ''
                     }
                     else{
                         for(let i=0; i<this.user_list.length; i++){
                             if(uid == this.user_list[i].uid){
-                                this.$emit('change_title', this.user_list[i].name);
+                                this.title = this.user_list[i].name;
                                 break;
                             }
                         }
@@ -299,6 +306,11 @@
             close(){
                 clearInterval(this.timer);
                 this.show = false;
+                var that = this;
+                setTimeout(function(){
+                    that.$emit('close');
+                }, 30);
+                
             },
 
             keydown(e){
@@ -341,10 +353,35 @@
     @import url("../assets/common.css");
 
     .chatting_room{
-        position: relative;
-        width:750px;
-        height:600px;
+        position: absolute;
+        width:80%;
+        left:9%;
+        height:calc(100vh - 50px);
+        top:20px;
+        border:solid 1px hsl(0, 0%, 78%);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 1px 2px 3px hsla(0, 0%, 0%, 0.23) !important;
         /* border:1px solid #ccc; */
+    }
+
+    .chatting_room_header{
+        position: absolute;
+        top:0;
+        left:300px;
+        height: 56px;
+        padding-right: 2em;
+        line-height: 56px;
+        font-weight: bold;
+        font-size: 23px;
+        text-indent: 1em;
+        width:calc(100% - 300px - 2em);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1; /* 行数 */
+        overflow: hidden;
+        background-color: hsla(0, 0%, 99%, 0.96);
+        border-bottom:solid 1px hsl(0, 0%, 87%);
     }
 
     .user_list{
@@ -352,57 +389,55 @@
         top:0;
         left:0;
         height:100%;
-        width:200px;
+        width:299px;
         overflow-y:auto;
-        border:1px solid #ccc;
-        border-right:unset;
+        background-color: hsla(0, 0%, 93%, 0.93);
+        border-right:solid 1px #ccc;
+        
     }
 
     .chatting_area{
         position: absolute;
-        top:0;
-        left:200px;
-        height:100%;
-        width: calc(100% - 200px);
-        border:1px solid #ccc;
+        top:57px;
+        left:300px;
+        height:calc(100% - 57px);
+        width: calc(100% - 300px);
+        background-color: hsla(0, 0%, 100%, 0.56);
     }
 
     .bubble_window{
         position: absolute;
         top:0;
         left:0;
-        height:430px;
-        width: calc(100% - 21px);
+        height:calc(100% - 240px);
+        width: calc(100% - 50px);
         overflow-y:overlay;
-        padding:20px 17px 20px 16px;
+        padding:20px 23px 20px 23px;
         /* scroll-behavior:smooth; */
-    }
-
-    .bubble_window::-webkit-scrollbar {
-        display:none
     }
 
     .input_area{
         position: absolute;
-        top:470px;
+        bottom:0;
         right:0;
-        height:calc(100% - 470px);
-        width: 549px;
-        border-top:1px solid #ccc;
-        border-bottom:1px solid #ccc;
+        height:200px;
+        width: calc(100% - 300px);
+        border-top:solid 1px hsla(0, 0%, 87%, 0.96);
+        background-color: hsl(0, 0%, 100%, 0.96);
         overflow: hidden;
     }
 
     textarea{
-        font-size:16px;
-        line-height:23px;
-        padding: 10px 20px;
-        width:calc(100% - 20px);
-        height:calc(100% - 20px);
+        font-size:17px;
+        line-height:25px;
+        padding: 20px 20px 20px 30px;
+        width:calc(100% - 50px);
+        height:106px;
         overflow-y:auto;
         font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif !important;
         color:#343434;
         border:unset;
+        background:unset;
         transition: all 0.1s linear;
     }
 
@@ -412,24 +447,39 @@
 
     .button_area{
         position: absolute;
-        bottom:6px;
-        right:36px;
-        width: 30px;
+        bottom:12px;
+        right:69px;
+        width: 36px;
     }
 
     .button_area .el-button{
-        padding:6px 15px;
+        padding:9px 18px;
+        font-size:17px;
     }
 
     .cb{
         margin-top:15px;
     }
 
-    textarea:disabled{
-        background-color: hsl(0, 0%, 97%) !important;
+    .input_area textarea:disabled{
+        background-color: hsla(0, 0%, 0%, 0) !important;
     }
 
     .chatting_time{
         line-height: 36px !important;
+    }
+
+    .close_icon{
+        position: absolute;
+        top:0;
+        right: 18px;
+        line-height:56px;
+        display:inline-block;
+        cursor:pointer;
+        color:#aaa;
+    }
+
+    .close_icon:hover{
+        color:#666
     }
 </style>

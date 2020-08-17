@@ -4,7 +4,7 @@
     <el-container class="mid">
       <el-container>
         <el-main>
-          <el-menu :default-active="active_index" class="workbench_menu" mode="horizontal" @select="handleSelect">
+          <el-menu :default-active="active_index" class="workbench_menu blur_div" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1"><router-link class="register_link" :to="{path:'/workbench/recent_view'}">最近浏览</router-link></el-menu-item>
             <el-menu-item index="2"><router-link class="register_link" :to="{path:'/workbench/star_view'}">我的收藏</router-link></el-menu-item>
             <el-menu-item index="3"><router-link class="register_link" :to="{path:'/workbench/create_view'}">我创建的</router-link></el-menu-item>
@@ -15,7 +15,7 @@
           </div>
         </el-main>
       </el-container>
-      <el-aside>
+      <el-aside class=" blur_div">
         <sidebar ref="sidebar" active="workbench" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
       </el-aside>
     </el-container>

@@ -1,13 +1,13 @@
 <template>
   <el-main>
-    <el-aside>
+    <el-aside class="blur_div">
       <sidebar ref="sidebar"></sidebar>
     </el-aside>
-    <el-row style="z-index: 999">
+    <el-row style="z-index: 999" class="blur_div">
       <!-- Toolbar Container -->
       <div id="toolbar-container"></div>
     </el-row>
-    <el-row>
+    <el-row class="blur_div">
       <!--el-col :span="5">
         <sidebar></sidebar>
       </el-col-->

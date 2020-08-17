@@ -1,34 +1,23 @@
 <template>
-  <div class="workbench">
+  <div class="search blur_div">
     <el-container>
     <el-container class="mid">
       <el-container>
         <el-main>
-            <el-form ref="search_form" :model="search_form" label-width="100px" size="mini">
-            <el-form-item label="搜索范围：" style="text-align:left">
-                <el-radio v-model="search_form.limit" :label="0">全部</el-radio>
-                <el-radio v-model="search_form.limit" :label="1">仅文档</el-radio>
-                <el-radio v-model="search_form.limit" :label="2">团队或文件夹</el-radio>
-            </el-form-item>
-            <el-form-item label="搜索排序：" style="text-align:left">
-                <el-radio v-model="search_form.ord" :label="1">按最近编辑时间排序</el-radio>
-                <el-radio v-model="search_form.ord" :label="2">按创建时间排序</el-radio>
-            </el-form-item>
-            <el-form-item label="搜索排序：" style="text-align:left">
-                <el-radio v-model="search_form.towards" :label="1">时间倒序</el-radio>
-                <el-radio v-model="search_form.towards" :label="2">时间正序</el-radio>
-            </el-form-item>
-            </el-form>
           <div style="padding: 0 40px 0 30px;">
             <div style="height:20px"></div>
-            <search-display
-                ref="search_display"
-                :title="'搜索结果'" 
-                :list="list" 
-                :is_in_desktop="is_in_desktop"
-                @refresh="refresh"
+            <component 
+                :is="view_type=='block'?'file-system-block':'file-system-list'"
+                context="workbench"
+                type="from_out"
+                :drage="false"
+                :out_list="list"
+                @change_view="change_view"
+                @open_info="open_info"
+                @share_item="share_item"
+                ref="file_system_component"
                 >
-            </search-display>
+            </component>
             <div style="height:50px"></div>
           </div>
         </el-main>
@@ -48,18 +37,7 @@
 <script>
 export default {
     props: {
-        type:{
-            type:String,
-            default: 'self', // or 'from_out' 'recent'
-        },
-        context:{
-            type:String,
-            default: 'search',
-        },
-        is_in_desktop:{
-            type:Boolean,
-            default: false,
-        },
+
     },
   data () {
     return {
@@ -71,14 +49,10 @@ export default {
             towards: 1,
             limit: 0,
         },
-        draging:{
-            type:'',
-            id:''
-        },
+        view_type:'block',
         random:-1,
         is_loading:true,
         not_found_text:['这里啥玩意也没有', '这里什么也没有', '空空如也', '这里好凄凉', '难道？这里什么也没有', '什么东东都没有', '这里啥都没', '什么也没有~', '这里没东西，别看了', '啊，这里没东西啊'],
-        stop_flag: false
     }
   },
   watch:{
@@ -92,8 +66,10 @@ export default {
     methods:{
          init(){
         //     this.init_scroll();
+            this.view_type = this.view_type_manager.get();
             this.search_form.key = this.$route.query?this.$route.query.data:'';
             this.random = parseInt(Math.random()*100%this.not_found_text.length);
+            this.search_form.key = this.$route.query.data;
             this.apply_for_info();
         },
 
@@ -117,23 +93,10 @@ export default {
                         console.log("(post)/workbench/search"+ " : " +res.status);
                     }
                     if(res.status == 0){
-                        that.list = []
-                        console.log(that.search_form.key);
-                        var args = that.search_form.key.trim().replace(new RegExp(/(\s)+/g)," ").split(' ');
+                        that.list = [];
+                        var llist = [];
                         for(let i=0; i < res.list.length; i++){
-                            res.list[i].name = that.checkData(res.list[i].name);
-                            res.list[i].content = that.checkData(res.list[i].content);
-                            for(let i=0; i<args.length; i++){
-                                args[i] = that.checkData(args[i]);
-                                let reg = new RegExp(args[i].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'ig');
-                                // res.list[i].name = res.list[i].name.replace(reg, function(word){
-                                //     return '<hl>'+word+'</hl>';
-                                // });
-                                // res.list[i].content = res.list[i].content.replace(reg, function(word){
-                                //     return '<hl>'+word+'</hl>';
-                                // });
-                            }
-                            that.list.push({
+                            llist.push({
                                 type: res.list[i].type=="doc"?"file":"fold",
                                 id: res.list[i].id,
                                 is_link: false,
@@ -145,7 +108,10 @@ export default {
                                 recent_edit_time: that.datetime_format(res.list[i].edit_dt, res.cur_dt),
                             })
                         }
-                        that.$refs.search_display.init();
+                        that.list.push({title:'搜索结果', content:llist});
+                        setTimeout(function(){
+                          that.$refs.file_system_component.init();
+                        }, 0);
                         that.is_loading = false;
                     }
                     else{
@@ -157,16 +123,7 @@ export default {
                 }
             });
         },
-       checkData(v) {
-            return v.replace(/[<>"&]/g, function(match, pos, originalText){
-                    switch(match){
-                    case "<": return "&lt;"; 
-                    case ">":return "&gt;";
-                    case "&":return "&amp;"; 
-                    case "\"":return "&quot;"; 
-                } 
-            }); 
-        },
+
         refresh_user_info(){
             this.$refs.sidebar.refresh_user_info();
         },
@@ -175,21 +132,23 @@ export default {
             this.$refs.file_system_component.init();
         },
 
-    error(){
-        this.$router.push({path:'/'});
-    },
+        open_info(title, content, type){
+            this.$refs.file_info_dialog.open_info(title, content, type);
+        },
 
-    in_loading(){
-      this.is_loading = true;
-    },
+        share_item(did, name){
+          this.$refs.share_dialog.open(did, name);
+        },
 
-    out_loading(){
-      this.is_loading = false;
-    },
+        change_view(){
+            this.view_type = this.view_type=='block' ? 'list' : 'block';
+            this.view_type_manager.set(this.view_type);
+            var that = this;
+            setTimeout(function(){
+              that.$refs.file_system_component.init();
+            }, 0);
+        },
 
-    open_chatting_dialog(){
-      this.$emit('open_chatting_dialog');
-    }
   }
 }
 </script>

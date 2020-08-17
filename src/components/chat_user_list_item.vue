@@ -52,8 +52,8 @@ export default {
 @import url("../assets/diadoc_icon.css");
 
 .chat_user_list_item{
-    border-bottom: solid 1px #ddd;
-    height: 4.5em;
+    border-bottom: solid 1px #ccc;
+    height: 5.5em;
     width:100%;
     position: relative;
     cursor: pointer;
@@ -61,39 +61,41 @@ export default {
 }
 
 .chat_user_list_item:hover, .chat_user_list_item_chosen{
-    background-color: hsl(0, 0%, 96%);
+    background-color: hsl(0, 0%, 87%);
 }
 
 .el-avatar{
     position: absolute;
-    top:10px;
-    left:10px;
+    top:15px;
+    left:15px;
+    width:50px;
+    height:50px;
 }
 
 .name{
     position: absolute;
-    top:11px;
-    left:60px;
+    top:18px;
+    left:78px;
     margin:0;
     width: 125px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1; /* 行数 */
     overflow: hidden;
-    font-size:15px;
+    font-size:18px;
     color:#555;
 }
 
 .content{
     position: absolute;
-    top:34px;
-    left:61px;
+    top:43px;
+    left:78px;
     width: 124px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1; /* 行数 */
     overflow: hidden;
-    font-size:12px;
-    color:#565656;
+    font-size:15px;
+    color:hsl(0, 0%, 56%);
 }
 </style>

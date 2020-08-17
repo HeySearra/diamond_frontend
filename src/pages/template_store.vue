@@ -1,5 +1,5 @@
 <template>
-  <div class="file_system">
+  <div class="file_system blur_div">
     <el-container>
       <el-container class="mid">
         <el-container>
