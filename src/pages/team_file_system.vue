@@ -205,8 +205,8 @@ export default {
       this.is_loading = false;
     },
 
-    open_chatting_dialog(){
-      this.$emit('open_chatting_dialog');
+    open_chatting_dialog(uid){
+      this.$emit('open_chatting_dialog_with_uid', uid);
     }
   }
 }

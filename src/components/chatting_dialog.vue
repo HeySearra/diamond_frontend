@@ -20,15 +20,15 @@ export default {
     },
 
     methods:{
-        open(){
-            this.init_info();
+        open(uid){
+            this.init_info(uid);
         },
 
-        init_info(){
+        init_info(uid){
             this.dia_vis = true;
             var that = this;
             setTimeout(function(){
-                that.$refs.chatting_room.open();
+                that.$refs.chatting_room.open(uid);
             }, 0);
         },
 

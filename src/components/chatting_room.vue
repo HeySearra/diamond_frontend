@@ -54,7 +54,7 @@
         },
 
         methods:{
-            open(){
+            open(uid){
                 var that = this;
                 this.uid = '';
                 this.chatting_list = [];
@@ -73,6 +73,9 @@
                         that.is_bottom = false;
                     }
                 });
+                if(uid){
+                    this.choose_user(uid);
+                }
                 this.show = true;
             },
 

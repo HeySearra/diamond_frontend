@@ -459,7 +459,7 @@ export default {
           }
       });
       if(flag){
-        this.$emit('open_chatting_dialog');
+        this.$emit('open_chatting_dialog', uid);
       }
     }
   }
