@@ -105,17 +105,11 @@ export default {
 
         apply_for_info(){
             var that = this;
-            var msg = {
-                key: that.keyword,
-                limit: that.search_form.limit,
-                ord: that.search_form.ord,
-                towards: that.search_form.towards,
-            }
             $.ajax({
                 type:'post',
                 url:"/workbench/search",
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                data: JSON.stringify(msg),
+                data: JSON.stringify(that.search_form),
                 processData: false,
                 contentType: false,
                 success:function (res){
@@ -123,6 +117,7 @@ export default {
                         console.log("(post)/workbench/search"+ " : " +res.status);
                     }
                     if(res.status == 0){
+                        that.list = []
                         console.log(that.search_form.key);
                         var args = that.search_form.key.trim().replace(new RegExp(/(\s)+/g)," ").split(' ');
                         for(let i=0; i < res.list.length; i++){
@@ -131,12 +126,12 @@ export default {
                             for(let i=0; i<args.length; i++){
                                 args[i] = that.checkData(args[i]);
                                 let reg = new RegExp(args[i].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'ig');
-                                res.list[i].name = res.list[i].name.replace(reg, function(word){
-                                    return '<hl>'+word+'</hl>';
-                                });
-                                res.list[i].content = res.list[i].content.replace(reg, function(word){
-                                    return '<hl>'+word+'</hl>';
-                                });
+                                // res.list[i].name = res.list[i].name.replace(reg, function(word){
+                                //     return '<hl>'+word+'</hl>';
+                                // });
+                                // res.list[i].content = res.list[i].content.replace(reg, function(word){
+                                //     return '<hl>'+word+'</hl>';
+                                // });
                             }
                             that.list.push({
                                 type: res.list[i].type=="doc"?"file":"fold",
