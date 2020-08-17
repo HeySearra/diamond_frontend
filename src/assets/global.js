@@ -1,5 +1,5 @@
 import { Message, MessageBox } from 'element-ui'
-export const console_debug = true;
+export const console_debug = false;
 export const alert_msg = {
     success:function(msg){
         Message({

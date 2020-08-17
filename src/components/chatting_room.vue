@@ -34,7 +34,7 @@
                 </div>
                 <transition name="el-fade-in-linear">
                     <div class="input_area">
-                        <textarea style="resize:none" :disabled="uid==''" v-model="text" @keydown="keydown"></textarea>
+                        <textarea style="resize:none" :disabled="uid==''" v-model="text" @keydown="keydown" maxlength="300"></textarea>
                     </div>
                 </transition>
                 <transition name="el-fade-in-linear">
@@ -78,7 +78,7 @@
                 this.init();
                 this.timer = setInterval(function(){
                     that.init(true);
-                }, 1000*2);
+                }, 1000*5);
                 $("#bubble_window").off('scroll');
                 $("#bubble_window").scroll(function(){
                     if(Math.abs($("#bubble_window").scrollTop() - $("#bubble_window")[0].scrollHeight) < 20){
@@ -201,6 +201,7 @@
                                 last_dt = new Date(res.list[0].dt);
                             }
                             else{
+                                that.is_loading = false;
                                 return;
                             }
                             let list = [];

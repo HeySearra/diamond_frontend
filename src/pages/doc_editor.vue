@@ -249,7 +249,7 @@ class CommentsAdapter {
       applyDocContent() {
         var that = this;
         // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
-        alert_msg.success('更新前版本号: ' + pageData.ver);
+        //alert_msg.success('更新前版本号: ' + pageData.ver);
         $.ajax({
           type: 'get',
           url: '/document/all?did=' + pageData.did + '&ver=' + pageData.ver,
@@ -263,7 +263,7 @@ class CommentsAdapter {
               pageData.file_name = res.name;
               pageData.initialData = res.content;
               pageData.ver = res.ver;
-              alert_msg.success('更新后版本号: ' + pageData.ver);
+              //alert_msg.success('更新后版本号: ' + pageData.ver);
             } else {
               switch (res.status) {
                 case 1:
@@ -594,7 +594,6 @@ export default {
       this.is_newest = true;
       var that = this;
       setTimeout(function(){
-        that.applyVerCode();
         that.getCurrentEditingUser();
       }, 0);
       this.applyVerCode_timer = setInterval(function(){
