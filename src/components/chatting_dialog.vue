@@ -4,10 +4,12 @@
             class="dialog_style"
             :visible.sync="dia_vis"
             :close-on-click-modal="false"
-            width="800px"
-            @close="close">
-            <h2>{{title}}</h2>
-            <chatting-room ref="chatting_room" @change_title="change_title"></chatting-room>
+            width="830px"
+            fullscreen
+            :modal="false"
+            :show-close="false">
+            <div style="height:6vh"></div>
+            <chatting-room ref="chatting_room" @close="close"></chatting-room>
         </el-dialog>
     </div>
 </template>
@@ -16,13 +18,13 @@
 export default {
     data() {
         return {
-            title:'',
             dia_vis:false
         }
     },
 
     methods:{
         open(uid){
+            $('.blur_div').addClass('blur_style');
             this.init_info(uid);
         },
 
@@ -36,15 +38,10 @@ export default {
         },
 
         close(){
-            this.$refs.chatting_room.close();
+            $('.blur_div').removeClass('blur_style');
             this.dia_vis = false;
-        },
-
-        change_title(title){
-            this.title = title;
         }
     }
-
 }
 </script>
 
@@ -57,11 +54,15 @@ export default {
 h2{
     position: absolute;
     top: 0;
-    left: 20px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1; /* 行数 */
-    overflow: hidden;
+    left: 27px;
     width:700px;
+}
+
+.chatting_room{
+    margin:0 auto;
+}
+
+>>>.el-dialog{
+    background-color: hsla(0, 0%, 0%, 0.06) !important;        
 }
 </style>

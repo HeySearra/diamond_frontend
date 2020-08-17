@@ -1,9 +1,9 @@
 <template>
   <el-main>
-    <el-aside style="display: flex; justify-content: center;font-size: 20px; align-content: center;">
+    <el-aside style="display: flex; justify-content: center;font-size: 20px; align-content: center;" class="blur_div">
       <span style="font-weight: bolder; margin-top: 50px">Merge Mode</span>
     </el-aside>
-    <div v-loading="is_loading">
+    <div v-loading="is_loading" class="blur_div">
       <!--el-row style="z-index: 999">
         <div class="new_toobar">
 

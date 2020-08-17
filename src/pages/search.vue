@@ -1,5 +1,5 @@
 <template>
-  <div class="workbench">
+  <div class="search blur_div">
     <el-container>
     <el-container class="mid">
       <el-container>

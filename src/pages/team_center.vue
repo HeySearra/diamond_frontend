@@ -1,5 +1,5 @@
 <template>
-  <div class="team_center">
+  <div class="team_center blur_div">
     <el-container>
     <el-container class="mid">
       <el-container>

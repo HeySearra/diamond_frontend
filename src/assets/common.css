@@ -205,6 +205,10 @@ h1:focus, a:focus{
     color:hsl(45, 78%, 69%) !important;
 }
 
+.blur_style{
+    filter:blur(2px) !important;
+}
+
 ::-webkit-scrollbar {
     width:6px;
     height:6px;

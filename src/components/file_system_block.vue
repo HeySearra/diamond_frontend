@@ -3,11 +3,11 @@
         <div class="clear_both"></div>
         <div style="height:6vh;" v-if="!list.length&&!is_loading"></div>
         <div v-if="!list.length&&!is_loading&&random>=0" class="not_found">{{not_found_text[random]}}</div>
-        <div class="go_button can_not_choose" v-if="type=='self'&&path.length">
+        <div class="go_button can_not_choose blur_div" v-if="type=='self'&&path.length">
             <div @click="go_left" :class="opa?'opa':''"><span class="el-icon-arrow-left"></span></div>
             <div @click="go_right" :class="opa?'opa':''"><span class="el-icon-arrow-right"></span></div>
         </div>
-        <div class="path" :class="opa?'opa':''" v-if="type=='self'&&path.length">
+        <div class="path blur_div" :class="opa?'opa':''" v-if="type=='self'&&path.length">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item v-for="item in path" :key="item.fid">
                     <router-link :to="item.fid!=''?'/file/'+item.fid:''">{{item.name}}</router-link>
@@ -17,6 +17,7 @@
         <div class="clear_both divide_type" :style="type=='self'&&path.length?'height:50px':'height:20px'"></div>
         <div v-for="item in list" :key="item.title">
             <file-display-block 
+                class="blur_div"
                 ref="display_component"
                 :title="item.title" 
                 :list="item.content" 
@@ -37,7 +38,7 @@
             <div class="clear_both divide_type"></div>
         </div>
         <div class="clear_both" style="height:50px"></div>
-        <div class="icon_part can_not_choose" :class="opa?'opa':''" @click="change_view" v-if="list.length">
+        <div class="icon_part can_not_choose blur_div" :class="opa?'opa':''" @click="change_view" v-if="list.length">
             <div class="icon_button"><span class="icon iconfont">&#xe7e4;</span></div>
         </div>
     </div>

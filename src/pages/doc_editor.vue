@@ -3,11 +3,12 @@
     <el-aside>
       <sidebar
         ref="sidebar"
+        class="blur_div"
         context="doc"
         :file_name="file_name"
       ></sidebar>
     </el-aside>
-    <div v-loading="is_loading">
+    <div v-loading="is_loading" class="blur_div">
       <el-row style="z-index: 999">
         <!-- Toolbar Container -->
         <div class="new_toobar">
