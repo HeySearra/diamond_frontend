@@ -19,10 +19,10 @@
               <span class="icon iconfont" @click="saveAsTemplate">&#xe672;</span>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
-              <span class="icon iconfont" v-if="!is_starred">&#xe65c;</span>
+              <span class="icon iconfont" v-if="!is_starred" @click="starTheDoc(is_starred)">&#xe65c;</span>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="取消收藏" placement="bottom">
-              <span class="icon iconfont" v-if="is_starred">&#xe65e;</span>
+              <span class="icon iconfont" v-if="is_starred" @click="starTheDoc(is_starred)">&#xe65e;</span>
             </el-tooltip>
             <!--el-tooltip class="item" effect="dark" content="历史记录" placement="bottom">
               <span class="icon iconfont">&#xe7de;</span>
@@ -71,7 +71,9 @@ const pageData = {
   // The ID of the current user.
   userId: '',
   // Editor initial data(for testing).
-  initialData: ''
+  initialData: '',
+  file_name: '',
+  ver: -1,
 };
 
 class MyUploadAdapter {
@@ -171,6 +173,176 @@ class CommentsAdapter {
         this.$refs.sidebar.refresh_user_info();
       },
 
+      updateDocContent() {
+        var that = this;
+        var status = -1;
+        let msg = {
+          did: pageData.did,
+          content: window.editor.getData(),
+          name: pageData.file_name,
+          ver: pageData.ver,
+          auth: 'comment'
+        };
+        $.ajax({
+          type: 'post',
+          url: '/document/edit',
+          data: JSON.stringify(msg),
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false,
+          success: function (res) {
+            status = res.status;
+            if (console_debug) {
+              console.log("(post)/document/edit" + " : " + res.status);
+            }
+            if (res.status === 0) {
+              pageData.ver = res.ver;
+              alert_msg.success('保存成功');
+              //提示成功
+            } else {
+              switch (res.status) {
+                case 1:
+                  alert_msg.error('编辑失败: 键值错误');
+                  break;
+                case 2:
+                  alert_msg.error('编辑失败: 您的权限不足或还没有登录');
+                  break;
+                case 3:
+                  alert_msg.error('编辑失败: 您的标题不合法');
+                  break;
+                case 4:
+                  alert_msg.error('编辑失败: 您的内容不合法');
+                  break;
+                case 5:
+                  alert_msg.error('编辑失败: 同目录下存在同名文件');
+                  break;
+                case 6:
+                  alert_msg.warning('请手动合并文档');
+                  pageData.ver = res.ver;
+                  let newPage = that.$router.resolve({
+                    name: 'doc_merge',
+                    query:{
+                      did: pageData.did
+                    }
+                  })
+                  window.open(newPage.href, '_blank');
+                  break;
+                case 7:
+                  alert_msg.warning('系统已经自动合并文档');
+                  that.applyDocContent();
+                  window.editor.setData(pageData.initialData);
+                  break;
+                default:
+                  alert_msg.error('编辑失败: 未知错误');
+              }
+              //that.$router.push({path:'/workbench/recent'});
+            }
+          },
+          error: function () {
+            alert_msg.error('连接失败');
+          }
+        })
+        return status;
+      },
+
+      applyDocContent() {
+        var that = this;
+        // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
+        alert_msg.success('更新前版本号: ' + pageData.ver);
+        $.ajax({
+          type: 'get',
+          url: '/document/all?did=' + pageData.did + '&ver=' + pageData.ver,
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          async: false,
+          success: function (res) {
+            if (console_debug) {
+              console.log("(get)/document/all" + " : " + res.status);
+            }
+            if (res.status === 0) {
+              pageData.file_name = res.name;
+              pageData.initialData = res.content;
+              pageData.ver = res.ver;
+              alert_msg.success('更新后版本号: ' + pageData.ver);
+            } else {
+              switch (res.status) {
+                case 1:
+                  alert_box.msg('加载失败', '键值错误');
+                  break;
+                case 2:
+                  alert_box.msg('加载失败', '您的权限不足或还没有登录');
+                  break;
+                case 3:
+                  alert_box.msg('加载失败', '文档不存在');
+                  break;
+                default:
+                  alert_msg.error('未知错误');
+              }
+              //跳转到首页
+              // that.$router.push({path:'/workbench/recent_view'});
+            }
+          },
+          error: function () {
+            alert_msg.error('连接失败');
+          }
+        })
+      },
+
+      /*addComment(data) {
+        console.log('Comment added', data);
+        if (this.updateDocContent() !== 0) {
+          alert_msg.error('上传评论失败: 您的文档不是最新');
+          return Promise.reject();
+        } else {
+          let msg = {
+            did: pageData.did,
+            // uid: pageData.userId,
+            threadId: data.threadId,
+            commentId: data.commentId,
+            content: data.content,
+          };
+          $.ajax({
+            type: 'post',
+            url: '/document/comment/add',
+            data: JSON.stringify(msg),
+            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+            processData: false,
+            contentType: false,
+            async: false,
+            success: function (res) {
+              if (console_debug) {
+                console.log("(post)/document/comment/add" + " : " + res.status);
+              }
+              if (res.status !== 0) {
+                switch (res.status) {
+                  case 1:
+                    alert_msg.error('上传评论失败: 键值错误');
+                    break;
+                  case 2:
+                    alert_msg.error('上传评论失败: 您的权限不足或还没有登录');
+                    break;
+                  case 3:
+                    alert_msg.error('上传评论失败: 文档或评论不存在');
+                    break;
+                  default:
+                    alert_msg.error('未知错误');
+                }
+              }
+            },
+            error: function () {
+              alert_msg.error('连接失败');
+            }
+          });
+          return Promise.resolve({
+            createdAt: new Date()       // Should be set on the server side.
+          });
+        }
+        // Write a request to your database here. The returned `Promise`
+        // should be resolved when the request has finished.
+        // When the promise resolves with the comment data object, it
+        // will update the editor comment using the provided data.
+
+      },*/
+
       addComment(data) {
         console.log('Comment added', data);
         let msg = {
@@ -212,6 +384,7 @@ class CommentsAdapter {
             alert_msg.error('连接失败');
           }
         });
+
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         // When the promise resolves with the comment data object, it
@@ -405,6 +578,12 @@ export default {
       online_timer:undefined
     }
   },
+  /*
+  watch: {
+    file_name: function () {
+      pageData.file_name = this.file_name;
+    }
+  },*/
 
   methods: {
     init() {
@@ -588,7 +767,7 @@ export default {
           if (res.status === 0) {
             that.file_name = res.name;
             pageData.initialData = res.content;
-            that.ver = res.ver;
+            pageData.ver = res.ver;
             that.loading_percentage = 85;
             setTimeout(function(){
               that.initCKEditor();
@@ -618,22 +797,23 @@ export default {
     },
     applyDocContent() {
       var that = this;
+      var content = window.editor.getData();
       // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
-      that.alert_msg.success('更新前版本号: ' + this.ver);
+      that.alert_msg.success('更新前版本号: ' + pageData.ver);
       $.ajax({
         type: 'get',
-        url: '/document/all?did=' + pageData.did + '&ver=' + this.ver,
+        url: '/document/all?did=' + pageData.did + '&ver=' + pageData.ver,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        // async: false,
+        async: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(get)/document/all" + " : " + res.status);
           }
           if (res.status === 0) {
             that.file_name = res.name;
-            pageData.initialData = res.content;
-            that.ver = res.ver;
-            that.alert_msg.success('更新后版本号: ' + that.ver);
+            content = res.content;
+            pageData.ver = res.ver;
+            that.alert_msg.success('更新后版本号: ' + pageData.ver);
           } else {
             switch (res.status) {
               case 1:
@@ -655,15 +835,16 @@ export default {
         error: function () {
           that.alert_msg.error('连接失败');
         }
-      })
+      });
+      return content;
     },
     updateDocContent() {
       var that = this;
       let msg = {
         did: pageData.did,
         content: window.editor.getData(),
-        name: that.file_name,
-        ver: this.ver,
+        name: this.file_name,
+        ver: pageData.ver,
         auth: 'write'
       };
       $.ajax({
@@ -678,7 +859,7 @@ export default {
             console.log("(post)/document/edit" + " : " + res.status);
           }
           if (res.status === 0) {
-            this.ver = res.ver;
+            pageData.ver = res.ver;
             that.alert_msg.success('保存成功');
             //提示成功
           } else {
@@ -700,7 +881,7 @@ export default {
                 break;
               case 6:
                 that.alert_msg.warning('请手动合并文档');
-                that.ver = res.ver;
+                pageData.ver = res.ver;
                 let newPage = that.$router.resolve({
                   name: 'doc_merge',
                   query:{
@@ -711,8 +892,9 @@ export default {
                 break;
               case 7:
                 that.alert_msg.warning('系统已经自动合并文档');
-                that.applyDocContent();
-                window.editor.setData(pageData.initialData);
+                const content = that.applyDocContent();
+                console.log("获得自动merge后的内容：", content);
+                window.editor.setData(content);
                 break;
               default:
                 that.alert_msg.error('编辑失败: 未知错误');
@@ -727,11 +909,11 @@ export default {
     },
 
     applyVerCode() {
-      if(!this.is_newest){
+      if(!this.is_newest || pageData.ver === -1){
         return;
       }
       var that = this;
-      let url = '/document/ver_condition?did=' + pageData.did + '&ver=' + this.ver;
+      let url = '/document/ver_condition?did=' + pageData.did + '&ver=' + pageData.ver;
       $.ajax({
         type: 'get',
         url: url,
@@ -814,7 +996,7 @@ export default {
       console.log('saving as template');
       var that = this;
       let msg = {
-        name: that.file_name,
+        name: this.file_name,
         content: window.editor.getData(),
       };
       $.ajax({
@@ -1065,7 +1247,8 @@ export default {
 
     open_chatting_dialog(){
       this.$emit('open_chatting_dialog');
-    }
+    },
+
   },
   /*beforeDestroy() {
     //this.updateDocContent(window.editor.getData());
