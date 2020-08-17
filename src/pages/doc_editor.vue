@@ -806,7 +806,7 @@ export default {
       that.alert_msg.success('更新前版本号: ' + pageData.ver);
       $.ajax({
         type: 'get',
-        url: '/document/all?did=' + pageData.did + '&ver=' + pageData.ver,
+        url: '/document/all?did=' + pageData.did + '&ver=-1',
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         async: false,
         success: function (res) {
