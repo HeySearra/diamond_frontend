@@ -23,18 +23,16 @@
             </el-dropdown-menu>
           </el-dropdown>
         </el-avatar>
-        <transition name="el-zoom-in-center">
-          <span
-            v-for="item in online_icon_list"
-            :key="item.uid"
-            @click="open_chat_dialog_with_uid(item.uid)">
-                <header-user-icon
-                  ref="header_user_icon"
-                  :name="item.name"
-                  :src="item.src">
-                </header-user-icon>
-          </span>
-          </transition>
+        <span
+          v-for="item in online_icon_list"
+          :key="item.uid"
+          @click="open_chat_dialog_with_uid(item.uid)">
+              <header-user-icon
+                ref="header_user_icon"
+                :name="item.name"
+                :src="item.src">
+              </header-user-icon>
+        </span>
       </div>
       <div class="user">
           <span class="el-dropdown-link" @click="to_login" v-if="!is_login&&!opa">

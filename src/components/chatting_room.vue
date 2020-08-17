@@ -72,6 +72,7 @@
                 var that = this;
                 this.uid = '';
                 this.title = '';
+                this.text = '';
                 this.chatting_list = [];
                 this.choose_user('');
                 clearInterval(this.timer);

@@ -1147,7 +1147,7 @@ export default {
             console.log("(post)/fs/star" + " : " + res.status);
           }
           if (res.status === 0) {
-            var opp = is_starred ? '收藏' : '取消收藏';
+            var opp = !is_starred ? '收藏' : '取消收藏';
             that.is_starred = !that.is_starred;
             that.alert_msg.success(opp + '成功');
           } else {

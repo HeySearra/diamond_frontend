@@ -115,6 +115,8 @@ export default {
                 url:'/upload/port',
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')}, 
                 data:form,
+                processData: false,
+                contentType: false,
                 async:false, 
                 success:function (res){ 
                     if(res.status == 0){

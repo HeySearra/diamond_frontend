@@ -83,7 +83,7 @@
     <el-row class="function_buttons" :class="active=='workbench'?'function_buttons_active':''"><router-link :to="{path:'/workbench/'}">工作台</router-link></el-row>
     <el-row class="function_buttons" :class="active=='team_center'?'function_buttons_active':''"><router-link :to="{path:'/team/'}">我的团队</router-link></el-row>
     <el-row class="function_buttons" :class="active=='desktop'?'function_buttons_active':''"><router-link :to="{path:'/file/'}">我的桌面</router-link></el-row>
-    <el-row class="function_buttons" :class="active=='template'?'function_buttons_active':''"><router-link :to="{path:'/template'}">模版库</router-link></el-row>
+    <el-row class="function_buttons" :class="active=='template'?'function_buttons_active':''"><router-link :to="{path:'/template'}">模板库</router-link></el-row>
     <el-row class="function_buttons" :class="active=='recycle'?'function_buttons_active':''"><router-link :to="{path:'/recycle'}">回收站</router-link></el-row>
     <div style="height:50px"></div>
   </div>
