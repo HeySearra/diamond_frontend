@@ -78,7 +78,7 @@ export default {
             that.page++;
             $.ajax({
                 type:'get',
-                url:"/workbench/star?page=" + that.page + "&each=" + that.each,
+                url:"/workbench/star",
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 processData: false,
                 contentType: false,
