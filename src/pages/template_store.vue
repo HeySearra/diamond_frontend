@@ -10,6 +10,7 @@
                 <template-display-block
                   v-bind:list="my_list"
                   context="user"
+                  @refresh="refresh"
                   @create_doc_from_template="create_doc_from_template">
                 </template-display-block>
                 <div class="clear_both divide_type"></div>
@@ -26,6 +27,7 @@
                     context="official"
                     :name="item.title"
                     :list="item.temps"
+                    @refresh="refresh"
                     @create_doc_from_template="create_doc_from_template">
                   </template-display-block>
                   <div class="clear_both divide_type"></div>
@@ -149,6 +151,10 @@ export default {
 
     open_chatting_dialog(){
       this.$emit('open_chatting_dialog');
+    },
+
+    refresh(){
+      this.getAllTemplates();
     }
   }
 }
