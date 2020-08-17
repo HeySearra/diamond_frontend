@@ -408,10 +408,15 @@ export default {
 
   methods: {
     init() {
+      this.did = this.$route.params.did;
       this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
       this.online_timer ? clearInterval(this.online_timer) : '';
       this.is_newest = true;
       var that = this;
+      setTimeout(function(){
+        that.applyVerCode();
+        that.getCurrentEditingUser();
+      }, 0);
       this.applyVerCode_timer = setInterval(function(){
         that.applyVerCode();
       }, 1000*10);
@@ -423,7 +428,6 @@ export default {
         this.$router.push({name:'login'});
         return;
       }
-      this.did = this.$route.params.did;
       pageData.did = this.did;
       this.getStarStatus();
       this.apply_for_info();
@@ -749,7 +753,7 @@ export default {
                 title: '警告',
                 message: '检测到有其他用户提交了当前文档，你在提交的时候可能需要合并内容。',
                 type: 'warning',
-                duration: 9600
+                duration: 6900
               });
             }
           } else {

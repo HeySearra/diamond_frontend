@@ -316,15 +316,15 @@
                         return dt.getHours() + ':' + dt.getMinutes();
                     }
                     else{
-                        return (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + dt.getHours() + ':' + dt.getMinutes();
+                        return (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + dt.getHours() + ':' + (dt.getMinutes()<10?('0'+dt.getMinutes()):dt.getMinutes());
                     }
                 }
                 else{
                     if(cdt.getFullYear() == dt.getFullYear()){
-                        return (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + dt.getHours() + ':' + dt.getMinutes();
+                        return (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + dt.getHours() + ':' + (dt.getMinutes()<10?('0'+dt.getMinutes()):dt.getMinutes());
                     }
                     else{
-                        return dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + dt.getHours() + ':' + dt.getMinutes();
+                        return dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + dt.getHours() + ':' + (dt.getMinutes()<10?('0'+dt.getMinutes()):dt.getMinutes());
                     }
                 }
             }

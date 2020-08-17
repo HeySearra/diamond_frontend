@@ -10,7 +10,7 @@
       active-text-color="#efb7b6">
       <h1><a class="logo_a" @click="$router.push({path:'/'});"></a></h1>
       <div class="online_icon" v-if="is_login&&online_icon_list.length">
-        <el-avatar>
+        <el-avatar v-if="online_dropdown_list.length">
           <el-dropdown>
             <span class="el-dropdown-link">
               <i class="el-icon-more"></i>
@@ -23,20 +23,18 @@
             </el-dropdown-menu>
           </el-dropdown>
         </el-avatar>
-        <span
-          v-for="item in online_icon_list"
-          :key="item.uid"
-          @click="open_chat_dialog_with_uid(item.uid)">
-          <el-tooltip 
-            class="item" 
-            effect="dark" 
-            :content="item.name" 
-            placement="top-start" 
-            >
-            <el-avatar :src="item.src"></el-avatar>
-          </el-tooltip>
-        </span>
-        
+        <transition name="el-zoom-in-center">
+          <span
+            v-for="item in online_icon_list"
+            :key="item.uid"
+            @click="open_chat_dialog_with_uid(item.uid)">
+                <header-user-icon
+                  ref="header_user_icon"
+                  :name="item.name"
+                  :src="item.src">
+                </header-user-icon>
+          </span>
+          </transition>
       </div>
       <div class="user">
           <span class="el-dropdown-link" @click="to_login" v-if="!is_login&&!opa">
@@ -292,20 +290,52 @@
       },
 
       refresh_online_list(list){
-        this.online_icon_list = [];
-        for(let i=0; i<5&&i<list.length; i++){
-          this.online_icon_list.push({
-            uid: list[i].uid,
-            name: list[i].name,
-            src: list[i].portrait
-          });
+        if(!list.length){
+          let item = this.$refs.header_user_icon;
+          if(item){
+            for(let i=0; i<item.length; i++){
+              item[i].close();
+            }
+          }
         }
-        for(let i=5; i<list.length; i++){
-          this.online_dropdown_list.push({
-            uid: list[i].uid,
-            name: list[i].name,
-            src: list[i].portrait
-          });
+        var that = this;
+        if(list.length){
+          that.online_icon_list = [];
+          that.online_dropdown_list = [];
+          for(let i=0; i<5&&i<list.length; i++){
+            that.online_icon_list.push({
+              uid: list[i].uid,
+              name: list[i].name,
+              src: list[i].portrait
+            });
+          }
+          for(let i=5; i<list.length; i++){
+            that.online_dropdown_list.push({
+              uid: list[i].uid,
+              name: list[i].name,
+              src: list[i].portrait
+            });
+          }
+        }
+        else{
+          setTimeout(function(){
+            that.online_icon_list = [];
+          that.online_dropdown_list = [];
+          for(let i=0; i<5&&i<list.length; i++){
+            that.online_icon_list.push({
+              uid: list[i].uid,
+              name: list[i].name,
+              src: list[i].portrait
+            });
+          }
+          for(let i=5; i<list.length; i++){
+            that.online_dropdown_list.push({
+              uid: list[i].uid,
+              name: list[i].name,
+              src: list[i].portrait
+            });
+          }
+          }, 150);
         }
       },
 

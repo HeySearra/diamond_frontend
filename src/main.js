@@ -56,6 +56,7 @@ import choose_path_dialog_for_template from './components/choose_path_dialog_for
 import chat_user_list_item from './components/chat_user_list_item';
 import search_display from './components/search_display';
 import search_item from './components/search_item';
+import header_user_icon from './components/header_user_icon';
 
 Vue.use(Element);
 Vue.use(echarts);
@@ -104,6 +105,7 @@ Vue.component('choose-path-dialog-for-template', choose_path_dialog_for_template
 Vue.component('chat-user-list-item', chat_user_list_item);
 Vue.component('search-display', search_display);
 Vue.component('search-item', search_item);
+Vue.component('header-user-icon', header_user_icon);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
