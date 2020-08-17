@@ -20,6 +20,7 @@ import test from '@/components/chatting_room.vue'
 import doc_editor from "@/pages/doc_editor.vue"
 import doc_read_only from "@/pages/doc_read_only.vue"
 import doc_comment_only from "@/pages/doc_comment_only.vue"
+import doc_merge from "../pages/doc_merge";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -175,6 +176,14 @@ const router =  new Router({
       component: doc_editor,
       meta:{
         title:'DiaDoc 文章',
+      }
+    },
+    {
+      path: '/doc/:did/merge',
+      name: 'doc_merge',
+      component: doc_merge,
+      meta:{
+        title:'DiaDoc 合并文章',
       }
     },
   ],

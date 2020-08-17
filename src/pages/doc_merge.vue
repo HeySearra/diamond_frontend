@@ -11,20 +11,7 @@
       <el-row style="z-index: 999">
         <!-- Toolbar Container -->
         <div class="new_toobar">
-          <div class="append_tools can_not_choose">
-            <el-tooltip class="item" effect="dark" content="保存" placement="bottom">
-              <span class="icon iconfont" @click="updateDocContent">&#xe82a;</span>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="保存为模板" placement="bottom">
-              <span class="icon iconfont" @click="saveAsTemplate">&#xe672;</span>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
-              <span class="icon iconfont" v-if="!is_starred">&#xe65c;</span>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="取消收藏" placement="bottom">
-              <span class="icon iconfont" v-if="is_starred">&#xe65e;</span>
-            </el-tooltip>
-          </div>
+
           <div id="toolbar-container" style="min-height:38.67px;">
 
           </div>
@@ -47,9 +34,9 @@
       </el-row>
     </div>
     <el-progress
-        :percentage="loading_percentage"
-        class="loading_bar"
-        :show-text="false">
+      :percentage="loading_percentage"
+      class="loading_bar"
+      :show-text="false">
     </el-progress>
   </el-main>
 </template>
@@ -62,7 +49,7 @@ import {alert_box, alert_msg, console_debug} from "../assets/global";
 const pageData = {
   did: '',
   commentsOnly: false,
-  readOnly: false,
+  readOnly: true,
   // Users data.
   users: [],
   // The ID of the current user.
@@ -390,8 +377,7 @@ export default {
       loading_percentage:0,
       is_loading: true,
       is_starred: false,
-      ver:-1,
-      is_newest: true
+      ver:-1
     }
   },
 
@@ -403,7 +389,6 @@ export default {
         return;
       }
       this.did = this.$route.params.did;
-      pageData.did = this.did;
       this.getStarStatus();
       this.apply_for_info();
     },
@@ -572,6 +557,8 @@ export default {
             setTimeout(function(){
               that.initCKEditor();
             }, 100);
+            console.log(res.content);
+            console.log(res.name);
           } else {
             switch (res.status) {
               case 1:
@@ -595,11 +582,11 @@ export default {
         }
       })
     },
-    updateDocContent() {
+    updateDocContent(content) {
       var that = this;
       let msg = {
         did: pageData.did,
-        content: window.editor.getData(),
+        content: content,
         name: that.file_name,
         // ver: this.ver
       };
@@ -638,13 +625,8 @@ export default {
               case 6:
                 that.alert_msg.warning('请手动合并文档');
                 /*************/
-                let newPage = that.$router.resolve({
-                  name: 'doc_merge',
-                  query:{
-                    did: pageData.did
-                  }
-                })
-                window.open(newPage.href, '_blank');
+                that.getInitialDocContent();
+
                 break;
               case 7:
                 that.alert_msg.warning('系统已经自动合并文档');
@@ -656,76 +638,6 @@ export default {
                 that.alert_msg.error('编辑失败: 未知错误');
             }
             //that.$router.push({path:'/workbench/recent'});
-          }
-        },
-        error: function () {
-          that.alert_msg.error('连接失败');
-        }
-      })
-    },
-
-    applyVerCode() {
-      var that = this;
-      $.ajax({
-        type: 'get',
-        url: '/document/ver_condition?did=' + pageData.did + '&ver=' + this.ver,
-        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        // async: false,
-        success: function (res) {
-          if (that.console_debug) {
-            console.log("(get)/document/all" + " : " + res.status);
-          }
-          if (res.status === 0) {
-            that.is_newest = res.is_newest;
-          } else {
-            switch (res.status) {
-              case 1:
-                that.alert_msg.error('获取版本号失败: 键值错误');
-                break;
-              case 2:
-                that.alert_msg.error('获取版本号失败: 您的权限不足或还没有登录');
-                break;
-              case 3:
-                that.alert_msg.error('获取版本号失败: 文档不存在');
-                break;
-              default:
-                that.alert_msg.error('获取版本号失败: 未知错误');
-            }
-          }
-        },
-        error: function () {
-          that.alert_msg.error('连接失败');
-        }
-      })
-    },
-
-    applyHistoryRecord() {
-      var that = this;
-      $.ajax({
-        type: 'get',
-        url: '/document/history?did=' + pageData.did,
-        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        // async: false,
-        success: function (res) {
-          if (that.console_debug) {
-            console.log("(get)/document/all" + " : " + res.status);
-          }
-          if (res.status === 0) {
-            //more operation
-          } else {
-            switch (res.status) {
-              case 1:
-                that.alert_msg.error('获取历史记录失败: 键值错误');
-                break;
-              case 2:
-                that.alert_msg.error('获取历史记录失败: 您的权限不足或还没有登录');
-                break;
-              case 3:
-                that.alert_msg.error('获取历史记录失败: 文档不存在');
-                break;
-              default:
-                that.alert_msg.error('获取历史记录失败: 未知错误');
-            }
           }
         },
         error: function () {
@@ -922,7 +834,7 @@ export default {
             console.log("(post)/fs/star_condition" + " : " + res.status);
           }
           if (res.status === 0) {
-            that.is_starred = res.is_starred;
+            that.is_starred = res.is_starred;;
           } else {
             switch (res.status) {
               case 1:
@@ -944,6 +856,9 @@ export default {
 
     getCurrentEditingUser() {
       var that = this;
+      let msg = {
+        id: pageData.did,
+      };
       var list = [];
       $.ajax({
         type: 'get',
@@ -1085,17 +1000,17 @@ export default {
 }
 
 .loading_bar{
-    position: fixed;
-    top:60px; /* 头部导航栏的高度 */
-    left:-6px; /* 为了掩饰圆角，但其实可以设置成方角的 */
-    width:calc(100vw + 8px);
-    transition: 0.1s opacity linear;
-    height:3px;
-    z-index:2001
+  position: fixed;
+  top:60px; /* 头部导航栏的高度 */
+  left:-6px; /* 为了掩饰圆角，但其实可以设置成方角的 */
+  width:calc(100vw + 8px);
+  transition: 0.1s opacity linear;
+  height:3px;
+  z-index:2001
 }
 
 .loading_bar_done{
-    opacity: 0;
+  opacity: 0;
 }
 
 >>>.el-progress-bar__inner{
@@ -1103,7 +1018,7 @@ export default {
 }
 
 .el-main>>>.el-loading-mask{
-    height: calc(100vh - 56px) !important;
+  height: calc(100vh - 56px) !important;
 }
 
 .editor_bottom{
@@ -1145,11 +1060,12 @@ export default {
 }
 
 #toolbar-container{
-  margin-left:105px;
+  margin-left:0;
 }
 
 >>>.ck-user__img {
-  border: none !important;
+  border: 0 solid !important;
 }
+
 
 </style>
