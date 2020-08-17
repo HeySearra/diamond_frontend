@@ -4,7 +4,7 @@
             class="dialog_style"
             :visible.sync="dia_vis"
             :close-on-click-modal="false"
-            width="fit-content"
+            width="800px"
             @close="close">
             <chatting-room ref="chatting_room"></chatting-room>
         </el-dialog>
@@ -28,12 +28,7 @@ export default {
             this.dia_vis = true;
             var that = this;
             setTimeout(function(){
-                if(that.$refs.chatting_room.init()){
-
-                }
-                else{
-                    that.dia_vis = false;
-                }
+                that.$refs.chatting_room.open();
             }, 0);
         },
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="chat_user_list_item" @click="click">
+    <div class="chat_user_list_item can_not_choose" :class="chosen?'chat_user_list_item_chosen':''" @click="click">
         <el-avatar size="large" :src="src"></el-avatar>
         <h3 class="name">{{name}}</h3>
         <div class="content">{{content}}</div>
@@ -28,12 +28,22 @@ export default {
     },
     data () {
         return {
-            
+            chosen:false,
+            show:false
         }
     },
     methods:{
         click(){
             this.$emit('click', this.uid);
+        },
+
+        choose(uid){
+            if(this.uid == uid){
+                this.chosen = true;
+            }
+            else{
+                this.chosen = false;
+            }
         }
     }
 }
@@ -50,8 +60,8 @@ export default {
     transition: background-color 0.1s linear;
 }
 
-.chat_user_list_item:hover{
-    background-color: #eee;
+.chat_user_list_item:hover, .chat_user_list_item_chosen{
+    background-color: hsl(0, 0%, 96%);
 }
 
 .el-avatar{
@@ -62,7 +72,7 @@ export default {
 
 .name{
     position: absolute;
-    top:10px;
+    top:11px;
     left:60px;
     margin:0;
     width: 125px;
@@ -70,16 +80,20 @@ export default {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1; /* 行数 */
     overflow: hidden;
+    font-size:15px;
+    color:#555;
 }
 
 .content{
     position: absolute;
-    top:32px;
-    left:60px;
-    width: 125px;
+    top:34px;
+    left:61px;
+    width: 124px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1; /* 行数 */
     overflow: hidden;
+    font-size:12px;
+    color:#565656;
 }
 </style>
