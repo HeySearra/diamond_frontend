@@ -13,6 +13,7 @@
                 :src="item.src"
                 :context="context"
                 :type="item.type"
+                @refresh="refresh"
                 @create_doc_from_template="create_doc_from_template">
             </template-block>
         </div>
@@ -66,6 +67,10 @@ export default {
 
         create_doc_from_template(tid, type, name){
             this.$emit('create_doc_from_template', tid, type, name);
+        },
+
+        refresh(){
+            this.$emit('refresh');
         }
     }
 

@@ -1,29 +1,30 @@
 <template>
-    <div class="can_not_choose template_block">
-        <div class="click_area" :class="focus?'click_area_focus':''"></div>
-
-        <el-image
-            class="preview_img"
-            :src="src"
-            fit="cover">
-        </el-image>
-        <div class="name">{{name}}</div>
-        <el-button class="use_button" type="primary" plain @click="createDocFromTemplate">使用</el-button>
-        <div class="more_menu" :class="focus?'more_menu_focus':''" v-if="context=='my'">
-            <el-dropdown trigger="click"
-                @visible-change="vis_change"
-                @command="click_dropdown_item">
-                <span class="el-dropdown-link">
-                    <i class="el-icon-s-tools"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item class="red_text" v-if="context=='my'">删除</el-dropdown-item>
-                    <!--是否需要对删除的二次确认-->
-                </el-dropdown-menu>
-            </el-dropdown>
+    <transition name="el-zoom-in-center" v-show="show">
+        <div class="can_not_choose template_block">
+            <div class="click_area" :class="focus?'click_area_focus':''"></div>
+            <el-image
+                class="preview_img"
+                :src="src"
+                fit="cover">
+            </el-image>
+            <div class="name">{{name}}</div>
+            <el-button class="use_button" :class="focus?'use_button_focus':''" type="primary" plain @click="createDocFromTemplate">使用</el-button>
+            <div class="more_menu" :class="focus?'more_menu_focus':''" v-if="context=='user'">
+                <el-dropdown trigger="click"
+                    @visible-change="vis_change"
+                    @command="click_dropdown_item">
+                    <span class="el-dropdown-link">
+                        <i class="el-icon-s-tools"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item class="red_text" command="delete">删除</el-dropdown-item>
+                        <!--是否需要对删除的二次确认-->
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </div>
+            <div ></div>
         </div>
-        <div ></div>
-    </div>
+    </transition>
 </template>
 
 <script>
@@ -53,7 +54,8 @@ export default {
     data() {
         return {
             focus: false,
-            fid: 'desktop'
+            fid: 'desktop',
+            show: true
         }
     },
 
@@ -72,7 +74,9 @@ export default {
 
         click_dropdown_item(command){
             switch(command){
-
+                case 'delete':
+                    this.deleteMyTemplate();
+                    break;
             }
         },
 
@@ -99,8 +103,11 @@ export default {
                 console.log("(post)/temp/delete" + " : " + res.status);
               }
               if (res.status === 0) {
-                that.alert_msg.success('删除成功');
-                that.$emit('refresh');
+                that.show = false;
+                setTimeout(function(){
+                    that.alert_msg.success('删除成功');
+                    that.$emit('refresh');
+                }, 100);
               } else {
                 switch (res.status) {
                   // case 1:
@@ -138,11 +145,12 @@ export default {
 .template_block{
     position: relative;
     cursor:pointer;
-    border: solid 1px;
+    /* border: solid 1px; */
     width:230px;
     height:150px;
     overflow: hidden;
     border-radius: 5px;
+    box-shadow: 1px 2px 3px hsla(0, 0%, 0%, 0.23);
 }
 
 .click_area{
@@ -154,6 +162,7 @@ export default {
     left:0;
     z-index:2;
     opacity: 0;
+    transition: all 0.1s linear;
 }
 
 .template_block:hover .click_area, .click_area_focus{
@@ -176,6 +185,7 @@ export default {
     font-size:15px;
     opacity: 0;
     z-index:3;
+    transition: all 0.1s linear;
 }
 
 .more_menu>>>.el-icon-s-tools{
@@ -209,7 +219,7 @@ export default {
     opacity: 0;
 }
 
-.template_block:hover .use_button{
+.template_block:hover .use_button, .use_button_focus{
     opacity: 1;
 }
 

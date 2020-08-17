@@ -1,15 +1,10 @@
 <template>
   <el-main>
-    <el-aside>
-      <sidebar
-        ref="sidebar"
-        context="doc"
-        :file_name="file_name"
-      ></sidebar>
+    <el-aside style="display: flex; justify-content: center;font-size: 20px; align-content: center;">
+      <span style="font-weight: bolder; margin-top: 50px">Merge Mode</span>
     </el-aside>
     <div v-loading="is_loading">
-      <el-row style="z-index: 999">
-        <!-- Toolbar Container -->
+      <!--el-row style="z-index: 999">
         <div class="new_toobar">
 
           <div id="toolbar-container" style="min-height:38.67px;">
@@ -17,7 +12,7 @@
           </div>
         </div>
 
-      </el-row>
+      </el-row-->
       <el-row>
         <!--el-col :span="5">
           <sidebar></sidebar>
@@ -389,8 +384,8 @@ export default {
         return;
       }
       this.did = this.$route.params.did;
-      this.getStarStatus();
-      this.apply_for_info();
+      //this.getStarStatus();
+      //this.apply_for_info();
     },
 
     apply_for_info() {
@@ -479,9 +474,9 @@ export default {
         //editor.plugins.get('Users').addUser({id: '0'});
         //editor.plugins.get('Users').defineMe('0');
         editor.isReadOnly = pageData.readOnly;
-        const toolbarContainer = document.querySelector('#toolbar-container');
-        toolbarContainer.appendChild(editor.ui.view.toolbar.element);
-        document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
+        //const toolbarContainer = document.querySelector('#toolbar-container');
+        //toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+        //document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
       }).catch(error => {
         console.error(error);
       });
@@ -834,7 +829,7 @@ export default {
             console.log("(post)/fs/star_condition" + " : " + res.status);
           }
           if (res.status === 0) {
-            that.is_starred = res.is_starred;;
+            that.is_starred = res.is_starred;
           } else {
             switch (res.status) {
               case 1:

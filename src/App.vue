@@ -6,11 +6,13 @@
         @edit_user_info="edit_user_info"
         @change_password="change_password"
         @chatting="chatting"
+        @open_chatting_dialog_with_uid="chatting_with_uid"
         ref="header"></navbar>
     </el-header>
     <router-view 
       ref="rw"
-      @open_chatting_dialog_with_uid="chatting_with_uid" />
+      @open_chatting_dialog_with_uid="chatting_with_uid"
+      @refresh_online_list="refresh_online_list" />
     <el-backtop></el-backtop>
     <message-drawer ref="message_drawer" @deal-team-invite="deal_team_invite" @refresh_message_count="refresh_message_count"></message-drawer>
     <edit-user-info-dialog ref="edit_user_info_dialog" @refresh_user_info="refresh_user_info"></edit-user-info-dialog>
@@ -72,6 +74,9 @@ export default {
     refresh_msg(){
       this.$refs.message_drawer.refresh();
     },
+    refresh_online_list(list){
+      this.$refs.header.refresh_online_list(list);
+    }
   },
 }
 </script>
