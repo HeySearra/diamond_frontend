@@ -7,9 +7,9 @@
                 <span v-if="type=='reject'" class="icon iconfont" style="color:hsl(1, 69%, 73%)">&#xe69e;</span>
                 <span v-if="type=='join'" class="icon iconfont" style="color:hsl(202, 56%, 50%);">&#xe6cb;</span>
                 <span v-if="type=='out'" class="icon iconfont" style="color:hsl(198, 10%, 69%)">&#xe62f;</span>
-                <span v-if="type=='doc'" class="icon iconfont" style="color:hsl(202, 56%, 50%)">&#xe7ff;</span>
+                <span v-if="type=='doc'&&false" class="icon iconfont" style="color:hsl(202, 56%, 50%)">&#xe7ff;</span>
                 <span v-if="false" class="icon iconfont">&#xe622;</span>
-                <el-avatar v-if="portrait!=''" :src="portrait" style="vertical-align: middle;"></el-avatar>
+                <el-avatar v-if="type=='doc'" :src="portrait" style="vertical-align: middle;margin-left:11px"></el-avatar>
             </div>
             <div class="content">
                 <h4 class="title">
@@ -109,7 +109,7 @@ export default {
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
         jump_to_doc(){
-            this.$router.push({path: '/document/' + this.id}); //待定
+            this.$router.push({name:'doc', params:{did:this.id}}); //待定
         },
         confirm_to_join(){
             let data = {
@@ -206,7 +206,7 @@ export default {
 }
 
 .profile span{
-    font-size: 25px;
+    font-size: 27px;
     color:#777;
     line-height: 34px;
     margin-left:20px;

@@ -9,23 +9,34 @@
       text-color="#333"
       active-text-color="#efb7b6">
       <h1><a class="logo_a" @click="$router.push({path:'/'});"></a></h1>
-      <div class="online_icon" v-if="is_login&&show_por">
+      <div class="online_icon" v-if="is_login&&online_icon_list.length">
         <el-avatar>
           <el-dropdown>
             <span class="el-dropdown-link">
               <i class="el-icon-more"></i>
             </span>
             <el-dropdown-menu slot="dropdown" class="online_icon_dropdown">
-              <el-dropdown-item>
-                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-                <span>这是一个人</span>
+              <el-dropdown-item v-for="item in online_dropdown_list" :key="item.uid" :command="item.uid" @command="click_user_dropdown">
+                <el-avatar :src="item.src"></el-avatar>
+                <span>{{item.name}}</span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-avatar>
-        <el-tooltip class="item" effect="dark" content="lkw" placement="top-start">
-          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-        </el-tooltip>
+        <span
+          v-for="item in online_icon_list"
+          :key="item.uid"
+          @click="open_chat_dialog_with_uid(item.uid)">
+          <el-tooltip 
+            class="item" 
+            effect="dark" 
+            :content="item.name" 
+            placement="top-start" 
+            >
+            <el-avatar :src="item.src"></el-avatar>
+          </el-tooltip>
+        </span>
+        
       </div>
       <div class="user">
           <span class="el-dropdown-link" @click="to_login" v-if="!is_login&&!opa">
@@ -75,6 +86,9 @@
     mounted(){
       this.init();
     },
+    destroyed(){
+      this.chatting_timer ? clearInterval(this.chatting_timer) : '';
+    },
     data() {
       return {
         search: '',
@@ -83,10 +97,12 @@
         is_login:false,
         photo_src:'',
         online_icon_list:[],
+        online_dropdown_list:[],
         message_count:0,
         have_chat:false,
         opa:false,
-        show_por:false
+        show_por:false,
+        chatting_timer:undefined
       };
     },
     methods: {
@@ -115,6 +131,11 @@
             this.$router.push({name:'login'});
           }
         }
+        this.chatting_timer ? clearInterval(this.chatting_timer) : '';
+        var that = this;
+        this.chatting_timer = setInterval(function(){
+          that.refresh_chatting_count();
+        }, 1000*5);
         this.apply_for_magic_word();
         this.get_info();
       },
@@ -266,6 +287,92 @@
             contentType: false,
             success:function (res){
               that.magic_word = res.words;
+            }
+        });
+      },
+
+      refresh_online_list(list){
+        this.online_icon_list = [];
+        for(let i=0; i<5&&i<list.length; i++){
+          this.online_icon_list.push({
+            uid: list[i].uid,
+            name: list[i].name,
+            src: list[i].portrait
+          });
+        }
+        for(let i=5; i<list.length; i++){
+          this.online_dropdown_list.push({
+            uid: list[i].uid,
+            name: list[i].name,
+            src: list[i].portrait
+          });
+        }
+      },
+
+      click_user_dropdown(command){
+        this.open_chat_dialog_with_uid(command);
+      },
+
+      open_chat_dialog_with_uid(uid){
+        if(uid == this.login_manager.get_uid()){
+          let random = parseInt(Math.random()*100000);
+          this.alert_msg.normal('你好寂寞' + this.magic_word[random%this.magic_word.length]);
+          return;
+        }
+        var flag = true;
+        let url = '/chat/build_chat';
+        var that = this;
+        $.ajax({
+            type:'post',
+            url: url,
+            headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+            data: JSON.stringify({uid:uid}),
+            async:false, 
+            success:function (res){
+                if(that.console_debug){
+                    console.log(url +  '：' + res.status);
+                }
+                if(res.status == 0){
+                    flag = true;
+                }
+                else{
+                    switch(res.status){
+                        case 2:
+                            that.alert_msg.error('权限不足');
+                            break;
+                        case 3:
+                            that.alert_msg.error('找不到用户');
+                            break;
+                        default:
+                            that.alert_msg.error('发生了未知错误');
+                    }
+                    flag = false;
+                }
+            },
+            error:function(res){
+                that.alert_msg.error('网络连接失败');
+                flag = false;
+            }
+        });
+        if(flag){
+          this.$emit('open_chatting_dialog_with_uid', uid);
+        }
+      },
+
+      refresh_chatting_count(){
+        let url = '/chat/count';
+        var that = this;
+        $.ajax({
+            type:'get',
+            url:url,
+            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+            processData: false,
+            contentType: false,
+            success:function (res){
+              if(that.console_debug){
+                  console.log(url +  '：' + res.status);
+              }
+              that.have_chat = res.count > 0;
             }
         });
       }

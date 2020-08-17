@@ -133,6 +133,17 @@
                 let force_bottom = false;
                 if(this.uid != uid){
                     force_bottom = true;
+                    if(uid == ''){
+                        this.$emit('change_title', '');
+                    }
+                    else{
+                        for(let i=0; i<this.user_list.length; i++){
+                            if(uid == this.user_list[i].uid){
+                                this.$emit('change_title', this.user_list[i].name);
+                                break;
+                            }
+                        }
+                    }
                 }
                 this.uid = uid;
                 let item = this.$refs.chat_user_list_item;
