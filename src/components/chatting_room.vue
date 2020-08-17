@@ -310,16 +310,20 @@
 
             datetime_format_for_chatting(t, ct){
                 let dt = t;
-                let cdt = new Date(dt);
-                if(cdt - dt <= 24*60*60*1000){
+                let cdt = new Date(ct);
+                if(cdt - dt <= 2*24*60*60*1000){
                     if(cdt.getDate() == dt.getDate()){
-                        return dt.getHours() + ':' + dt.getMinutes();
+                        return dt.getHours() + ':' + (dt.getMinutes()<10?('0'+dt.getMinutes()):dt.getMinutes());
+                    }
+                    else if(cdt.getDate()-dt.getDate() == 1){
+                        return '昨天 ' + dt.getHours() + ':' + (dt.getMinutes()<10?('0'+dt.getMinutes()):dt.getMinutes());
                     }
                     else{
                         return (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + dt.getHours() + ':' + (dt.getMinutes()<10?('0'+dt.getMinutes()):dt.getMinutes());
                     }
                 }
                 else{
+
                     if(cdt.getFullYear() == dt.getFullYear()){
                         return (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + dt.getHours() + ':' + (dt.getMinutes()<10?('0'+dt.getMinutes()):dt.getMinutes());
                     }
