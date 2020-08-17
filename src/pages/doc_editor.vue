@@ -383,6 +383,8 @@ export default {
 
   destroyed(){
     this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
+    this.online_timer ? clearInterval(this.online_timer) : '';
+    this.$emit('refresh_online_list', []);
   },
 
   data() {
@@ -396,18 +398,23 @@ export default {
       is_starred: false,
       ver:-1,
       is_newest: true,
-      applyVerCode_timer:undefined
+      applyVerCode_timer:undefined,
+      online_timer:undefined
     }
   },
 
   methods: {
     init() {
       this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
+      this.online_timer ? clearInterval(this.online_timer) : '';
       this.is_newest = true;
       var that = this;
       this.applyVerCode_timer = setInterval(function(){
         that.applyVerCode();
       }, 1000*10);
+      this.online_timer = setInterval(function(){
+        that.getCurrentEditingUser();
+      }, 1000*30);
       if(!this.login_manager.get()){
         that.alert_msg.warning('您还未登录，请先登录账号');
         this.$router.push({name:'login'});
@@ -969,39 +976,38 @@ export default {
 
     getCurrentEditingUser() {
       var that = this;
-      var list = [];
       $.ajax({
         type: 'get',
-        url: '/document/online?id=' + pageData.did,
+        url: '/document/online?did=' + pageData.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        processData: false,
+        contentType: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(get)/document/online" + " : " + res.status);
           }
           if (res.status === 0) {
-
-            list = res.list;
+            that.$emit('refresh_online_list', res.list);
           } else {
             switch (res.status) {
-              case 1:
-                that.alert_box.msg('获取正在编辑用户失败', '键值错误');
-                break;
-              case 2:
-                that.alert_box.msg('获取正在编辑用户失败', '您的权限不足或还没有登录');
-                break;
-              case 3:
-                that.alert_box.msg('获取正在编辑用户失败', '文档不存在');
-                break;
-              default:
-                that.alert_msg.error('未知错误');
+              // case 1:
+              //   that.alert_box.msg('获取正在编辑用户失败', '键值错误');
+              //   break;
+              // case 2:
+              //   that.alert_box.msg('获取正在编辑用户失败', '您的权限不足或还没有登录');
+              //   break;
+              // case 3:
+              //   that.alert_box.msg('获取正在编辑用户失败', '文档不存在');
+              //   break;
+              // default:
+              //   that.alert_msg.error('未知错误');
             }
           }
         },
         error: function () {
-          that.alert_msg.error('连接失败');
+          //that.alert_msg.error('连接失败');
         }
       });
-      return list;
     },
 
     loading_done(){
