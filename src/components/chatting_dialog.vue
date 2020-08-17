@@ -5,10 +5,9 @@
             :visible.sync="dia_vis"
             :close-on-click-modal="false"
             width="800px"
-            @close="close"
-            @change_title="change_title">
+            @close="close">
             <h2>{{title}}</h2>
-            <chatting-room ref="chatting_room"></chatting-room>
+            <chatting-room ref="chatting_room" @change_title="change_title"></chatting-room>
         </el-dialog>
     </div>
 </template>
@@ -32,7 +31,7 @@ export default {
             var that = this;
             setTimeout(function(){
                 that.$refs.chatting_room.open(uid);
-                $(".dialog").scrollTop($(".dialog")[0].scrollHeight);
+                $(".el-dialog").scrollTop($(".el-dialog")[0].scrollHeight);
             }, 0);
         },
 

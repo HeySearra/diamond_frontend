@@ -138,7 +138,7 @@
                     }
                     else{
                         for(let i=0; i<this.user_list.length; i++){
-                            if(uid == user_list[i].uid){
+                            if(uid == this.user_list[i].uid){
                                 this.$emit('change_title', this.user_list[i].name);
                                 break;
                             }
