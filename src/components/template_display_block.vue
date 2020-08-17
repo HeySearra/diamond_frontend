@@ -2,7 +2,7 @@
     <div class="template_display_block">
         <h1>{{title}}</h1>
         <el-divider></el-divider>
-        <div class="not_found" v-if="context=='my'&&!list.length">你还没有模板{{magic}}&nbsp;&nbsp;&nbsp;快从文档新建一个模板吧</div>
+        <div class="not_found" v-if="context=='user'&&!list.length">你还没有模板{{magic}}&nbsp;&nbsp;&nbsp;快从文档新建一个模板吧</div>
         <div class="template_area">
             <template-block
                 class="template_item"
@@ -35,11 +35,7 @@ export default {
             type: Array,
             default() {
                 return [
-                    {
-                        tid: '1',
-                        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-                        name: 'my template'
-                    },
+                    
                 ]
             }
         }

@@ -4,7 +4,7 @@ import Router from 'vue-router'
 import login from '@/pages/login.vue'
 import register from '@/pages/register.vue'
 import forget from '@/pages/forget.vue'
-import message_drawer from '@/components/message_drawer.vue'
+import search from '@/pages/search.vue'
 import forget_set from '@/pages/forget_set.vue'
 import workbench from '@/pages/workbench.vue'
 import workbench_recent from '@/pages/workbench_recent.vue'
@@ -184,6 +184,14 @@ const router =  new Router({
       component: doc_merge,
       meta:{
         title:'DiaDoc 合并文章',
+      }
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: search,
+      meta:{
+        title:'DiaDoc 搜索结果',
       }
     },
   ],

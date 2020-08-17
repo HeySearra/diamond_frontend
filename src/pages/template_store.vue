@@ -58,23 +58,8 @@
 export default {
   data() {
     return {
-      my_list: [{
-        tid: '1',
-        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        name: 'my template'
-      },],
-      official_list: [{
-          title: "学习",
-          temps: [{
-            tid: '1',
-            src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-            name: '退学专用模板'
-          },{
-            tid: '2',
-            src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-            name: '上学专用模板'
-          }]
-        },]
+      my_list: [],
+      official_list: []
     }
   },
   mounted() {

@@ -84,7 +84,7 @@ export const datetime_format = (t, ct) => {
         return parseInt((cur-time)/60/60/1000) + '小时前';
     }
     else if(cur.getFullYear() == time.getFullYear()){
-        return (time.getMonth()+1) + '-' + time.getDate() + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
+        return (time.getMonth()+1) + '-' + time.getDate() + ' ' + time.getHours() + ':' + (time.getMinutes()<10?('0'+time.getMinutes()):time.getMinutes()) + ':' + (time.getSeconds()<0?('0'+time.getSeconds()):time.getSeconds());
     }
     else{
         return t;

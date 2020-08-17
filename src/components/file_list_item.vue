@@ -15,12 +15,12 @@
             </div>
             <div class="name">{{name}}</div>
             <div class="info_area">
-                <div v-if="type=='recycle'">{{delete_time}}</div>
-                <div v-if="type=='recycle'">{{rest_time}}天</div>
+                <div v-if="context=='recycle'">{{delete_time}}</div>
+                <div v-if="context=='recycle'">{{rest_time}}天</div>
                 <div v-if="type=='recent'">{{view_time}}</div>
-                <div v-if="type!='recycle'&&type!='recent'">{{creator}}</div>
-                <div v-if="type!='recycle'&&type!='recent'">{{recent_edit_time}}</div>
-                <div v-if="type!='recycle'&&type!='recent'" class="min_hide">{{create_time}}</div>
+                <div v-if="context!='recycle'&&type!='recent'">{{creator}}</div>
+                <div v-if="context!='recycle'&&type!='recent'">{{recent_edit_time}}</div>
+                <div v-if="context!='recycle'&&type!='recent'" class="min_hide">{{create_time}}</div>
             </div>
             <div class="more_menu" :class="focus?'more_menu_focus':''">
                 <el-dropdown trigger="click"
@@ -120,7 +120,7 @@ export default {
     },
 
     mounted(){
-        
+
     },
 
     methods:{
