@@ -63,7 +63,7 @@ import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn';
 import {alert_box, alert_msg, console_debug} from "../assets/global";
 
-const pageData = {
+var pageData = {
   did: '',
   commentsOnly: false,
   readOnly: false,
@@ -75,6 +75,7 @@ const pageData = {
   initialData: '',
   file_name: '',
   ver: -1,
+  status: '',
 };
 
 class MyUploadAdapter {
@@ -176,7 +177,6 @@ class CommentsAdapter {
 
       updateDocContent() {
         var that = this;
-        var status = -1;
         let msg = {
           did: pageData.did,
           content: window.editor.getData(),
@@ -191,11 +191,13 @@ class CommentsAdapter {
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           processData: false,
           contentType: false,
+          async: false,
           success: function (res) {
-            status = res.status;
+            pageData.initialData = res.status;
             if (console_debug) {
               console.log("(post)/document/edit" + " : " + res.status);
             }
+            console.log("(post)/document/edit" + " : " + res.status);
             if (res.status === 0) {
               pageData.ver = res.ver;
               alert_msg.success('保存成功');
@@ -242,12 +244,12 @@ class CommentsAdapter {
             alert_msg.error('连接失败');
           }
         })
-        return status;
+        return pageData.initialData;
       },
 
       applyDocContent() {
         var that = this;
-        var content = window.editor.getData();
+        pageData.initialData = window.editor.getData();
         $.ajax({
           type: 'get',
           url: '/document/all?did=' + pageData.did + '&ver=-1',
@@ -259,7 +261,7 @@ class CommentsAdapter {
             }
             if (res.status === 0) {
               pageData.file_name = res.name;
-              content = res.content;
+              pageData.initialData = res.content;
               pageData.ver = res.ver;
               //alert_msg.success('更新后版本号: ' + pageData.ver);
             } else {
@@ -282,7 +284,7 @@ class CommentsAdapter {
             alert_msg.error('连接失败');
           }
         });
-        return content;
+        return pageData.initialData;
       },
 
       addComment(data) {
@@ -331,6 +333,14 @@ class CommentsAdapter {
         if (status !== 0 && status !== 7) {
           this.removeComment(data);
         }
+        console.log(window.editor.getData());
+        setTimeout(function () {
+          $('.ck-user').off('click');
+          $('.ck-user').click(function () {
+            var uid = $(this).attr('data-user-id');
+            alert(uid);
+          });
+        }, 0);
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         // When the promise resolves with the comment data object, it
@@ -338,6 +348,7 @@ class CommentsAdapter {
         return Promise.resolve({
           createdAt: new Date()       // Should be set on the server side.
         });
+
       },
 
       /*addComment(data) {
@@ -697,6 +708,13 @@ export default {
         const toolbarContainer = document.querySelector('#toolbar-container');
         toolbarContainer.appendChild(editor.ui.view.toolbar.element);
         document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
+        setTimeout(function () {
+          $('.ck-user').off('click');
+          $('.ck-user').click(function () {
+            var uid = $(this).attr('data-user-id');
+            alert(uid);
+          });
+        }, 0);
       }).catch(error => {
         console.error(error);
       });
@@ -797,7 +815,7 @@ export default {
     },
     applyDocContent() {
       var that = this;
-      var content = window.editor.getData();
+      pageData.initialData = window.editor.getData();
       // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
       that.alert_msg.success('更新前版本号: ' + pageData.ver);
       $.ajax({
@@ -836,7 +854,7 @@ export default {
           that.alert_msg.error('连接失败');
         }
       });
-      return content;
+      return pageData.initialData;
     },
     updateDocContent() {
       var that = this;
@@ -1409,8 +1427,12 @@ export default {
   /*margin-left:140px;*/
 }
 
->>>.ck-user__img {
+>>>.ck-user__img{
   border: none !important;
+}
+
+>>>.ck-user{
+  cursor:pointer !important;
 }
 
 </style>
