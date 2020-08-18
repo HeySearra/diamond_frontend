@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import doc_read_only from "@/pages/doc_read_only.vue"
-import doc_comment_only from "@/pages/doc_comment_only.vue"
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -148,6 +146,22 @@ const router =  new Router({
       path: '/doc/:did',
       name: 'doc',
       component: doc_editor => require(["@/pages/doc_editor.vue"], doc_editor),
+      meta:{
+        title:'DiaDoc 文章',
+      }
+    },
+    {
+      path: '/doc/comment_only/:did',
+      name: 'doc_comment_only',
+      component: doc_comment_only => require(["@/pages/doc_comment_only.vue"], doc_comment_only),
+      meta:{
+        title:'DiaDoc 文章',
+      }
+    },
+    {
+      path: '/doc/read_only/:did',
+      name: 'doc_read_only',
+      component: doc_read_only => require(["@/pages/doc_read_only.vue"], doc_read_only),
       meta:{
         title:'DiaDoc 文章',
       }
