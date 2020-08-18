@@ -7,7 +7,8 @@
         context="doc"
         :file_name="file_name"
       ></sidebar>
-      <div id="history"
+      <transition name="el-zoom-in-top">
+      <div v-show="show_history" id="history"
         style="z-index: 1000;
                   width: 320px;
                   height: 100%;
@@ -16,11 +17,11 @@
                   left: 0;
                   top: 0;
                   display: none;
-                  overflow: scroll;
+                  overflow: overlay;
                   ">
         <el-row style="margin-top: 20px;
                        margin-bottom: 20px;
-                       padding: 0 10px 5px 30px;">
+                       padding: 0 10px 0 30px;">
           <el-col :span="20" style="font-size:20px; font-weight: bolder">历史记录</el-col>
           <el-col :span="4"><span class="icon iconfont"
                                   style="font-size: 25px; margin-top: 1px; cursor: pointer;"
@@ -36,6 +37,7 @@
           :did="did">
         </history-block>
       </div>
+      </transition>
     </el-aside>
     <div v-loading="is_loading" class="blur_div">
       <el-row style="z-index: 999">
@@ -641,6 +643,7 @@ export default {
       applyVerCode_timer:undefined,
       online_timer:undefined,
       history_list:[{name: '阿三'},{name: '阿斯'}],
+      show_history: false
     }
   },
 
@@ -1323,8 +1326,8 @@ export default {
     },
 
     showHistoryBlock(){
-      $('#history').css('display', 'inherit');
-      $('.el-aside').attr('overflow', 'hidden !important');
+      this.show_history = true;
+      //$('.el-aside').attr('overflow', 'hidden !important');
       var that = this;
       $.ajax({
         type: 'get',
@@ -1345,8 +1348,8 @@ export default {
       });
     },
     closeHistoryBlock(){
-      $('#history').css('display', 'none');
-      $('.el-aside').attr('overflow', '-moz-scrollbars-none');
+      this.show_history = false;
+      //$('.el-aside').attr('overflow', '-moz-scrollbars-none');
     },
 
   },

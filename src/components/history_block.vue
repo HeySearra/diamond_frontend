@@ -1,10 +1,10 @@
 <template>
-  <div style="margin-left: 20px; margin-bottom: 18px; cursor: pointer;" @click="toHistoryPage">
+  <div class="history_block" @click="toHistoryPage">
     <el-row>
       <el-col :span="4"><el-avatar :src="portrait"></el-avatar></el-col>
-      <el-col :span="20" style="margin-top: 9px">{{name}}</el-col>
+      <el-col class="name" :span="20">{{name}}</el-col>
     </el-row>
-    <el-row style="margin-top: 5px; font-size: 11px;">修改于：{{dt}}</el-row>
+    <el-row style=" font-size: 11px; margin-left:5em">修改于：{{dt}}</el-row>
   </div>
 </template>
 
@@ -49,5 +49,22 @@ export default {
 </script>
 
 <style scoped>
+.history_block{
+  padding: 18px 20px; 
+  cursor: pointer;
+  transition:all 0.1s linear;
+}
 
+.history_block:hover{
+  background-color: hsla(0, 0%, 0%, 0.09);
+}
+
+.name{
+  margin:0;
+  text-indent:1em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1; /* 行数 */
+  overflow: hidden;
+}
 </style>

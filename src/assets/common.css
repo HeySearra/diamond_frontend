@@ -32,6 +32,7 @@
     border-right:solid 2px hsl(0, 0%, 90%);
     background-color: hsl(0, 0%, 96%);
     width:320px !important;
+    overflow-x:hidden;
     overflow-y:overlay;
 }
 
