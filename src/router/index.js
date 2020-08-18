@@ -167,6 +167,14 @@ const router =  new Router({
       }
     },
     {
+      path: '/doc/history/:did/:ver',
+      name: 'doc_history',
+      component: doc_history => require(["@/pages/doc_history.vue"], doc_history),
+      meta:{
+        title:'DiaDoc 历史记录',
+      }
+    },
+    {
       path: '/doc/:did/merge',
       name: 'doc_merge',
       component: doc_merge => require(["@/pages/doc_merge"], doc_merge),

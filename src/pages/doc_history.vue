@@ -7,43 +7,15 @@
         context="doc"
         :file_name="file_name"
       ></sidebar>
-      <div id="history"
-        style="z-index: 1000;
-                  width: 320px;
-                  height: 100%;
-                  background-color: rgb(245, 245, 245);
-                  position: absolute;
-                  left: 0;
-                  top: 0;
-                  display: none;
-                  overflow: scroll;
-                  ">
-        <el-row style="margin-top: 20px;
-                       margin-bottom: 20px;
-                       padding: 0 10px 5px 30px;">
-          <el-col :span="20" style="font-size:20px; font-weight: bolder">历史记录</el-col>
-          <el-col :span="4"><span class="icon iconfont"
-                                  style="font-size: 25px; margin-top: 1px; cursor: pointer;"
-                                  @click="closeHistoryBlock">&#xe79b;</span></el-col>
-        </el-row>
-        <history-block
-          v-for="item in history_list"
-          :name="item.name"
-          :dt="item.dt"
-          :portrait="item.portrait"
-          :ver="item.ver"
-          :did="did">
-        </history-block>
-      </div>
     </el-aside>
     <div v-loading="is_loading" class="blur_div">
       <el-row style="z-index: 999">
         <!-- Toolbar Container -->
         <div class="new_toobar">
           <div class="append_tools can_not_choose">
-            <el-tooltip class="item" effect="dark" content="保存" placement="bottom">
+            <!--el-tooltip class="item" effect="dark" content="保存" placement="bottom">
               <span class="icon iconfont" @click="updateDocContent">&#xe82a;</span>
-            </el-tooltip>
+            </el-tooltip-->
             <el-tooltip class="item" effect="dark" content="保存为模板" placement="bottom">
               <span class="icon iconfont" @click="saveAsTemplate">&#xe672;</span>
             </el-tooltip>
@@ -53,9 +25,9 @@
             <el-tooltip class="item" effect="dark" content="取消收藏" placement="bottom">
               <span class="icon iconfont" v-if="is_starred" @click="starTheDoc(is_starred)">&#xe65e;</span>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="历史记录" placement="bottom">
-              <span class="icon iconfont" @click="showHistoryBlock">&#xe7de;</span>
-            </el-tooltip>
+            <!--el-tooltip class="item" effect="dark" content="历史记录" placement="bottom">
+              <span class="icon iconfont">&#xe7de;</span>
+            </el-tooltip-->
           </div>
           <div id="toolbar-container" style="min-height:38.67px;">
 
@@ -69,7 +41,7 @@
         </el-col-->
         <el-col class="editor-container" :span="18">
           <!-- Editor Container -->
-          <input class="editor_title" v-model="file_name" maxlength="60"/>
+          <input class="editor_title" v-model="file_name" maxlength="60" readonly="readonly"/>
           <div id="editor">
 
           </div>
@@ -79,9 +51,9 @@
       </el-row>
     </div>
     <el-progress
-        :percentage="loading_percentage"
-        class="loading_bar"
-        :show-text="false">
+      :percentage="loading_percentage"
+      class="loading_bar"
+      :show-text="false">
     </el-progress>
   </el-main>
 </template>
@@ -91,10 +63,10 @@ import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn';
 import {alert_box, alert_msg, console_debug} from "../assets/global";
 
-var pageData = {
+const pageData = {
   did: '',
   commentsOnly: false,
-  readOnly: false,
+  readOnly: true,
   // Users data.
   users: [],
   // The ID of the current user.
@@ -103,7 +75,6 @@ var pageData = {
   initialData: '',
   file_name: '',
   ver: -1,
-  status: '',
 };
 
 class MyUploadAdapter {
@@ -205,6 +176,7 @@ class CommentsAdapter {
 
       updateDocContent() {
         var that = this;
+        var status = -1;
         let msg = {
           did: pageData.did,
           content: window.editor.getData(),
@@ -219,13 +191,11 @@ class CommentsAdapter {
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           processData: false,
           contentType: false,
-          async: false,
           success: function (res) {
-            pageData.initialData = res.status;
+            status = res.status;
             if (console_debug) {
               console.log("(post)/document/edit" + " : " + res.status);
             }
-            console.log("(post)/document/edit" + " : " + res.status);
             if (res.status === 0) {
               pageData.ver = res.ver;
               alert_msg.success('保存成功');
@@ -272,12 +242,12 @@ class CommentsAdapter {
             alert_msg.error('连接失败');
           }
         })
-        return pageData.initialData;
+        return status;
       },
 
       applyDocContent() {
         var that = this;
-        pageData.initialData = window.editor.getData();
+        var content = window.editor.getData();
         $.ajax({
           type: 'get',
           url: '/document/all?did=' + pageData.did + '&ver=-1',
@@ -289,7 +259,7 @@ class CommentsAdapter {
             }
             if (res.status === 0) {
               pageData.file_name = res.name;
-              pageData.initialData = res.content;
+              content = res.content;
               pageData.ver = res.ver;
               //alert_msg.success('更新后版本号: ' + pageData.ver);
             } else {
@@ -312,94 +282,7 @@ class CommentsAdapter {
             alert_msg.error('连接失败');
           }
         });
-        return pageData.initialData;
-      },
-
-      /*addComment(data) {
-        console.log('Comment added', data);
-        let msg = {
-          did: pageData.did,
-          // uid: pageData.userId,
-          threadId: data.threadId,
-          commentId: data.commentId,
-          content: data.content,
-        };
-        var ajaxStatus = 0;
-        $.ajax({
-          type: 'post',
-          url: '/document/comment/add',
-          data: JSON.stringify(msg),
-          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-          processData: false,
-          contentType: false,
-          async: false,
-          success: function (res) {
-            ajaxStatus = res.status;
-            if (console_debug) {
-              console.log("(post)/document/comment/add" + " : " + res.status);
-            }
-            if (res.status !== 0) {
-              switch (res.status) {
-                case 1:
-                  alert_msg.error('上传评论失败: 键值错误');
-                  break;
-                case 2:
-                  alert_msg.error('上传评论失败: 您的权限不足或还没有登录');
-                  break;
-                case 3:
-                  alert_msg.error('上传评论失败: 文档或评论不存在');
-                  break;
-                default:
-                  alert_msg.error('未知错误');
-              }
-            }
-          },
-          error: function () {
-            alert_msg.error('连接失败');
-          }
-        });
-        if (ajaxStatus === 0) {
-          var that = this;
-          setTimeout(function () {
-            $('.ck-user').off('click');
-            $('.ck-user').click(function () {
-              var uid = $(this).attr('data-user-id');
-              alert(uid);
-            });
-            const status = that.updateDocContent();
-            console.log(status);
-            if (status !== 0 && status !== 7) {
-              that.removeCommentInDB(data);
-              if (status === 6) {alert_box.msg('评论失败：', '当前文档版本需要手动合并');}
-            }
-            console.log(window.editor.getData());
-          }, 0);
-        }
-        // Write a request to your database here. The returned `Promise`
-        // should be resolved when the request has finished.
-        // When the promise resolves with the comment data object, it
-        // will update the editor comment using the provided data.
-        return Promise.resolve({
-          createdAt: new Date()       // Should be set on the server side.
-        });
-
-
-      },*/
-      removeCommentInDB(data) {
-        console.log('Comment removed in db', data);
-        let msg = {
-          did: pageData.did,
-          threadId: data.threadId,
-          commentId: data.commentId,
-        };
-        $.ajax({
-          type: 'post',
-          url: '/document/comment/remove',
-          data: JSON.stringify(msg),
-          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-          processData: false,
-          contentType: false,
-        });
+        return content;
       },
 
       addComment(data) {
@@ -443,7 +326,11 @@ class CommentsAdapter {
             alert_msg.error('连接失败');
           }
         });
-
+        const status = this.updateDocContent();
+        console.log(status);
+        if (status !== 0 && status !== 7) {
+          this.removeComment(data);
+        }
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         // When the promise resolves with the comment data object, it
@@ -452,6 +339,57 @@ class CommentsAdapter {
           createdAt: new Date()       // Should be set on the server side.
         });
       },
+
+      /*addComment(data) {
+        console.log('Comment added', data);
+        let msg = {
+          did: pageData.did,
+          // uid: pageData.userId,
+          threadId: data.threadId,
+          commentId: data.commentId,
+          content: data.content,
+        };
+        $.ajax({
+          type: 'post',
+          url: '/document/comment/add',
+          data: JSON.stringify(msg),
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false,
+          async: false,
+          success: function (res) {
+            if (console_debug) {
+              console.log("(post)/document/comment/add" + " : " + res.status);
+            }
+            if (res.status !== 0) {
+              switch (res.status) {
+                case 1:
+                  alert_msg.error('上传评论失败: 键值错误');
+                  break;
+                case 2:
+                  alert_msg.error('上传评论失败: 您的权限不足或还没有登录');
+                  break;
+                case 3:
+                  alert_msg.error('上传评论失败: 文档或评论不存在');
+                  break;
+                default:
+                  alert_msg.error('未知错误');
+              }
+            }
+          },
+          error: function () {
+            alert_msg.error('连接失败');
+          }
+        });
+
+        // Write a request to your database here. The returned `Promise`
+        // should be resolved when the request has finished.
+        // When the promise resolves with the comment data object, it
+        // will update the editor comment using the provided data.
+        return Promise.resolve({
+          createdAt: new Date()       // Should be set on the server side.
+        });
+      },*/
 
       updateComment(data) {
         console.log('Comment updated', data);
@@ -634,8 +572,7 @@ export default {
       ver:-1,
       is_newest: true,
       applyVerCode_timer:undefined,
-      online_timer:undefined,
-      history_list:[{name: '阿三'},{name: '阿斯'}],
+      online_timer:undefined
     }
   },
 
@@ -648,6 +585,7 @@ export default {
   methods: {
     init() {
       this.did = this.$route.params.did;
+      this.ver = this.$route.params.ver;
       this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
       this.online_timer ? clearInterval(this.online_timer) : '';
       this.is_newest = true;
@@ -688,43 +626,7 @@ export default {
         extraPlugins: [CommentsAdapter, MyCustomUploadAdapterPlugin],
         toolbar: {
           items: [
-            'undo',
-            'redo',
-            'exportPdf',
-            'comment',
-            '|',
-            'heading',
-            '|',
-            'fontSize',
-            'fontFamily',
-            'fontColor',
-            '|',
-            'bold',
-            'italic',
-            'underline',
-            'strikethrough',
-            'highlight',
-            '|',
-            'alignment',
-            'pageBreak',
-            '|',
-            'numberedList',
-            'bulletedList',
-            '|',
-            'indent',
-            'outdent',
-            '|',
-            'todoList',
-            'link',
-            'blockQuote',
-            'imageUpload',
-            'insertTable',
-            'mediaEmbed',
-            '|',
-            'code',
-            'codeBlock',
-            'MathType',
-            'ChemType'
+
           ]
         },
         image: {
@@ -760,13 +662,6 @@ export default {
         const toolbarContainer = document.querySelector('#toolbar-container');
         toolbarContainer.appendChild(editor.ui.view.toolbar.element);
         document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
-        setTimeout(function () {
-          $('.ck-user').off('click');
-          $('.ck-user').click(function () {
-            var uid = $(this).attr('data-user-id');
-            alert(uid);
-          });
-        }, 0);
       }).catch(error => {
         console.error(error);
       });
@@ -827,7 +722,7 @@ export default {
       // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
       $.ajax({
         type: 'get',
-        url: '/document/all?did=' + pageData.did + '&ver=-1',
+        url: '/document/all?did=' + pageData.did + '&ver=' + this.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         // async: false,
         success: function (res) {
@@ -867,8 +762,9 @@ export default {
     },
     applyDocContent() {
       var that = this;
-      pageData.initialData = window.editor.getData();
+      var content = window.editor.getData();
       // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
+      that.alert_msg.success('更新前版本号: ' + pageData.ver);
       $.ajax({
         type: 'get',
         url: '/document/all?did=' + pageData.did + '&ver=-1',
@@ -880,8 +776,9 @@ export default {
           }
           if (res.status === 0) {
             that.file_name = res.name;
-            pageData.initialData = res.content;
+            content = res.content;
             pageData.ver = res.ver;
+            that.alert_msg.success('更新后版本号: ' + pageData.ver);
           } else {
             switch (res.status) {
               case 1:
@@ -904,7 +801,7 @@ export default {
           that.alert_msg.error('连接失败');
         }
       });
-      return pageData.initialData;
+      return content;
     },
     updateDocContent() {
       var that = this;
@@ -1316,33 +1213,6 @@ export default {
       this.$emit('open_chatting_dialog');
     },
 
-    showHistoryBlock(){
-      $('#history').css('display', 'inherit');
-      $('.el-aside').attr('overflow', 'hidden !important');
-      var that = this;
-      $.ajax({
-        type: 'get',
-        url: '/document/history?did=' + pageData.did,
-        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        processData: false,
-        contentType: false,
-        async: true,
-        success: function (res) {
-          console.log("(get)/document/history" + " : " + res.status);
-          if (res.status === 0) {
-            that.history_list = res.list;
-          }
-        },
-        error: function () {
-          //that.alert_msg.error('连接失败');
-        }
-      });
-    },
-    closeHistoryBlock(){
-      $('#history').css('display', 'none');
-      $('.el-aside').attr('overflow', '-moz-scrollbars-none');
-    },
-
   },
   /*beforeDestroy() {
     //this.updateDocContent(window.editor.getData());
@@ -1437,22 +1307,20 @@ export default {
 .el-aside {
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
-  /*overflow: hidden !important;*/
-
 }
 
 .loading_bar{
-    position: fixed;
-    top:60px; /* 头部导航栏的高度 */
-    left:-6px; /* 为了掩饰圆角，但其实可以设置成方角的 */
-    width:calc(100vw + 8px);
-    transition: 0.1s opacity linear;
-    height:3px;
-    z-index:2001
+  position: fixed;
+  top:60px; /* 头部导航栏的高度 */
+  left:-6px; /* 为了掩饰圆角，但其实可以设置成方角的 */
+  width:calc(100vw + 8px);
+  transition: 0.1s opacity linear;
+  height:3px;
+  z-index:2001
 }
 
 .loading_bar_done{
-    opacity: 0;
+  opacity: 0;
 }
 
 >>>.el-progress-bar__inner{
@@ -1460,7 +1328,7 @@ export default {
 }
 
 .el-main>>>.el-loading-mask{
-    height: calc(100vh - 56px) !important;
+  height: calc(100vh - 56px) !important;
 }
 
 .editor_bottom{
@@ -1502,16 +1370,12 @@ export default {
 }
 
 #toolbar-container{
-  /*margin-left:105px*/;
-  margin-left:140px;
+  margin-left:70px;
+  /*margin-left:140px;*/
 }
 
->>>.ck-user__img{
+>>>.ck-user__img {
   border: none !important;
-}
-
->>>.ck-user{
-  cursor:pointer !important;
 }
 
 </style>
