@@ -91,7 +91,7 @@ export default {
     position: absolute;
     top:43px;
     left:78px;
-    width: 124px;
+    width: 200px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1; /* 行数 */

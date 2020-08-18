@@ -21,7 +21,10 @@
                             </el-upload>
                         </el-form-item>
                         <el-form-item label="昵称">
-                            <el-input v-model="form.name" clearable placeholder="请输入昵称" maxlength="64" @keyup.enter.native="submit()"></el-input>
+                            <el-input v-model="form.name" clearable placeholder="请输入昵称" maxlength="64"></el-input>
+                        </el-form-item>
+                        <el-form-item label="个人简介">
+                            <el-input v-model="form.intro" type="textarea" resize="none" :rows="5" clearable placeholder="请输入你的个人简介" maxlength="300"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -45,6 +48,7 @@ export default {
             form:{
                 img: '',
                 name: '',
+                intro:''
             },
         }
     },
@@ -75,12 +79,14 @@ export default {
                     if(res.status == 0){
                         that.form.img = res.portrait;
                         that.form.name = res.name;
+                        that.form.intro = res.intro;
                         that.dia_vis = true;
                     }
                     else{
                         that.dia_vis = false;
                         that.form.img = '';
                         that.form.name = '';
+                        that.form.intro = '';
                         that.alert_msg.error('获取信息失败');
                     }
                 },
@@ -147,13 +153,9 @@ export default {
 
         submit(){
             var that = this;
-            if(that.form.name == ''){
+            if(that.form.name.trim() == ''){
                 that.alert_msg.warning('昵称不得为空');
                 return;
-            }
-            let msg = {
-                name: that.form.name,
-                img: that.form.img,
             }
             $.ajax({ 
                 type:'post', 
@@ -180,7 +182,10 @@ export default {
                                 that.alert_msg.error('昵称不合法，请检查您的信息')
                                 break;
                             case 4:
-                                that.alert_msg.error('头像上传失败，请重新上传');
+                                that.alert_msg.error('头像保存失败，请重新上传');
+                                break;
+                            case 5:
+                                that.alert_msg.error('个人简介不合法，请修改');
                                 break;
                             default:
                                 that.alert_msg.error('修改信息失败，请检查你的信息');

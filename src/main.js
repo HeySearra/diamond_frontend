@@ -29,6 +29,7 @@ import change_password_dialog from './components/change_password_dialog';
 import chatting_dialog from './components/chatting_dialog';
 import team_invite_dialog from './components/team_invite_dialog';
 
+import user_info_dialog from './components/user_info_dialog';
 
 Vue.use(Element);
 // Vue.use(echarts);
@@ -49,6 +50,8 @@ Vue.component('change-password-dialog', change_password_dialog);
 
 Vue.component('chatting-dialog', chatting_dialog);
 Vue.component('team-invite-dialog', team_invite_dialog);
+
+Vue.component('user-info-dialog', user_info_dialog);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'

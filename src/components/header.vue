@@ -26,7 +26,7 @@
         <span
           v-for="item in online_icon_list"
           :key="item.uid"
-          @click="open_chat_dialog_with_uid(item.uid)">
+          @click="open_user_info(item.uid)">
               <header-user-icon
                 ref="header_user_icon"
                 :name="item.name"
@@ -346,53 +346,11 @@
       },
 
       click_user_dropdown(command){
-        this.open_chat_dialog_with_uid(command);
+        this.open_user_info(command);
       },
 
-      open_chat_dialog_with_uid(uid){
-        if(uid == this.login_manager.get_uid()){
-          let random = parseInt(Math.random()*100000);
-          this.alert_msg.normal('你好寂寞' + this.magic_word[random%this.magic_word.length]);
-          return;
-        }
-        var flag = true;
-        let url = '/chat/build_chat';
-        var that = this;
-        $.ajax({
-            type:'post',
-            url: url,
-            headers: {'X-CSRFToken': that.getCookie('csrftoken')},
-            data: JSON.stringify({uid:uid}),
-            async:false, 
-            success:function (res){
-                if(that.console_debug){
-                    console.log(url +  '：' + res.status);
-                }
-                if(res.status == 0){
-                    flag = true;
-                }
-                else{
-                    switch(res.status){
-                        case 2:
-                            that.alert_msg.error('权限不足');
-                            break;
-                        case 3:
-                            that.alert_msg.error('找不到用户');
-                            break;
-                        default:
-                            that.alert_msg.error('发生了未知错误');
-                    }
-                    flag = false;
-                }
-            },
-            error:function(res){
-                that.alert_msg.error('网络连接失败');
-                flag = false;
-            }
-        });
-        if(flag){
-          this.$emit('open_chatting_dialog_with_uid', uid);
-        }
+      open_user_info(uid){
+        this.$emit('open_user_info', uid);
       },
 
       refresh_chatting_count(){

@@ -33,7 +33,7 @@
             @edit_admin="edit_admin"
             @manage_member="manage_member"
             @edit_team_info="edit_team_info"
-            @open_chatting_dialog="open_chatting_dialog"
+            @open_user_info="open_user_info"
             @send_all="send_all"></sidebar>
       </el-aside>
     </el-container>
@@ -231,8 +231,8 @@ export default {
       this.is_loading = false;
     },
 
-    open_chatting_dialog(uid){
-      this.$emit('open_chatting_dialog_with_uid', uid);
+    open_user_info(uid){
+      this.$emit('open_user_info', uid);
     },
 
     send_all(tid){

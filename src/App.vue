@@ -7,12 +7,12 @@
         @edit_user_info="edit_user_info"
         @change_password="change_password"
         @chatting="chatting"
-        @open_chatting_dialog_with_uid="chatting_with_uid"
+        @open_user_info="open_user_info"
         ref="header"></navbar>
     </el-header>
     <router-view 
       ref="rw"
-      @open_chatting_dialog_with_uid="chatting_with_uid"
+      @open_user_info="open_user_info"
       @refresh_online_list="refresh_online_list" />
     <el-backtop></el-backtop>
     <message-drawer ref="message_drawer" @deal-team-invite="deal_team_invite" @refresh_message_count="refresh_message_count"></message-drawer>
@@ -20,6 +20,7 @@
     <change-password-dialog ref="change_password_dialog"></change-password-dialog>
     <chatting-dialog ref="chatting_dialog"></chatting-dialog>
     <team-invite-dialog @close_msg="close_msg" @refresh_msg="refresh_msg" ref="team_invite_dialog"></team-invite-dialog>
+    <user-info-dialog ref="user_info_dialog" @open_chatting_dialog="chatting_with_uid"></user-info-dialog>
   </div>
 </template>
 
@@ -77,6 +78,9 @@ export default {
     },
     refresh_online_list(list){
       this.$refs.header.refresh_online_list(list);
+    },
+    open_user_info(uid){
+      this.$refs.user_info_dialog.open(uid);
     }
   },
 }
