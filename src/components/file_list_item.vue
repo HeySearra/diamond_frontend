@@ -417,8 +417,8 @@ export default {
         },
 
         open_doc() {
-            if(this.type == 'workbench'){
-                var that = this;
+            var that = this;
+            if(this.context == 'workbench'){
                 $.ajax({
                     type:'get',
                     url: '/document/auth?did=' + that.did,

@@ -260,18 +260,18 @@ export default {
                         that.alert_msg.success('添加成功');
                     }
                     else{
-                        switch(that.status){
+                        switch(res.status){
                             case 3:
                                 that.alert_msg.error('找不到文档');
                                 break;
                             case 4:
-                                that.alert_msg.error('系统不认识这个人');
+                                that.alert_msg.warning('系统不认识这个人');
                                 break;
                             case 5:
-                                that.alert_msg.error('你不需要添加'+(that.tid?'团队创建者或':'')+'你自己');
+                                that.alert_msg.normal('你不需要添加'+(that.tid?'团队创建者或':'')+'你自己');
                                 break;
                             case 6:
-                                that.alert_msg.error('Ta 已经在分享列表中了');
+                                that.alert_msg.normal('Ta 已经在分享列表中了');
                                 break;
                             default:
                                 that.alert_msg.error('发生未知错误');
