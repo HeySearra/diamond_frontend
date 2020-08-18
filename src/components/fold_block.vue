@@ -73,6 +73,10 @@ export default {
             type:Boolean,
             default:false
         },
+        i_pfid:{
+            type:String,
+            default:''
+        }
     },
     data() {
         return {
@@ -115,6 +119,10 @@ export default {
 
         apply_for_parent(){
             if(this.context!='workbench'&&!this.is_link){
+                return;
+            }
+            if(this.context == 'workbench'){
+                this.pfid = this.i_pfid;
                 return;
             }
             let url = '/fs/father?id=' + this.fid + '&type=fold';
@@ -555,7 +563,7 @@ export default {
 
 <style scoped>
 @import url("../assets/common.css");
-@import url("../assets/diadoc_icon.css");
+
 
 .fold_block{
     position: relative;

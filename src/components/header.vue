@@ -72,8 +72,12 @@
 </template>
 
 <script>
+  import header_user_icon from '@/components/header_user_icon';
   export default {
     name:'navbar',
+    components:{
+      'header-user-icon': header_user_icon
+    },
     watch:{
       $route(to,from){
         this.init();
@@ -414,7 +418,7 @@
 
 <style scoped>
 @import url("../assets/common.css");
-@import url("../assets/diadoc_icon.css");
+
 
 .hearer{
   z-index: 1000;

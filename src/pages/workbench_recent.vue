@@ -64,6 +64,7 @@ export default {
                                 is_link: false,
                                 is_starred: res.list[i].is_starred,
                                 name: res.list[i].name,
+                                i_pfid:res.list[i].pfid,
                                 view_time: that.datetime_format(res.list[i].dt, res.cur_dt),
                             })
                         }

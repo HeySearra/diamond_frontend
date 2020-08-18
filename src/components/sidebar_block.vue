@@ -53,6 +53,7 @@
         <div class="clear_both"></div>
         <el-row><el-button type="primary" plain @click="$emit('edit_team_info', tid)">修 改 团 队 信 息</el-button></el-row>
         <el-row><el-button type="primary" plain @click="$emit('manage_member', tid)" v-if="is_admin||is_creator">管 理 成 员</el-button></el-row>
+        <el-row><el-button type="primary" plain @click="$emit('send_all', tid)" v-if="is_admin||is_creator">群 发 通 知</el-button></el-row>
         <el-row><el-button type="primary" plain @click="$emit('edit_admin', tid)" v-if="is_creator">设 置 管 理 员</el-button></el-row>
         <el-row><el-button type="danger" @click="quit_team" v-if="is_member||is_admin">退 出 团 队</el-button></el-row>
         <el-row><el-button type="danger" @click="delete_team" v-if="is_creator">解 散 团 队</el-button></el-row>
@@ -297,6 +298,9 @@ export default {
                   console.log(url2 +  '：' + res.status);
               }
               if(res.status == 0){
+                  that.is_creator = false;
+                  that.is_admin = false;
+                  that.is_member = false;
                   switch(res.identity){
                     case 'owner':
                       that.is_creator = true;
@@ -633,7 +637,7 @@ export default {
 
 .item{
   float:left;
-  margin:6px;
+  margin:7px;
 }
 
 .doc_icon{

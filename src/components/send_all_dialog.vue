@@ -4,16 +4,25 @@
             class="dialog_style"
             :visible.sync="dia_vis"
             width="600px">
-            <h3 style="margin-left:-6px;line-height:30px;"><span class="icon iconfont can_not_choose" style="color:hsl(202, 56%, 50%);font-size:30px;margin-right:10px;">&#xe6cb;</span>来自 {{team_name}} 的{{title}}</h3>
+            <h3 style="margin-left:-6px;line-height:30px;">发送团队消息</h3>
             <div class="content">
                 <div style="height:10px"></div>
                 <div class="item_area">
-                    是否接受团队<b> {{team_name}} </b>的加入邀请？接受后您将成为该团队的成员
+                    <el-input
+                        type="textarea"
+                        placeholder="请输入消息内容"
+                        v-model="msg"
+                        autofocus
+                        :autosize="{minRows: 3, maxRows: 15}"
+                        maxlength="300"
+                        show-word-limit
+                        resize="none">
+                    </el-input>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button type="danger" @click="click_to_accept(false)">拒 绝</el-button>
-                <el-button type="success" @click="click_to_accept(true)">接 受</el-button>
+                <el-button @click="dia_vis = false">取 消</el-button>
+                <el-button type="primary" @click="send" :disabled="!msg.trim().length">发 送</el-button>
             </span>
         </el-dialog>
     </div>
@@ -25,17 +34,16 @@ export default {
 
     data() {
         return {
-            title:'团队邀请',
-            team_name: 'team_name',
-            mid:'',
+            tid:'',
+            msg:'',
             dia_vis:false
         }
     },
 
     methods:{
-        open(data){
-            this.mid = data.mid;
-            this.team_name = data.team_name;
+        open(tid){
+            this.tid = tid;
+            this.msg = '';
             this.dia_vis = true;
         },
 
@@ -45,45 +53,41 @@ export default {
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
 
-        click_to_accept(if_accept){
+        send(){
             var that = this;
-            var msg = {
-                mid: that.mid,
-                result: if_accept,
-            };
+            if(this.msg.trim().length <= 0){
+                this.alert_msg.warning('请输入消息内容');
+                return;
+            }
             $.ajax({
                 type:'post',
-                url:"/team/invitation/confirm",
-                data: JSON.stringify(msg),
+                url:"/team/send_all",
+                data: JSON.stringify({tid:this.tid, content:this.msg}),
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 async:false, 
                 success:function (res){
                     if(that.console_debug){
-                        console.log("(post)/team/invitation/confirm"+ " : " +res.status);
+                        console.log("/team/send_all"+ " : " +res.status);
                     }
                     if(res.status == 0){
-                        that.alert_msg.success('已' + (if_accept?'成功':'拒绝') +'加入团队！');
-                        if_accept ? that.$router.push({path: '/team/' + res.tid + "/file/desktop"}) : '';
-                        if_accept ? that.$emit('close_msg') : that.$emit('refresh_msg');
+                        that.alert_msg.success('成功发送团队消息');
                         that.dia_vis = false;
                     }
                     else{
                         switch(res.status){
                             case 2:
-                                that.alert_msg.error('用户未登录或没有权限');
+                                that.alert_msg.error('未登录或权限不足');
                                 break;
                             case 3:
-                                that.alert_msg.normal('您已在团队中');
-                                that.dia_vis = false;
-                                that.$emit('refresh_msg');
+                                that.alert_msg.error('找不到团队');
                                 break;
                             default:
-                                that.alert_msg.error('出错啦');
+                                that.alert_msg.error('发生未知错误');
                         }
                     }
                 },
                 error:function(){
-                    that.alert_msg.error('连接失败');
+                    that.alert_msg.error('网络连接失败');
                 }
             });
         },
@@ -98,7 +102,7 @@ export default {
 
 
 .item_area{
-    overflow-y: auto;
+    overflow-y: overlay;
 }
 
 @media (max-width: 1200px){

@@ -83,6 +83,7 @@ export default {
 </script>
 
 <style>
+  @import url("./assets/diadoc_icon.css");
   body, .el-header, .el-footer{
     margin:0;
     padding:0;

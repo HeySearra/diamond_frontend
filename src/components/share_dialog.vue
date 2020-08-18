@@ -199,7 +199,7 @@ export default {
                     }
                     if(res.status == 0){
                         that.read_url = that.$host + '/document/add_read?dk=' + res.key;
-                        that.url = that.read_url;
+                        that.sharable ? that.url=that.read_url : '';
                         flag = true;
                         that.read_link_vis = false;
                     }
@@ -270,6 +270,9 @@ export default {
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
                         if(value){
                             switch(that.share_type){
                                 case 1:
@@ -286,10 +289,6 @@ export default {
                         else{
                             that.url = '';
                         }
-                        console.log(url +  '：' + res.status);
-                    }
-                    if(res.status == 0){
- 
                     }
                     else{
                         that.sharable = !value;

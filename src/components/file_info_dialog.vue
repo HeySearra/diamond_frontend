@@ -54,7 +54,7 @@ export default {
 <style scoped>
 @import url("../assets/common.css");
 @import url("../assets/dialog_style.css");
-@import url("../assets/diadoc_icon.css");
+
 
 .file_info_dialog{
     position: relative;

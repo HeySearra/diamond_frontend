@@ -33,7 +33,8 @@
             @edit_admin="edit_admin"
             @manage_member="manage_member"
             @edit_team_info="edit_team_info"
-            @open_chatting_dialog="open_chatting_dialog"></sidebar>
+            @open_chatting_dialog="open_chatting_dialog"
+            @send_all="send_all"></sidebar>
       </el-aside>
     </el-container>
     <el-footer></el-footer>
@@ -45,6 +46,7 @@
     <choose-path-dialog ref="choose_path_dialog"></choose-path-dialog>
     <edit-team-info-dialog ref="edit_team_info_dialog" @refresh="refresh_team_info_force"></edit-team-info-dialog>
     <share-dialog ref="share_dialog" context="team"></share-dialog>
+    <send-all-dialog ref="send_all_dialog"></send-all-dialog>
   </div>
 </template>
 
@@ -56,6 +58,7 @@ import share_dialog from '@/components/share_dialog';
 import admin_edit_dialog from '@/components/admin_edit_dialog';
 import manage_member_dialog from '@/components/manage_member_dialog';
 import edit_team_info_dialog from '@/components/edit_team_info_dialog';
+import send_all_dialog from '@/components/send_all_dialog';
 export default {
   components:{
     'new-dialog': new_dialog,
@@ -64,7 +67,8 @@ export default {
     'share-dialog': share_dialog,
     'admin-edit-dialog': admin_edit_dialog,
     'manage-member-dialog': manage_member_dialog,
-    'edit-team-info-dialog': edit_team_info_dialog
+    'edit-team-info-dialog': edit_team_info_dialog,
+    'send-all-dialog': send_all_dialog
   },
 
   data () {
@@ -229,6 +233,10 @@ export default {
 
     open_chatting_dialog(uid){
       this.$emit('open_chatting_dialog_with_uid', uid);
+    },
+
+    send_all(tid){
+      this.$refs.send_all_dialog.open(tid);
     }
   }
 }
