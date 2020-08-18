@@ -29,7 +29,8 @@
                         <el-dropdown-item command="move" v-if="(context=='file_system'||context=='team')&&!is_link">移动</el-dropdown-item>
                         <el-dropdown-item command="copy" v-if="(context=='file_system'||context=='team')&&!is_link">复制</el-dropdown-item>
                         <el-dropdown-item command="rename" v-if="(context=='file_system'||context=='team')&&!is_link">重命名</el-dropdown-item>
-                        <el-dropdown-item command="share" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">分享</el-dropdown-item>
+                        <el-dropdown-item command="share" v-if="(context=='file_system'||context=='team')&&can_share&&!is_link">通过链接分享</el-dropdown-item>
+                        <el-dropdown-item command="dtd_share" v-if="(context=='file_system'||context=='team')&&can_share&&!is_link">分享给用户</el-dropdown-item>
                         <el-dropdown-item command="star" v-if="(context=='file_system'||context=='team'||context=='workbench')&&!is_link">{{is_starred ? '取消收藏' : '收藏'}}</el-dropdown-item>
                         <el-dropdown-item command="remove_link" class="red_text" v-if="is_link">移除快捷方式</el-dropdown-item>
                         <el-dropdown-item command="recover" v-if="context=='recycle'" @click="click_to_recover">恢复</el-dropdown-item>
@@ -77,6 +78,10 @@ export default {
         i_pfid:{
             type:String,
             default:''
+        },
+        can_share:{
+            type:Boolean,
+            default:false
         }
     },
     data() {
@@ -269,6 +274,9 @@ export default {
                     break;
                 case 'share':
                     this.$emit('share_item', this.did, this.name);
+                    break;
+                case 'dtd_share':
+                    this.$emit('dtd_share', this.did, this.name);
                     break;
                 case 'copy':
                     this.$emit('copy_item', this.did, 'file', this.name);

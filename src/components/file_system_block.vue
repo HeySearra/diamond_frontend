@@ -31,6 +31,7 @@
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
+                @dtd_share="dtd_share"
                 @copy_item="copy_item"
                 @refresh="refresh"
                 @add_item="add_item"
@@ -194,6 +195,7 @@ export default {
                                     name: res.list[i].name,
                                     is_link: res.list[i].is_link,
                                     is_starred: res.list[i].is_starred,
+                                    can_share: res.list[i].can_share
                                 });
                             }
                             else if(res.list[i].type == 'fold'){
@@ -275,6 +277,10 @@ export default {
 
         share_item(did, name){
             this.$emit('share_item', did, name);
+        },
+
+        dtd_share(did, name){
+            this.$emit('dtd_share', did, name);
         },
 
         copy_item(id, type, name){
