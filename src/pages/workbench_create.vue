@@ -82,6 +82,7 @@ export default {
                                 is_link: false,
                                 is_starred: res.list[i].is_starred,
                                 name: res.list[i].name,
+                                i_pfid:res.list[i].pfid,
                                 create_time: that.datetime_format(res.list[i].create_dt, res.cur_dt),
                                 creator: res.list[i].cname,
                                 recent_edit_time: that.datetime_format(res.list[i].edit_dt, res.cur_dt),

@@ -95,7 +95,7 @@ export default {
 <style scoped>
 @import url("../assets/common.css");
 @import url("../assets/dialog_style.css");
-@import url("../assets/diadoc_icon.css");
+
 
 .item_area{
     overflow-y: auto;

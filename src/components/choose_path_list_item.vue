@@ -77,7 +77,7 @@ export default {
 
 <style scoped>
 @import url("../assets/common.css");
-@import url("../assets/diadoc_icon.css");
+
 
 .choose_path_list_item{
     border-bottom: solid 1px rgba(0, 0, 0, 0.1);

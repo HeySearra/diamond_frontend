@@ -20,6 +20,7 @@
                     :fid="item.id" 
                     :eid="item.id"
                     :name="item.name" 
+                    :i_pfid="item.i_pfid"
                     :context="context" 
                     :is_starred="item.is_starred"
                     :type="type"
@@ -182,7 +183,7 @@ export default {
 
 <style scoped>
 @import url("../assets/common.css");
-@import url("../assets/diadoc_icon.css");
+
 @import url("../assets/dialog_style.css");
 
 h1{

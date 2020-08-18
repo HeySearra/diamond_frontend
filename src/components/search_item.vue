@@ -235,7 +235,7 @@ export default {
 
 <style scoped>
 @import url("../assets/common.css");
-@import url("../assets/diadoc_icon.css");
+
 
 .file_list_item{
     position: relative;

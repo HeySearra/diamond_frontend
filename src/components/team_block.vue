@@ -287,7 +287,7 @@ export default {
 
 <style scoped>
 @import url("../assets/common.css");
-@import url("../assets/diadoc_icon.css");
+
 
 .team_block{
     position: relative;

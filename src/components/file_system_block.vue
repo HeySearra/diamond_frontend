@@ -373,7 +373,7 @@ export default {
 
 <style scoped>
 @import url("../assets/common.css");
-@import url("../assets/diadoc_icon.css");
+
 @import url("../assets/dialog_style.css");
 
 .file_system_block{
