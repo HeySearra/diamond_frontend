@@ -133,6 +133,8 @@
         }
         this.chatting_timer ? clearInterval(this.chatting_timer) : '';
         var that = this;
+        this.refresh_chatting_count();
+        this.refresh_message_count();
         this.chatting_timer = setInterval(function(){
           that.refresh_chatting_count();
         }, 1000*5);

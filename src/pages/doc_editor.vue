@@ -145,6 +145,8 @@ function MyCustomUploadAdapterPlugin(editor) {
   };
 }
 
+var tthat;
+
 class CommentsAdapter {
   constructor(editor) {
     this.editor = editor;
@@ -338,7 +340,7 @@ class CommentsAdapter {
           $('.ck-user').off('click');
           $('.ck-user').click(function () {
             var uid = $(this).attr('data-user-id');
-            alert(uid);
+            tthat.$emit('open_user_info', uid);
           });
         }, 0);
         // Write a request to your database here. The returned `Promise`
@@ -599,6 +601,7 @@ export default {
       this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
       this.online_timer ? clearInterval(this.online_timer) : '';
       this.is_newest = true;
+      tthat = this;
       var that = this;
       setTimeout(function(){
         that.getCurrentEditingUser();

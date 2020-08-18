@@ -9,6 +9,7 @@
                     :key="item.uid"
                     :uid="item.uid"
                     :name="item.name"
+                    :no_read="!item.is_read"
                     :src="item.src"
                     :content="item.last_message"
                     @click="choose_user">
@@ -125,6 +126,14 @@
                         }
                         if(res.status == 0){
                             that.user_list = res.list;
+                            setTimeout(function(){
+                                let item = that.$refs.chat_user_list_item;
+                                if(item){
+                                    for(let i=0; i<item.length; i++){
+                                        item[i].init();
+                                    }
+                                }
+                            }, 0);
                             result = true;
                         }
                         else{
@@ -482,6 +491,7 @@
     }
 
     .chatting_time{
+        margin-top:15px;
         line-height: 36px !important;
     }
 
