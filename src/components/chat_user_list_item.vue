@@ -50,7 +50,7 @@ export default {
 }
 </script>
 <style scoped>
-@import url("../assets/diadoc_icon.css");
+
 
 .chat_user_list_item{
     border-bottom: solid 1px #ccc;

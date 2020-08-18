@@ -73,6 +73,10 @@ export default {
         is_in_desktop:{
             type:Boolean,
             default:false
+        },
+        i_pfid:{
+            type:String,
+            default:''
         }
     },
     data() {
@@ -116,6 +120,10 @@ export default {
 
         apply_for_parent(){
             if(this.context!='workbench'&&!this.is_link){
+                return;
+            }
+            if(this.context == 'workbench'){
+                this.pfid = this.i_pfid;
                 return;
             }
             let url = '/fs/father?id=' + this.did + '&type=doc';
@@ -596,7 +604,7 @@ export default {
 
 <style scoped>
 @import url("../assets/common.css");
-@import url("../assets/diadoc_icon.css");
+
 
 .file_block{
     position: relative;

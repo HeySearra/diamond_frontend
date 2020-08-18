@@ -389,7 +389,7 @@
         padding-right: 2em;
         line-height: 56px;
         font-weight: bold;
-        font-size: 23px;
+        font-size: 21px;
         text-indent: 1em;
         width:calc(100% - 300px - 2em);
         display: -webkit-box;

@@ -86,7 +86,7 @@ export default {
 
 <style scoped>
 @import url("../assets/common.css");
-@import url("../assets/diadoc_icon.css");
+
 
 .user_list_item{
     width:100%;

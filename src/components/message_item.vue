@@ -1,11 +1,11 @@
 <template>
-    <div class="message-item can_not_choose" @dblclick="click_to_read" @click="mark_read">
+    <div class="message-item can_not_choose" @dblclick="click_to_read" @click="mark_read" v-loading="loading">
         <div style="height:10px;"></div>
         <div class="item">
             <div class="profile can_not_choose">
                 <span v-if="type=='accept'" class="icon iconfont" style="color:hsl(202, 56%, 50%)">&#xe664;</span>
                 <span v-if="type=='reject'" class="icon iconfont" style="color:hsl(1, 69%, 73%)">&#xe69e;</span>
-                <span v-if="type=='join'" class="icon iconfont" style="color:hsl(202, 56%, 50%);">&#xe6cb;</span>
+                <span v-if="type=='join'||type=='admin'" class="icon iconfont" style="color:hsl(202, 56%, 50%);">&#xe6cb;</span>
                 <span v-if="type=='out'" class="icon iconfont" style="color:hsl(198, 10%, 69%)">&#xe62f;</span>
                 <span v-if="type=='doc'&&false" class="icon iconfont" style="color:hsl(202, 56%, 50%)">&#xe7ff;</span>
                 <span v-if="false" class="icon iconfont">&#xe622;</span>
@@ -184,7 +184,7 @@ export default {
 }
 </script>
 <style scoped>
-@import url("../assets/diadoc_icon.css");
+
 .message-item{
     position: relative;
     padding: 0;

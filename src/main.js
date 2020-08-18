@@ -5,15 +5,15 @@ import App from './App'
 import router from './router'
 import './assets/element.css'
 import Element from 'element-ui'
-import echarts from 'echarts'
-import mavonEditor from 'mavon-editor'
+// import echarts from 'echarts'
+// import mavonEditor from 'mavon-editor'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import Ripple from 'vue-ripple-directive'
 import VueClipboard from 'vue-clipboard2'
 import 'jquery'
 import './assets/icon_store/iconfont.css'
 import './assets/diadoc_icon/iconfont.css'
-import 'mavon-editor/dist/css/index.css'
+// import 'mavon-editor/dist/css/index.css'
 import './assets/common.css'
 
 import navbar from './components/header';
@@ -31,8 +31,8 @@ import team_invite_dialog from './components/team_invite_dialog';
 
 
 Vue.use(Element);
-Vue.use(echarts);
-Vue.use(mavonEditor);
+// Vue.use(echarts);
+// Vue.use(mavonEditor);
 Vue.use(CKEditor);
 Vue.directive('ripple',Ripple);
 Vue.use(VueClipboard);
@@ -67,8 +67,8 @@ Vue.prototype.datetime_format = datetime_format;
 Vue.prototype.magic_word = magic_word;
 
 Vue.config.productionTip = false;
-Vue.prototype.$echarts = echarts;
-Vue.prototype.$host = 'http://localhost:8000'
+// Vue.prototype.$echarts = echarts;
+Vue.prototype.$host = 'http://47.96.109.229'
 
 Ripple.color = 'rgba(0, 0, 0, 0.07)'
 
