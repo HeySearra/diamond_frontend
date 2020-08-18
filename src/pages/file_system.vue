@@ -16,6 +16,7 @@
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
+                @dtd_share="dtd_share"
                 @copy_item="copy_item"
                 @refresh="refresh"
                 @add_item="add_item"
@@ -37,6 +38,7 @@
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
     <choose-path-dialog @refresh="refresh" ref="choose_path_dialog"></choose-path-dialog>
     <share-dialog ref="share_dialog"></share-dialog>
+    <dtd-share-dialog ref="dtd_share_dialog"></dtd-share-dialog>
   </div>
 </template>
 
@@ -45,12 +47,14 @@ import new_dialog from '@/components/new_dialog';
 import file_info_dialog from '@/components/file_info_dialog';
 import choose_path_dialog from '@/components/choose_path_dialog';
 import share_dialog from '@/components/share_dialog';
+import dtd_share_dialog from '@/components/dtd_share_dialog';
 export default {
   components:{
     'new-dialog': new_dialog,
     'file-info-dialog': file_info_dialog,
     'choose-path-dialog': choose_path_dialog,
-    'share-dialog': share_dialog
+    'share-dialog': share_dialog,
+    'dtd-share-dialog': dtd_share_dialog
   },
 
   data () {
@@ -183,6 +187,10 @@ export default {
 
     share_item(did, name){
       this.$refs.share_dialog.open(did, name);
+    },
+
+    dtd_share(did, name){
+      this.$refs.dtd_share_dialog.open(did);
     },
 
     copy_item(id, type, name){

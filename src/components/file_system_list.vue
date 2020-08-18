@@ -31,6 +31,7 @@
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
+                @dtd_share="dtd_share"
                 @copy_item="copy_item"
                 @refresh="refresh"
                 @add_item="add_item"
@@ -50,7 +51,7 @@ export default {
     name: 'file-system-list',
 
     components:{
-        'file-display-list': file_display_list
+        'file-display-list': file_display_list,
     },
 
     props: {
@@ -194,6 +195,7 @@ export default {
                                     name: res.list[i].name,
                                     is_link: res.list[i].is_link,
                                     is_starred: res.list[i].is_starred,
+                                    can_share: res.list[i].can_share,
                                     creator: res.list[i].cname,
                                     create_time: that.datetime_format(res.list[i].create_dt, res.cur_dt),
                                     recent_edit_time: that.datetime_format(res.list[i].edit_dt, res.cur_dt),
@@ -281,6 +283,10 @@ export default {
 
         share_item(did, name){
             this.$emit('share_item', did, name);
+        },
+
+        dtd_share(did, name){
+            this.$emit('dtd_share', did, name);
         },
 
         copy_item(id, type, name){

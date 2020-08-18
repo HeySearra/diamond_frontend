@@ -10,7 +10,7 @@
             <div class="content">
                 <div style="height:20px;"></div>
                 <div style="padding:15px 30px;">
-                    <span>允许分享该文档<span>（关闭后仅{{context=='normal'?'自己':'团队成员'}}可查看）</span>：</span>
+                    <span>允许通过链接分享<span>（关闭后链接共享将失效）</span>：</span>
                     <el-switch
                         style="float:right"
                         v-model="sharable"
@@ -21,21 +21,23 @@
                 </div>
                 <div style="height:50px;"></div>
                 <div class="can_not_choose" style="width:fit-content; margin:0 auto">
-                    <el-radio-group v-model="share_type" @change="change_share_type">
-                        <el-radio-button :label="1" :disabled="read_link_vis">文档阅读分享</el-radio-button>
-                        <el-radio-button :label="2" :disabled="comment_link_vis">文档评论分享</el-radio-button>
-                        <el-radio-button :label="3" :disabled="write_link_vis">文档编辑分享</el-radio-button>
+                    <el-radio-group v-model="share_type" @change="change_radio">
+                        <el-radio-button :label="1" :disabled="!sharable">允许阅读文档</el-radio-button>
+                        <el-radio-button :label="2" :disabled="!sharable">允许评论文档</el-radio-button>
+                        <el-radio-button :label="3" :disabled="!sharable">允许编辑文章</el-radio-button>
                     </el-radio-group>
                 </div>
                 <div style="height:30px;"></div>
                 <div style="width:96%;margin:0 auto">
                     <el-input v-model="url" readonly :disabled="!sharable"></el-input>
                     <el-button :disabled="!sharable" type="primary" plain 
-                        v-clipboard:copy="url" v-clipboard:success="copy_success" v-clipboard:error="copy_error">复制链接</el-button>
+                        v-clipboard:copy="url" v-clipboard:success="copy_success" v-clipboard:error="copy_error">复制链接
+                    </el-button>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dia_vis=false">关 闭</el-button>
+                <el-button @click="reset_link" v-show="sharable">重新生成链接</el-button>
+                <el-button type="primary" @click="dia_vis=false">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -53,48 +55,60 @@ export default {
     },
     data() {
         return {
-            title:'分享',
+            title:'通过链接共享文件',
             dia_vis:false,
             did:'',
             url:'',
             sharable:true,
-            share_type:1,
-            write_url:'',
-            comment_url:'',
-            read_url:'',
-            read_link_vis: true,
-            comment_link_vis: true,
-            write_link_vis: true,
+            share_type:0,
         }
     },
 
     methods:{
         open(did, name){
-            console.log("f4i43tujrgv");
             this.did = did;
-            this.title = '分享 ' + name;
-            var flag = false;
-            this.read_link_vis = true;
-            this.comment_link_vis = true;
-            this.write_link_vis = true;
             this.url = '';
             var that = this;
             $.ajax({ 
-                type:'get',
-                url:'/document/lock?did=' + that.did,
+                type:'post',
+                url:'/fs/share_link',
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify({did:did}),
                 async:false, 
                 success:function (res){ 
                     if(that.console_debug){
-                        console.log('/document/lock?did=' + that.did +  '：' + res.status);
+                        console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.sharable = !res.is_locked;
-                        flag = true;
+                        switch(res.auth){
+                            case 'read':
+                                that.share_type = 1;
+                                break;
+                            case 'comment':
+                                that.share_type = 2;
+                                break;
+                            case 'write':
+                                that.share_type = 3;
+                                break;
+                            case 'no_share':
+                                that.share_type = 0;
+                                that.sharable = false;
+                        }
+                        switch(res.auth){
+                            case 'read':
+                            case 'comment':
+                            case 'write':
+                                that.sharable = true;
+                        }
+                        that.url = that.$host + '/document/share?dk=' + res.key;
+                        that.dia_vis = true;
                     }
                     else{
                         switch(res.status){
                             case 2:
+                                that.alert_msg.error('文档不存在');
+                                break;
+                            case 3:
                                 that.alert_msg.error('文档不存在');
                                 break;
                             default:
@@ -107,124 +121,6 @@ export default {
                     that.alert_msg.error('网络连接失败');
                 }
             });
-
-            if(!flag){
-                return;
-            }
-
-            flag = false;
-            $.ajax({ 
-                type:'post',
-                url:'/fs/share',
-                data: JSON.stringify({did: that.did, auth: 'write'}),
-                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async:false, 
-                success:function (res){ 
-                    if(that.console_debug){
-                        console.log('/fs/share?did=' + that.did + '&auth=write' +  '：' + res.status);
-                    }
-                    if(res.status == 0){
-                        that.write_url = that.$host + '/document/add_write?dk=' + res.key;
-                        flag = true;
-                        that.write_link_vis = false;
-                    }
-                    else{
-                        switch(res.status){
-                            case 2:
-                                that.write_link_vis = true;
-                                flag = true;
-                                break;
-                            default:
-                                that.alert_msg.error('发生了未知错误');
-                        }
-                        
-                    }
-                },
-                error:function(res){
-                    that.alert_msg.error('网络连接失败');
-                }
-            });
-
-            if(!flag){
-                return;
-            }
-
-            flag = false;
-            $.ajax({ 
-                type:'post',
-                url:'/fs/share',
-                data: JSON.stringify({did: that.did, auth: 'comment'}),
-                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async:false, 
-                success:function (res){ 
-                    if(that.console_debug){
-                        console.log('/fs/share?did=' + that.did + '&auth=comment' +  '：' + res.status);
-                    }
-                    if(res.status == 0){
-                        that.comment_url = that.$host + '/document/add_comment?dk=' + res.key;
-                        flag = true;
-                        that.comment_link_vis = false;
-                    }
-                    else{
-                        switch(res.status){
-                            case 2:
-                                that.comment_link_vis = true;
-                                flag = true;
-                                break;
-                            default:
-                                that.alert_msg.error('发生了未知错误');
-                        }
-                        
-                    }
-                },
-                error:function(res){
-                    that.alert_msg.error('网络连接失败');
-                }
-            });
-
-            if(!flag){
-                return;
-            }
-
-            flag = false;
-            $.ajax({ 
-                type:'post',
-                url:'/fs/share',
-                data: JSON.stringify({did: that.did, auth: 'read'}),
-                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async:false, 
-                success:function (res){ 
-                    if(that.console_debug){
-                        console.log('/fs/share?did=' + that.did + '&auth=read' +  '：' + res.status);
-                    }
-                    if(res.status == 0){
-                        that.read_url = that.$host + '/document/add_read?dk=' + res.key;
-                        that.sharable ? that.url=that.read_url : '';
-                        flag = true;
-                        that.read_link_vis = false;
-                    }
-                    else{
-                        switch(res.status){
-                            case 2:
-                                that.read_link_vis = true;
-                                flag = true;
-                                break;
-                            default:
-                                that.alert_msg.error('发生了未知错误');
-                        }
-                        
-                    }
-                },
-                error:function(res){
-                    that.alert_msg.error('网络连接失败');
-                }
-            });
-
-            if(!flag){
-                return;
-            }
-
-            this.dia_vis = true;
         },
 
         getCookie (name) {
@@ -233,21 +129,63 @@ export default {
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
 
-        change_share_type(value){
-            if(!this.sharable){
-                return;
-            }
+        change_radio(value){
             switch(value){
                 case 1:
-                    this.url = this.read_url;
+                    this.change_share_type('read');
                     break;
                 case 2:
-                    this.url = this.comment_url;
+                    this.change_share_type('comment');
                     break;
                 case 3:
-                    this.url = this.write_url;
+                    this.change_share_type('write');
                     break;
             }
+        },
+
+        change_share_type(type){
+            let url = '/fs/share_change_auth';
+            var that = this;
+            $.ajax({ 
+                type:'post',
+                url:url,
+                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                data: JSON.stringify({did:this.did, auth:type}),
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        switch(type){
+                            case 'read':
+                            case 'comment':
+                            case 'write':
+                                that.sharable = true;
+                                break;
+                            case 'no_share':
+                                that.sharable = false;
+                                break;
+                        }
+                    }
+                    else{
+                        switch(res.status){
+                            case 3:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            case 3:
+                                that.alert_msg.error('文档不存在');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
+                        }
+                        
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
         },
 
         copy_success(){
@@ -259,53 +197,62 @@ export default {
         },
 
         change_switch(value){
-            let url = '/document/lock';
-            let json_data = {did:this.did, is_locked:!value};
+            if(value){
+                if(!this.share_type){
+                    this.share_type = 1;
+                }
+                this.change_radio(this.share_type);
+            }
+            else{
+                this.share_type = 0;
+                this.change_share_type('no_share');
+            }
+        },
+
+        reset_link(){
             var that = this;
-            $.ajax({ 
-                type:'post',
-                url: url,
-                data: JSON.stringify(json_data),
-                headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async:false, 
-                success:function (res){ 
-                    if(that.console_debug){
-                        console.log(url +  '：' + res.status);
-                    }
-                    if(res.status == 0){
-                        if(value){
-                            switch(that.share_type){
-                                case 1:
-                                    that.url = that.read_url;
-                                    break;
-                                case 2:
-                                    that.url = that.comment_url;
-                                    break;
-                                case 3:
-                                    that.url = that.write_url;
-                                    break;
-                            }
+            function a(is_clear){
+                let url = '/fs/share_reset';
+                $.ajax({ 
+                    type:'post',
+                    url:url,
+                    headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+                    data: JSON.stringify({did:that.did, is_clear:is_clear}),
+                    async:false, 
+                    success:function (res){ 
+                        if(that.console_debug){
+                            console.log(url +  '：' + res.status);
+                        }
+                        if(res.status == 0){
+                            that.url = that.$host + '/document/share?dk=' + res.key;
+                            that.alert_msg.success('已重置链接');
                         }
                         else{
-                            that.url = '';
+                            switch(res.status){
+                                case 3:
+                                    that.alert_msg.error('文档不存在');
+                                    break;
+                                default:
+                                    that.alert_msg.error('发生了未知错误');
+                            }
+                            
                         }
+                    },
+                    error:function(res){
+                        that.alert_msg.error('网络连接失败');
                     }
-                    else{
-                        that.sharable = !value;
-                        switch(res.status){
-                            case 2:
-                                that.alert_msg.error('文档不存在');
-                                break;
-                            default:
-                                that.alert_msg.error('发生了未知错误');
-                        }
-                        
-                    }
-                },
-                error:function(res){
-                    that.alert_msg.error('网络连接失败');
-                }
-            });
+                });
+            }
+            this.$confirm('是否清除之前被分享用户的访问权限，这样用户需要通过访问新的链接才能获取对该文件权限。', '清除之前被分享用户的权限', {
+                confirmButtonText: '是',
+                cancelButtonText: '否',
+                type: 'warning'
+                }).then(() => {
+                    a(false);
+                })
+                .catch(() => {
+                    a(true);
+                });          
         }
     }
 

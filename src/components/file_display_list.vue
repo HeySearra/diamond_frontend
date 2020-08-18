@@ -36,6 +36,7 @@
                     :i_pfid="item.i_pfid"
                     :context="context"
                     :is_starred="item.is_starred"
+                    :can_share="item.can_share"
                     :type="type"
                     :is_in_desktop="is_in_desktop"
                     :delete_time="item.delete_time"
@@ -43,6 +44,7 @@
                     @open_info="open_info"
                     @move_item="move_item"
                     @share_item="share_item"
+                    @dtd_share="dtd_share"
                     @copy_item="copy_item"
                     @refresh="refresh"
                     @rename="rename">
@@ -188,6 +190,10 @@ export default {
 
         share_item(did, name){
             this.$emit('share_item', did, name);
+        },
+
+        dtd_share(did, name){
+            this.$emit('dtd_share', did, name);
         },
 
         copy_item(id, type, name){

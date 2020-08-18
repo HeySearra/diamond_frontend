@@ -16,6 +16,7 @@
                 @open_info="open_info"
                 @move_item="move_item"
                 @share_item="share_item"
+                @dtd_share="dtd_share"
                 @copy_item="copy_item"
                 @add_item="add_item"
                 @refresh="refresh"
@@ -47,6 +48,7 @@
     <edit-team-info-dialog ref="edit_team_info_dialog" @refresh="refresh_team_info_force"></edit-team-info-dialog>
     <share-dialog ref="share_dialog" context="team"></share-dialog>
     <send-all-dialog ref="send_all_dialog"></send-all-dialog>
+    <dtd-share-dialog ref="dtd_share_dialog"></dtd-share-dialog>
   </div>
 </template>
 
@@ -59,6 +61,7 @@ import admin_edit_dialog from '@/components/admin_edit_dialog';
 import manage_member_dialog from '@/components/manage_member_dialog';
 import edit_team_info_dialog from '@/components/edit_team_info_dialog';
 import send_all_dialog from '@/components/send_all_dialog';
+import dtd_share_dialog from '@/components/dtd_share_dialog';
 export default {
   components:{
     'new-dialog': new_dialog,
@@ -68,7 +71,8 @@ export default {
     'admin-edit-dialog': admin_edit_dialog,
     'manage-member-dialog': manage_member_dialog,
     'edit-team-info-dialog': edit_team_info_dialog,
-    'send-all-dialog': send_all_dialog
+    'send-all-dialog': send_all_dialog,
+    'dtd-share-dialog': dtd_share_dialog
   },
 
   data () {
@@ -217,6 +221,10 @@ export default {
 
     share_item(did, name){
       this.$refs.share_dialog.open(did, name);
+    },
+
+    dtd_share(did, name){
+      this.$refs.dtd_share_dialog.open(did);
     },
 
     copy_item(id, type, name){
