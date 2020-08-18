@@ -230,8 +230,7 @@ class CommentsAdapter {
                   break;
                 case 7:
                   alert_msg.warning('系统已经自动合并文档');
-                  that.applyDocContent();
-                  window.editor.setData(pageData.initialData);
+                  window.editor.setData(that.applyDocContent());
                   break;
                 default:
                   alert_msg.error('编辑失败: 未知错误');
@@ -248,11 +247,10 @@ class CommentsAdapter {
 
       applyDocContent() {
         var that = this;
-        // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
-        //alert_msg.success('更新前版本号: ' + pageData.ver);
+        var content = window.editor.getData();
         $.ajax({
           type: 'get',
-          url: '/document/all?did=' + pageData.did + '&ver=' + pageData.ver,
+          url: '/document/all?did=' + pageData.did + '&ver=-1',
           headers: {'X-CSRFToken': this.getCookie('csrftoken')},
           async: false,
           success: function (res) {
@@ -261,7 +259,7 @@ class CommentsAdapter {
             }
             if (res.status === 0) {
               pageData.file_name = res.name;
-              pageData.initialData = res.content;
+              content = res.content;
               pageData.ver = res.ver;
               //alert_msg.success('更新后版本号: ' + pageData.ver);
             } else {
@@ -278,73 +276,71 @@ class CommentsAdapter {
                 default:
                   alert_msg.error('未知错误');
               }
-              //跳转到首页
-              // that.$router.push({path:'/workbench/recent_view'});
             }
           },
           error: function () {
             alert_msg.error('连接失败');
           }
-        })
+        });
+        return content;
       },
 
-      /*addComment(data) {
+      addComment(data) {
         console.log('Comment added', data);
-        if (this.updateDocContent() !== 0) {
-          alert_msg.error('上传评论失败: 您的文档不是最新');
-          return Promise.reject();
-        } else {
-          let msg = {
-            did: pageData.did,
-            // uid: pageData.userId,
-            threadId: data.threadId,
-            commentId: data.commentId,
-            content: data.content,
-          };
-          $.ajax({
-            type: 'post',
-            url: '/document/comment/add',
-            data: JSON.stringify(msg),
-            headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-            processData: false,
-            contentType: false,
-            async: false,
-            success: function (res) {
-              if (console_debug) {
-                console.log("(post)/document/comment/add" + " : " + res.status);
-              }
-              if (res.status !== 0) {
-                switch (res.status) {
-                  case 1:
-                    alert_msg.error('上传评论失败: 键值错误');
-                    break;
-                  case 2:
-                    alert_msg.error('上传评论失败: 您的权限不足或还没有登录');
-                    break;
-                  case 3:
-                    alert_msg.error('上传评论失败: 文档或评论不存在');
-                    break;
-                  default:
-                    alert_msg.error('未知错误');
-                }
-              }
-            },
-            error: function () {
-              alert_msg.error('连接失败');
+        let msg = {
+          did: pageData.did,
+          // uid: pageData.userId,
+          threadId: data.threadId,
+          commentId: data.commentId,
+          content: data.content,
+        };
+        $.ajax({
+          type: 'post',
+          url: '/document/comment/add',
+          data: JSON.stringify(msg),
+          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+          processData: false,
+          contentType: false,
+          async: false,
+          success: function (res) {
+            if (console_debug) {
+              console.log("(post)/document/comment/add" + " : " + res.status);
             }
-          });
-          return Promise.resolve({
-            createdAt: new Date()       // Should be set on the server side.
-          });
+            if (res.status !== 0) {
+              switch (res.status) {
+                case 1:
+                  alert_msg.error('上传评论失败: 键值错误');
+                  break;
+                case 2:
+                  alert_msg.error('上传评论失败: 您的权限不足或还没有登录');
+                  break;
+                case 3:
+                  alert_msg.error('上传评论失败: 文档或评论不存在');
+                  break;
+                default:
+                  alert_msg.error('未知错误');
+              }
+            }
+          },
+          error: function () {
+            alert_msg.error('连接失败');
+          }
+        });
+        const status = this.updateDocContent();
+        console.log(status);
+        if (status !== 0 && status !== 7) {
+          this.removeComment(data);
         }
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         // When the promise resolves with the comment data object, it
         // will update the editor comment using the provided data.
+        return Promise.resolve({
+          createdAt: new Date()       // Should be set on the server side.
+        });
+      },
 
-      },*/
-
-      addComment(data) {
+      /*addComment(data) {
         console.log('Comment added', data);
         let msg = {
           did: pageData.did,
@@ -393,7 +389,7 @@ class CommentsAdapter {
         return Promise.resolve({
           createdAt: new Date()       // Should be set on the server side.
         });
-      },
+      },*/
 
       updateComment(data) {
         console.log('Comment updated', data);
@@ -579,12 +575,12 @@ export default {
       online_timer:undefined
     }
   },
-  /*
+
   watch: {
     file_name: function () {
       pageData.file_name = this.file_name;
     }
-  },*/
+  },
 
   methods: {
     init() {
@@ -632,6 +628,7 @@ export default {
             'undo',
             'redo',
             'exportPdf',
+            'comment',
             '|',
             'heading',
             '|',
@@ -661,7 +658,6 @@ export default {
             'insertTable',
             'mediaEmbed',
             '|',
-            'comment',
             'code',
             'codeBlock',
             'MathType',
