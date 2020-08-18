@@ -81,6 +81,7 @@ export default {
             this.tid = tid;
             this.activeName = '1';
             this.search_input = '';
+            this.search_list = [];
             if(this.init_info()){
                 this.dia_vis = true;
             }

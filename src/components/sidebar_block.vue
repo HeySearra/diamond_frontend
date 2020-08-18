@@ -298,6 +298,9 @@ export default {
                   console.log(url2 +  '：' + res.status);
               }
               if(res.status == 0){
+                  that.is_creator = false;
+                  that.is_admin = false;
+                  that.is_member = false;
                   switch(res.identity){
                     case 'owner':
                       that.is_creator = true;
@@ -634,7 +637,7 @@ export default {
 
 .item{
   float:left;
-  margin:6px;
+  margin:7px;
 }
 
 .doc_icon{
