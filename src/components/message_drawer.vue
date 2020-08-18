@@ -130,7 +130,8 @@ export default {
                 type:'get',
                 url:url,
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async: false,
+                processData: false,
+                contentType: false,
                 success:function (res){
                     if(that.console_debug){
                         console.log(url + '：' + res.status);
@@ -173,7 +174,8 @@ export default {
                 type:'post',
                 url:"/msg/ar_all",
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                async:false,
+                processData: false,
+                contentType: false,
                 success:function (res){
                     if(that.console_debug){
                         console.log("(get)/msg/ar_all"+ " : " +res.status);

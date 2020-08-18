@@ -93,7 +93,7 @@ export default {
                             }
                             if(res.status == 0){
                                 let from = that.$route.query.from;
-                                that.$router.push({name:'workbench'});
+                                that.$router.push({path:'/file/desktop'});
                                 that.alert_msg.success('登录成功');
                                 that.login_manager.set(true);
                             }

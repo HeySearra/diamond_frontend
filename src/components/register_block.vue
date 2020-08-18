@@ -118,7 +118,7 @@ export default {
                             }
                             if(res.status == 0){
                                 that.login_manager.set(true);
-                                that.$router.push({name:'workbench'});
+                                that.$router.push({path:'/file/desktop'});
                                 that.alert_msg.success('注册成功');
                             }
                             else{

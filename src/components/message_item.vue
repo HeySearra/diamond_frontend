@@ -155,6 +155,14 @@ export default {
         },
 
         mark_read(){
+            let dbl_alert = localStorage.getItem(this.login_manager.get_uid()+'&dblclick');
+            if(!dbl_alert){
+                localStorage.setItem(this.login_manager.get_uid()+'&dblclick', true);
+                this.alert_msg.normal('双击可打开消息内容');
+            }
+            if(this.is_read){
+                return;
+            }
             var that = this;
             let msg = {mid: that.mid};
             $.ajax({
@@ -162,7 +170,8 @@ export default {
                 url: "/msg/ar",
                 headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                 data: JSON.stringify(msg),
-                async:false, 
+                processData: false,
+                contentType: false,
                 success:function (res){
                     if(that.console_debug){
                         console.log("(post)/msg/ar"+ " : " +res.status);
@@ -172,7 +181,7 @@ export default {
                         that.$emit('refresh_count');
                     }
                     else{
-                        that.alert_msg.error('标记已读失败', '请重试');
+                        //that.alert_msg.error('标记已读失败', '请重试');
                     }
                 },
                 error:function(){

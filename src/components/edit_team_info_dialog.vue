@@ -152,7 +152,7 @@ export default {
                                 that.alert_msg.error('团队名称非法');
                                 break;
                             case 5:
-                                that.alert_msg.error('团队介绍非法');
+                                that.alert_msg.error('你的团队介绍不行'+that.magic_word[parseInt(Math.random()*10000)%magic_word.length]);
                                 break;
                             default:
                                 that.alert_msg.error('发生了未知错误');
