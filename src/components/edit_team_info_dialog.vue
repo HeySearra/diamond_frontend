@@ -188,7 +188,7 @@ export default {
             }
             var that = this;
             let form = new FormData();
-            form.append('profile', f.file);
+            form.append('file', f.file);
             $.ajax({ 
                 type:'post', 
                 url:'/upload/port',
