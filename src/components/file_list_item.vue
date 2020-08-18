@@ -330,7 +330,7 @@ export default {
                     this.delete();
                     break;
                 case 'open':
-                    this.open_fold(this.fid);
+                    this.open_doc(this.fid);
                     break;
                 case 'recover':
                     this.click_to_recover();
@@ -417,7 +417,50 @@ export default {
         },
 
         open_doc() {
-            this.$router.push({name:'doc', params:{did:this.did}});;
+            if(this.type == 'workbench'){
+                var that = this;
+                $.ajax({
+                    type:'get',
+                    url: '/document/auth?did=' + that.did,
+                    headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+                    processData: false,
+                    contentType: false,
+                    success:function (res){
+                        if(that.console_debug){
+                            console.log("(get)/document/auth ：" + res.status);
+                        }
+                        if(res.status === 0){
+                            if(res.auth == 'write'){
+                                that.$router.push({name:'doc', params:{did:this.did}});
+                            }
+                            else if(res.auth == 'comment'){
+                                that.$router.push({name:'doc_comment_only', params:{did:this.did}});
+                            }
+                            else if(res.auth == 'read'){
+                                that.$router.push({name:'doc_read_only', params:{did:this.did}});
+                            }
+                            else{
+                                that.alert_msg.error('权限不足');
+                            }
+                        }
+                        else{
+                            switch(res.status){
+                                case 2:
+                                    that.alert_msg.error('权限不足');
+                                    break;
+                                default:
+                                    that.alert_msg.error('发生了未知错误');
+                            }
+                        }
+                    },
+                    error:function(res){
+                        that.alert_msg.error('网络连接失败');
+                    }
+                });
+            }
+            else{
+                this.$router.push({name:'doc', params:{did:this.did}});
+            }
         },
 
         create_link(){

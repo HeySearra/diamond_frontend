@@ -31,6 +31,8 @@ import team_invite_dialog from './components/team_invite_dialog';
 
 import user_info_dialog from './components/user_info_dialog';
 
+import history_block from "./components/history_block";
+
 Vue.use(Element);
 // Vue.use(echarts);
 // Vue.use(mavonEditor);
@@ -52,6 +54,8 @@ Vue.component('chatting-dialog', chatting_dialog);
 Vue.component('team-invite-dialog', team_invite_dialog);
 
 Vue.component('user-info-dialog', user_info_dialog);
+
+Vue.component('history-block', history_block);
 
 import { alert_msg } from './assets/global.js'
 import { alert_box } from './assets/global.js'
