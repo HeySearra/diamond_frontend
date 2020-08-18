@@ -45,7 +45,14 @@
 </template>
 
 <script>
+import file_display_list from '@/components/file_display_list';
 export default {
+    name: 'file-system-list',
+
+    components:{
+        'file-display-list': file_display_list
+    },
+
     props: {
         fid: {
             type:String,

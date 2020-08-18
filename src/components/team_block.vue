@@ -30,6 +30,8 @@
 
 <script>
 export default {
+    name: 'team-block',
+
     props: {
         tid:{
             type:String,

@@ -41,7 +41,18 @@
 </template>
 
 <script>
+import new_dialog from '@/components/new_dialog';
+import file_info_dialog from '@/components/file_info_dialog';
+import choose_path_dialog from '@/components/choose_path_dialog';
+import share_dialog from '@/components/share_dialog';
 export default {
+  components:{
+    'new-dialog': new_dialog,
+    'file-info-dialog': file_info_dialog,
+    'choose-path-dialog': choose_path_dialog,
+    'share-dialog': share_dialog
+  },
+
   data () {
     return {
       view_type:'block',

@@ -28,6 +28,7 @@
 
 <script>
 export default {
+    name: 'change-password-dialog',
     data() {
         return {
             title:'修改密码',

@@ -90,6 +90,8 @@
 </template>
 <script>
 export default {
+    name: 'sidebar',
+
     props: {
       context:{
         type:String,

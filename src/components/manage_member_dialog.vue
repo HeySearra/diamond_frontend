@@ -54,7 +54,14 @@
 </template>
 
 <script>
+import user_list_item from '@/components/user_list_item';
 export default {
+    name: 'manage-member-dialog',
+
+    components:{
+        'user-list-item': user_list_item
+    },
+
     data() {
         return {
             title:'团队成员管理',

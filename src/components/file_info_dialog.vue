@@ -28,6 +28,8 @@
 
 <script>
 export default {
+    name: 'file-info-dialog',
+
     data() {
         return {
             title:'',

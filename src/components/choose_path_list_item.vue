@@ -26,6 +26,8 @@
 
 <script>
 export default {
+    name: 'choose-path-list-item',
+
     props: {
         id: {
             type:String,

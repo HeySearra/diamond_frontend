@@ -15,7 +15,14 @@
 </template>
 
 <script>
+import chatting_room from '@/components/chatting_room';
 export default {
+    name: 'chatting-dialog',
+
+    components:{
+        'chatting-room': chatting_room
+    },
+
     data() {
         return {
             dia_vis:false

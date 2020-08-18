@@ -36,6 +36,8 @@
 
 <script>
 export default {
+    name: 'edit-user-info-dialog',
+
     data() {
         return {
             title:'修改个人信息',

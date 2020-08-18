@@ -1,7 +1,7 @@
 <template>
     <div style="position:relative" class="cb">
         <div class="ava" :class="type=='my'?'my_ava':'other_ava'">
-            <el-avatar :src="src"></el-avatar>
+            <el-avatar :src="src" :key="src"></el-avatar>
         </div>
         <div class="chatting_bubble" :class="type=='my'?'my':'other'">
             {{text}}
@@ -11,6 +11,8 @@
 </template>
 <script>
     export default {
+        name: 'chatting-bubble',
+
         props:{
             type:{
                 type:String,
@@ -28,19 +30,26 @@
 
         data() {
             return {
-                show:false
+                show:false,
+
             }
         },
 
         mounted(){
-            
-        }
+            this.init();
+        },
 
+        methods:{
+            init(){
+
+            }
+        }
     }
 </script>
 
 <style scoped>
     @import url("../assets/common.css");
+    
 
     .chatting_bubble{
         /* border:solid 1px; */

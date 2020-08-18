@@ -29,6 +29,8 @@
 
 <script>
 export default {
+    name: 'template-block',
+
     props: {
         tid:{
             type:String,

@@ -33,6 +33,8 @@
 
 <script>
 export default {
+    name: 'reg',
+
     data() {
         return {
             form:{

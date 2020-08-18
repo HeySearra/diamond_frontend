@@ -55,6 +55,8 @@
 
 <script>
 export default {
+    name: 'file-list-item',
+
     props: {
         is_link: {
             type:Boolean,

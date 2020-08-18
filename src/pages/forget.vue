@@ -7,7 +7,12 @@
 </template>
 
 <script>
+import forget_block from '@/components/forget_block';
 export default {
+  components:{
+    'forget': forget_block
+  },
+
   data () {
     return {
     }

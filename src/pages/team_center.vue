@@ -37,7 +37,16 @@
 </template>
 
 <script>
+import team_display_block from '@/components/team_display_block';
+import new_dialog from '@/components/new_dialog';
+import file_info_dialog from '@/components/file_info_dialog';
 export default {
+  components:{
+    'team-display-block': team_display_block,
+    'new-dialog': new_dialog,
+    'file-info-dialog': file_info_dialog
+  },
+
   data () {
     return {
       my_list:[],

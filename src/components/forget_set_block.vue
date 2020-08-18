@@ -21,6 +21,8 @@
 
 <script>
 export default {
+    name: 'forget-set',
+
     data() {
         return {
             form:{

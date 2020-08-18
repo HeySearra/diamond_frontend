@@ -13,7 +13,6 @@
             >
         </component>
         <div style="height:50px"></div>
-        <share-dialog ref="share_dialog"></share-dialog>
     </div>
 </template>
 

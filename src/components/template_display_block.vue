@@ -21,7 +21,14 @@
 </template>
 
 <script>
+import template_block from '@/components/template_block';
 export default {
+    name: 'template-display-block',
+
+    components:{
+        'template-block': template_block
+    },
+
     props: {
         title: {
             type:String,

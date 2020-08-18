@@ -22,7 +22,14 @@
 </template>
 
 <script>
+import team_block from '@/components/team_block';
 export default {
+    name: 'team-display-block',
+
+    components:{
+        'team-block': team_block
+    },
+
     props: {
         title: {
             type:String,

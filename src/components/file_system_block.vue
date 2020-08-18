@@ -45,7 +45,14 @@
 </template>
 
 <script>
+import file_display_block from '@/components/file_display_block';
 export default {
+    name: 'file-system-block',
+
+    components:{
+        'file-display-block': file_display_block
+    },
+
     props: {
         fid: {
             type:String,

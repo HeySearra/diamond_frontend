@@ -49,7 +49,24 @@
 </template>
 
 <script>
+import new_dialog from '@/components/new_dialog';
+import file_info_dialog from '@/components/file_info_dialog';
+import choose_path_dialog from '@/components/choose_path_dialog';
+import share_dialog from '@/components/share_dialog';
+import admin_edit_dialog from '@/components/admin_edit_dialog';
+import manage_member_dialog from '@/components/manage_member_dialog';
+import edit_team_info_dialog from '@/components/edit_team_info_dialog';
 export default {
+  components:{
+    'new-dialog': new_dialog,
+    'file-info-dialog': file_info_dialog,
+    'choose-path-dialog': choose_path_dialog,
+    'share-dialog': share_dialog,
+    'admin-edit-dialog': admin_edit_dialog,
+    'manage-member-dialog': manage_member_dialog,
+    'edit-team-info-dialog': edit_team_info_dialog
+  },
+
   data () {
     return {
       view_type:'block',

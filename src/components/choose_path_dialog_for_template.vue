@@ -31,7 +31,14 @@
 </template>
 
 <script>
+import choose_path_list_item from '@/components/choose_path_list_item';
 export default {
+    name: 'choose-path-dialog-for-template',
+
+    components:{
+        'choose-path-list-item': choose_path_list_item
+    },
+    
     data() {
         return {
             title:'将新文档创建在',

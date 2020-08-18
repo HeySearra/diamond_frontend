@@ -47,6 +47,8 @@
 
 <script>
 export default {
+    name: 'file-block',
+
     props: {
         is_link: {
             type:Boolean,

@@ -1,26 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import login from '@/pages/login.vue'
-import register from '@/pages/register.vue'
-import forget from '@/pages/forget.vue'
-import search from '@/pages/search.vue'
-import forget_set from '@/pages/forget_set.vue'
-import workbench from '@/pages/workbench.vue'
-import workbench_recent from '@/pages/workbench_recent.vue'
-import workbench_star from '@/pages/workbench_star.vue'
-import workbench_create from '@/pages/workbench_create.vue'
-import workbench_share from '@/pages/workbench_share.vue'
-import team_center from '@/pages/team_center.vue'
-import file_system from '@/pages/file_system.vue'
-import team_file_system from '@/pages/team_file_system.vue'
-import template_store from '@/pages/template_store.vue'
-import recycle from '@/pages/recycle.vue'
-import test from '@/components/chatting_room.vue'
-import doc_editor from "@/pages/doc_editor.vue"
 import doc_read_only from "@/pages/doc_read_only.vue"
 import doc_comment_only from "@/pages/doc_comment_only.vue"
-import doc_merge from "../pages/doc_merge";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -39,7 +21,7 @@ const router =  new Router({
     {
       path: '/login',
       name: 'login',
-      component: login,
+      component: login => require(['@/pages/login.vue'], login),
       meta:{
         title:'DiaDoc 登录',
       }
@@ -47,7 +29,7 @@ const router =  new Router({
     {
       path: '/register',
       name: 'register',
-      component: register,
+      component: register => require(['@/pages/register.vue'], register),
       meta:{
         title:'DiaDoc 注册',
       }
@@ -55,7 +37,7 @@ const router =  new Router({
     {
       path: '/forget',
       name: 'forget',
-      component: forget,
+      component: forget => require(['@/pages/forget.vue'], forget),
       meta:{
         title:'DiaDoc 找回密码',
       }
@@ -63,7 +45,7 @@ const router =  new Router({
     {
       path: '/forget/set',
       name: 'forget_set',
-      component: forget_set,
+      component: forget_set => require(['@/pages/forget_set.vue'], forget_set),
       meta:{
         title:'DiaDoc 重置密码',
       }
@@ -71,7 +53,7 @@ const router =  new Router({
     {
       path: '/workbench',
       name: 'workbench',
-      component: workbench,
+      component: workbench => require(['@/pages/workbench.vue'], workbench),
       meta:{
         title:'DiaDoc 工作台',
       },
@@ -83,7 +65,7 @@ const router =  new Router({
         {
           path:'/workbench/recent_view',
           name: 'workbench_recent',
-          component: workbench_recent,
+          component: workbench_recent => require(['@/pages/workbench_recent.vue'], workbench_recent),
           meta:{
               title:'DiaDoc 最近浏览',
           }
@@ -91,7 +73,7 @@ const router =  new Router({
         {
           path:'/workbench/star_view',
           name: 'workbench_star',
-          component: workbench_star,
+          component: workbench_star => require(['@/pages/workbench_star.vue'], workbench_star),
           meta:{
               title:'DiaDoc 我的收藏',
           }
@@ -99,7 +81,7 @@ const router =  new Router({
         {
           path:'/workbench/create_view',
           name: 'workbench_create',
-          component: workbench_create,
+          component: workbench_create => require(['@/pages/workbench_create.vue'], workbench_create),
           meta:{
               title:'DiaDoc 我创建的',
           }
@@ -107,7 +89,7 @@ const router =  new Router({
         {
           path:'/workbench/share_view',
           name: 'workbench_share',
-          component: workbench_share,
+          component: workbench_share => require(['@/pages/workbench_share.vue'], workbench_share),
           meta:{
               title:'DiaDoc 共享文件',
           }
@@ -121,7 +103,7 @@ const router =  new Router({
     {
       path: '/team',
       name: 'team_center',
-      component: team_center,
+      component: team_center => require(['@/pages/team_center.vue'], team_center),
       meta:{
         title:'DiaDoc 我的团队'
       }
@@ -129,7 +111,7 @@ const router =  new Router({
     {
       path: '/team/:tid/file/:id',
       name: 'team_file_system',
-      component: team_file_system,
+      component: team_file_system => require(['@/pages/team_file_system.vue'], team_file_system),
       meta:{
         title:'DiaDoc 团队空间'
       }
@@ -137,7 +119,7 @@ const router =  new Router({
     {
       path: '/file/:id',
       name: 'file_system',
-      component: file_system,
+      component: file_system => require(['@/pages/file_system.vue'], file_system),
       meta:{
         title:'DiaDoc 文件夹',
       }
@@ -149,7 +131,7 @@ const router =  new Router({
     {
       path: '/template',
       name: 'template_store',
-      component: template_store,
+      component: template_store => require(['@/pages/template_store.vue'], template_store),
       meta:{
         title:'DiaDoc 模板库',
       }
@@ -157,7 +139,7 @@ const router =  new Router({
     {
       path: '/recycle',
       name: 'recycle',
-      component: recycle,
+      component: recycle => require(['@/pages/recycle.vue'], recycle),
       meta:{
         title:'DiaDoc 回收站',
       },
@@ -165,7 +147,7 @@ const router =  new Router({
     {
       path: '/doc/:did',
       name: 'doc',
-      component: doc_editor,
+      component: doc_editor => require(["@/pages/doc_editor.vue"], doc_editor),
       meta:{
         title:'DiaDoc 文章',
       }
@@ -173,7 +155,7 @@ const router =  new Router({
     {
       path: '/doc/:did/merge',
       name: 'doc_merge',
-      component: doc_merge,
+      component: doc_merge => require(["@/pages/doc_merge"], doc_merge),
       meta:{
         title:'DiaDoc 合并文章',
       }
@@ -181,7 +163,7 @@ const router =  new Router({
     {
       path: '/search',
       name: 'search',
-      component: search,
+      component: search => require(['@/pages/search.vue'], search),
       meta:{
         title:'DiaDoc 搜索结果',
       }

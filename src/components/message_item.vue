@@ -29,6 +29,8 @@
 
 <script>
 export default {
+    name: 'message-item',
+
     props: {
         mid:{
             type:String,

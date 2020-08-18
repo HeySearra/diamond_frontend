@@ -7,7 +7,12 @@
 </template>
 
 <script>
+import login from '@/components/login_block';
 export default {
+  components:{
+    'login': login
+  },
+
   data () {
     return {
     }

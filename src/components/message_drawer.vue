@@ -33,7 +33,14 @@
 </template>
 
 <script>
+import message_item from '@/components/message_item';
 export default {
+    name: 'message-drawer',
+
+    components:{
+        'message-item': message_item
+    },
+
     data(){
         return {
             drawer: false,

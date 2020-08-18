@@ -31,6 +31,8 @@
 
 <script>
 export default {
+    name: 'user-list-item',
+
     props: {
         uid: {
             type:String,

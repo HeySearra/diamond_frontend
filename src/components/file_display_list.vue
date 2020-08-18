@@ -67,7 +67,16 @@
 </template>
 
 <script>
+import file_list_item from '@/components/file_list_item';
+import fold_list_item from '@/components/fold_list_item';
 export default {
+    name: 'file-display-list',
+
+    components:{
+        'file-list-item': file_list_item, 
+        'fold-list-item': fold_list_item
+    },
+
     props: {
         title: {
             type:String,

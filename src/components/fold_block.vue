@@ -46,6 +46,8 @@
 
 <script>
 export default {
+    name: 'fold-block',
+
     props: {
         is_link: {
             type:Boolean,

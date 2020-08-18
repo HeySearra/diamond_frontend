@@ -20,6 +20,8 @@
 
 <script>
 export default {
+  name: 'new-dialog',
+
   data () {
     return {
         title:'',

@@ -54,6 +54,8 @@
 
 <script>
 export default {
+    name: 'fold-list-item',
+
     props: {
         is_link: {
             type:Boolean,

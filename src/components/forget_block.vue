@@ -18,6 +18,8 @@
 
 <script>
 export default {
+    name: 'forget',
+
     data() {
         return {
             form:{

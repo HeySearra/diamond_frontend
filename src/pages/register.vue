@@ -7,7 +7,12 @@
 </template>
 
 <script>
+import reg from '@/components/register_block';
 export default {
+  components:{
+    'reg': reg
+  },
+
   data () {
     return {
     }

@@ -46,7 +46,12 @@
 </template>
 
 <script>
+import user_list_item from '@/components/user_list_item';
 export default {
+    name:'admin-edit-dialog',
+    components:{
+        'user-list-item': user_list_item
+    },
     data() {
         return {
             title:'管理员设置',

@@ -21,6 +21,8 @@
 
 <script>
 export default {
+    name: 'team-invite-dialog',
+
     data() {
         return {
             title:'团队邀请',

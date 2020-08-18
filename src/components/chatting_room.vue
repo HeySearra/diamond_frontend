@@ -25,7 +25,8 @@
                             v-for="(iitem, iindex) in item.list"
                             :key="iindex"
                             :type="iitem.is_mine?'my':'other'"
-                            :text="iitem.text">
+                            :text="iitem.text"
+                            :src="iitem.is_mine?my_por:another_por">
                         </chatting-bubble>
                         </div>
                         <div class="bottom clear_both"></div>
@@ -47,7 +48,16 @@
     </transition>
 </template>
 <script>
+    import chat_user_list_item from '@/components/chat_user_list_item';
+    import chatting_bubble from '@/components/chatting_bubble';
     export default {
+        name: 'chatting-room',
+
+        components:{
+            'chat-user-list-item' :chat_user_list_item, 
+            'chatting-bubble': chatting_bubble
+        },
+
         data() {
             return {
                 text:'',
@@ -60,7 +70,9 @@
                 is_loading:true,
                 is_bottom:true,
                 show: false,
-                title:''
+                title:'',
+                another_por: '',
+                my_por: '',
             }
         },
 
@@ -206,6 +218,8 @@
                                 return;
                             }
                             let list = [];
+                            that.my_por = res.user_info.src;
+                            that.another_por = res.another_info.src;
                             for(let i=0; i<res.list.length; i++){
                                 if(new Date(res.list[i].dt) - last_dt > 1000*60*3){
                                     var llist = [];

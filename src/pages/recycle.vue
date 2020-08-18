@@ -25,7 +25,6 @@
         <sidebar ref="sidebar" active="recycle" @create_new_file="create_new_file" @create_new_fold="create_new_fold"></sidebar>
       </el-aside>
     </el-container>
-    <file-info-dialog ref="file_info_dialog"></file-info-dialog>
     <el-footer></el-footer>
     </el-container>
     <new-dialog ref="new_dialog" :desktop_alert="true"></new-dialog>
@@ -33,7 +32,12 @@
 </template>
 
 <script>
+import new_dialog from '@/components/new_dialog';
 export default {
+  components:{
+    'new-dialog': new_dialog
+  },
+
   data () {
     return {
         view_type:'list',

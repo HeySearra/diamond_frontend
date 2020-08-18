@@ -43,6 +43,8 @@
 
 <script>
 export default {
+    name: 'share-dialog',
+
     props:{
         context:{
             type:String,

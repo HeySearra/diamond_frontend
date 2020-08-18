@@ -31,7 +31,14 @@
 </template>
 
 <script>
+import choose_path_list_item from '@/components/choose_path_list_item';
 export default {
+    name: 'choose-path-dialog',
+
+    components:{
+        'choose-path-list-item': choose_path_list_item
+    },
+
     data() {
         return {
             title:'移动到',

@@ -55,7 +55,16 @@
 </template>
 
 <script>
+import template_display_block from '@/components/template_display_block';
+import new_dialog from '@/components/new_dialog';
+import choose_path_dialog_for_template from '@/components/choose_path_dialog_for_template';
 export default {
+  components:{
+    'template-display-block': template_display_block,
+    'new-dialog': new_dialog,
+    'choose-path-dialog-for-template': choose_path_dialog_for_template
+  },
+
   data() {
     return {
       my_list: [],

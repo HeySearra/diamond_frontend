@@ -28,7 +28,16 @@
 </template>
 
 <script>
+import new_dialog from '@/components/new_dialog';
+import file_info_dialog from '@/components/file_info_dialog';
+import share_dialog from '@/components/share_dialog';
 export default {
+  components:{
+    'new-dialog': new_dialog,
+    'file-info-dialog': file_info_dialog,
+    'share-dialog': share_dialog
+  },
+
   data () {
     return {
       active_index: '1'

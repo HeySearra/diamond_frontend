@@ -49,6 +49,8 @@
 
 <script>
 export default {
+    name: 'edit-team-info-dialog',
+
     data() {
         return {
             title:'修改团队信息',

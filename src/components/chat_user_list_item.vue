@@ -1,6 +1,6 @@
 <template>
     <div class="chat_user_list_item can_not_choose" :class="chosen?'chat_user_list_item_chosen':''" @click="click">
-        <el-avatar size="large" :src="src"></el-avatar>
+        <el-avatar size="large" :src="src" :key="src"></el-avatar>
         <h3 class="name">{{name}}</h3>
         <div class="content">{{content}}</div>
     </div>
@@ -8,6 +8,7 @@
 
 <script>
 export default {
+    name: 'chat-user-list-item',
     props: {
         uid:{
             type:String,

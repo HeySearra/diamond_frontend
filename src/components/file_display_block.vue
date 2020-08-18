@@ -38,7 +38,16 @@
 </template>
 
 <script>
+import file_block from '@/components/file_block';
+import fold_block from '@/components/fold_block';
 export default {
+    name: 'file-display-block',
+
+    components:{
+        'file-block': file_block, 
+        'fold-block': fold_block
+    },
+
     props: {
         title: {
             type:String,

@@ -14,6 +14,8 @@
 
 <script>
 export default {
+    name: 'header-user-icon',
+
     props: {
         name: {
             type:String,

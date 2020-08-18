@@ -104,6 +104,7 @@ class CommentsAdapter {
   }
 }
 export default {
+
   mounted() {
     appData.users = [
       {
