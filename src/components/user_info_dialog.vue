@@ -10,7 +10,7 @@
                 <div class="por">
                     <el-avatar :src="src"></el-avatar>
                 </div>
-                <h2 class="name">{{name}} <el-tag type="info" v-if="is_me">我</el-tag></h2>
+                <h2 class="name">{{name}} <el-tag type="info" v-if="is_me" disable-transitions>我</el-tag></h2>
                 <div class="acc">{{account}}</div>
                 <div class="intro">{{intro}}</div>
                 <el-button type="primary" class="chat_button" v-show="!is_me" @click="build_chat">私聊</el-button>
@@ -63,7 +63,9 @@ export default {
                     that.name = res.name;
                     that.account = res.acc;
                     that.src = res.portrait;
-                    that.dia_vis = true;
+                    setTimeout(function(){
+                        that.dia_vis = true;
+                    }, 0);
                 }
                 else{
                     switch(res.status){

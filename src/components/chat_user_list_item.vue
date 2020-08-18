@@ -1,5 +1,8 @@
 <template>
     <div class="chat_user_list_item can_not_choose" :class="chosen?'chat_user_list_item_chosen':''" @click="click">
+        <transition name="el-fade-in-linear">
+            <el-badge is-dot v-show="have_not_read"></el-badge>
+        </transition>
         <el-avatar size="large" :src="src" :key="src"></el-avatar>
         <h3 class="name">{{name}}</h3>
         <div class="content">{{content}}</div>
@@ -25,16 +28,29 @@ export default {
         content:{
             type:String,
             default:'content'
+        },
+        no_read:{
+            type:Boolean,
+            default:false
         }
     },
     data () {
         return {
             chosen:false,
-            show:false
+            show:false,
+            have_not_read: false,
         }
     },
+    mounted(){
+        this.init();
+    },
     methods:{
+        init(){
+            this.have_not_read = this.no_read;
+        },
+
         click(){
+            this.have_not_read = false;
             this.$emit('click', this.uid);
         },
 
@@ -98,5 +114,11 @@ export default {
     overflow: hidden;
     font-size:15px;
     color:hsl(0, 0%, 56%);
+}
+
+.el-badge{
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }
 </style>

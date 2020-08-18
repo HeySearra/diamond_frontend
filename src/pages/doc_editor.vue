@@ -173,6 +173,8 @@ function MyCustomUploadAdapterPlugin(editor) {
   };
 }
 
+var tthat;
+
 class CommentsAdapter {
   constructor(editor) {
     this.editor = editor;
@@ -358,23 +360,19 @@ class CommentsAdapter {
             alert_msg.error('连接失败');
           }
         });
-        if (ajaxStatus === 0) {
-          var that = this;
-          setTimeout(function () {
-            $('.ck-user').off('click');
-            $('.ck-user').click(function () {
-              var uid = $(this).attr('data-user-id');
-              alert(uid);
-            });
-            const status = that.updateDocContent();
-            console.log(status);
-            if (status !== 0 && status !== 7) {
-              that.removeCommentInDB(data);
-              if (status === 6) {alert_box.msg('评论失败：', '当前文档版本需要手动合并');}
-            }
-            console.log(window.editor.getData());
-          }, 0);
+        const status = this.updateDocContent();
+        console.log(status);
+        if (status !== 0 && status !== 7) {
+          this.removeComment(data);
         }
+        console.log(window.editor.getData());
+        setTimeout(function () {
+          $('.ck-user').off('click');
+          $('.ck-user').click(function () {
+            var uid = $(this).attr('data-user-id');
+            alert(uid);
+          });
+        }, 0);
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         // When the promise resolves with the comment data object, it
@@ -443,7 +441,13 @@ class CommentsAdapter {
             alert_msg.error('连接失败');
           }
         });
-
+        setTimeout(function () {
+          $('.ck-user').off('click');
+          $('.ck-user').click(function () {
+            var uid = $(this).attr('data-user-id');
+            tthat.$emit('open_user_info', uid);
+          });
+        }, 0);
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         // When the promise resolves with the comment data object, it
@@ -651,6 +655,7 @@ export default {
       this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
       this.online_timer ? clearInterval(this.online_timer) : '';
       this.is_newest = true;
+      tthat = this;
       var that = this;
       setTimeout(function(){
         that.getCurrentEditingUser();
