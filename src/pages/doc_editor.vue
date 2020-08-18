@@ -770,7 +770,7 @@ export default {
           $('.ck-user').off('click');
           $('.ck-user').click(function () {
             var uid = $(this).attr('data-user-id');
-            alert(uid);
+            that.$emit('open_user_info', uid);
           });
         }, 0);
       }).catch(error => {
