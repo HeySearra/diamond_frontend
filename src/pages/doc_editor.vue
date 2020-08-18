@@ -28,6 +28,7 @@
         </el-row>
         <history-block
           v-for="item in history_list"
+          :key="item.ver"
           :name="item.name"
           :dt="item.dt"
           :portrait="item.portrait"
@@ -769,7 +770,7 @@ export default {
           $('.ck-user').off('click');
           $('.ck-user').click(function () {
             var uid = $(this).attr('data-user-id');
-            alert(uid);
+            that.$emit('open_user_info', uid);
           });
         }, 0);
       }).catch(error => {
