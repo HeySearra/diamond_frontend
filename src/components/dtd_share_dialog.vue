@@ -11,8 +11,8 @@
                     <div>
                         <div style="height:30px"></div>
                         <div class="search_input">
-                            <el-input v-model="search_input" style="width:75%" placeholder="搜索用户账号" maxlength="70"  @input="search_user"></el-input>
-                            <el-button type="primary" style="width:23%;float:right" @click="inviate">添 加</el-button>
+                            <el-input v-model="search_input" style="width:80%" placeholder="搜索用户账号" maxlength="70"  @input="search_user"></el-input>
+                            <el-button type="primary" style="width:18%;float:right" @click="inviate">添 加</el-button>
                         </div>
                         <div style="height:18px"></div>
                         <div class="user_part" v-loading="search_loading">
@@ -48,6 +48,7 @@
                             :account="item.acc"
                             :src="item.src"
                             :op="item.auth"
+                            :did="did"
                             @refresh="refresh"
                         ></user-list-item>
                     </div>
@@ -182,6 +183,9 @@ export default {
 
         apply_for_team(){
             this.search_loading = true;
+            if(this.tid || this.tid==''){
+                return;
+            }
             let url = '/team/info?tid=' + this.tid;
             var that = this;
             $.ajax({ 
@@ -228,6 +232,10 @@ export default {
         },
 
         inviate(){
+            if(this.search_input.trim() == ''){
+                this.alert_msg.warning('请输入用户账号');
+                return;
+            }
             let url = '/fs/share_dtd_change';
             var that = this;
             $.ajax({ 
@@ -241,7 +249,6 @@ export default {
                         console.log(url +  '：' + res.status);
                     }
                     if(res.status == 0){
-                        that.search_input = '';
                         that.shared_list.push({
                             name: res.user_info.name,
                             uid: res.user_info.uid,
@@ -249,6 +256,7 @@ export default {
                             acc: that.search_input,
                             type: 'read'
                         });
+                        that.search_input = '';
                         that.alert_msg.success('添加成功');
                     }
                     else{

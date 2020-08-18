@@ -32,7 +32,7 @@
                         </el-select>
                     </div>
                 </div>
-                <div style="position:absolute; right:36px" class="cancel_icon" v-if="type=='admin'||type=='shared'" @click="remove_admin">
+                <div style="position:absolute; right:36px" class="cancel_icon" v-if="type=='admin'||type=='shared'" @click="remove">
                     <span class="icon iconfont">&#xe79b;</span>
                 </div>
             </div>
@@ -160,7 +160,7 @@ export default {
                             that.alert_msg.success('移除成功');
                         }
                         else{
-                            that.alert_msg.error('修改成功');
+                            that.alert_msg.success('修改成功');
                         }
                     }
                     else{

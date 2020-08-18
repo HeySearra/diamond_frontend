@@ -431,13 +431,13 @@ export default {
                         }
                         if(res.status === 0){
                             if(res.auth == 'write'){
-                                that.$router.push({name:'doc', params:{did:this.did}});
+                                that.$router.push({name:'doc', params:{did:that.did}});
                             }
                             else if(res.auth == 'comment'){
-                                that.$router.push({name:'doc_comment_only', params:{did:this.did}});
+                                that.$router.push({name:'doc_comment_only', params:{did:that.did}});
                             }
                             else if(res.auth == 'read'){
-                                that.$router.push({name:'doc_read_only', params:{did:this.did}});
+                                that.$router.push({name:'doc_read_only', params:{did:that.did}});
                             }
                             else{
                                 that.alert_msg.error('权限不足');
@@ -459,7 +459,7 @@ export default {
                 });
             }
             else{
-                this.$router.push({name:'doc', params:{did:this.did}});
+                that.$router.push({name:'doc', params:{did:that.did}});
             }
         },
 

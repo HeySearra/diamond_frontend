@@ -29,7 +29,7 @@
                 </div>
                 <div style="height:30px;"></div>
                 <div style="width:96%;margin:0 auto">
-                    <el-input v-model="url" readonly :disabled="!sharable"></el-input>
+                    <el-input v-model="display_url" readonly :disabled="!sharable"></el-input>
                     <el-button :disabled="!sharable" type="primary" plain 
                         v-clipboard:copy="url" v-clipboard:success="copy_success" v-clipboard:error="copy_error">复制链接
                     </el-button>
@@ -53,6 +53,7 @@ export default {
             default:'normal'
         }
     },
+
     data() {
         return {
             title:'通过链接共享文件',
@@ -61,6 +62,23 @@ export default {
             url:'',
             sharable:true,
             share_type:0,
+            display_url:''
+        }
+    },
+
+    watch:{
+        url(val){
+            if(this.sharable){
+                this.display_url = val;
+            }
+        },
+        sharable(val){
+            if(val){
+                this.display_url = this.url;
+            }
+            else{
+                this.display_url = '';
+            }
         }
     },
 

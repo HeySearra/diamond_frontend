@@ -28,6 +28,7 @@
         </el-row>
         <history-block
           v-for="item in history_list"
+          :key="item.ver"
           :name="item.name"
           :dt="item.dt"
           :portrait="item.portrait"
