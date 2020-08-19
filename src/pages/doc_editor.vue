@@ -655,7 +655,7 @@ export default {
       is_newest: true,
       applyVerCode_timer:undefined,
       online_timer:undefined,
-      history_list:[{name: '阿三'},{name: '阿斯'}],
+      history_list:[],
       show_history: false,
       is_locking: false,
       locking_flag: false,
@@ -1417,7 +1417,7 @@ export default {
       this.show_history = false;
       //$('#sidebar').css('display', 'inherit');
     },
-    
+
     lock(){
       if(this.locking_flag){
         if(this.locking_uid != ''){
@@ -1438,7 +1438,7 @@ export default {
         url: url,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         data: JSON.stringify(data),
-        async:false, 
+        async:false,
         success:function (res){
             if(that.console_debug)console.log(url+ " : " +res.status);
             if(res.status == 0){

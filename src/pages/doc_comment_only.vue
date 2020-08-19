@@ -13,7 +13,7 @@
         <!-- Toolbar Container -->
         <div class="new_toobar">
           <div class="append_tools can_not_choose">
-            <el-tooltip class="item" effect="dark" content="保存" placement="bottom">
+            <el-tooltip class="item" effect="dark" content="保存" placement="bottom" v-if="locking_uid===''">
               <span class="icon iconfont" @click="updateDocContent">&#xe82a;</span>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="保存为模板" placement="bottom">
@@ -572,7 +572,9 @@ export default {
       ver:-1,
       is_newest: true,
       applyVerCode_timer:undefined,
-      online_timer:undefined
+      online_timer:undefined,
+      locking_uid: '',
+      toolbar_item: ['comment',],
     }
   },
 
@@ -624,11 +626,7 @@ export default {
         initialData: pageData.initialData,
         extraPlugins: [CommentsAdapter, MyCustomUploadAdapterPlugin],
         toolbar: {
-          items: [
-
-            'comment',
-
-          ]
+          items: this.toolbar_item
         },
         image: {
           toolbar: [
@@ -734,6 +732,13 @@ export default {
             that.file_name = res.name;
             pageData.initialData = res.content;
             pageData.ver = res.ver;
+            that.locking_uid = res.locked_uid;
+            if (that.locking_uid !== '') {
+              that.alert_msg.warning('该文档已被上锁，您不能评论该文章');
+              that.toolbar_item = [];
+              pageData.readOnly = true;
+              pageData.commentsOnly = false;
+            }
             that.loading_percentage = 85;
             setTimeout(function(){
               that.initCKEditor();
@@ -765,7 +770,6 @@ export default {
       var that = this;
       var content = window.editor.getData();
       // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
-      that.alert_msg.success('更新前版本号: ' + pageData.ver);
       $.ajax({
         type: 'get',
         url: '/document/all?did=' + pageData.did + '&ver=-1',
@@ -779,7 +783,6 @@ export default {
             that.file_name = res.name;
             content = res.content;
             pageData.ver = res.ver;
-            that.alert_msg.success('更新后版本号: ' + pageData.ver);
           } else {
             switch (res.status) {
               case 1:
@@ -846,15 +849,7 @@ export default {
                 that.alert_msg.error('编辑失败: 同目录下存在同名文件');
                 break;
               case 6:
-                that.alert_msg.warning('请手动合并文档');
-                pageData.ver = res.ver;
-                let newPage = that.$router.resolve({
-                  name: 'doc_merge',
-                  query:{
-                    did: pageData.did
-                  }
-                })
-                window.open(newPage.href, '_blank');
+                that.alert_msg.error('当前文档版本与远端服务器版本冲突，请刷新后再进行评论');
                 break;
               case 7:
                 that.alert_msg.warning('系统已经自动合并文档');
