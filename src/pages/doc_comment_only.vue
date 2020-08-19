@@ -580,7 +580,7 @@ export default {
   watch: {
     file_name: function () {
       pageData.file_name = this.file_name;
-    }
+    },
   },
 
   methods: {

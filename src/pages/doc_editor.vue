@@ -618,6 +618,7 @@ class CommentsAdapter {
 }
 
 export default {
+  inject: ['reload'],
   mounted() {
     this.init();
     pageData.did = this.$route.params.did;
@@ -691,6 +692,9 @@ export default {
         }
         this.is_locking = false;
       }
+    },
+    $route(value, old_value) {
+      location.reload();
     }
   },
 
