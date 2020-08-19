@@ -1,47 +1,25 @@
 <template>
   <el-main>
-    <el-aside>
-      <sidebar
-        ref="sidebar"
-        class="blur_div"
-        context="doc"
-        :file_name="file_name"
-      ></sidebar>
+    <el-aside style="display: flex; justify-content: center;font-size: 20px; align-content: center;" class="blur_div">
+      <span style="font-weight: bolder; margin-top: 50px">History Record</span>
     </el-aside>
     <div v-loading="is_loading" class="blur_div">
-      <el-row style="z-index: 999">
-        <!-- Toolbar Container -->
+      <!--el-row style="z-index: 999">
         <div class="new_toobar">
-          <div class="append_tools can_not_choose">
-            <!--el-tooltip class="item" effect="dark" content="保存" placement="bottom">
-              <span class="icon iconfont" @click="updateDocContent">&#xe82a;</span>
-            </el-tooltip-->
-            <el-tooltip class="item" effect="dark" content="保存为模板" placement="bottom">
-              <span class="icon iconfont" @click="saveAsTemplate">&#xe672;</span>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
-              <span class="icon iconfont" v-if="!is_starred" @click="starTheDoc(is_starred)">&#xe65c;</span>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="取消收藏" placement="bottom">
-              <span class="icon iconfont" v-if="is_starred" @click="starTheDoc(is_starred)">&#xe65e;</span>
-            </el-tooltip>
-            <!--el-tooltip class="item" effect="dark" content="历史记录" placement="bottom">
-              <span class="icon iconfont">&#xe7de;</span>
-            </el-tooltip-->
-          </div>
+
           <div id="toolbar-container" style="min-height:38.67px;">
 
           </div>
         </div>
 
-      </el-row>
+      </el-row-->
       <el-row>
         <!--el-col :span="5">
           <sidebar></sidebar>
         </el-col-->
         <el-col class="editor-container" :span="18">
           <!-- Editor Container -->
-          <input class="editor_title" v-model="file_name" maxlength="60" readonly="readonly"/>
+          <input class="editor_title" v-model="file_name" maxlength="60"/>
           <div id="editor">
 
           </div>
@@ -72,9 +50,7 @@ const pageData = {
   // The ID of the current user.
   userId: '',
   // Editor initial data(for testing).
-  initialData: '',
-  file_name: '',
-  ver: -1,
+  initialData: ''
 };
 
 class MyUploadAdapter {
@@ -174,117 +150,6 @@ class CommentsAdapter {
         this.$refs.sidebar.refresh_user_info();
       },
 
-      updateDocContent() {
-        var that = this;
-        var status = -1;
-        let msg = {
-          did: pageData.did,
-          content: window.editor.getData(),
-          name: pageData.file_name,
-          ver: pageData.ver,
-          auth: 'comment'
-        };
-        $.ajax({
-          type: 'post',
-          url: '/document/edit',
-          data: JSON.stringify(msg),
-          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-          processData: false,
-          contentType: false,
-          success: function (res) {
-            status = res.status;
-            if (console_debug) {
-              console.log("(post)/document/edit" + " : " + res.status);
-            }
-            if (res.status === 0) {
-              pageData.ver = res.ver;
-              alert_msg.success('保存成功');
-              //提示成功
-            } else {
-              switch (res.status) {
-                case 1:
-                  alert_msg.error('编辑失败: 键值错误');
-                  break;
-                case 2:
-                  alert_msg.error('编辑失败: 您的权限不足或还没有登录');
-                  break;
-                case 3:
-                  alert_msg.error('编辑失败: 您的标题不合法');
-                  break;
-                case 4:
-                  alert_msg.error('编辑失败: 您的内容不合法');
-                  break;
-                case 5:
-                  alert_msg.error('编辑失败: 同目录下存在同名文件');
-                  break;
-                case 6:
-                  alert_msg.warning('请手动合并文档');
-                  pageData.ver = res.ver;
-                  let newPage = that.$router.resolve({
-                    name: 'doc_merge',
-                    query:{
-                      did: pageData.did
-                    }
-                  })
-                  window.open(newPage.href, '_blank');
-                  break;
-                case 7:
-                  alert_msg.warning('系统已经自动合并文档');
-                  window.editor.setData(that.applyDocContent());
-                  break;
-                default:
-                  alert_msg.error('编辑失败: 未知错误');
-              }
-              //that.$router.push({path:'/workbench/recent'});
-            }
-          },
-          error: function () {
-            alert_msg.error('连接失败');
-          }
-        })
-        return status;
-      },
-
-      applyDocContent() {
-        var that = this;
-        var content = window.editor.getData();
-        $.ajax({
-          type: 'get',
-          url: '/document/all?did=' + pageData.did + '&ver=-1',
-          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-          async: false,
-          success: function (res) {
-            if (console_debug) {
-              console.log("(get)/document/all" + " : " + res.status);
-            }
-            if (res.status === 0) {
-              pageData.file_name = res.name;
-              content = res.content;
-              pageData.ver = res.ver;
-              //alert_msg.success('更新后版本号: ' + pageData.ver);
-            } else {
-              switch (res.status) {
-                case 1:
-                  alert_box.msg('加载失败', '键值错误');
-                  break;
-                case 2:
-                  alert_box.msg('加载失败', '您的权限不足或还没有登录');
-                  break;
-                case 3:
-                  alert_box.msg('加载失败', '文档不存在');
-                  break;
-                default:
-                  alert_msg.error('未知错误');
-              }
-            }
-          },
-          error: function () {
-            alert_msg.error('连接失败');
-          }
-        });
-        return content;
-      },
-
       addComment(data) {
         console.log('Comment added', data);
         let msg = {
@@ -326,11 +191,6 @@ class CommentsAdapter {
             alert_msg.error('连接失败');
           }
         });
-        const status = this.updateDocContent();
-        console.log(status);
-        if (status !== 0 && status !== 7) {
-          this.removeComment(data);
-        }
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         // When the promise resolves with the comment data object, it
@@ -339,57 +199,6 @@ class CommentsAdapter {
           createdAt: new Date()       // Should be set on the server side.
         });
       },
-
-      /*addComment(data) {
-        console.log('Comment added', data);
-        let msg = {
-          did: pageData.did,
-          // uid: pageData.userId,
-          threadId: data.threadId,
-          commentId: data.commentId,
-          content: data.content,
-        };
-        $.ajax({
-          type: 'post',
-          url: '/document/comment/add',
-          data: JSON.stringify(msg),
-          headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-          processData: false,
-          contentType: false,
-          async: false,
-          success: function (res) {
-            if (console_debug) {
-              console.log("(post)/document/comment/add" + " : " + res.status);
-            }
-            if (res.status !== 0) {
-              switch (res.status) {
-                case 1:
-                  alert_msg.error('上传评论失败: 键值错误');
-                  break;
-                case 2:
-                  alert_msg.error('上传评论失败: 您的权限不足或还没有登录');
-                  break;
-                case 3:
-                  alert_msg.error('上传评论失败: 文档或评论不存在');
-                  break;
-                default:
-                  alert_msg.error('未知错误');
-              }
-            }
-          },
-          error: function () {
-            alert_msg.error('连接失败');
-          }
-        });
-
-        // Write a request to your database here. The returned `Promise`
-        // should be resolved when the request has finished.
-        // When the promise resolves with the comment data object, it
-        // will update the editor comment using the provided data.
-        return Promise.resolve({
-          createdAt: new Date()       // Should be set on the server side.
-        });
-      },*/
 
       updateComment(data) {
         console.log('Comment updated', data);
@@ -541,6 +350,8 @@ export default {
   mounted() {
     this.init();
     pageData.did = this.$route.params.did;
+    this.did = this.$route.params.did;
+    this.ver = this.$route.params.ver;
     pageData.users = [];
     pageData.userId = 'user-1'
     // this.getDocAuth();
@@ -554,12 +365,6 @@ export default {
     // console.log(this.file_name);
   },
 
-  destroyed(){
-    this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
-    this.online_timer ? clearInterval(this.online_timer) : '';
-    this.$emit('refresh_online_list', []);
-  },
-
   data() {
     return {
       Editor: null,//editor instance
@@ -569,44 +374,20 @@ export default {
       loading_percentage:0,
       is_loading: true,
       is_starred: false,
-      ver:-1,
-      is_newest: true,
-      applyVerCode_timer:undefined,
-      online_timer:undefined
-    }
-  },
-
-  watch: {
-    file_name: function () {
-      pageData.file_name = this.file_name;
+      ver:-1
     }
   },
 
   methods: {
     init() {
-      this.did = this.$route.params.did;
-      this.ver = this.$route.params.ver;
-      this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
-      this.online_timer ? clearInterval(this.online_timer) : '';
-      this.is_newest = true;
-      var that = this;
-      setTimeout(function(){
-        that.getCurrentEditingUser();
-      }, 0);
-      this.applyVerCode_timer = setInterval(function(){
-        that.applyVerCode();
-      }, 1000*10);
-      this.online_timer = setInterval(function(){
-        that.getCurrentEditingUser();
-      }, 1000*30);
       if(!this.login_manager.get()){
         that.alert_msg.warning('您还未登录，请先登录账号');
         this.$router.push({name:'login'});
         return;
       }
-      pageData.did = this.did;
-      this.getStarStatus();
-      this.apply_for_info();
+      this.did = this.$route.params.did;
+      //this.getStarStatus();
+      //this.apply_for_info();
     },
 
     apply_for_info() {
@@ -626,7 +407,43 @@ export default {
         extraPlugins: [CommentsAdapter, MyCustomUploadAdapterPlugin],
         toolbar: {
           items: [
-
+            'undo',
+            'redo',
+            'exportPdf',
+            '|',
+            'heading',
+            '|',
+            'fontSize',
+            'fontFamily',
+            'fontColor',
+            '|',
+            'bold',
+            'italic',
+            'underline',
+            'strikethrough',
+            'highlight',
+            '|',
+            'alignment',
+            'pageBreak',
+            '|',
+            'numberedList',
+            'bulletedList',
+            '|',
+            'indent',
+            'outdent',
+            '|',
+            'todoList',
+            'link',
+            'blockQuote',
+            'imageUpload',
+            'insertTable',
+            'mediaEmbed',
+            '|',
+            'comment',
+            'code',
+            'codeBlock',
+            'MathType',
+            'ChemType'
           ]
         },
         image: {
@@ -659,9 +476,9 @@ export default {
         //editor.plugins.get('Users').addUser({id: '0'});
         //editor.plugins.get('Users').defineMe('0');
         editor.isReadOnly = pageData.readOnly;
-        const toolbarContainer = document.querySelector('#toolbar-container');
-        toolbarContainer.appendChild(editor.ui.view.toolbar.element);
-        document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
+        //const toolbarContainer = document.querySelector('#toolbar-container');
+        //toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+        //document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
       }).catch(error => {
         console.error(error);
       });
@@ -722,7 +539,7 @@ export default {
       // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
       $.ajax({
         type: 'get',
-        url: '/document/all?did=' + pageData.did + '&ver=' + this.did,
+        url: '/document/all?did=' + this.did + '&ver=' + this.ver,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         // async: false,
         success: function (res) {
@@ -732,11 +549,13 @@ export default {
           if (res.status === 0) {
             that.file_name = res.name;
             pageData.initialData = res.content;
-            pageData.ver = res.ver;
+            // that.ver = res.ver;
             that.loading_percentage = 85;
             setTimeout(function(){
               that.initCKEditor();
             }, 100);
+            console.log(res.content);
+            console.log(res.name);
           } else {
             switch (res.status) {
               case 1:
@@ -760,57 +579,13 @@ export default {
         }
       })
     },
-    applyDocContent() {
-      var that = this;
-      var content = window.editor.getData();
-      // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
-      that.alert_msg.success('更新前版本号: ' + pageData.ver);
-      $.ajax({
-        type: 'get',
-        url: '/document/all?did=' + pageData.did + '&ver=-1',
-        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        async: false,
-        success: function (res) {
-          if (that.console_debug) {
-            console.log("(get)/document/all" + " : " + res.status);
-          }
-          if (res.status === 0) {
-            that.file_name = res.name;
-            content = res.content;
-            pageData.ver = res.ver;
-            that.alert_msg.success('更新后版本号: ' + pageData.ver);
-          } else {
-            switch (res.status) {
-              case 1:
-                that.alert_box.msg('加载失败', '键值错误');
-                break;
-              case 2:
-                that.alert_box.msg('加载失败', '您的权限不足或还没有登录');
-                break;
-              case 3:
-                that.alert_box.msg('加载失败', '文档不存在');
-                break;
-              default:
-                that.alert_msg.error('未知错误');
-            }
-            //跳转到首页
-            // that.$router.push({path:'/workbench/recent_view'});
-          }
-        },
-        error: function () {
-          that.alert_msg.error('连接失败');
-        }
-      });
-      return content;
-    },
-    updateDocContent() {
+    updateDocContent(content) {
       var that = this;
       let msg = {
         did: pageData.did,
-        content: window.editor.getData(),
-        name: this.file_name,
-        ver: pageData.ver,
-        auth: 'write'
+        content: content,
+        name: that.file_name,
+        // ver: this.ver
       };
       $.ajax({
         type: 'post',
@@ -824,7 +599,7 @@ export default {
             console.log("(post)/document/edit" + " : " + res.status);
           }
           if (res.status === 0) {
-            pageData.ver = res.ver;
+            // this.ver = res.ver;
             that.alert_msg.success('保存成功');
             //提示成功
           } else {
@@ -846,20 +621,15 @@ export default {
                 break;
               case 6:
                 that.alert_msg.warning('请手动合并文档');
-                pageData.ver = res.ver;
-                let newPage = that.$router.resolve({
-                  name: 'doc_merge',
-                  query:{
-                    did: pageData.did
-                  }
-                })
-                window.open(newPage.href, '_blank');
+                /*************/
+                that.getInitialDocContent();
+
                 break;
               case 7:
                 that.alert_msg.warning('系统已经自动合并文档');
-                const content = that.applyDocContent();
-                console.log("获得自动merge后的内容：", content);
-                window.editor.setData(content);
+                /*************/
+                that.getInitialDocContent();
+                window.editor.setData(pageData.initialData);
                 break;
               default:
                 that.alert_msg.error('编辑失败: 未知错误');
@@ -873,95 +643,12 @@ export default {
       })
     },
 
-    applyVerCode() {
-      if(!this.is_newest || pageData.ver === -1){
-        return;
-      }
-      var that = this;
-      let url = '/document/ver_condition?did=' + pageData.did + '&ver=' + pageData.ver;
-      $.ajax({
-        type: 'get',
-        url: url,
-        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        // async: false,
-        success: function (res) {
-          if (that.console_debug) {
-            console.log(url + " : " + res.status);
-          }
-          if (res.status === 0) {
-            that.is_newest = res.is_newest;
-            if(!res.is_newest){
-              clearInterval(that.applyVerCode_timer);
-              that.$notify({
-                title: '警告',
-                message: '检测到有其他用户提交了当前文档，你在提交的时候可能需要合并内容。',
-                type: 'warning',
-                duration: 6900
-              });
-            }
-          } else {
-            switch (res.status) {
-              // case 1:
-              //   that.alert_msg.error('获取版本号失败: 键值错误');
-              //   break;
-              // case 2:
-              //   that.alert_msg.error('获取版本号失败: 您的权限不足或还没有登录');
-              //   break;
-              // case 3:
-              //   that.alert_msg.error('获取版本号失败: 文档不存在');
-              //   break;
-              // default:
-              //   that.alert_msg.error('获取版本号失败: 未知错误');
-            }
-          }
-        },
-        error: function () {
-          that.alert_msg.error('连接失败');
-        }
-      })
-    },
-
-    applyHistoryRecord() {
-      var that = this;
-      $.ajax({
-        type: 'get',
-        url: '/document/history?did=' + pageData.did,
-        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        // async: false,
-        success: function (res) {
-          if (that.console_debug) {
-            console.log("(get)/document/all" + " : " + res.status);
-          }
-          if (res.status === 0) {
-            //more operation
-          } else {
-            switch (res.status) {
-              case 1:
-                that.alert_msg.error('获取历史记录失败: 键值错误');
-                break;
-              case 2:
-                that.alert_msg.error('获取历史记录失败: 您的权限不足或还没有登录');
-                break;
-              case 3:
-                that.alert_msg.error('获取历史记录失败: 文档不存在');
-                break;
-              default:
-                that.alert_msg.error('获取历史记录失败: 未知错误');
-            }
-          }
-        },
-        error: function () {
-          that.alert_msg.error('连接失败');
-        }
-      })
-    },
-
     //将文档内容存储为模版
     saveAsTemplate() {
       console.log('saving as template');
       var that = this;
       let msg = {
-        name: this.file_name,
+        name: that.file_name,
         content: window.editor.getData(),
       };
       $.ajax({
@@ -1087,13 +774,13 @@ export default {
       });
     },
 
-    //is_starred: true：请求收藏，false：请求取消收藏
-    starTheDoc(is_starred) {
+    //is_stared: true：请求收藏，false：请求取消收藏
+    starTheDoc(is_stared) {
       var that = this;
       let msg = {
         id: pageData.did,
         type: 'doc',
-        is_starred: !is_starred
+        is_stared: is_stared
       };
       $.ajax({
         type: 'post',
@@ -1102,31 +789,32 @@ export default {
         data: JSON.stringify(msg),
         processData: false,
         contentType: false,
-        async: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(post)/fs/star" + " : " + res.status);
           }
           if (res.status === 0) {
-            var opp = !is_starred ? '收藏' : '取消收藏';
-            that.is_starred = !that.is_starred;
-            that.alert_msg.success(opp + '成功');
+
+            //提示收藏成功/收藏图标变化
           } else {
-            const op = is_starred ? '收藏' : '取消收藏';
+            const op = is_stared ? '收藏' : '取消收藏';
             switch (res.status) {
+              case 1:
+                that.alert_box.msg(op + '失败', '键值错误');
+                break;
               case 2:
-                that.alert_msg.error('您的权限不足或还没有登录');
+                that.alert_box.msg(op + '失败', '您的权限不足或还没有登录');
                 break;
               case 3:
-                that.alert_msg.error('找不到文档');
+                that.alert_box.msg(op + '失败', '文档不存在');
                 break;
               default:
-                that.alert_msg.error('发生未知错误');
+                that.alert_msg.error('未知错误');
             }
           }
         },
         error: function () {
-          that.alert_msg.error('网络连接失败');
+          that.alert_msg.error('连接失败');
         }
       });
     },
@@ -1165,38 +853,42 @@ export default {
 
     getCurrentEditingUser() {
       var that = this;
+      let msg = {
+        id: pageData.did,
+      };
+      var list = [];
       $.ajax({
         type: 'get',
-        url: '/document/online?did=' + pageData.did,
+        url: '/document/online?id=' + pageData.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-        processData: false,
-        contentType: false,
         success: function (res) {
           if (that.console_debug) {
             console.log("(get)/document/online" + " : " + res.status);
           }
           if (res.status === 0) {
-            that.$emit('refresh_online_list', res.list);
+
+            list = res.list;
           } else {
             switch (res.status) {
-              // case 1:
-              //   that.alert_box.msg('获取正在编辑用户失败', '键值错误');
-              //   break;
-              // case 2:
-              //   that.alert_box.msg('获取正在编辑用户失败', '您的权限不足或还没有登录');
-              //   break;
-              // case 3:
-              //   that.alert_box.msg('获取正在编辑用户失败', '文档不存在');
-              //   break;
-              // default:
-              //   that.alert_msg.error('未知错误');
+              case 1:
+                that.alert_box.msg('获取正在编辑用户失败', '键值错误');
+                break;
+              case 2:
+                that.alert_box.msg('获取正在编辑用户失败', '您的权限不足或还没有登录');
+                break;
+              case 3:
+                that.alert_box.msg('获取正在编辑用户失败', '文档不存在');
+                break;
+              default:
+                that.alert_msg.error('未知错误');
             }
           }
         },
         error: function () {
-          //that.alert_msg.error('连接失败');
+          that.alert_msg.error('连接失败');
         }
       });
+      return list;
     },
 
     loading_done(){
@@ -1207,12 +899,7 @@ export default {
           $('.loading_bar').addClass('loading_bar_done');
         }, 360);
       }, 560);
-    },
-
-    open_chatting_dialog(){
-      this.$emit('open_chatting_dialog');
-    },
-
+    }
   },
   /*beforeDestroy() {
     //this.updateDocContent(window.editor.getData());
@@ -1370,12 +1057,12 @@ export default {
 }
 
 #toolbar-container{
-  margin-left:70px;
-  /*margin-left:140px;*/
+  margin-left:0;
 }
 
 >>>.ck-user__img {
-  border: none !important;
+  border: 0 solid !important;
 }
+
 
 </style>

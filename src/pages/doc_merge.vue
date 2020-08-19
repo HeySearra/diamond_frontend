@@ -537,7 +537,7 @@ export default {
       // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
       $.ajax({
         type: 'get',
-        url: '/document/all?did=' + pageData.did/* + '&ver=' + this.ver*/,
+        url: '/document/all?did=' + pageData.did + '&ver=-1'/* + this.ver*/,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         // async: false,
         success: function (res) {

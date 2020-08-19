@@ -2,6 +2,7 @@
   <el-main>
     <el-aside>
       <sidebar
+        id="sidebar"
         ref="sidebar"
         class="blur_div"
         context="doc"
@@ -58,6 +59,12 @@
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="历史记录" placement="bottom">
               <span class="icon iconfont" @click="showHistoryBlock">&#xe7de;</span>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="开启编辑锁" placement="bottom">
+              <span class="icon iconfont" v-if="!is_locked" @click="">&#xe7de;</span>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="关闭编辑锁" placement="bottom">
+              <span class="icon iconfont" v-if="is_locked" @click="">&#xe7de;</span>
             </el-tooltip>
           </div>
           <div id="toolbar-container" style="min-height:38.67px;">
@@ -257,7 +264,7 @@ class CommentsAdapter {
                   pageData.ver = res.ver;
                   let newPage = that.$router.resolve({
                     name: 'doc_merge',
-                    query:{
+                    params:{
                       did: pageData.did
                     }
                   })
@@ -638,11 +645,12 @@ export default {
       loading_percentage:0,
       is_loading: true,
       is_starred: false,
+      is_locked: false,
       ver:-1,
       is_newest: true,
       applyVerCode_timer:undefined,
       online_timer:undefined,
-      history_list:[{name: '阿三'},{name: '阿斯'}],
+      history_list:[{name: '阿三', did: '3'},{name: '阿斯'}],
       show_history: false
     }
   },
@@ -961,7 +969,7 @@ export default {
                 pageData.ver = res.ver;
                 let newPage = that.$router.resolve({
                   name: 'doc_merge',
-                  query:{
+                  params:{
                     did: pageData.did
                   }
                 })
@@ -1327,7 +1335,7 @@ export default {
 
     showHistoryBlock(){
       this.show_history = true;
-      //$('.el-aside').attr('overflow', 'hidden !important');
+      $('#sidebar').css('display', 'none');
       var that = this;
       $.ajax({
         type: 'get',
@@ -1349,7 +1357,7 @@ export default {
     },
     closeHistoryBlock(){
       this.show_history = false;
-      //$('.el-aside').attr('overflow', '-moz-scrollbars-none');
+      $('#sidebar').css('display', 'inherit');
     },
 
   },
@@ -1512,7 +1520,7 @@ export default {
 
 #toolbar-container{
   /*margin-left:105px*/;
-  margin-left:140px;
+  margin-left:175px;
 }
 
 >>>.ck-user__img{
