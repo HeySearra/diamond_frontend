@@ -13,7 +13,7 @@
         style="z-index: 1000;
                   width: 320px;
                   height: 100%;
-                  background-color: rgb(245, 245, 245);
+                  background-color: rgba(245, 245, 245, 0.69);
                   position: absolute;
                   left: 0;
                   top: 0;
@@ -1334,8 +1334,14 @@ export default {
     },
 
     showHistoryBlock(){
+      if(this.show_history){
+        this.closeHistoryBlock();
+        return;
+      }
       this.show_history = true;
-      $('#sidebar').css('display', 'none');
+      $('.sidebar').addClass('blur_style');
+      //$('.el-aside').attr('overflow', 'hidden !important');
+      //$('#sidebar').css('display', 'none');
       var that = this;
       $.ajax({
         type: 'get',
@@ -1356,8 +1362,9 @@ export default {
       });
     },
     closeHistoryBlock(){
+      $('.sidebar').removeClass('blur_style');
       this.show_history = false;
-      $('#sidebar').css('display', 'inherit');
+      //$('#sidebar').css('display', 'inherit');
     },
 
   },

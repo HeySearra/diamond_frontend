@@ -43,8 +43,8 @@
     <new-dialog ref="new_dialog" @refresh="refresh"></new-dialog>
     <file-info-dialog ref="file_info_dialog"></file-info-dialog>
     <admin-edit-dialog @refresh_team_info="refresh_team_info_force" ref="admin_edit_dialog"></admin-edit-dialog>
-    <manage-member-dialog ref="manage_member_dialog"></manage-member-dialog>
-    <choose-path-dialog ref="choose_path_dialog"></choose-path-dialog>
+    <manage-member-dialog ref="manage_member_dialog" @refresh_team_info="refresh_team_info_force"></manage-member-dialog>
+    <choose-path-dialog ref="choose_path_dialog" @refresh="refresh"></choose-path-dialog>
     <edit-team-info-dialog ref="edit_team_info_dialog" @refresh="refresh_team_info_force"></edit-team-info-dialog>
     <share-dialog ref="share_dialog" context="team"></share-dialog>
     <send-all-dialog ref="send_all_dialog"></send-all-dialog>
@@ -224,7 +224,7 @@ export default {
     },
 
     dtd_share(did, name){
-      this.$refs.dtd_share_dialog.open(did);
+      this.$refs.dtd_share_dialog.open(did, this.tid);
     },
 
     copy_item(id, type, name){

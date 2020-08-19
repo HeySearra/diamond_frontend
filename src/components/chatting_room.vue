@@ -74,6 +74,7 @@
                 title:'',
                 another_por: '',
                 my_por: '',
+                save_list:[]
             }
         },
 
@@ -95,12 +96,14 @@
                 }, 1000*5);
                 $("#bubble_window").off('scroll');
                 $("#bubble_window").scroll(function(){
-                    if(Math.abs($("#bubble_window").scrollTop() - $("#bubble_window")[0].scrollHeight) < 20){
+                    if(Math.abs($("#bubble_window")[0].scrollTop + $("#bubble_window")[0].clientHeight - $("#bubble_window")[0].scrollHeight) < 20){
                         that.is_bottom = true;
                     }
                     else{
                         that.is_bottom = false;
                     }
+                    // console.log(Math.abs($("#bubble_window")[0].scrollTop + $("#bubble_window")[0].clientHeight - $("#bubble_window")[0].scrollHeight))
+                    // console.log(that.is_bottom);
                 });
                 if(uid){
                     this.choose_user(uid);
@@ -119,7 +122,8 @@
                     type:'get',
                     url: url,
                     headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                    async:false, 
+                    processData: false,
+                    contentType: false, 
                     success:function (res){
                         if(that.console_debug){
                             console.log(url+ " : " +res.status);
@@ -209,13 +213,15 @@
                     type:'get',
                     url: url,
                     headers: {'X-CSRFToken': this.getCookie('csrftoken')},
-                    async:false, 
+                    processData: false,
+                    contentType: false,
                     success:function (res){
                         if(that.console_debug){
                             console.log(url+ " : " +res.status);
                         }
                         if(res.status == 0){
                             that.chatting_list = [];
+                            that.save_list = res.list;
                             let start_dt;
                             let last_dt;
                             if(res.list.length){
@@ -266,7 +272,7 @@
                                 return;
                             }
                             if(refresh){
-                                $("#bubble_window").animate({scrollTop:$("#bubble_window")[0].scrollHeight}, 800);
+                                $("#bubble_window").animate({scrollTop:$("#bubble_window")[0].scrollHeight}, 500);
                             }
                             else{
                                 $("#bubble_window").scrollTop($("#bubble_window")[0].scrollHeight);
@@ -303,12 +309,14 @@
                     uid:this.uid,
                     text:this.text
                 }
+                that.add_chatting_bubble(this.text);
                 $.ajax({
                     type:'post',
                     url: url,
                     headers: {'X-CSRFToken': this.getCookie('csrftoken')},
                     data: JSON.stringify(msg),
-                    async:false, 
+                    processData: false,
+                    contentType: false,
                     success:function (res){
                         if(that.console_debug){
                             console.log(url+ " : " +res.status);
@@ -368,6 +376,22 @@
                         return dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + dt.getHours() + ':' + (dt.getMinutes()<10?('0'+dt.getMinutes()):dt.getMinutes());
                     }
                 }
+            },
+
+            add_chatting_bubble(text){
+                var last_dt = this.save_list.length-1<0 ? new Date('1900-1-1') : new Date(this.save_list[this.save_list.length-1].dt);
+                var now_dt = new Date();
+                if(now_dt - last_dt > 1000*60*3){
+                    var content = {
+                        time: this.datetime_format_for_chatting(now_dt, now_dt),
+                        list: [{is_mine:true, dt:now_dt, text:text}]
+                    };
+                    this.chatting_list.push(content);
+                }
+                else{
+                    this.chatting_list[this.chatting_list.length-1].list.push({is_mine:true, dt:now_dt, text:text});
+                }
+                $("#bubble_window").animate({scrollTop:$("#bubble_window")[0].scrollHeight}, 500);
             }
         }
 
