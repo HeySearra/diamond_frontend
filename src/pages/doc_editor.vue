@@ -36,7 +36,8 @@
           :dt="item.dt"
           :portrait="item.portrait"
           :ver="item.ver"
-          :did="did">
+          :did="did"
+          @rollbackHistory="rollbackHistory">
         </history-block>
       </div>
       </transition>
@@ -154,18 +155,18 @@ class MyUploadAdapter {
       processData: false,
       contentType: false,
       success: function (respJson) {
-        console.log(respJson);
+        //console.log(respJson);
         if (respJson.code === 0) {
           resolve({
             default: respJson.url
           });
         } else {
-          console.log('上传错误');
+          //console.log('上传错误');
         }
       },
       error: function (e) {
-        console.log('error uploading img');
-        console.log(e);
+        //console.log('error uploading img');
+        //console.log(e);
       }
     });
   }
@@ -175,7 +176,7 @@ class MyUploadAdapter {
     // Reject the promise returned from the upload() method.
     if (this.xhr) {
       this.xhr.abort();
-      console.log('abort uploading img');
+      //console.log('abort uploading img');
     }
   }
 }
@@ -241,7 +242,7 @@ class CommentsAdapter {
             if (console_debug) {
               console.log("(post)/document/edit" + " : " + res.status);
             }
-            console.log("(post)/document/edit" + " : " + res.status);
+            //console.log("(post)/document/edit" + " : " + res.status);
             if (res.status === 0) {
               pageData.ver = res.ver;
               alert_msg.success('保存成功');
@@ -398,7 +399,7 @@ class CommentsAdapter {
 
       },*/
       removeCommentInDB(data) {
-        console.log('Comment removed in db', data);
+        //console.log('Comment removed in db', data);
         let msg = {
           did: pageData.did,
           threadId: data.threadId,
@@ -415,7 +416,7 @@ class CommentsAdapter {
       },
 
       addComment(data) {
-        console.log('Comment added', data);
+        //console.log('Comment added', data);
         let msg = {
           did: pageData.did,
           // uid: pageData.userId,
@@ -472,7 +473,7 @@ class CommentsAdapter {
       },
 
       updateComment(data) {
-        console.log('Comment updated', data);
+        //console.log('Comment updated', data);
         let msg = {
           did: pageData.did,
           // uid: pageData.userId,
@@ -518,7 +519,7 @@ class CommentsAdapter {
       },
 
       removeComment(data) {
-        console.log('Comment removed', data);
+        //console.log('Comment removed', data);
         let msg = {
           did: pageData.did,
           // uid: pageData.userId,
@@ -563,7 +564,7 @@ class CommentsAdapter {
       },
 
       getCommentThread(data) {
-        console.log('Getting comment thread', data);
+        //console.log('Getting comment thread', data);
         var thread_comments;
         let msg = {
           did: pageData.did,
@@ -618,7 +619,6 @@ class CommentsAdapter {
 }
 
 export default {
-  inject: ['reload'],
   mounted() {
     this.init();
     pageData.did = this.$route.params.did;
@@ -1034,7 +1034,7 @@ export default {
               case 7:
                 that.alert_msg.warning('系统已经自动合并文档');
                 const content = that.applyDocContent();
-                console.log("获得自动merge后的内容：", content);
+                //console.log("获得自动merge后的内容：", content);
                 window.editor.setData(content);
                 break;
               default:
@@ -1134,7 +1134,7 @@ export default {
 
     //将文档内容存储为模版
     saveAsTemplate() {
-      console.log('saving as template');
+      //console.log('saving as template');
       var that = this;
       let msg = {
         name: this.file_name,
@@ -1182,7 +1182,7 @@ export default {
       })
     },
     getAllCommentedUsers() {
-      console.log('Getting all commented users');
+      //console.log('Getting all commented users');
       var that = this;
       let msg = {
         did: pageData.did
@@ -1202,7 +1202,7 @@ export default {
             setTimeout(function(){
               that.getInitialDocContent();
             }, 100);
-            console.log(pageData.users);
+            //console.log(pageData.users);
           } else {
             switch (res.status) {
               case 1:
@@ -1408,7 +1408,7 @@ export default {
         contentType: false,
         async: true,
         success: function (res) {
-          console.log("(get)/document/history" + " : " + res.status);
+          //console.log("(get)/document/history" + " : " + res.status);
           if (res.status === 0) {
             that.history_list = res.list;
           }
@@ -1507,6 +1507,32 @@ export default {
         },
         error:function(){
             that.alert_msg.error('网络连接失败');
+        }
+      });
+    },
+
+    rollbackHistory(his_ver) {
+      var that = this;
+      // this.ver = this.$route.query.ver ? this.$route.query.ver : -1;
+      $.ajax({
+        type: 'get',
+        url: '/document/all?did=' + pageData.did + '&ver=' + his_ver,
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        async: false,
+        success: function (res) {
+          if (that.console_debug) {
+            console.log("(get)/document/all" + " : " + res.status);
+          }
+          if (res.status === 0) {
+            that.file_name = res.name;
+            window.editor.setData(res.content);
+            that.alert_msg.success('导入历史记录成功');
+          } else {
+            that.alert_msg.error('导入历史记录失败，请重新尝试');
+          }
+        },
+        error: function () {
+
         }
       });
     }
