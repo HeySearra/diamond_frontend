@@ -181,7 +181,7 @@ export default {
         },
 
         upload_por(f){
-            var is_pic = file.type=='image/jpeg' || file.type=='image/png';
+            var is_pic = f.file.type=='image/jpeg' || f.file.type=='image/png';
             if (!is_pic) {
                 this.alert_msg.error('请上传 jpg 或 png 格式的图片');
                 return;

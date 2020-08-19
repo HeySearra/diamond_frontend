@@ -64,7 +64,7 @@
             <el-tooltip class="item" effect="dark" v-if="!is_locking&&locking_uid==''" content="开启编辑锁" placement="bottom">
               <span class="icon iconfont" @click="lock">&#xe62d;</span>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" v-if="!is_locking&&!locking_uid==''" content="其他用户已开启编辑锁" placement="bottom">
+            <el-tooltip class="item" effect="dark" v-if="!is_locking&&locking_uid!=''" content="其他用户已开启编辑锁" placement="bottom">
               <span class="icon iconfont" style="color:hsl(1, 69%, 73%)" @click="lock">&#xe62b;</span>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" v-if="is_locking" content="编辑锁已开启" placement="bottom">
