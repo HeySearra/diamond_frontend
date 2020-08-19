@@ -60,13 +60,13 @@
             <el-tooltip class="item" effect="dark" content="历史记录" placement="bottom">
               <span class="icon iconfont" @click="showHistoryBlock">&#xe7de;</span>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" v-if="!is_locking&&locking_uid==''" content="开启全局锁" placement="bottom">
+            <el-tooltip class="item" effect="dark" v-if="!is_locking&&locking_uid==''" content="开启编辑锁" placement="bottom">
               <span class="icon iconfont" @click="lock">&#xe62d;</span>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" v-if="!is_locking&&!locking_uid==''" content="其他用户已开启全局锁" placement="bottom">
+            <el-tooltip class="item" effect="dark" v-if="!is_locking&&!locking_uid==''" content="其他用户已开启编辑锁" placement="bottom">
               <span class="icon iconfont" style="color:hsl(1, 69%, 73%)" @click="lock">&#xe62b;</span>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" v-if="is_locking" content="全局锁已开启" placement="bottom">
+            <el-tooltip class="item" effect="dark" v-if="is_locking" content="编辑锁已开启" placement="bottom">
               <span class="icon iconfont" style="color:hsl(100, 45%, 45%)" @click="lock">&#xe62b;</span>
             </el-tooltip>
           </div>
@@ -675,7 +675,7 @@ export default {
       else{
         if(value!='' && old_value==''){
           this.$notify({
-            title: '有其他用户开启了全局锁',
+            title: '有其他用户开启了编辑锁',
             message: '你不能保存该文档了',
             type: 'warning',
           });
@@ -684,7 +684,7 @@ export default {
         else{
           if(this.is_locking==false && old_value!='' && old_value!=this.login_manager.get_uid()){
             this.$notify({
-              title: '全局锁已释放',
+              title: '编辑锁已释放',
               message: '重新进入该页面可保存文档',
             });
           }
@@ -1420,10 +1420,10 @@ export default {
     lock(){
       if(this.locking_flag){
         if(this.locking_uid != ''){
-          this.alert_msg.warning('有其他用户正开启全局锁');
+          this.alert_msg.warning('有其他用户正开启编辑锁');
         }
         else{
-          this.alert_msg.warning('你必须重新进入文章才会开启全局锁');
+          this.alert_msg.warning('你必须重新进入文章才会开启编辑锁');
         }
         return;
       }
@@ -1443,11 +1443,11 @@ export default {
             if(res.status == 0){
               that.is_locking = !that.is_locking;
               if(that.is_locking){
-                that.alert_msg.success('成功开启全局锁');
+                that.alert_msg.success('成功开启编辑锁');
                 that.locking_uid = that.login_manager.get_uid();
               }
               else{
-                that.alert_msg.success('成功释放全局锁');
+                that.alert_msg.success('成功释放编辑锁');
                 that.locking_uid = '';
               }
             }
@@ -1460,7 +1460,7 @@ export default {
                     that.alert_msg.error('文档不存在');
                     break;
                   case 4:
-                    that.alert_msg.error('有其他用户开启了全局锁');
+                    that.alert_msg.error('有其他用户开启了编辑锁');
                     break;
                   default:
                     that.alert_msg.error('发生未知错误');
@@ -1495,7 +1495,7 @@ export default {
 
             }
             else{
-                that.alert_msg.error('全局锁状态更新失败');
+                that.alert_msg.error('编辑锁状态更新失败');
             }
         },
         error:function(){
