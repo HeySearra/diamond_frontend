@@ -37,11 +37,12 @@ export default {
     toHistoryPage() {
       let newPage = this.$router.resolve({
         name: 'doc_history',
-        query:{
+        params:{
           did: this.did,
           ver: this.ver,
         }
-      })
+      });
+      console.log(newPage);
       window.open(newPage.href, '_blank');
     }
   }
@@ -50,7 +51,7 @@ export default {
 
 <style scoped>
 .history_block{
-  padding: 18px 20px; 
+  padding: 18px 20px;
   cursor: pointer;
   transition:all 0.1s linear;
   position:relative;

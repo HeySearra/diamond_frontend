@@ -2,6 +2,7 @@
   <el-main>
     <el-aside>
       <sidebar
+        id="sidebar"
         ref="sidebar"
         class="blur_div"
         context="doc"
@@ -266,7 +267,7 @@ class CommentsAdapter {
                   pageData.ver = res.ver;
                   let newPage = that.$router.resolve({
                     name: 'doc_merge',
-                    query:{
+                    params:{
                       did: pageData.did
                     }
                   })
@@ -648,6 +649,7 @@ export default {
       loading_percentage:0,
       is_loading: true,
       is_starred: false,
+      is_locked: false,
       ver:-1,
       is_newest: true,
       applyVerCode_timer:undefined,
@@ -1016,7 +1018,7 @@ export default {
                 pageData.ver = res.ver;
                 let newPage = that.$router.resolve({
                   name: 'doc_merge',
-                  query:{
+                  params:{
                     did: pageData.did
                   }
                 })
@@ -1389,6 +1391,7 @@ export default {
       this.show_history = true;
       $('.sidebar').addClass('blur_style');
       //$('.el-aside').attr('overflow', 'hidden !important');
+      //$('#sidebar').css('display', 'none');
       var that = this;
       $.ajax({
         type: 'get',
@@ -1411,7 +1414,7 @@ export default {
     closeHistoryBlock(){
       $('.sidebar').removeClass('blur_style');
       this.show_history = false;
-      //$('.el-aside').attr('overflow', '-moz-scrollbars-none');
+      //$('#sidebar').css('display', 'inherit');
     },
     
     lock(){
