@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import './assets/element.css'
-// import Element from 'element-ui'
+import Element from 'element-ui'
 // import echarts from 'echarts'
 // import mavonEditor from 'mavon-editor'
 import CKEditor from '@ckeditor/ckeditor5-vue';
@@ -33,7 +33,7 @@ import user_info_dialog from './components/user_info_dialog';
 
 import history_block from "./components/history_block";
 
-// Vue.use(Element);
+Vue.use(Element);
 // Vue.use(echarts);
 // Vue.use(mavonEditor);
 Vue.use(CKEditor);

@@ -50,14 +50,23 @@
             <el-tooltip class="item" effect="dark" content="保存为模板" placement="bottom">
               <span class="icon iconfont" @click="saveAsTemplate">&#xe672;</span>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
-              <span class="icon iconfont" v-if="!is_starred" @click="starTheDoc(is_starred)">&#xe65c;</span>
+            <el-tooltip class="item" effect="dark" v-if="!is_starred" content="收藏" placement="bottom">
+              <span class="icon iconfont" @click="starTheDoc(is_starred)">&#xe65c;</span>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="取消收藏" placement="bottom">
-              <span class="icon iconfont" v-if="is_starred" @click="starTheDoc(is_starred)">&#xe65e;</span>
+            <el-tooltip class="item" effect="dark" v-if="is_starred" content="取消收藏" placement="bottom">
+              <span class="icon iconfont" @click="starTheDoc(is_starred)">&#xe65e;</span>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="历史记录" placement="bottom">
               <span class="icon iconfont" @click="showHistoryBlock">&#xe7de;</span>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" v-if="!is_locking&&locking_uid==''" content="开启全局锁" placement="bottom">
+              <span class="icon iconfont" @click="lock">&#xe62d;</span>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" v-if="!is_locking&&!locking_uid==''" content="其他用户已开启全局锁" placement="bottom">
+              <span class="icon iconfont" style="color:hsl(1, 69%, 73%)" @click="lock">&#xe62b;</span>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" v-if="is_locking" content="全局锁已开启" placement="bottom">
+              <span class="icon iconfont" style="color:hsl(100, 45%, 45%)" @click="lock">&#xe62b;</span>
             </el-tooltip>
           </div>
           <div id="toolbar-container" style="min-height:38.67px;">
@@ -626,6 +635,7 @@ export default {
   destroyed(){
     this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
     this.online_timer ? clearInterval(this.online_timer) : '';
+    this.locking_timer ? clearInterval(this.locking_timer) : '';
     this.$emit('refresh_online_list', []);
   },
 
@@ -643,13 +653,42 @@ export default {
       applyVerCode_timer:undefined,
       online_timer:undefined,
       history_list:[{name: '阿三'},{name: '阿斯'}],
-      show_history: false
+      show_history: false,
+      is_locking: false,
+      locking_flag: false,
+      locking_uid: '',
+      locking_timer: undefined
     }
   },
 
   watch: {
     file_name: function () {
       pageData.file_name = this.file_name;
+    },
+    locking_uid(value, old_value){
+      const h = this.$createElement;
+      if(value == this.login_manager.get_uid()){
+        this.is_locking = true;
+      }
+      else{
+        if(value!='' && old_value==''){
+          this.$notify({
+            title: '有其他用户开启了全局锁',
+            message: '你不能保存该文档了',
+            type: 'warning',
+          });
+          this.locking_flag = true;
+        }
+        else{
+          if(this.is_locking==false && old_value!='' && old_value!=this.login_manager.get_uid()){
+            this.$notify({
+              title: '全局锁已释放',
+              message: '重新进入该页面可保存文档',
+            });
+          }
+        }
+        this.is_locking = false;
+      }
     }
   },
 
@@ -659,8 +698,17 @@ export default {
       this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
       this.online_timer ? clearInterval(this.online_timer) : '';
       this.is_newest = true;
+      this.is_locking = false;
+      this.locking_flag = false;
+      this.locking_uid = '';
+      this.locking_timer = undefined;
       tthat = this;
       var that = this;
+      if(!this.login_manager.get()){
+        that.alert_msg.warning('您还未登录，请先登录账号');
+        this.$router.push({name:'login'});
+        return;
+      }
       setTimeout(function(){
         that.getCurrentEditingUser();
       }, 0);
@@ -669,12 +717,10 @@ export default {
       }, 1000*10);
       this.online_timer = setInterval(function(){
         that.getCurrentEditingUser();
-      }, 1000*30);
-      if(!this.login_manager.get()){
-        that.alert_msg.warning('您还未登录，请先登录账号');
-        this.$router.push({name:'login'});
-        return;
-      }
+      }, 1000*10);
+      this.locking_timer = setInterval(function(){
+        that.repeat_send_lock();
+      }, 1000*60);
       pageData.did = this.did;
       this.getStarStatus();
       this.apply_for_info();
@@ -916,6 +962,15 @@ export default {
       return pageData.initialData;
     },
     updateDocContent() {
+      if(this.locking_flag){
+        if(this.locking_uid != ''){
+          this.alert_msg.warning('该文档已被上锁，您不能保存该文章');
+        }
+        else{
+          this.alert_msg.warning('你需要重新进入该文档才能保存');
+        }
+        return;
+      }
       var that = this;
       let msg = {
         did: pageData.did,
@@ -1288,6 +1343,7 @@ export default {
             console.log("(get)/document/online" + " : " + res.status);
           }
           if (res.status === 0) {
+            that.locking_uid = res.locked_uid;
             that.$emit('refresh_online_list', res.list);
           } else {
             switch (res.status) {
@@ -1357,6 +1413,94 @@ export default {
       this.show_history = false;
       //$('.el-aside').attr('overflow', '-moz-scrollbars-none');
     },
+    
+    lock(){
+      if(this.locking_flag){
+        if(this.locking_uid != ''){
+          this.alert_msg.warning('有其他用户正开启全局锁');
+        }
+        else{
+          this.alert_msg.warning('你必须重新进入文章才会开启全局锁');
+        }
+        return;
+      }
+      let url = "/document/lock";
+      var that = this;
+      let data = new Object();
+      data.did = this.did;
+      data.op = this.is_locking ? false : true;
+      $.ajax({
+        type:'post',
+        url: url,
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        data: JSON.stringify(data),
+        async:false, 
+        success:function (res){
+            if(that.console_debug)console.log(url+ " : " +res.status);
+            if(res.status == 0){
+              that.is_locking = !that.is_locking;
+              if(that.is_locking){
+                that.alert_msg.success('成功开启全局锁');
+                that.locking_uid = that.login_manager.get_uid();
+              }
+              else{
+                that.alert_msg.success('成功释放全局锁');
+                that.locking_uid = '';
+              }
+            }
+            else{
+                switch(res.status){
+                  case 2:
+                    that.alert_msg.error('权限不足');
+                    break;
+                  case 3:
+                    that.alert_msg.error('文档不存在');
+                    break;
+                  case 4:
+                    that.alert_msg.error('有其他用户开启了全局锁');
+                    break;
+                  default:
+                    that.alert_msg.error('发生未知错误');
+                }
+            }
+        },
+        error:function(){
+            that.alert_msg.error('网络连接失败');
+        }
+      });
+    },
+
+    repeat_send_lock(){
+      if(!this.is_locking){
+        return;
+      }
+      let url = "/document/lock";
+      var that = this;
+      let data = new Object();
+      data.did = this.did;
+      data.op = true;
+      $.ajax({
+        type:'post',
+        url: url,
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')},
+        data: JSON.stringify(data),
+        processData: false,
+        contentType: false,
+        success:function (res){
+            if(that.console_debug)console.log(url+ " : " +res.status);
+            if(res.status == 0){
+
+            }
+            else{
+                that.alert_msg.error('全局锁状态更新失败');
+            }
+        },
+        error:function(){
+            that.alert_msg.error('网络连接失败');
+        }
+      });
+    }
+
 
   },
   /*beforeDestroy() {
@@ -1500,7 +1644,7 @@ export default {
 
 .append_tools{
   position: absolute;
-  top: 4px;
+  top: 5px;
   left:9px;
 }
 
@@ -1517,8 +1661,8 @@ export default {
 }
 
 #toolbar-container{
-  /*margin-left:105px*/;
-  margin-left:140px;
+  /*margin-left:140px*/
+  margin-left:169px;
 }
 
 >>>.ck-user__img{
