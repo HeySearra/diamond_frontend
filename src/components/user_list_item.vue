@@ -10,7 +10,7 @@
                 <div style="display: inline-block;margin:8px 20px;float:left">
                     <el-avatar :src="src"></el-avatar>
                 </div>
-                <div style="display: inline-block;float:left;width:150px" class="no_display" :style="type=='shared'?'width: calc(63% - 150px);':''">
+                <div style="display: inline-block;float:left;width:150px" class="no_display" :style="type=='shared'||type=='member'?'width: calc(63% - 150px);':''">
                     <div class="content">
                         {{name}}
                     </div>
@@ -20,9 +20,9 @@
                         {{account}}
                     </div>
                 </div>
-                <div style="display: inline-block;float:right;width:150px;color:#aaa; margin-right:70px" v-if="type=='shared'">
+                <div style="display: inline-block;float:right;width:150px;color:#aaa; margin-right:70px" v-if="type=='shared'||type=='member'">
                     <div class="content">
-                        <el-select v-model="shared_auth" placeholder="请选择权限" @change="change_shared_auth">
+                        <el-select v-model="shared_auth" placeholder="请选择权限" @change="change_radio" :disabled="type=='member'&&identity!='member'">
                             <el-option
                             v-for="item in options"
                             :key="item.value"
@@ -32,7 +32,7 @@
                         </el-select>
                     </div>
                 </div>
-                <div style="position:absolute; right:36px" class="cancel_icon" v-if="type=='admin'||type=='shared'" @click="remove">
+                <div style="position:absolute; right:36px" class="cancel_icon" v-if="type=='admin'||type=='shared'||(type=='member'&&identity!='creator')" @click="remove">
                     <span class="icon iconfont">&#xe79b;</span>
                 </div>
             </div>
@@ -49,6 +49,10 @@ export default {
         uid: {
             type:String,
             default: 'uid'
+        },
+        tid: {
+            type:String,
+            default: 'tid'
         },
         name: {
             type:String,
@@ -73,6 +77,10 @@ export default {
         did:{
             type:String,
             default: ''
+        },
+        identity:{
+            type:String,
+            default: 'member'
         }
     },
 
@@ -121,6 +129,9 @@ export default {
             else if(this.type == 'shared'){
                 this.change_shared_auth('no_share');
             }
+            else if(this.type == 'member'){
+                this.remove_member();
+            }
         },
 
         remove_admin(){
@@ -133,6 +144,15 @@ export default {
 
         click_account(){
             this.$emit('click_account', this.account);
+        },
+
+        change_radio(type){
+            if(this.type == 'shared'){
+                this.change_shared_auth(type);
+            }
+            else if(this.type == 'member'){
+                this.change_member_auth(type);
+            }
         },
 
         change_shared_auth(type){
@@ -173,6 +193,69 @@ export default {
                                 break;
                             default:
                                 that.alert_msg.error('发生未知错误');
+                        }
+                    }
+                },
+                error:function(res){
+                    that.alert_msg.error('网络连接失败');
+                }
+            });
+        },
+
+        remove_member(){
+            if(this.uid == this.login_manager.get_uid()){
+                this.alert_msg.warning('对自己好一些' + this.magic_word[parseInt((Math.random()*1000))%this.magic_word.length]);
+                return;
+            }
+            var that = this;
+            this.alert_box.confirm_msg('警告', '确定将 ' + this.name + ' 移出团队吗？', function(){
+                that.change_member_auth('no_share');
+            });
+        },
+
+        change_member_auth(type){
+            var that = this;
+            let url = '/team/invitation';
+            $.ajax({ 
+                type:'post',
+                url: url,
+                headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+                data: JSON.stringify({tid:that.tid, acc:that.account, is_new:false, auth:type}),
+                async:false, 
+                success:function (res){ 
+                    if(that.console_debug){
+                        console.log(url +  '：' + res.status);
+                    }
+                    if(res.status == 0){
+                        if(type == 'no_share'){
+                            that.show = false;
+                            that.alert_msg.success('移除成功');
+                            setTimeout(function(){
+                                that.$emit('refresh');
+                            }, 100);  
+                        }
+                        else{
+                            that.alert_msg.success('修改成功');
+                        }
+                    }
+                    else{
+                        switch(res.status){
+                            case 2:
+                                that.alert_msg.error('权限不足');
+                                break;
+                            case 3:
+                                that.alert_msg.error('找不到团队');
+                                break;
+                            case 4:
+                                that.alert_msg.warning('系统不认识这个人');
+                                break;
+                            case 7:
+                                break;
+                            case 8:
+                                that.alert_msg.warning('你无法移除其他管理员');
+                                break;
+                            default:
+                                that.alert_msg.error('发生了未知错误');
                         }
                     }
                 },

@@ -3,6 +3,7 @@
         <div class="chatting_room" v-show="show">
             <div class="chatting_room_header can_not_choose">{{title}}<span class="el-icon-close close_icon" @click="close"></span></div>
             <div class="user_list">
+                <div class="not_found" style="margin-top:50%" v-if="!user_list.length">你的私聊列表是空的</div>
                 <chat-user-list-item
                     ref="chat_user_list_item"
                     v-for="item in user_list"

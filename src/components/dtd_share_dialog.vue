@@ -64,7 +64,6 @@
 
 <script>
 import user_list_item from '@/components/user_list_item';
-import registerVue from '../pages/register.vue';
 export default {
     name: 'dtd-share-dialog',
 
@@ -270,7 +269,7 @@ export default {
                                 that.alert_msg.warning('系统不认识这个人');
                                 break;
                             case 5:
-                                that.alert_msg.normal('你不需要添加'+(that.tid?'团队创建者或':'')+'你自己');
+                                that.alert_msg.normal('你不需要添加'+(that.tid?'团队创建者或文档创建者':'你自己'));
                                 break;
                             case 6:
                                 that.alert_msg.normal('Ta 已经在分享列表中了');
@@ -366,7 +365,7 @@ export default {
 
 .ac{
     position: absolute;
-    width:496px;
+    width:calc(46% - 34px);
 }
 
 @media (max-width: 1200px){
