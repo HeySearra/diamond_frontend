@@ -39,6 +39,7 @@
 .el-main {
     color: #333;
     width: calc(100% - 320px);
+    min-width: 690px;
     position: fixed;
     left:320px;
     height: calc(100vh - 62px);

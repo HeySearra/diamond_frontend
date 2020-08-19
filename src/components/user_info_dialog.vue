@@ -63,6 +63,7 @@ export default {
                     that.name = res.name;
                     that.account = res.acc;
                     that.src = res.portrait;
+                    that.intro = res.intro;
                     setTimeout(function(){
                         that.dia_vis = true;
                     }, 0);

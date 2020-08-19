@@ -309,7 +309,8 @@
                     uid:this.uid,
                     text:this.text
                 }
-                that.add_chatting_bubble(this.text);
+                this.add_chatting_bubble(this.text);
+                this.text = '';
                 $.ajax({
                     type:'post',
                     url: url,
