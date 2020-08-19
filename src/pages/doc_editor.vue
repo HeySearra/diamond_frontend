@@ -28,6 +28,7 @@
                                   style="font-size: 25px; margin-top: 1px; cursor: pointer;"
                                   @click="closeHistoryBlock">&#xe79b;</span></el-col>
         </el-row>
+        <div style="background-color:#ddd; height:1px"></div>
         <history-block
           v-for="item in history_list"
           :key="item.ver"

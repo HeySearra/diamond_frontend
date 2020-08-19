@@ -53,6 +53,7 @@ export default {
 .history_block{
   padding: 18px 20px;
   cursor: pointer;
+  border-bottom: solid 1px #ddd;
   transition:all 0.1s linear;
   position:relative;
 }
