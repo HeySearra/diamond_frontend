@@ -845,7 +845,7 @@ export default {
       };
       $.ajax({
         type: 'get',
-        url: '/document/auth?did=' + pageData.did,
+        url: '/document/auth?did=' + this.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         async: false,
         success: function (res) {
