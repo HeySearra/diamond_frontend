@@ -87,10 +87,10 @@ export default {
 
         this.get_desktop_id();
         if(this.fid == 'desktop'){
-          var that = this;
-          setTimeout(function(){
-            that.alert_msg.error('请求桌面信息错误');
-          }, 0)
+          // var that = this;
+          // setTimeout(function(){
+          //   that.alert_msg.error('请求桌面信息错误');
+          // }, 0)
           return;
         }
         var that = this;
