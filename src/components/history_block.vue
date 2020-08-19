@@ -25,7 +25,7 @@ export default {
       default: ''
     },
     ver: {
-      type: String,
+      type: Number,
       default: ''
     },
     did: {

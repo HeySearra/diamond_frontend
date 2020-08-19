@@ -543,7 +543,6 @@ export default {
     pageData.did = this.$route.params.did;
     pageData.users = [];
     pageData.userId = 'user-1'
-    // this.getDocAuth();
     var that = this;
     this.loading_percentage = 0;
     $('.loading_bar').removeClass('loading_bar_done');
@@ -604,6 +603,7 @@ export default {
         return;
       }
       pageData.did = this.did;
+      this.getDocAuth();
       this.getStarStatus();
       this.apply_for_info();
     },
@@ -683,16 +683,12 @@ export default {
           }
           if (res.status === 0) {
             switch (res.auth) {
-              case "read":
-                pageData.readOnly = true;
-                break;
-              case "comment":
-                pageData.commentsOnly = true;
+              case "none":
+                that.$router.push({path: '/'});
                 break;
               default:
                 break;
             }
-
           } else {
             switch (res.status) {
               case 1:
