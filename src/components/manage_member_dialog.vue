@@ -203,6 +203,7 @@ export default {
                         }
                         if(res.status == 0){
                             that.alert_msg.success('已成功将 ' + name + ' 移出团队');
+                            that.$emit('refresh_team_info');
                             that.init_info();
                         }
                         else{

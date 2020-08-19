@@ -102,8 +102,8 @@
                     else{
                         that.is_bottom = false;
                     }
-                    console.log(Math.abs($("#bubble_window")[0].scrollTop + $("#bubble_window")[0].clientHeight - $("#bubble_window")[0].scrollHeight))
-                    console.log(that.is_bottom);
+                    // console.log(Math.abs($("#bubble_window")[0].scrollTop + $("#bubble_window")[0].clientHeight - $("#bubble_window")[0].scrollHeight))
+                    // console.log(that.is_bottom);
                 });
                 if(uid){
                     this.choose_user(uid);
@@ -379,7 +379,7 @@
             },
 
             add_chatting_bubble(text){
-                var last_dt = new Date(this.save_list[this.save_list.length-1].dt);
+                var last_dt = this.save_list.length-1<0 ? new Date('1900-1-1') : new Date(this.save_list[this.save_list.length-1].dt);
                 var now_dt = new Date();
                 if(now_dt - last_dt > 1000*60*3){
                     var content = {
