@@ -200,9 +200,6 @@ export default {
                 success:function (res){ 
                     if(res.status == 0){
                         that.form.img = res.src;
-                        if(res.src[0] != '/'){
-                            that.form.img = '/' + that.form.img;
-                        }
                     }
                     else{
                         switch(res){
