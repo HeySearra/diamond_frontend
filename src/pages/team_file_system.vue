@@ -224,7 +224,7 @@ export default {
     },
 
     dtd_share(did, name){
-      this.$refs.dtd_share_dialog.open(did);
+      this.$refs.dtd_share_dialog.open(did, this.tid);
     },
 
     copy_item(id, type, name){

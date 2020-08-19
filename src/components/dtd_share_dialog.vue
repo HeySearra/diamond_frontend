@@ -64,6 +64,7 @@
 
 <script>
 import user_list_item from '@/components/user_list_item';
+import registerVue from '../pages/register.vue';
 export default {
     name: 'dtd-share-dialog',
 
@@ -183,7 +184,8 @@ export default {
 
         apply_for_team(){
             this.search_loading = true;
-            if(this.tid || this.tid==''){
+            if(!this.tid || this.tid==''){
+                this.search_loading = false;
                 return;
             }
             let url = '/team/info?tid=' + this.tid;
@@ -206,7 +208,7 @@ export default {
                             src: res.csrc,
                             acc: res.cacc
                         });
-                        for(let i=0; i<that.admin.length; i++){
+                        for(let i=0; i<res.admin.length; i++){
                             that.search_list.push({
                                 uid: res.admin[i].uid,
                                 name: res.admin[i].name,
@@ -214,7 +216,7 @@ export default {
                                 acc: res.admin[i].acc
                             });
                         }
-                        for(let i=0; i<that.norm.length; i++){
+                        for(let i=0; i<res.norm.length; i++){
                             that.search_list.push({
                                 uid: res.norm[i].uid,
                                 name: res.norm[i].name,

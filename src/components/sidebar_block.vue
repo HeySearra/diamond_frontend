@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar_menu sidebar_block" v-loading="is_loading">
+  <div class="sidebar_menu sidebar sidebar_block" v-loading="is_loading">
     <div style="height:35px;"></div>
     <el-row>
       <div class="avatar"><el-avatar :src="user_src"></el-avatar></div>

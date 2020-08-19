@@ -266,10 +266,10 @@ export default {
                 cancelButtonText: '否',
                 type: 'warning'
                 }).then(() => {
-                    a(false);
+                    a(true);
                 })
                 .catch(() => {
-                    a(true);
+                    a(false);
                 });          
         }
     }

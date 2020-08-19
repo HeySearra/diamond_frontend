@@ -4,7 +4,7 @@
       <el-col :span="4"><el-avatar :src="portrait"></el-avatar></el-col>
       <el-col class="name" :span="20">{{name}}</el-col>
     </el-row>
-    <el-row style=" font-size: 11px; margin-left:5em">修改于：{{dt}}</el-row>
+    <el-row style=" font-size: 11px; margin-left:5em; position:absolute; top:45px; left:23px">修改于：{{dt}}</el-row>
   </div>
 </template>
 
@@ -53,6 +53,7 @@ export default {
   padding: 18px 20px; 
   cursor: pointer;
   transition:all 0.1s linear;
+  position:relative;
 }
 
 .history_block:hover{
@@ -60,7 +61,7 @@ export default {
 }
 
 .name{
-  margin:0;
+  margin:-2px 0 0 0;
   text-indent:1em;
   display: -webkit-box;
   -webkit-box-orient: vertical;
