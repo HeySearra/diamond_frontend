@@ -603,7 +603,7 @@ export default {
       }, 1000*30);
       if(!this.login_manager.get()){
         that.alert_msg.warning('您还未登录，请先登录账号');
-        this.$router.push({name:'login'});
+        this.$router.replace({name:'login'});
         return;
       }
       pageData.did = this.did;
@@ -692,7 +692,7 @@ export default {
           if (res.status === 0) {
             switch (res.auth) {
               case "none":
-                that.$router.push({path: '/'});
+                that.$router.replace({path: '/'});
                 ret = true;
                 break;
               default:
