@@ -539,6 +539,10 @@ class CommentsAdapter {
 
 export default {
   mounted() {
+    this.did = this.$route.params.did;
+    if (!this.getDocAuth()) {
+      return;
+    }
     this.init();
     pageData.did = this.$route.params.did;
     pageData.users = [];
@@ -571,7 +575,8 @@ export default {
       ver:-1,
       is_newest: true,
       applyVerCode_timer:undefined,
-      online_timer:undefined
+      online_timer:undefined,
+      is_editor_loaded: false
     }
   },
 
@@ -583,7 +588,6 @@ export default {
 
   methods: {
     init() {
-      this.did = this.$route.params.did;
       this.applyVerCode_timer ? clearInterval(this.applyVerCode_timer) : '';
       this.online_timer ? clearInterval(this.online_timer) : '';
       this.is_newest = true;
@@ -603,7 +607,6 @@ export default {
         return;
       }
       pageData.did = this.did;
-      this.getDocAuth();
       this.getStarStatus();
       this.apply_for_info();
     },
@@ -618,6 +621,9 @@ export default {
       if (parts.length === 2) return parts.pop().split(';').shift()
     },
     initCKEditor() {
+      /*if (this.is_editor_loaded) {
+        return;
+      }*/
       var that = this;
       CKEditor.create(document.querySelector('#editor'), {
         language: 'zh-cn',
@@ -666,9 +672,11 @@ export default {
       });
       that.loading_percentage = 100;
       that.loading_done();
+      //this.is_editor_loaded = true;
     },
     getDocAuth() {
       var that = this;
+      var ret = true;
       let msg = {
         did: pageData.did
       };
@@ -685,6 +693,7 @@ export default {
             switch (res.auth) {
               case "none":
                 that.$router.push({path: '/'});
+                ret = true;
                 break;
               default:
                 break;
@@ -710,6 +719,7 @@ export default {
           that.alert_msg.error('连接失败');
         }
       });
+      return ret;
     },
     getInitialDocContent() {
       //通过路由获取文章id

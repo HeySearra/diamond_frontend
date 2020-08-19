@@ -143,7 +143,7 @@ const router =  new Router({
       },
     },
     {
-      path: '/doc/:did',
+      path: '/doc/edit/:did',
       name: 'doc',
       component: doc_editor => require(["@/pages/doc_editor.vue"], doc_editor),
       meta:{
