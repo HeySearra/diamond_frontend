@@ -47,7 +47,7 @@
         <div class="new_toobar">
           <div class="append_tools can_not_choose">
             <el-tooltip class="item" effect="dark" content="保存" placement="bottom">
-              <span class="icon iconfont" @click="updateDocContent">&#xe82a;</span>
+              <span class="icon iconfont" style="color:hsl(202, 69%, 36%)" @click="updateDocContent">&#xe82b;</span>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="保存为模板" placement="bottom">
               <span class="icon iconfont" @click="saveAsTemplate">&#xe672;</span>

@@ -169,7 +169,7 @@ export default {
 }
 
 .chat_button{
-    width:90%;
+    width:75%;
     margin:0 auto;
     display:block;
     margin-top:30px;
