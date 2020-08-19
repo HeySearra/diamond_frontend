@@ -372,6 +372,9 @@ export default {
         // },
 
         open_doc() {
+            if(this.context == 'recycle'){
+                return;
+            }
             var that = this;
             if(this.context == 'workbench'){
                 $.ajax({
