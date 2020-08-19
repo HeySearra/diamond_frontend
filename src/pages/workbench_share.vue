@@ -111,7 +111,7 @@ export default {
                                 type: res.list[i].type=="doc"?"file":"fold",
                                 id: res.list[i].id,
                                 is_link: false,
-                                is_starred: true,
+                                is_starred: res.list[i].is_starred,
                                 name: res.list[i].name,
                                 create_time: res.list[i].create_dt,
                                 creator: res.list[i].cname,
