@@ -285,7 +285,7 @@ class CommentsAdapter {
         return content;
       },
 
-      addComment(data) {
+      /*addComment(data) {
         console.log('Comment added', data);
         let msg = {
           did: pageData.did,
@@ -338,9 +338,9 @@ class CommentsAdapter {
         return Promise.resolve({
           createdAt: new Date()       // Should be set on the server side.
         });
-      },
+      },*/
 
-      /*addComment(data) {
+      addComment(data) {
         console.log('Comment added', data);
         let msg = {
           did: pageData.did,
@@ -389,7 +389,7 @@ class CommentsAdapter {
         return Promise.resolve({
           createdAt: new Date()       // Should be set on the server side.
         });
-      },*/
+      },
 
       updateComment(data) {
         console.log('Comment updated', data);
@@ -811,7 +811,7 @@ export default {
         content: window.editor.getData(),
         name: this.file_name,
         ver: pageData.ver,
-        auth: 'write'
+        auth: 'comment'
       };
       $.ajax({
         type: 'post',
