@@ -540,11 +540,11 @@ class CommentsAdapter {
 export default {
   mounted() {
     this.did = this.$route.params.did;
+    pageData.did = this.$route.params.did;
     if (!this.getDocAuth()) {
       return;
     }
     this.init();
-    pageData.did = this.$route.params.did;
     pageData.users = [];
     pageData.userId = 'user-1'
     var that = this;
