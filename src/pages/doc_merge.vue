@@ -476,6 +476,13 @@ export default {
         //const toolbarContainer = document.querySelector('#toolbar-container');
         //toolbarContainer.appendChild(editor.ui.view.toolbar.element);
         //document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
+        setTimeout(function () {
+          $('.ck-user').off('click');
+          $('.ck-user').click(function () {
+            var uid = $(this).attr('data-user-id');
+            that.$emit('open_user_info', uid);
+          });
+        }, 0);
       }).catch(error => {
         console.error(error);
       });
@@ -1063,5 +1070,8 @@ export default {
   border: 0 solid !important;
 }
 
+>>>.ck-user{
+  cursor:pointer !important;
+}
 
 </style>

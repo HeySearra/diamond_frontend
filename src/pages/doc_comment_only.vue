@@ -381,7 +381,13 @@ class CommentsAdapter {
             alert_msg.error('连接失败');
           }
         });
-
+        setTimeout(function () {
+          $('.ck-user').off('click');
+          $('.ck-user').click(function () {
+            var uid = $(this).attr('data-user-id');
+            tthat.$emit('open_user_info', uid);
+          });
+        }, 0);
         // Write a request to your database here. The returned `Promise`
         // should be resolved when the request has finished.
         // When the promise resolves with the comment data object, it
@@ -663,6 +669,13 @@ export default {
         const toolbarContainer = document.querySelector('#toolbar-container');
         toolbarContainer.appendChild(editor.ui.view.toolbar.element);
         document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
+        setTimeout(function () {
+          $('.ck-user').off('click');
+          $('.ck-user').click(function () {
+            var uid = $(this).attr('data-user-id');
+            that.$emit('open_user_info', uid);
+          });
+        }, 0);
       }).catch(error => {
         console.error(error);
       });
@@ -1377,6 +1390,10 @@ export default {
 
 >>>.ck-user__img {
   border: none !important;
+}
+
+>>>.ck-user{
+  cursor:pointer !important;
 }
 
 </style>
