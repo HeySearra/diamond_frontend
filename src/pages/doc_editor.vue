@@ -715,7 +715,7 @@ export default {
       var that = this;
       if(!this.login_manager.get()){
         that.alert_msg.warning('您还未登录，请先登录账号');
-        this.$router.push({name:'login'});
+        this.$router.replace({name:'login'});
         return;
       }
       setTimeout(function(){
@@ -845,7 +845,7 @@ export default {
       };
       $.ajax({
         type: 'get',
-        url: '/document/auth?did=' + pageData.did,
+        url: '/document/auth?did=' + this.did,
         headers: {'X-CSRFToken': this.getCookie('csrftoken')},
         async: false,
         success: function (res) {
@@ -855,15 +855,15 @@ export default {
           if (res.status === 0) {
             switch (res.auth) {
               case "comment":
-                that.$router.push({name: 'doc_comment_only', params: {did:that.did}});
+                that.$router.replace({name: 'doc_comment_only', params: {did:that.did}});
                 ret = false;
                 break;
               case "read":
-                that.$router.push({name: 'doc_read_only', params: {did:that.did}});
+                that.$router.replace({name: 'doc_read_only', params: {did:that.did}});
                 ret = false;
                 break;
               case "none":
-                that.$router.push({path: '/'});
+                that.$router.replace({path: '/'});
                 ret = false;
                 break;
               default:
